@@ -371,20 +371,3 @@ li {
 .warning {
     animation: flash-warning 1s infinite;
 }
-
-/* --- New Styles for Score Log Export Button --- */
-#export-log-btn {
-    background-color: #17a2b8;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 0; /* Override previous button margin */
-}
-
-#export-log-btn:hover {
-    background-color: #138496;
-}
