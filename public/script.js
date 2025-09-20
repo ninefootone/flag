@@ -272,5 +272,4 @@ document.addEventListener('DOMContentLoaded', () => {
     coinTossBtn.addEventListener('click', () => {
         sendAction('COIN_TOSS');
     });
-
 });
