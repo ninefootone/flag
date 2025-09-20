@@ -11,8 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
-    "ws": "^8.18.3"
+    "express": "^4.19.2"
   },
   "engines": {
     "node": "20.x"
