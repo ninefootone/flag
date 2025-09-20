@@ -7,7 +7,6 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 
-let previousGameState = {};
 let currentGameState = {
     date: '',
     location: '',
@@ -94,8 +93,6 @@ wss.on('connection', function connection(ws) {
         const parsedMessage = JSON.parse(message);
         console.log('received action:', parsedMessage.type);
         
-        previousGameState = { ...currentGameState };
-
         if (parsedMessage.type === 'START_GAME_CLOCK') {
             startGameClock();
         } else if (parsedMessage.type === 'STOP_GAME_CLOCK') {
@@ -106,13 +103,6 @@ wss.on('connection', function connection(ws) {
             stopPlayClock();
         } else if (parsedMessage.type === 'UPDATE_STATE') {
             currentGameState = { ...currentGameState, ...parsedMessage.payload };
-            broadcastState();
-        } else if (parsedMessage.type === 'UNDO') {
-            currentGameState = { ...previousGameState };
-            broadcastState();
-        } else if (parsedMessage.type === 'COIN_TOSS') {
-            const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-            currentGameState.scoreLogHTML = `<li>Coin Toss: ${result}.</li>` + currentGameState.scoreLogHTML;
             broadcastState();
         }
     });

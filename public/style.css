@@ -113,7 +113,7 @@ header {
     color: #58a6ff;
 }
 
-.score-buttons, .manual-score-adjust {
+.score-buttons {
     display: flex;
     justify-content: center;
     gap: 5px;
@@ -131,14 +131,6 @@ header {
 
 .score-buttons button:hover {
     background-color: #30363d;
-}
-
-.manual-score-adjust button {
-    font-size: 1rem;
-    width: 40px;
-    background-color: #21262d;
-    border: 1px solid #30363d;
-    color: #c9d1d9;
 }
 
 /* Clock Display and Controls */
@@ -256,8 +248,8 @@ header {
     font-size: 0.9rem;
 }
 
-/* Log and Undo Section */
-.score-log, .undo-control {
+/* Log Section */
+.score-log {
     margin-top: 20px;
     border: 1px solid #30363d;
     border-radius: 8px;
@@ -289,10 +281,6 @@ li {
     border-radius: 4px;
     font-size: 0.9rem;
     color: #c9d1d9;
-}
-
-.undo-control {
-    text-align: center;
 }
 
 /* Grid for settings form */

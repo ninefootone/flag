@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
     const team1NameDisplay = document.getElementById('team1-name-display');
-    const team2NameDisplay = document.getElementById('team2-name-display');
+    const team2NameDisplay = document = document.getElementById('team2-name-display');
     const gameDateDisplay = document.getElementById('game-date');
     const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
@@ -50,10 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameClockResetBtn = document.getElementById('game-clock-reset');
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
     const playClockResetBtn = document.getElementById('play-clock-reset');
-    const manualScoreUpBtns = document.querySelectorAll('.manual-up');
-    const manualScoreDownBtns = document.querySelectorAll('.manual-down');
-    const undoBtn = document.getElementById('undo-btn');
-    const coinTossBtn = document.getElementById('coin-toss-btn');
 
 
     // --- WebSocket Event Handlers ---
@@ -237,39 +233,5 @@ document.addEventListener('DOMContentLoaded', () => {
     playClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_PLAY_CLOCK');
         sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
-    });
-
-    manualScoreUpBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            const team = button.dataset.team;
-            const newScores = { ...gameState.scores };
-            if (team === '1') {
-                newScores.team1++;
-            } else {
-                newScores.team2++;
-            }
-            sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: `<li>Manual Adjustment: The score was adjusted up for ${team === '1' ? gameState.team1Name : gameState.team2Name}.</li>` + gameState.scoreLogHTML });
-        });
-    });
-
-    manualScoreDownBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            const team = button.dataset.team;
-            const newScores = { ...gameState.scores };
-            if (team === '1') {
-                newScores.team1--;
-            } else {
-                newScores.team2--;
-            }
-            sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: `<li>Manual Adjustment: The score was adjusted down for ${team === '1' ? gameState.team1Name : gameState.team2Name}.</li>` + gameState.scoreLogHTML });
-        });
-    });
-    
-    undoBtn.addEventListener('click', () => {
-        sendAction('UNDO');
-    });
-
-    coinTossBtn.addEventListener('click', () => {
-        sendAction('COIN_TOSS');
     });
 });
