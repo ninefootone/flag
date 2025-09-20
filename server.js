@@ -51,7 +51,11 @@ wss.on('connection', function connection(ws) {
     });
 });
 
-// This is the crucial part for your hosting. Instead of using `server.listen()`,
-// we export the app and the server, allowing CloudLinux Passenger to manage
-// the server's listening port and process.
-module.exports = app;
+// ----------------------------------------------------
+// This is the crucial part for your hosting on Render.
+// We tell the server to listen on the port Render provides.
+// ----------------------------------------------------
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
