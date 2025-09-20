@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupHeader = document.getElementById('popup-header');
     const qbNumberInput = document.getElementById('qb-number');
     const wrNumberInput = document.getElementById('wr-number');
-    const rbNumberInput = document.getElementById('rb-number'); // New element
+    const rbNumberInput = document.getElementById('rb-number');
     const intNumberInput = document.getElementById('int-number');
     const safetyNumberInput = document.getElementById('safety-number');
     const logScoreBtn = document.getElementById('log-score-btn');
@@ -152,13 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let playerDetails = [];
         if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
-        if (players.wr) { playerDetails.push(`WR #${players.wr}`); } // New check
-        if (players.rb) { playerDetails.push(`RB #${players.rb}`); } // New check
+        if (players.wr) { playerDetails.push(`WR #${players.wr}`); }
+        if (players.rb) { playerDetails.push(`RB #${players.rb}`); }
         if (players.int) { playerDetails.push(`INT #${players.int}`); }
         if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
         
         const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
-        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreType} for ${event.points} points${playerString}.</li>`;
+        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
         return newLogEntry + gameState.scoreLogHTML;
     };
 
@@ -190,8 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hideScorePopup = () => {
         scorePopup.classList.add('hidden');
         qbNumberInput.value = '';
-        wrNumberInput.value = ''; // Clear new WR field
-        rbNumberInput.value = ''; // Clear new RB field
+        wrNumberInput.value = '';
+        rbNumberInput.value = '';
         intNumberInput.value = '';
         safetyNumberInput.value = '';
         tempScoreEvent = null;
@@ -242,8 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const players = {
             qb: qbNumberInput.value || '',
-            wr: wrNumberInput.value || '', // Get new WR value
-            rb: rbNumberInput.value || '', // Get new RB value
+            wr: wrNumberInput.value || '',
+            rb: rbNumberInput.value || '',
             int: intNumberInput.value || '',
             safety: safetyNumberInput.value || ''
         };
