@@ -1,0 +1,271 @@
+body {
+    font-family: "bebas-neue-pro", Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+}
+
+h1 {
+    color: #0056b3;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Settings Form */
+#settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="number"], input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Coin Flip Button */
+#coin-flip-btn {
+    background-color: #7d44c7;
+}
+
+#coin-flip-btn:hover {
+    background-color: #6a34b3;
+}
+
+.result-display {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #444;
+    margin-top: -10px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+/* Undo and Save Buttons */
+.undo-btn {
+    margin: 10px 5px;
+    background-color: #ffc107;
+    color: #333;
+}
+
+.undo-btn:hover {
+    background-color: #e0a800;
+}
+
+.save-btn {
+    margin: 10px 5px;
+    background-color: #28a745;
+}
+
+.save-btn:hover {
+    background-color: #218838;
+}
+
+/* Game Interface */
+.hidden {
+    display: none !important;
+}
+
+#game-interface {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.game-info {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Down Tracker */
+.down-tracker {
+    margin-bottom: 10px;
+}
+
+.down-tracker h2 {
+    margin-bottom: 5px;
+}
+
+.down-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.down-btn {
+    background-color: #007BFF;
+    border: 2px solid #0056b3;
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+.down-btn.active {
+    background-color: #0056b3;
+    border-color: #003580;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.auto-advance-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.timers-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.timer {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    flex: 1;
+}
+
+.clock-display {
+    font-size: 3em;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #4CAF50;
+    font-family: "bebas-neue-pro", sans-serif;
+}
+
+.timer-controls button {
+    margin: 5px;
+    padding: 8px 15px;
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.team-score {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    flex: 1;
+}
+
+.score-display {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #dc3545;
+    margin: 10px 0;
+}
+
+.score-buttons button {
+    margin: 5px;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+
+.manual-up {
+    background-color: #28a745;
+}
+
+.manual-up:hover {
+    background-color: #218838;
+}
+
+.manual-down {
+    background-color: #dc3545;
+}
+
+.manual-down:hover {
+    background-color: #c82333;
+}
+
+.timeouts {
+    margin-top: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* Log Sections */
+.game-log-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.log-section {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    flex: 1;
+}
+
+#score-log, #timeout-log {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.log-section h2 {
+    margin-top: 0;
+}
+
+#score-log li, #timeout-log li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+#score-log li:last-child, #timeout-log li:last-child {
+    border-bottom: none;
+}

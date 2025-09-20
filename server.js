@@ -1,0 +1,57 @@
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+const path = require('path');
+
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+let currentGameState = {};
+
+// Use this line to serve your static files from the 'public' directory.
+// This handles requests for your index.html, script.js, and style.css files.
+app.use(express.static(path.join(__dirname, 'public')));
+
+// This is the root route. It tells the app to serve the main index.html file
+// when a user visits the URL directly.
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// This is your WebSocket server logic, which handles real-time communication.
+wss.on('connection', function connection(ws) {
+    console.log('A new client connected!');
+
+    ws.send(JSON.stringify(currentGameState));
+
+    ws.on('message', function incoming(message) {
+        console.log('received: %s', message);
+        
+        try {
+            const parsedMessage = JSON.parse(message);
+            currentGameState = parsedMessage;
+        } catch (error) {
+            console.error('Failed to parse message:', error);
+        }
+
+        wss.clients.forEach(function each(client) {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString());
+            }
+        });
+    });
+
+    ws.on('close', () => {
+        console.log('A client disconnected.');
+    });
+
+    ws.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+});
+
+// This is the crucial part for your hosting. Instead of using `server.listen()`,
+// we export the app and the server, allowing CloudLinux Passenger to manage
+// the server's listening port and process.
+module.exports = app;
