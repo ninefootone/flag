@@ -289,13 +289,30 @@ li {
     border-radius: 4px;
 }
 
-.end-game-btn {
-    background-color: #dc3545;
-    color: white;
+/* New: Styles for the undo and end game buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.undo-btn, .end-game-btn {
     width: 100%;
     padding: 15px;
-    margin-top: 20px;
     font-size: 1.2rem;
+}
+
+.undo-btn {
+    background-color: #6c757d;
+}
+
+.undo-btn:hover {
+    background-color: #5a6268;
+}
+
+.end-game-btn {
+    background-color: #dc3545;
 }
 
 .end-game-btn:hover {

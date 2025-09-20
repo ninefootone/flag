@@ -28,8 +28,18 @@ let currentGameState = {
 
 const initialGameState = { ...currentGameState };
 
+let gameStateHistory = [];
+const MAX_HISTORY_SIZE = 10;
+
 let gameClockInterval;
 let playClockInterval;
+
+const saveStateToHistory = (state) => {
+    gameStateHistory.push(JSON.parse(JSON.stringify(state)));
+    if (gameStateHistory.length > MAX_HISTORY_SIZE) {
+        gameStateHistory.shift(); // Remove the oldest state
+    }
+};
 
 const startGameClock = () => {
     if (!gameClockInterval) {
@@ -95,6 +105,11 @@ wss.on('connection', function connection(ws) {
         const parsedMessage = JSON.parse(message);
         console.log('received action:', parsedMessage.type);
         
+        // Save state before processing an action that changes it
+        if (parsedMessage.type !== 'UNDO_ACTION' && parsedMessage.type !== 'START_GAME_CLOCK' && parsedMessage.type !== 'START_PLAY_CLOCK' && parsedMessage.type !== 'STOP_GAME_CLOCK' && parsedMessage.type !== 'STOP_PLAY_CLOCK') {
+            saveStateToHistory(currentGameState);
+        }
+
         if (parsedMessage.type === 'START_GAME_CLOCK') {
             startGameClock();
         } else if (parsedMessage.type === 'STOP_GAME_CLOCK') {
@@ -110,7 +125,17 @@ wss.on('connection', function connection(ws) {
             stopGameClock();
             stopPlayClock();
             currentGameState = { ...initialGameState };
+            gameStateHistory = [];
             broadcastState();
+        } else if (parsedMessage.type === 'UNDO_ACTION') {
+            if (gameStateHistory.length > 0) {
+                currentGameState = gameStateHistory.pop();
+                stopGameClock();
+                stopPlayClock();
+                broadcastState();
+            } else {
+                console.log('No more actions to undo.');
+            }
         }
     });
 

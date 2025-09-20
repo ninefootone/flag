@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockResetBtn = document.getElementById('play-clock-reset');
     const adjustButtons = document.querySelectorAll('.adjust-btn');
     const endGameBtn = document.getElementById('end-game-btn');
+    const undoBtn = document.getElementById('undo-btn');
     const team1TimeoutLabel = document.getElementById('team1-timeout-label');
     const team2TimeoutLabel = document.getElementById('team2-timeout-label');
 
@@ -269,5 +270,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     endGameBtn.addEventListener('click', () => {
         sendAction('END_GAME');
+    });
+
+    undoBtn.addEventListener('click', () => {
+        sendAction('UNDO_ACTION');
     });
 });
