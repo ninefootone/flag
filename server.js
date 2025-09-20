@@ -21,7 +21,9 @@ let currentGameState = {
     playClockDuration: 40,
     timeoutsPerHalf: 2,
     scoreLogHTML: '',
-    timeoutLogHTML: ''
+    timeoutLogHTML: '',
+    gameClockRunning: false, // New property
+    playClockRunning: false  // New property
 };
 
 let gameClockInterval;
@@ -29,6 +31,7 @@ let playClockInterval;
 
 const startGameClock = () => {
     if (!gameClockInterval) {
+        currentGameState.gameClockRunning = true;
         gameClockInterval = setInterval(() => {
             if (currentGameState.gameTimeLeft > 0) {
                 currentGameState.gameTimeLeft--;
@@ -43,10 +46,13 @@ const startGameClock = () => {
 const stopGameClock = () => {
     clearInterval(gameClockInterval);
     gameClockInterval = null;
+    currentGameState.gameClockRunning = false;
+    broadcastState();
 };
 
 const startPlayClock = () => {
     if (!playClockInterval) {
+        currentGameState.playClockRunning = true;
         playClockInterval = setInterval(() => {
             if (currentGameState.playTimeLeft > 0) {
                 currentGameState.playTimeLeft--;
@@ -61,6 +67,8 @@ const startPlayClock = () => {
 const stopPlayClock = () => {
     clearInterval(playClockInterval);
     playClockInterval = null;
+    currentGameState.playClockRunning = false;
+    broadcastState();
 };
 
 const broadcastState = () => {

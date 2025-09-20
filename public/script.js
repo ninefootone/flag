@@ -15,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
         playClockDuration: 40,
         timeoutsPerHalf: 2,
         scoreLogHTML: '',
-        timeoutLogHTML: ''
+        timeoutLogHTML: '',
+        gameClockRunning: false,
+        playClockRunning: false
     };
 
     const settingsForm = document.getElementById('settings-form');
@@ -109,8 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const updateButtonLabels = () => {
-        gameClockToggleBtn.textContent = gameState.gameTimeLeft > 0 ? (gameState.gameClockInterval ? 'Stop' : 'Start') : 'Start';
-        playClockToggleBtn.textContent = gameState.playTimeLeft > 0 ? (gameState.playClockInterval ? 'Stop' : 'Start') : 'Start';
+        gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
+        playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
     };
 
 
@@ -207,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     gameClockToggleBtn.addEventListener('click', () => {
-        if (gameState.gameClockInterval) {
+        if (gameState.gameClockRunning) {
             sendAction('STOP_GAME_CLOCK');
         } else {
             sendAction('START_GAME_CLOCK');
@@ -223,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     playClockToggleBtn.addEventListener('click', () => {
-        if (gameState.playClockInterval) {
+        if (gameState.playClockRunning) {
             sendAction('STOP_PLAY_CLOCK');
         } else {
             sendAction('START_PLAY_CLOCK');
