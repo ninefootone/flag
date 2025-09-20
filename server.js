@@ -7,8 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 
-let previousGameState = {}; // New property to store previous state
-
+let previousGameState = {};
 let currentGameState = {
     date: '',
     location: '',
@@ -95,7 +94,6 @@ wss.on('connection', function connection(ws) {
         const parsedMessage = JSON.parse(message);
         console.log('received action:', parsedMessage.type);
         
-        // Save previous state before any changes
         previousGameState = { ...currentGameState };
 
         if (parsedMessage.type === 'START_GAME_CLOCK') {
@@ -110,7 +108,6 @@ wss.on('connection', function connection(ws) {
             currentGameState = { ...currentGameState, ...parsedMessage.payload };
             broadcastState();
         } else if (parsedMessage.type === 'UNDO') {
-            // Revert to the previous state
             currentGameState = { ...previousGameState };
             broadcastState();
         } else if (parsedMessage.type === 'COIN_TOSS') {
