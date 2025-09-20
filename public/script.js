@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreLogHTML: '',
         timeoutLogHTML: '',
         gameClockRunning: false,
-        playClockRunning: false
+        playClockRunning: false,
+        coinTossResult: null
     };
 
     const settingsForm = document.getElementById('settings-form');
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationField = document.getElementById('location-field');
     const team1NameInput = document.getElementById('team1-name');
     const team2NameInput = document.getElementById('team2-name');
-    const halfDurationInput = document = document.getElementById('half-duration');
+    const halfDurationInput = document.getElementById('half-duration');
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
     const team1NameDisplay = document.getElementById('team1-name-display');
@@ -71,6 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const safetyNumberInput = document.getElementById('safety-number');
     const logScoreBtn = document.getElementById('log-score-btn');
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
+
+    // New element references for coin toss
+    const coinTossHeadsBtn = document.getElementById('coin-toss-heads');
+    const coinTossTailsBtn = document.getElementById('coin-toss-tails');
+    const coinTossResultDisplay = document.getElementById('coin-toss-result');
 
     // Temporary variables to hold scoring data
     let tempScoreEvent = null;
@@ -131,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonLabels();
         team1TimeoutLabel.textContent = gameState.team1Name;
         team2TimeoutLabel.textContent = gameState.team2Name;
+        
+        if (gameState.coinTossResult) {
+            coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
+        }
     };
     
     const updateButtonLabels = () => {
@@ -200,6 +210,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     startGameBtn.addEventListener('click', () => {
+        if (!gameState.coinTossResult) {
+            alert("Please complete the coin toss before starting the game.");
+            return;
+        }
+
         const newGameState = {
             date: dateField.value || 'N/A',
             location: locationField.value || 'N/A',
@@ -218,6 +233,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         sendAction('UPDATE_STATE', newGameState);
     });
+
+    coinTossHeadsBtn.addEventListener('click', () => {
+        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        sendAction('UPDATE_STATE', { coinTossResult: result });
+    });
+
+    coinTossTailsBtn.addEventListener('click', () => {
+        const result = Math.random() < 0.5 ? 'Tails' : 'Heads';
+        sendAction('UPDATE_STATE', { coinTossResult: result });
+    });
+
 
     scoreButtons.forEach(button => {
         button.addEventListener('click', () => {
