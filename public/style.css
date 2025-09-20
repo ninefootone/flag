@@ -99,8 +99,13 @@ header {
 }
 
 .score-buttons button {
-    font-size: 1rem;
-    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-width: 60px;
+    padding: 10px 5px;
     background-color: #eee;
     color: #333;
     border: 1px solid #ccc;
@@ -110,6 +115,17 @@ header {
 
 .score-buttons button:hover {
     background-color: #ddd;
+}
+
+.score-buttons .button-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.score-buttons .button-score {
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 /* Clock Display and Controls */
