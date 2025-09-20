@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tempScoreEvent = null;
 
     // A simple audio element for the warning sound
-    const audio = new Audio('/assets/warning.mp3'); // We'll assume you have a sound file here
+    const audio = new Audio('/assets/warning.mp3'); 
 
     // --- WebSocket Event Handlers ---
     ws.onopen = () => {
@@ -145,13 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
             coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
         }
 
-        // Two-minute warning logic
+        // Two-minute warning logic (now persistent until the clock is stopped)
         if (gameState.gameTimeLeft === 120 && !gameState.twoMinuteWarningIssued) {
             gameClockDisplay.parentElement.classList.add('warning');
             audio.play();
             sendAction('UPDATE_STATE', { twoMinuteWarningIssued: true });
-        } else if (gameState.gameTimeLeft !== 120 && gameState.twoMinuteWarningIssued) {
-             gameClockDisplay.parentElement.classList.remove('warning');
         }
     };
     
@@ -330,6 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
     gameClockToggleBtn.addEventListener('click', () => {
         if (gameState.gameClockRunning) {
             sendAction('STOP_GAME_CLOCK');
+            // When stopping the clock, remove the warning flash
+            gameClockDisplay.parentElement.classList.remove('warning');
         } else {
             sendAction('START_GAME_CLOCK');
         }
@@ -337,6 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gameClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_GAME_CLOCK');
+        // When resetting the clock, remove the warning flash
+        gameClockDisplay.parentElement.classList.remove('warning');
         sendAction('UPDATE_STATE', { 
             gameTimeLeft: gameState.halfDuration, 
             timeoutsUsed: { '1': 0, '2': 0 },
