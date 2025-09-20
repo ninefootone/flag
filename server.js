@@ -51,10 +51,8 @@ wss.on('connection', function connection(ws) {
     });
 });
 
-// ----------------------------------------------------
-// This is the crucial part for your hosting on Render.
-// We explicitly handle the upgrade request.
-// ----------------------------------------------------
+// This handles the WebSocket upgrade request directly, which is more
+// reliable on some platforms.
 server.on('upgrade', (request, socket, head) => {
     wss.handleUpgrade(request, socket, head, (ws) => {
         wss.emit('connection', ws, request);
