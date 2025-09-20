@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
     const team1NameDisplay = document.getElementById('team1-name-display');
-    const team2NameDisplay = document = document.getElementById('team2-name-display');
+    const team2NameDisplay = document.getElementById('team2-name-display');
     const gameDateDisplay = document.getElementById('game-date');
     const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
