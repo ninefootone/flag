@@ -73,9 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const logScoreBtn = document.getElementById('log-score-btn');
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
 
-    // New element references for coin toss
-    const coinTossHeadsBtn = document.getElementById('coin-toss-heads');
-    const coinTossTailsBtn = document.getElementById('coin-toss-tails');
+    // Updated element reference for the single coin toss button
+    const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
 
     // Temporary variables to hold scoring data
@@ -234,16 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAction('UPDATE_STATE', newGameState);
     });
 
-    coinTossHeadsBtn.addEventListener('click', () => {
+    coinTossBtn.addEventListener('click', () => {
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
     });
-
-    coinTossTailsBtn.addEventListener('click', () => {
-        const result = Math.random() < 0.5 ? 'Tails' : 'Heads';
-        sendAction('UPDATE_STATE', { coinTossResult: result });
-    });
-
 
     scoreButtons.forEach(button => {
         button.addEventListener('click', () => {
