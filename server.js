@@ -105,8 +105,8 @@ wss.on('connection', function connection(ws) {
         const parsedMessage = JSON.parse(message);
         console.log('received action:', parsedMessage.type);
         
-        // Save state before processing an action that changes it
-        if (parsedMessage.type !== 'UNDO_ACTION' && parsedMessage.type !== 'START_GAME_CLOCK' && parsedMessage.type !== 'START_PLAY_CLOCK' && parsedMessage.type !== 'STOP_GAME_CLOCK' && parsedMessage.type !== 'STOP_PLAY_CLOCK') {
+        // Save state to history before processing the new action
+        if (parsedMessage.type === 'UPDATE_STATE' || parsedMessage.type === 'END_GAME') {
             saveStateToHistory(currentGameState);
         }
 

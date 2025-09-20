@@ -132,20 +132,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    const addScoreLogEntry = (event) => {
+    // This function now returns the new log string instead of sending a separate action
+    const getNewScoreLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const newLogEntry = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>`;
-        
-        const newScoreLogHTML = newLogEntry + gameState.scoreLogHTML;
-        sendAction('UPDATE_STATE', { scoreLogHTML: newScoreLogHTML });
+        return newLogEntry + gameState.scoreLogHTML;
     };
 
-    const addTimeoutLogEntry = (event) => {
+    // This function now returns the new log string instead of sending a separate action
+    const getNewTimeoutLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const newLogEntry = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} called a timeout.</li>`;
-        
-        const newTimeoutLogHTML = newLogEntry + gameState.timeoutLogHTML;
-        sendAction('UPDATE_STATE', { timeoutLogHTML: newTimeoutLogHTML });
+        return newLogEntry + gameState.timeoutLogHTML;
     };
 
     const updateDownDisplay = () => {
@@ -192,8 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 newScores.team2 += scoreToAdd;
             }
 
-            addScoreLogEntry({ team: team, scoreType: scoreLabel, points: scoreToAdd });
-            sendAction('UPDATE_STATE', { scores: newScores });
+            const newScoreLogHTML = getNewScoreLog({ team: team, scoreType: scoreLabel, points: scoreToAdd });
+            sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: newScoreLogHTML });
         });
     });
     
@@ -219,9 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
                 const newTimeoutsUsed = { ...gameState.timeoutsUsed };
                 newTimeoutsUsed[team]++;
-                addTimeoutLogEntry({ team: team });
+                const newTimeoutLogHTML = getNewTimeoutLog({ team: team });
                 sendAction('STOP_GAME_CLOCK');
-                sendAction('UPDATE_STATE', { timeoutsUsed: newTimeoutsUsed });
+                sendAction('UPDATE_STATE', { timeoutsUsed: newTimeoutsUsed, timeoutLogHTML: newTimeoutLogHTML });
             } else {
                 alert('No timeouts left for this team.');
             }
