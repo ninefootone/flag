@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameDateDisplay = document.getElementById('game-date');
     const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
-    const team2ScoreDisplay = document = document.getElementById('team2-score-display');
+    const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
@@ -61,6 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1TimeoutLabel = document.getElementById('team1-timeout-label');
     const team2TimeoutLabel = document.getElementById('team2-timeout-label');
 
+    // New element references for the score pop-up
+    const scorePopup = document.getElementById('score-popup');
+    const popupHeader = document.getElementById('popup-header');
+    const qbNumberInput = document.getElementById('qb-number');
+    const rbwrNumberInput = document.getElementById('rbwr-number');
+    const intNumberInput = document.getElementById('int-number');
+    const safetyNumberInput = document.getElementById('safety-number');
+    const logScoreBtn = document.getElementById('log-score-btn');
+    const cancelPopupBtn = document.getElementById('cancel-popup-btn');
+
+    // Temporary variables to hold scoring data
+    let tempScoreEvent = null;
 
     // --- WebSocket Event Handlers ---
     ws.onopen = () => {
@@ -132,19 +144,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    // This function now returns the new log string instead of sending a separate action
-    const getNewScoreLog = (event) => {
+    // This function now returns the new log string with player details
+    const getNewScoreLog = (event, players = {}) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        // Calculate elapsed time for the log entry
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>`;
+        
+        let playerDetails = [];
+        if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
+        if (players.rbwr) { playerDetails.push(`WR/RB #${players.rbwr}`); }
+        if (players.int) { playerDetails.push(`INT #${players.int}`); }
+        if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
+        
+        const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
+        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreType} for ${event.points} points${playerString}.</li>`;
         return newLogEntry + gameState.scoreLogHTML;
     };
 
     // This function now returns the new log string instead of sending a separate action
     const getNewTimeoutLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        // Calculate elapsed time for the log entry
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
         const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} called a timeout.</li>`;
         return newLogEntry + gameState.timeoutLogHTML;
@@ -159,6 +177,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     };
+
+    const showScorePopup = (team, scoreToAdd, scoreLabel) => {
+        tempScoreEvent = { team, scoreToAdd, scoreLabel };
+        const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
+        popupHeader.textContent = `Log ${scoreLabel} for ${teamName}`;
+        scorePopup.classList.remove('hidden');
+    };
+    
+    const hideScorePopup = () => {
+        scorePopup.classList.add('hidden');
+        qbNumberInput.value = '';
+        rbwrNumberInput.value = '';
+        intNumberInput.value = '';
+        safetyNumberInput.value = '';
+        tempScoreEvent = null;
+    };
+
 
     // --- Event Listeners ---
     startGameBtn.addEventListener('click', () => {
@@ -186,19 +221,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const team = button.dataset.team;
             const scoreToAdd = parseInt(button.dataset.score, 10);
             const scoreLabel = button.dataset.label;
-            
-            const newScores = { ...gameState.scores };
-            if (team === '1') {
-                newScores.team1 += scoreToAdd;
-            } else {
-                newScores.team2 += scoreToAdd;
-            }
-
-            const newScoreLogHTML = getNewScoreLog({ team: team, scoreType: scoreLabel, points: scoreToAdd });
-            sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: newScoreLogHTML });
+            showScorePopup(team, scoreToAdd, scoreLabel);
         });
     });
     
+    logScoreBtn.addEventListener('click', () => {
+        if (!tempScoreEvent) return;
+        
+        const { team, scoreToAdd } = tempScoreEvent;
+        const newScores = { ...gameState.scores };
+        
+        if (team === '1') {
+            newScores.team1 += scoreToAdd;
+        } else {
+            newScores.team2 += scoreToAdd;
+        }
+        
+        const players = {
+            qb: qbNumberInput.value || '',
+            rbwr: rbwrNumberInput.value || '',
+            int: intNumberInput.value || '',
+            safety: safetyNumberInput.value || ''
+        };
+        
+        const newScoreLogHTML = getNewScoreLog(tempScoreEvent, players);
+        sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: newScoreLogHTML });
+        hideScorePopup();
+    });
+
+    cancelPopupBtn.addEventListener('click', () => {
+        hideScorePopup();
+    });
+
     // Manual Score Adjustment Buttons
     adjustButtons.forEach(button => {
         button.addEventListener('click', () => {

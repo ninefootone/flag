@@ -174,6 +174,34 @@
                 <button id="end-game-btn" class="end-game-btn">End Game</button>
             </div>
         </div>
+        
+        <div id="score-popup" class="hidden">
+            <div class="popup-content">
+                <h3 id="popup-header">Log Score Details</h3>
+                <div class="player-input-grid">
+                    <div>
+                        <label for="qb-number">QB #</label>
+                        <input type="number" id="qb-number" placeholder="Optional">
+                    </div>
+                    <div>
+                        <label for="rbwr-number">WR/RB #</label>
+                        <input type="number" id="rbwr-number" placeholder="Optional">
+                    </div>
+                    <div>
+                        <label for="int-number">INT #</label>
+                        <input type="number" id="int-number" placeholder="Optional">
+                    </div>
+                    <div>
+                        <label for="safety-number">Safety #</label>
+                        <input type="number" id="safety-number" placeholder="Optional">
+                    </div>
+                </div>
+                <div class="popup-buttons">
+                    <button id="log-score-btn" class="log-score-btn">Log Score</button>
+                    <button id="cancel-popup-btn" class="cancel-popup-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="/script.js"></script>
 </body>
