@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameClockToggleBtn = document.getElementById('game-clock-toggle');
     const gameClockResetBtn = document.getElementById('game-clock-reset');
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
-    const playClockResetBtn = document.getElementById('play-clock-reset');
+    const playClockResetBtn = document = document.getElementById('play-clock-reset');
     const adjustButtons = document.querySelectorAll('.adjust-btn');
 
 
@@ -243,6 +243,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.playClockRunning) {
             sendAction('STOP_PLAY_CLOCK');
         } else {
+            // Check for auto-advance before starting the clock
+            if (autoAdvanceCheckbox.checked) {
+                const newDown = (gameState.currentDown % 4) + 1;
+                sendAction('UPDATE_STATE', { currentDown: newDown });
+            }
             sendAction('START_PLAY_CLOCK');
         }
     });
