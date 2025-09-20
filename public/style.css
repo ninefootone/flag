@@ -360,3 +360,14 @@ li {
         gap: 10px;
     }
 }
+
+/* Two-minute warning animation */
+@keyframes flash-warning {
+    0%   { background-color: #ffc107; color: black; }
+    50%  { background-color: #e0a800; color: black; }
+    100% { background-color: #ffc107; color: black; }
+}
+
+.warning {
+    animation: flash-warning 1s infinite;
+}

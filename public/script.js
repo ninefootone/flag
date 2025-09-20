@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         timeoutLogHTML: '',
         gameClockRunning: false,
         playClockRunning: false,
-        coinTossResult: null
+        coinTossResult: null,
+        twoMinuteWarningIssued: false
     };
 
     const settingsForm = document.getElementById('settings-form');
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1NameDisplay = document.getElementById('team1-name-display');
     const team2NameDisplay = document.getElementById('team2-name-display');
     const gameDateDisplay = document.getElementById('game-date');
-    const gameLocationDisplay = document.getElementById('game-location');
+    const gameLocationDisplay = document = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
     const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
@@ -79,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Temporary variables to hold scoring data
     let tempScoreEvent = null;
+
+    // A simple audio element for the warning sound
+    const audio = new Audio('/assets/warning.mp3'); // We'll assume you have a sound file here
 
     // --- WebSocket Event Handlers ---
     ws.onopen = () => {
@@ -139,6 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (gameState.coinTossResult) {
             coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
+        }
+
+        // Two-minute warning logic
+        if (gameState.gameTimeLeft === 120 && !gameState.twoMinuteWarningIssued) {
+            gameClockDisplay.parentElement.classList.add('warning');
+            audio.play();
+            sendAction('UPDATE_STATE', { twoMinuteWarningIssued: true });
+        } else if (gameState.gameTimeLeft !== 120 && gameState.twoMinuteWarningIssued) {
+             gameClockDisplay.parentElement.classList.remove('warning');
         }
     };
     
@@ -228,7 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
             playTimeLeft: parseInt(playClockDurationInput.value, 10),
             currentDown: 1,
             scoreLogHTML: '',
-            timeoutLogHTML: ''
+            timeoutLogHTML: '',
+            twoMinuteWarningIssued: false
         };
         sendAction('UPDATE_STATE', newGameState);
     });
@@ -325,7 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAction('STOP_GAME_CLOCK');
         sendAction('UPDATE_STATE', { 
             gameTimeLeft: gameState.halfDuration, 
-            timeoutsUsed: { '1': 0, '2': 0 } 
+            timeoutsUsed: { '1': 0, '2': 0 },
+            twoMinuteWarningIssued: false
         });
     });
 
