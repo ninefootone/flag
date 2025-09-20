@@ -83,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // NEW: Local flag to manage the visual/audible warning
     let twoMinuteWarningIssuedLocally = false;
+    
+    // NEW: Local history of score changes for the undo button
+    let scoreHistory = [];
 
     // A simple audio element for the warning sound
     const audio = new Audio('/assets/warning.mp3'); 
@@ -229,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
+        scoreHistory = []; // Reset score history for new game
 
         const newGameState = {
             date: dateField.value || 'N/A',
@@ -267,6 +271,12 @@ document.addEventListener('DOMContentLoaded', () => {
     logScoreBtn.addEventListener('click', () => {
         if (!tempScoreEvent) return;
         
+        // Save the current score state before the change
+        scoreHistory.push({
+            scores: { ...gameState.scores },
+            scoreLogHTML: gameState.scoreLogHTML
+        });
+
         const { team, scoreToAdd } = tempScoreEvent;
         const newScores = { ...gameState.scores };
         
@@ -296,6 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Manual Score Adjustment Buttons
     adjustButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Manual adjustments are not logged for undo
             const team = button.dataset.team;
             const adjustment = button.dataset.adjust;
 
@@ -375,6 +386,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     undoBtn.addEventListener('click', () => {
-        sendAction('UNDO_ACTION');
+        if (scoreHistory.length > 0) {
+            const previousState = scoreHistory.pop();
+            sendAction('UPDATE_STATE', {
+                scores: previousState.scores,
+                scoreLogHTML: previousState.scoreLogHTML
+            });
+        } else {
+            alert("No score actions to undo.");
+        }
     });
 });
