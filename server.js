@@ -26,6 +26,8 @@ let currentGameState = {
     playClockRunning: false
 };
 
+const initialGameState = { ...currentGameState };
+
 let gameClockInterval;
 let playClockInterval;
 
@@ -103,6 +105,11 @@ wss.on('connection', function connection(ws) {
             stopPlayClock();
         } else if (parsedMessage.type === 'UPDATE_STATE') {
             currentGameState = { ...currentGameState, ...parsedMessage.payload };
+            broadcastState();
+        } else if (parsedMessage.type === 'END_GAME') {
+            stopGameClock();
+            stopPlayClock();
+            currentGameState = { ...initialGameState };
             broadcastState();
         }
     });

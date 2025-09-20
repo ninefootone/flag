@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameDateDisplay = document.getElementById('game-date');
     const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
-    const team2ScoreDisplay = document.getElementById('team2-score-display');
+    const team2ScoreDisplay = document = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
@@ -49,8 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameClockToggleBtn = document.getElementById('game-clock-toggle');
     const gameClockResetBtn = document.getElementById('game-clock-reset');
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
-    const playClockResetBtn = document = document.getElementById('play-clock-reset');
+    const playClockResetBtn = document.getElementById('play-clock-reset');
     const adjustButtons = document.querySelectorAll('.adjust-btn');
+    const endGameBtn = document.getElementById('end-game-btn');
 
 
     // --- WebSocket Event Handlers ---
@@ -255,5 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
     playClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_PLAY_CLOCK');
         sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
+    });
+
+    endGameBtn.addEventListener('click', () => {
+        sendAction('END_GAME');
     });
 });
