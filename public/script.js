@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameDateDisplay = document.getElementById('game-date');
     const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
-    const team2ScoreDisplay = document.getElementById('team2-score-display');
+    const team2ScoreDisplay = document = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
@@ -135,14 +135,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // This function now returns the new log string instead of sending a separate action
     const getNewScoreLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        const newLogEntry = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>`;
+        // Calculate elapsed time for the log entry
+        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>`;
         return newLogEntry + gameState.scoreLogHTML;
     };
 
     // This function now returns the new log string instead of sending a separate action
     const getNewTimeoutLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        const newLogEntry = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} called a timeout.</li>`;
+        // Calculate elapsed time for the log entry
+        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} called a timeout.</li>`;
         return newLogEntry + gameState.timeoutLogHTML;
     };
 
