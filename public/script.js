@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const toggleInterface = () => {
-        if (gameState.team1Name !== 'Home Team' || gameState.team2Name !== 'Away Team') {
+        if (gameState.team1Name && gameState.team2Name && gameState.team1Name !== 'Home Team' && gameState.team2Name !== 'Away Team') {
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
         } else {
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     playClockResetBtn.addEventListener('click', () => {
-            sendAction('STOP_PLAY_CLOCK');
-            sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
-        });
+        sendAction('STOP_PLAY_CLOCK');
+        sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
     });
+});
