@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         halfDuration: 1200,
         playClockDuration: 40,
         timeoutsPerHalf: 2,
-        actionLog: [],
         scoreLogHTML: '',
         timeoutLogHTML: ''
     };
@@ -49,9 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameClockResetBtn = document.getElementById('game-clock-reset');
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
     const playClockResetBtn = document.getElementById('play-clock-reset');
+    const manualScoreUpBtns = document.querySelectorAll('.manual-up');
+    const manualScoreDownBtns = document.querySelectorAll('.manual-down');
 
-    let gameClockInterval;
-    let playClockInterval;
 
     // --- WebSocket Event Handlers ---
     ws.onopen = () => {
@@ -74,9 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- State Management and UI Updates ---
-    const broadcastState = () => {
+    const sendAction = (type, payload = {}) => {
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify(gameState));
+            ws.send(JSON.stringify({ type, payload }));
         }
     };
 
@@ -106,7 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         updateDownDisplay();
+        updateButtonLabels();
     };
+    
+    const updateButtonLabels = () => {
+        gameClockToggleBtn.textContent = gameState.gameTimeLeft > 0 ? (gameState.gameClockInterval ? 'Stop' : 'Start') : 'Start';
+        playClockToggleBtn.textContent = gameState.playTimeLeft > 0 ? (gameState.playClockInterval ? 'Stop' : 'Start') : 'Start';
+    };
+
 
     const formatTime = (totalSeconds) => {
         const minutes = Math.floor(totalSeconds / 60);
@@ -114,87 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    const startGameClock = () => {
-        if (!gameClockInterval) {
-            gameClockInterval = setInterval(() => {
-                if (gameState.gameTimeLeft > 0) {
-                    gameState.gameTimeLeft--;
-                    broadcastState();
-                } else {
-                    stopGameClock();
-                    alert('Half is over!');
-                }
-            }, 1000);
-            gameClockToggleBtn.textContent = 'Stop';
-        }
-    };
-    const stopGameClock = () => {
-        clearInterval(gameClockInterval);
-        gameClockInterval = null;
-        gameClockToggleBtn.textContent = 'Start';
-    };
-    const resetGameClock = () => {
-        stopGameClock();
-        gameState.gameTimeLeft = gameState.halfDuration;
-        gameState.timeoutsUsed = { '1': 0, '2': 0 };
-        broadcastState();
-    };
-    const toggleGameClock = () => {
-        if (gameClockInterval) {
-            stopGameClock();
-        } else {
-            startGameClock();
-        }
-    };
-
-    const startPlayClock = () => {
-        if (autoAdvanceCheckbox.checked) {
-            gameState.currentDown = (gameState.currentDown % 4) + 1;
-            broadcastState();
-        }
-        if (!playClockInterval) {
-            playClockInterval = setInterval(() => {
-                if (gameState.playTimeLeft > 0) {
-                    gameState.playTimeLeft--;
-                    broadcastState();
-                } else {
-                    stopPlayClock();
-                    alert('Play clock expired!');
-                }
-            }, 1000);
-            playClockToggleBtn.textContent = 'Stop';
-        }
-    };
-    const stopPlayClock = () => {
-        clearInterval(playClockInterval);
-        playClockInterval = null;
-        playClockToggleBtn.textContent = 'Start';
-    };
-    const resetPlayClock = () => {
-            stopPlayClock();
-            gameState.playTimeLeft = gameState.playClockDuration;
-            broadcastState();
-    };
-    const togglePlayClock = () => {
-        if (playClockInterval) {
-            stopPlayClock();
-        } else {
-            startPlayClock();
-        }
-    };
-
     const addScoreLogEntry = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        gameState.scoreLogHTML = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>` + gameState.scoreLogHTML;
+        const newLogEntry = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>`;
+        
+        const newScoreLogHTML = newLogEntry + gameState.scoreLogHTML;
+        sendAction('UPDATE_STATE', { scoreLogHTML: newScoreLogHTML });
     };
 
     const addTimeoutLogEntry = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        gameState.timeoutLogHTML = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} called a timeout.</li>` + gameState.timeoutLogHTML;
-    };
-
-    const undoLastAction = () => {
-        alert('Undo functionality is not yet implemented in the real-time version.');
+        const newLogEntry = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} called a timeout.</li>`;
+        
+        const newTimeoutLogHTML = newLogEntry + gameState.timeoutLogHTML;
+        sendAction('UPDATE_STATE', { timeoutLogHTML: newTimeoutLogHTML });
     };
 
     const updateDownDisplay = () => {
@@ -209,24 +148,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     startGameBtn.addEventListener('click', () => {
-        gameState.date = dateField.value || 'N/A';
-        gameState.location = locationField.value || 'N/A';
-        gameState.team1Name = team1NameInput.value || 'Home Team';
-        gameState.team2Name = team2NameInput.value || 'Away Team';
-        gameState.halfDuration = parseInt(halfDurationInput.value, 10) * 60;
-        gameState.playClockDuration = parseInt(playClockDurationInput.value, 10);
-        gameState.timeoutsPerHalf = parseInt(timeoutsPerHalfInput.value, 10);
-        
-        gameState.scores = { team1: 0, team2: 0 };
-        gameState.timeoutsUsed = { '1': 0, '2': 0 };
-        gameState.gameTimeLeft = gameState.halfDuration;
-        gameState.playTimeLeft = gameState.playClockDuration;
-        gameState.currentDown = 1;
-        gameState.actionLog = [];
-        gameState.scoreLogHTML = '';
-        gameState.timeoutLogHTML = '';
-        
-        broadcastState();
+        const newGameState = {
+            date: dateField.value || 'N/A',
+            location: locationField.value || 'N/A',
+            team1Name: team1NameInput.value || 'Home Team',
+            team2Name: team2NameInput.value || 'Away Team',
+            halfDuration: parseInt(halfDurationInput.value, 10) * 60,
+            playClockDuration: parseInt(playClockDurationInput.value, 10),
+            timeoutsPerHalf: parseInt(timeoutsPerHalfInput.value, 10),
+            scores: { team1: 0, team2: 0 },
+            timeoutsUsed: { '1': 0, '2': 0 },
+            gameTimeLeft: parseInt(halfDurationInput.value, 10) * 60,
+            playTimeLeft: parseInt(playClockDurationInput.value, 10),
+            currentDown: 1,
+            scoreLogHTML: '',
+            timeoutLogHTML: ''
+        };
+        sendAction('UPDATE_STATE', newGameState);
     });
 
     scoreButtons.forEach(button => {
@@ -235,14 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const scoreToAdd = parseInt(button.dataset.score, 10);
             const scoreLabel = button.dataset.label;
             
+            const newScores = { ...gameState.scores };
             if (team === '1') {
-                gameState.scores.team1 += scoreToAdd;
+                newScores.team1 += scoreToAdd;
             } else {
-                gameState.scores.team2 += scoreToAdd;
+                newScores.team2 += scoreToAdd;
             }
 
             addScoreLogEntry({ team: team, scoreType: scoreLabel, points: scoreToAdd });
-            broadcastState();
+            sendAction('UPDATE_STATE', { scores: newScores });
         });
     });
 
@@ -250,10 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const team = button.dataset.team;
             if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
-                gameState.timeoutsUsed[team]++;
+                const newTimeoutsUsed = { ...gameState.timeoutsUsed };
+                newTimeoutsUsed[team]++;
                 addTimeoutLogEntry({ team: team });
-                stopGameClock();
-                broadcastState();
+                sendAction('STOP_GAME_CLOCK');
+                sendAction('UPDATE_STATE', { timeoutsUsed: newTimeoutsUsed });
             } else {
                 alert('No timeouts left for this team.');
             }
@@ -262,13 +202,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     downButtons.forEach(button => {
         button.addEventListener('click', () => {
-            gameState.currentDown = parseInt(button.dataset.down);
-            broadcastState();
+            sendAction('UPDATE_STATE', { currentDown: parseInt(button.dataset.down) });
         });
     });
 
-    gameClockToggleBtn.addEventListener('click', toggleGameClock);
-    gameClockResetBtn.addEventListener('click', resetGameClock);
-    playClockToggleBtn.addEventListener('click', togglePlayClock);
-    playClockResetBtn.addEventListener('click', resetPlayClock);
+    gameClockToggleBtn.addEventListener('click', () => {
+        if (gameState.gameClockInterval) {
+            sendAction('STOP_GAME_CLOCK');
+        } else {
+            sendAction('START_GAME_CLOCK');
+        }
+    });
+
+    gameClockResetBtn.addEventListener('click', () => {
+        sendAction('STOP_GAME_CLOCK');
+        sendAction('UPDATE_STATE', { 
+            gameTimeLeft: gameState.halfDuration, 
+            timeoutsUsed: { '1': 0, '2': 0 } 
+        });
+    });
+
+    playClockToggleBtn.addEventListener('click', () => {
+        if (gameState.playClockInterval) {
+            sendAction('STOP_PLAY_CLOCK');
+        } else {
+            sendAction('START_PLAY_CLOCK');
+        }
+    });
+
+    playClockResetBtn.addEventListener('click', () => {
+        sendAction('STOP_PLAY_CLOCK');
+        sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
+    });
+
+    manualScoreUpBtns.forEach(button => {
+        button.addEventListener('click', () => {
+            const team = button.dataset.team;
+            const newScores = { ...gameState.scores };
+            if (team === '1') {
+                newScores.team1++;
+            } else {
+                newScores.team2++;
+            }
+            sendAction('UPDATE_STATE', { scores: newScores });
+        });
+    });
+
+    manualScoreDownBtns.forEach(button => {
+        button.addEventListener('click', () => {
+            const team = button.dataset.team;
+            const newScores = { ...gameState.scores };
+            if (team === '1') {
+                newScores.team1--;
+            } else {
+                newScores.team2--;
+            }
+            sendAction('UPDATE_STATE', { scores: newScores });
+        });
+    });
+
 });
