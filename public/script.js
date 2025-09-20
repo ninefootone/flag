@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockResetBtn = document.getElementById('play-clock-reset');
     const manualScoreUpBtns = document.querySelectorAll('.manual-up');
     const manualScoreDownBtns = document.querySelectorAll('.manual-down');
+    const undoBtn = document.getElementById('undo-btn');
+    const coinTossBtn = document.getElementById('coin-toss-btn');
 
 
     // --- WebSocket Event Handlers ---
@@ -246,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 newScores.team2++;
             }
-            sendAction('UPDATE_STATE', { scores: newScores });
+            sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: `<li>Manual Adjustment: The score was adjusted up for ${team === '1' ? gameState.team1Name : gameState.team2Name}.</li>` + gameState.scoreLogHTML });
         });
     });
 
@@ -259,8 +261,16 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 newScores.team2--;
             }
-            sendAction('UPDATE_STATE', { scores: newScores });
+            sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: `<li>Manual Adjustment: The score was adjusted down for ${team === '1' ? gameState.team1Name : gameState.team2Name}.</li>` + gameState.scoreLogHTML });
         });
+    });
+    
+    undoBtn.addEventListener('click', () => {
+        sendAction('UNDO');
+    });
+
+    coinTossBtn.addEventListener('click', () => {
+        sendAction('COIN_TOSS');
     });
 
 });

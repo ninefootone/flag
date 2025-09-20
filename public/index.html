@@ -2,131 +2,146 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Referee App</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Referee App</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="container">
-        <h1>Real-time Referee App</h1>
-
+    <div class="app-container">
         <div id="settings-form">
-            <div class="input-group">
+            <h2>Game Settings</h2>
+            <form id="settings-form-element">
                 <label for="date-field">Date:</label>
-                <input type="date" id="date-field">
-            </div>
-            <div class="input-group">
+                <input type="text" id="date-field" placeholder="DD/MM/YYYY">
+
                 <label for="location-field">Location:</label>
-                <input type="text" id="location-field" placeholder="e.g., Central Park Field #3">
-            </div>
-            <div class="input-group">
-                <label for="team1-name">Team 1 Name:</label>
+                <input type="text" id="location-field" placeholder="City, State">
+
+                <label for="team1-name">Home Team Name:</label>
                 <input type="text" id="team1-name" value="Home Team">
-            </div>
-            <div class="input-group">
-                <label for="team2-name">Team 2 Name:</label>
+
+                <label for="team2-name">Away Team Name:</label>
                 <input type="text" id="team2-name" value="Away Team">
-            </div>
-            <div class="input-group">
-                <label for="half-duration">Half Duration (minutes):</label>
-                <input type="number" id="half-duration" value="20" min="1">
-            </div>
-            <div class="input-group">
-                <label for="play-clock-duration">Play Clock (seconds):</label>
-                <input type="number" id="play-clock-duration" value="40" min="1">
-            </div>
-            <div class="input-group">
-                <label for="timeouts-per-half">Timeouts per half:</label>
-                <input type="number" id="timeouts-per-half" value="2" min="0">
-            </div>
-            <button id="start-game-btn">Start Game</button>
+                
+                <div class="settings-grid">
+                    <div>
+                        <label for="half-duration">Half Duration (min):</label>
+                        <input type="number" id="half-duration" value="20" min="1">
+                    </div>
+                    <div>
+                        <label for="play-clock-duration">Play Clock (sec):</label>
+                        <input type="number" id="play-clock-duration" value="40" min="5">
+                    </div>
+                    <div>
+                        <label for="timeouts-per-half">Timeouts Per Half:</label>
+                        <input type="number" id="timeouts-per-half" value="2" min="0">
+                    </div>
+                </div>
+
+                <button type="button" id="start-game-btn">Start Game</button>
+                <button type="button" id="coin-toss-btn">Coin Toss</button>
+            </form>
         </div>
 
         <div id="game-interface" class="hidden">
-            <div class="game-info">
-                <span id="game-date"></span> | <span id="game-location"></span>
-            </div>
+            <header>
+                <h1 class="game-info">
+                    <span id="game-date"></span><br>
+                    <span id="game-location"></span>
+                </h1>
+            </header>
 
-            <div class="down-tracker">
-                <h2>Downs</h2>
-                <div class="down-buttons">
-                    <button data-down="1" class="down-btn active">1st</button>
-                    <button data-down="2" class="down-btn">2nd</button>
-                    <button data-down="3" class="down-btn">3rd</button>
-                    <button data-down="4" class="down-btn">4th</button>
-                </div>
-                <div class="auto-advance-option">
-                    <input type="checkbox" id="auto-advance-play-clock" checked>
-                    <label for="auto-advance-play-clock">Auto Advance on Play</label>
-                </div>
-            </div>
-
-            <div class="timers-container">
-                <div class="timer game-timer">
-                    <h2>Game Clock</h2>
-                    <div id="game-clock-display" class="clock-display">20:00</div>
-                    <div class="timer-controls">
-                        <button id="game-clock-toggle">Start</button>
-                        <button id="game-clock-reset">Reset</button>
-                    </div>
-                </div>
-                <div class="timer play-timer">
-                    <h2>Play Clock</h2>
-                    <div id="play-clock-display" class="clock-display">40</div>
-                    <div class="timer-controls">
-                        <button id="play-clock-toggle">Start</button>
-                        <button id="play-clock-reset">Reset</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="scoreboard">
+            <section class="scoreboard">
                 <div class="team-score">
-                    <h2 id="team1-name-display">Home Team</h2>
-                    <div id="team1-score-display" class="score-display">0</div>
+                    <span id="team1-name-display" class="team-name"></span>
+                    <span id="team1-score-display" class="score"></span>
                     <div class="score-buttons">
-                        <button data-team="1" data-score="6" data-label="TD">TD</button>
-                        <button data-team="1" data-score="1" data-label="1xp">1xp</button>
-                        <button data-team="1" data-score="2" data-label="2xp">2xp</button>
-                        <button data-team="1" data-score="2" data-label="Safety">Safety</button>
-                        <button data-team="1" data-score="1" class="manual-up">+</button>
-                        <button data-team="1" data-score="-1" class="manual-down">-</button>
+                        <button class="score-btn" data-team="1" data-score="6" data-label="Touchdown">6</button>
+                        <button class="score-btn" data-team="1" data-score="1" data-label="PAT">1</button>
+                        <button class="score-btn" data-team="1" data-score="2" data-label="2PT">2</button>
+                        <button class="score-btn" data-team="1" data-score="3" data-label="Field Goal">3</button>
+                        <button class="score-btn" data-team="1" data-score="2" data-label="Safety">2</button>
                     </div>
-                    <div class="timeouts">
-                        Timeouts: <span id="team1-timeouts">2</span>
-                        <button data-team="1" class="use-timeout-btn">Use Timeout</button>
+                    <div class="manual-score-adjust">
+                        <button class="manual-up" data-team="1">+</button>
+                        <button class="manual-down" data-team="1">-</button>
                     </div>
                 </div>
-                <div class="team-score">
-                    <h2 id="team2-name-display">Away Team</h2>
-                    <div id="team2-score-display" class="score-display">0</div>
-                    <div class="score-buttons">
-                        <button data-team="2" data-score="6" data-label="TD">TD</button>
-                        <button data-team="2" data-score="1" data-label="1xp">1xp</button>
-                        <button data-team="2" data-score="2" data-label="2xp">2xp</button>
-                        <button data-team="2" data-score="2" data-label="Safety">Safety</button>
-                        <button data-team="2" data-score="1" class="manual-up">+</button>
-                        <button data-team="2" data-score="-1" class="manual-down">-</button>
+                
+                <div class="game-clocks">
+                    <div class="clock-display game-clock-bg">
+                        <span id="game-clock-display" class="clock-time"></span>
+                        <p class="clock-label">Game Clock</p>
                     </div>
-                    <div class="timeouts">
-                        Timeouts: <span id="team2-timeouts">2</span>
-                        <button data-team="2" class="use-timeout-btn">Use Timeout</button>
+                    <div class="clock-controls">
+                        <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
+                        <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="game-log-container">
-                <div class="log-section">
-                    <h2>Score Log</h2>
+                <div class="team-score">
+                    <span id="team2-name-display" class="team-name"></span>
+                    <span id="team2-score-display" class="score"></span>
+                    <div class="score-buttons">
+                        <button class="score-btn" data-team="2" data-score="6" data-label="Touchdown">6</button>
+                        <button class="score-btn" data-team="2" data-score="1" data-label="PAT">1</button>
+                        <button class="score-btn" data-team="2" data-score="2" data-label="2PT">2</button>
+                        <button class="score-btn" data-team="2" data-score="3" data-label="Field Goal">3</button>
+                        <button class="score-btn" data-team="2" data-score="2" data-label="Safety">2</button>
+                    </div>
+                    <div class="manual-score-adjust">
+                        <button class="manual-up" data-team="2">+</button>
+                        <button class="manual-down" data-team="2">-</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="game-controls">
+                <div class="game-controls-container">
+                    <div class="down-buttons">
+                        <p>Down</p>
+                        <button class="down-btn" data-down="1">1</button>
+                        <button class="down-btn" data-down="2">2</button>
+                        <button class="down-btn" data-down="3">3</button>
+                        <button class="down-btn" data-down="4">4</button>
+                    </div>
+                    <div class="play-clock-section">
+                        <div class="clock-display play-clock-bg">
+                            <span id="play-clock-display" class="clock-time"></span>
+                            <p class="clock-label">Play Clock</p>
+                        </div>
+                        <div class="play-clock-controls">
+                            <button id="play-clock-toggle" class="clock-btn start-stop-btn">Start</button>
+                            <button id="play-clock-reset" class="clock-btn reset-btn">Reset</button>
+                        </div>
+                        <div class="play-clock-options">
+                            <label for="auto-advance-play-clock">
+                                <input type="checkbox" id="auto-advance-play-clock"> Auto Advance
+                            </label>
+                        </div>
+                    </div>
+                    <div class="timeout-buttons">
+                        <p>Timeouts</p>
+                        <button class="use-timeout-btn" data-team="1"><span id="team1-timeouts"></span></button>
+                        <button class="use-timeout-btn" data-team="2"><span id="team2-timeouts"></span></button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="score-log">
+                <div class="log-container">
+                    <h3 class="log-title">Score and Timeout Log</h3>
                     <ul id="score-log"></ul>
-                </div>
-                <div class="log-section">
-                    <h2>Timeout Log</h2>
                     <ul id="timeout-log"></ul>
                 </div>
-            </div>
+            </section>
+            
+            <section class="undo-control">
+                <button id="undo-btn">Undo Last Change</button>
+            </section>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
 </body>
 </html>
