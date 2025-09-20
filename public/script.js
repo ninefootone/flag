@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // WebSocket connection to the server
     const ws = new WebSocket(`wss://${location.host}`);
 
-    // State object to hold all game data
     let gameState = {
         date: '',
         location: '',
@@ -10,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         team2Name: 'Away Team',
         scores: { team1: 0, team2: 0 },
         timeoutsUsed: { '1': 0, '2': 0 },
-        gameTimeLeft: 1200, // 20 minutes in seconds
+        gameTimeLeft: 1200,
         playTimeLeft: 40,
         currentDown: 1,
         halfDuration: 1200,
@@ -21,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
         timeoutLogHTML: ''
     };
 
-    // DOM Elements
     const settingsForm = document.getElementById('settings-form');
     const gameInterface = document.getElementById('game-interface');
     const startGameBtn = document.getElementById('start-game-btn');
@@ -53,66 +50,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
     const playClockResetBtn = document.getElementById('play-clock-reset');
 
-    // Timer variables
     let gameClockInterval;
     let playClockInterval;
 
     // --- WebSocket Event Handlers ---
-
-    // Connection opened
     ws.onopen = () => {
         console.log('Connected to the WebSocket server!');
     };
 
-    // Listen for messages from the server
     ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
         console.log('Received from server:', message);
-
-        // Update the local game state with the received data
         gameState = { ...gameState, ...message };
-
-        // Update the UI to reflect the new state
         updateUI();
     };
 
-    // Connection closed
     ws.onclose = () => {
         console.log('Disconnected from the WebSocket server.');
     };
 
-    // Error handler
     ws.onerror = (error) => {
         console.error('WebSocket Error:', error);
     };
 
     // --- State Management and UI Updates ---
-
-    // Function to send the entire game state to the server
     const broadcastState = () => {
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify(gameState));
         }
     };
 
-    // New function to toggle the UI
     const toggleInterface = () => {
-        // If the game has started (a team name is set), show the game interface
         if (gameState.team1Name !== 'Home Team' || gameState.team2Name !== 'Away Team') {
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
         } else {
-            // Otherwise, show the setup form
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
         }
     };
 
-    // Function to update the entire UI based on the local gameState
     const updateUI = () => {
-        // First, check if we should be on the game or setup screen
         toggleInterface();
-        
         gameDateDisplay.textContent = gameState.date;
         gameLocationDisplay.textContent = gameState.location;
         team1NameDisplay.textContent = gameState.team1Name;
@@ -124,22 +103,17 @@ document.addEventListener('DOMContentLoaded', () => {
         gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
         playClockDisplay.textContent = gameState.playTimeLeft;
         
-        // Update logs and down tracker
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         updateDownDisplay();
     };
 
-    // --- Game Logic Functions (local, then broadcast) ---
-
-    // Helper function to format time
     const formatTime = (totalSeconds) => {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    // Game Clock Functions
     const startGameClock = () => {
         if (!gameClockInterval) {
             gameClockInterval = setInterval(() => {
@@ -173,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Play Clock Functions
     const startPlayClock = () => {
         if (autoAdvanceCheckbox.checked) {
             gameState.currentDown = (gameState.currentDown % 4) + 1;
@@ -210,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Log Functions
     const addScoreLogEntry = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         gameState.scoreLogHTML = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} scored a ${event.scoreType} for ${event.points} points.</li>` + gameState.scoreLogHTML;
@@ -221,13 +193,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.timeoutLogHTML = `<li>[${formatTime(gameState.gameTimeLeft)}] ${teamName} called a timeout.</li>` + gameState.timeoutLogHTML;
     };
 
-    // Undo Function
     const undoLastAction = () => {
-        // NOTE: This feature will need to be refactored on the server-side to work reliably
         alert('Undo functionality is not yet implemented in the real-time version.');
     };
 
-    // Down Tracker Functions
     const updateDownDisplay = () => {
         downButtons.forEach(btn => {
             if (parseInt(btn.dataset.down) === gameState.currentDown) {
@@ -239,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Event Listeners ---
-
     startGameBtn.addEventListener('click', () => {
         gameState.date = dateField.value || 'N/A';
         gameState.location = locationField.value || 'N/A';
@@ -299,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Timer Event Listeners
     gameClockToggleBtn.addEventListener('click', toggleGameClock);
     gameClockResetBtn.addEventListener('click', resetGameClock);
     playClockToggleBtn.addEventListener('click', togglePlayClock);
