@@ -119,6 +119,11 @@ wss.on('connection', function connection(ws) {
         } else if (parsedMessage.type === 'STOP_PLAY_CLOCK') {
             stopPlayClock();
         } else if (parsedMessage.type === 'UPDATE_STATE') {
+            // Check if this update is a game clock reset
+            if (parsedMessage.payload.gameTimeLeft !== undefined && parsedMessage.payload.gameTimeLeft === currentGameState.halfDuration) {
+                const endHalfLog = '<li>--- End of First Half ---</li>';
+                currentGameState.scoreLogHTML = endHalfLog + currentGameState.scoreLogHTML;
+            }
             currentGameState = { ...currentGameState, ...parsedMessage.payload };
             broadcastState();
         } else if (parsedMessage.type === 'END_GAME') {
