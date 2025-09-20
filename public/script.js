@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Automatically set the date field to the current date
+    const today = new Date();
+    const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    document.getElementById('date-field').value = formattedDate;
+
     const ws = new WebSocket(`wss://${location.host}`);
 
     let gameState = {
@@ -35,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameDateDisplay = document.getElementById('game-date');
     const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
-    const team2ScoreDisplay = document = document.getElementById('team2-score-display');
+    const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
@@ -52,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockResetBtn = document.getElementById('play-clock-reset');
     const adjustButtons = document.querySelectorAll('.adjust-btn');
     const endGameBtn = document.getElementById('end-game-btn');
+    const team1TimeoutLabel = document.getElementById('team1-timeout-label');
+    const team2TimeoutLabel = document.getElementById('team2-timeout-label');
 
 
     // --- WebSocket Event Handlers ---
@@ -108,6 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         updateDownDisplay();
         updateButtonLabels();
+        team1TimeoutLabel.textContent = gameState.team1Name;
+        team2TimeoutLabel.textContent = gameState.team2Name;
     };
     
     const updateButtonLabels = () => {
