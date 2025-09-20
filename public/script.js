@@ -77,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Updated element reference for the single coin toss button
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
+    
+    // NEW: Reference for the export button
+    const exportLogBtn = document.getElementById('export-log-btn');
 
     // Temporary variables to hold scoring data
     let tempScoreEvent = null;
@@ -194,6 +197,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
         const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} called a timeout.</li>`;
         return newLogEntry + gameState.timeoutLogHTML;
+    };
+    
+    // NEW: Function to format and export the game log
+    const exportGameLog = () => {
+        const scoreLogItems = Array.from(scoreLogList.querySelectorAll('li'));
+        const timeoutLogItems = Array.from(timeoutLogList.querySelectorAll('li'));
+        
+        const scoreLogText = scoreLogItems.map(item => item.textContent).join('\n');
+        const timeoutLogText = timeoutLogItems.map(item => item.textContent).join('\n');
+        
+        const logContent = `
+Flag Football Game Log
+
+Date: ${gameState.date}
+Location: ${gameState.location}
+
+Teams:
+- ${gameState.team1Name}
+- ${gameState.team2Name}
+
+--- Score Log ---
+${scoreLogText || "No scores logged."}
+
+--- Timeout Log ---
+${timeoutLogText || "No timeouts logged."}
+
+--- Final Score ---
+${gameState.team1Name}: ${gameState.scores.team1}
+${gameState.team2Name}: ${gameState.scores.team2}
+`;
+
+        const blob = new Blob([logContent], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Game-Log_${gameState.team1Name}-vs-${gameState.team2Name}_${gameState.date}.txt`;
+        link.click();
+        URL.revokeObjectURL(link.href);
     };
 
     const updateDownDisplay = () => {
@@ -412,4 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("No actions to undo.");
         }
     });
+    
+    // NEW: Add event listener for the export button
+    exportLogBtn.addEventListener('click', exportGameLog);
 });
