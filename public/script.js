@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const intNumberInput = document.getElementById('int-number');
     const safetyNumberInput = document.getElementById('safety-number');
     const logScoreBtn = document.getElementById('log-score-btn');
-    const cancelPopupBtn = document.getElementById('cancel-popup-btn');
+    const cancelPopupBtn = document = document.getElementById('cancel-popup-btn');
 
     // Updated element reference for the single coin toss button
     const coinTossBtn = document.getElementById('coin-toss-btn');
