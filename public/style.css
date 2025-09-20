@@ -156,16 +156,10 @@ header {
     font-weight: bold;
     color: #007bff;
     line-height: 1;
-    margin: 0;
+    margin: 0 10px; /* New: Added horizontal margin for spacing */
 }
 
-.score-adjust {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
-}
-
-.score-adjust .adjust-btn {
+.adjust-btn {
     padding: 2px 8px;
     font-size: 1rem;
     line-height: 1;
@@ -289,7 +283,7 @@ li {
     border-radius: 4px;
 }
 
-/* New: Styles for the undo and end game buttons */
+/* Styles for the undo and end game buttons */
 .action-buttons {
     display: flex;
     flex-direction: column;
