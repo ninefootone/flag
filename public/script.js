@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationField = document.getElementById('location-field');
     const team1NameInput = document.getElementById('team1-name');
     const team2NameInput = document.getElementById('team2-name');
-    const halfDurationInput = document.getElementById('half-duration');
+    const halfDurationInput = document = document.getElementById('half-duration');
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
     const team1NameDisplay = document.getElementById('team1-name-display');
@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scorePopup = document.getElementById('score-popup');
     const popupHeader = document.getElementById('popup-header');
     const qbNumberInput = document.getElementById('qb-number');
-    const rbwrNumberInput = document.getElementById('rbwr-number');
+    const wrNumberInput = document.getElementById('wr-number');
+    const rbNumberInput = document.getElementById('rb-number'); // New element
     const intNumberInput = document.getElementById('int-number');
     const safetyNumberInput = document.getElementById('safety-number');
     const logScoreBtn = document.getElementById('log-score-btn');
@@ -151,7 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let playerDetails = [];
         if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
-        if (players.rbwr) { playerDetails.push(`WR/RB #${players.rbwr}`); }
+        if (players.wr) { playerDetails.push(`WR #${players.wr}`); } // New check
+        if (players.rb) { playerDetails.push(`RB #${players.rb}`); } // New check
         if (players.int) { playerDetails.push(`INT #${players.int}`); }
         if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
         
@@ -188,7 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hideScorePopup = () => {
         scorePopup.classList.add('hidden');
         qbNumberInput.value = '';
-        rbwrNumberInput.value = '';
+        wrNumberInput.value = ''; // Clear new WR field
+        rbNumberInput.value = ''; // Clear new RB field
         intNumberInput.value = '';
         safetyNumberInput.value = '';
         tempScoreEvent = null;
@@ -239,7 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const players = {
             qb: qbNumberInput.value || '',
-            rbwr: rbwrNumberInput.value || '',
+            wr: wrNumberInput.value || '', // Get new WR value
+            rb: rbNumberInput.value || '', // Get new RB value
             int: intNumberInput.value || '',
             safety: safetyNumberInput.value || ''
         };
