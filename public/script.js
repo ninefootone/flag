@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // NEW: Local flag to manage the visual/audible warning
     let twoMinuteWarningIssuedLocally = false;
     
-    // NEW: Local history of score changes for the undo button
-    let scoreHistory = [];
+    // NEW: Local history of score and timeout changes for the undo button
+    let actionHistory = [];
 
     // A simple audio element for the warning sound
     const audio = new Audio('/assets/warning.mp3'); 
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
-        scoreHistory = []; // Reset score history for new game
+        actionHistory = []; // Reset action history for new game
 
         const newGameState = {
             date: dateField.value || 'N/A',
@@ -272,7 +272,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tempScoreEvent) return;
         
         // Save the current score state before the change
-        scoreHistory.push({
+        actionHistory.push({
+            type: 'score',
             scores: { ...gameState.scores },
             scoreLogHTML: gameState.scoreLogHTML
         });
@@ -324,6 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const team = button.dataset.team;
             if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
+                
+                // Save the current timeout state before the change
+                actionHistory.push({
+                    type: 'timeout',
+                    timeoutsUsed: { ...gameState.timeoutsUsed },
+                    timeoutLogHTML: gameState.timeoutLogHTML
+                });
+
                 const newTimeoutsUsed = { ...gameState.timeoutsUsed };
                 newTimeoutsUsed[team]++;
                 const newTimeoutLogHTML = getNewTimeoutLog({ team: team });
@@ -386,14 +395,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     undoBtn.addEventListener('click', () => {
-        if (scoreHistory.length > 0) {
-            const previousState = scoreHistory.pop();
-            sendAction('UPDATE_STATE', {
-                scores: previousState.scores,
-                scoreLogHTML: previousState.scoreLogHTML
-            });
+        if (actionHistory.length > 0) {
+            const lastAction = actionHistory.pop();
+            if (lastAction.type === 'score') {
+                sendAction('UPDATE_STATE', {
+                    scores: lastAction.scores,
+                    scoreLogHTML: lastAction.scoreLogHTML
+                });
+            } else if (lastAction.type === 'timeout') {
+                sendAction('UPDATE_STATE', {
+                    timeoutsUsed: lastAction.timeoutsUsed,
+                    timeoutLogHTML: lastAction.timeoutLogHTML
+                });
+            }
         } else {
-            alert("No score actions to undo.");
+            alert("No actions to undo.");
         }
     });
 });
