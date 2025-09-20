@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameClockResetBtn = document.getElementById('game-clock-reset');
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
     const playClockResetBtn = document.getElementById('play-clock-reset');
+    const adjustButtons = document.querySelectorAll('.adjust-btn');
 
 
     // --- WebSocket Event Handlers ---
@@ -181,6 +182,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             addScoreLogEntry({ team: team, scoreType: scoreLabel, points: scoreToAdd });
+            sendAction('UPDATE_STATE', { scores: newScores });
+        });
+    });
+    
+    // Manual Score Adjustment Buttons
+    adjustButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const team = button.dataset.team;
+            const adjustment = button.dataset.adjust;
+
+            const newScores = { ...gameState.scores };
+            if (team === '1') {
+                newScores.team1 += (adjustment === '+' ? 1 : -1);
+            } else {
+                newScores.team2 += (adjustment === '+' ? 1 : -1);
+            }
             sendAction('UPDATE_STATE', { scores: newScores });
         });
     });
