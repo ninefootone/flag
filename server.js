@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true });
 
 let currentGameState = {};
 
@@ -27,7 +27,7 @@ wss.on('connection', function connection(ws) {
 
     ws.on('message', function incoming(message) {
         console.log('received: %s', message);
-        
+
         try {
             const parsedMessage = JSON.parse(message);
             currentGameState = parsedMessage;
@@ -53,8 +53,14 @@ wss.on('connection', function connection(ws) {
 
 // ----------------------------------------------------
 // This is the crucial part for your hosting on Render.
-// We tell the server to listen on the port Render provides.
+// We explicitly handle the upgrade request.
 // ----------------------------------------------------
+server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request);
+    });
+});
+
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);

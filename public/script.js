@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1NameDisplay = document.getElementById('team1-name-display');
     const team2NameDisplay = document.getElementById('team2-name-display');
     const gameDateDisplay = document.getElementById('game-date');
-    const gameLocationDisplay = document = document.getElementById('game-location');
+    const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
     const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
