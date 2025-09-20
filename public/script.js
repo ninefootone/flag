@@ -33,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
     const team1NameInput = document.getElementById('team1-name');
-    const team2NameInput = document = document.getElementById('team2-name');
+    const team2NameInput = document.getElementById('team2-name');
     const halfDurationInput = document.getElementById('half-duration');
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
     const team1NameDisplay = document.getElementById('team1-name-display');
     const team2NameDisplay = document.getElementById('team2-name-display');
     const gameDateDisplay = document.getElementById('game-date');
-    const gameLocationDisplay = document = document.getElementById('game-location');
+    const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
     const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
@@ -60,8 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const adjustButtons = document.querySelectorAll('.adjust-btn');
     const endGameBtn = document.getElementById('end-game-btn');
     const undoBtn = document.getElementById('undo-btn');
-    const team1TimeoutLabel = document.getElementById('team1-timeout-label');
-    const team2TimeoutLabel = document.getElementById('team2-timeout-label');
 
     // New element references for the score pop-up
     const scorePopup = document.getElementById('score-popup');
@@ -147,8 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         updateDownDisplay();
         updateButtonLabels();
-        team1TimeoutLabel.textContent = gameState.team1Name;
-        team2TimeoutLabel.textContent = gameState.team2Name;
         
         if (gameState.coinTossResult) {
             coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
