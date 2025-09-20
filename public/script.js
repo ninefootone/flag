@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
     const team1NameInput = document.getElementById('team1-name');
-    const team2NameInput = document.getElementById('team2-name');
+    const team2NameInput = document = document.getElementById('team2-name');
     const halfDurationInput = document.getElementById('half-duration');
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Temporary variables to hold scoring data
     let tempScoreEvent = null;
+    
+    // NEW: Local flag to manage the visual/audible warning
+    let twoMinuteWarningIssuedLocally = false;
 
     // A simple audio element for the warning sound
     const audio = new Audio('/assets/warning.mp3'); 
@@ -145,11 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
             coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
         }
 
-        // Two-minute warning logic (now persistent until the clock is stopped)
-        if (gameState.gameTimeLeft === 120 && !gameState.twoMinuteWarningIssued) {
+        // Two-minute warning logic (now uses the local flag)
+        if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
             audio.play();
-            sendAction('UPDATE_STATE', { twoMinuteWarningIssued: true });
+            twoMinuteWarningIssuedLocally = true;
         }
     };
     
@@ -224,6 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Please complete the coin toss before starting the game.");
             return;
         }
+        twoMinuteWarningIssuedLocally = false;
+        gameClockDisplay.parentElement.classList.remove('warning');
 
         const newGameState = {
             date: dateField.value || 'N/A',
@@ -337,8 +342,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gameClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_GAME_CLOCK');
-        // When resetting the clock, remove the warning flash
+        // When resetting the clock, remove the warning flash and reset the local flag
         gameClockDisplay.parentElement.classList.remove('warning');
+        twoMinuteWarningIssuedLocally = false;
         sendAction('UPDATE_STATE', { 
             gameTimeLeft: gameState.halfDuration, 
             timeoutsUsed: { '1': 0, '2': 0 },
