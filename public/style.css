@@ -228,36 +228,45 @@ header {
 
 .timeout-buttons {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 20px;
     width: 100%;
+    text-align: center;
+    margin-top: 20px;
 }
 
-.timeout-buttons button {
-    background-color: #ffc107;
-    color: #333;
-    width: 100%;
-    padding: 10px;
-    border: none;
+.timeout-button-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-}
-
-.timeout-buttons button:hover {
-    background-color: #e0a800;
+    gap: 5px;
 }
 
 .timeout-label {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: bold;
 }
 
+.use-timeout-btn {
+    background-color: #ffc107;
+    color: #333;
+    width: 80px;
+    height: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.use-timeout-btn:hover {
+    background-color: #e0a800;
+}
+
 .timeout-count {
-    font-size: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 /* Log and End Game Section */
