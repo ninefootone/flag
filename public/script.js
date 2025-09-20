@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     playClockResetBtn.addEventListener('click', () => {
-        sendAction('STOP_PLAY_CLOCK');
-        sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
+            sendAction('STOP_PLAY_CLOCK');
+            sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
+        });
     });
-});
