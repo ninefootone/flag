@@ -202,10 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NEW: Function to apply role-based permissions
     const applyRolePermissions = () => {
-        // First, disable all controls by default
+        // First, hide all controls by default
         allControls.forEach(control => control.classList.add('disabled'));
 
-        // Then, enable only the controls for the current user's role
+        // Then, show only the controls for the current user's role
         const controlsToEnable = rolePermissions[userRole] || [];
         controlsToEnable.forEach(control => control.classList.remove('disabled'));
     };
@@ -275,8 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (gameIdFromUrl) {
         gameLobby.classList.add('hidden');
-        settingsForm.classList.add('hidden');
-        gameInterface.classList.remove('hidden');
+        settingsForm.classList.remove('hidden');
         connectWebSocket(gameIdFromUrl);
     } else {
         gameLobby.classList.remove('hidden');

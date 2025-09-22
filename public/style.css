@@ -20,7 +20,7 @@ body {
 }
 
 /* Common Form and Button Styles */
-#settings-form, #game-interface {
+#settings-form, #game-interface, #game-lobby {
     padding: 20px;
 }
 

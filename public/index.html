@@ -9,8 +9,37 @@
 </head>
 <body>
     <div class="app-container">
-        <div id="settings-form">
+        <div id="game-lobby">
+            <h2>Start or Join a Game</h2>
+            <div class="role-selection">
+                <h3>Select Your Role</h3>
+                <div class="role-selection-wrapper">
+                    <input type="radio" id="role-referee" name="user-role" value="referee" checked>
+                    <label for="role-referee">Referee</label>
+
+                    <input type="radio" id="role-scorer" name="user-role" value="scorer">
+                    <label for="role-scorer">Scorer</label>
+
+                    <input type="radio" id="role-clock" name="user-role" value="clock">
+                    <label for="role-clock">Clock</label>
+
+                    <input type="radio" id="role-coach" name="user-role" value="coach">
+                    <label for="role-coach">Coach</label>
+                </div>
+            </div>
+            <button id="start-new-game-btn" class="main-btn">Start a New Game</button>
+            <div class="join-game-section">
+                <hr>
+                <p>Or join an existing game:</p>
+                <input type="text" id="game-id-input" placeholder="Enter Game ID">
+                <button id="join-game-btn" class="main-btn">Join Game</button>
+                <p id="join-error-message" class="hidden error-message">Please enter a valid Game ID.</p>
+            </div>
+        </div>
+        
+        <div id="settings-form" class="hidden">
             <h2>Game Settings</h2>
+            <p id="current-game-id" class="hidden"><strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)</p>
             <form id="settings-form-element">
                 <label for="date-field">Date:</label>
                 <input type="date" id="date-field">
