@@ -110,18 +110,33 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateUI = () => {
-        // This function will only update the UI based on the current state.
-        // It will no longer handle showing/hiding main sections.
-        if (Object.keys(gameState).length === 0) {
-            return;
-        }
-
         const urlGameId = window.location.pathname.split('/').pop();
         if (urlGameId) {
             gameIdDisplay.style.display = 'block';
             document.getElementById('game-id-text').textContent = urlGameId;
         } else {
             gameIdDisplay.style.display = 'none';
+        }
+
+        // Correctly handle showing/hiding main sections based on state
+        if (gameState.team1Name && gameState.team2Name && gameState.team1Name !== 'Home Team' && gameState.team2Name !== 'Away Team') {
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.add('hidden');
+            gameInterface.classList.remove('hidden');
+        } else if (Object.keys(gameState).length > 0) {
+            // A game has been created, but not yet started (team names are default)
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.remove('hidden');
+            gameInterface.classList.add('hidden');
+        } else {
+            // No game active, show the lobby
+            gameLobby.classList.remove('hidden');
+            settingsForm.classList.add('hidden');
+            gameInterface.classList.add('hidden');
+        }
+
+        if (Object.keys(gameState).length === 0) {
+            return;
         }
 
         gameDateDisplay.textContent = gameState.date;
@@ -211,18 +226,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Event Listeners ---
-    // Check URL for game ID on page load
     const pathParts = window.location.pathname.split('/');
     const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2] : null;
 
     if (gameIdFromUrl) {
-        // A game ID exists in the URL, so connect and show the game interface
         gameLobby.classList.add('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.remove('hidden');
         connectWebSocket(gameIdFromUrl);
     } else {
-        // No game ID in the URL, show the lobby
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.add('hidden');
@@ -231,14 +243,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startNewGameBtn.addEventListener('click', () => {
         const newGameId = Math.random().toString(36).substring(2, 8);
         history.pushState(null, '', `/game/${newGameId}`);
-        
-        // After starting a new game, show the settings form, not the game interface
+
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
-        
+
         document.getElementById('game-id-text').textContent = newGameId;
         gameIdDisplay.style.display = 'block';
-        
+
         connectWebSocket(newGameId);
     });
 
@@ -246,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
             history.pushState(null, '', `/game/${gameId}`);
-            
+
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
             gameInterface.classList.remove('hidden');
