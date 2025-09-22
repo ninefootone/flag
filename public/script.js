@@ -4,54 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
 
-    // NEW: Hide all sections initially
+    // Element references
     const gameLobby = document.getElementById('game-lobby');
     const settingsForm = document.getElementById('settings-form');
     const gameInterface = document.getElementById('game-interface');
-    gameLobby.classList.remove('hidden');
-    settingsForm.classList.add('hidden');
-    gameInterface.classList.add('hidden');
-
-    // NEW: Add references to lobby elements
     const startNewGameBtn = document.getElementById('start-new-game-btn');
     const joinGameBtn = document.getElementById('join-game-btn');
     const gameIdInput = document.getElementById('game-id-input');
     const joinErrorMessage = document.getElementById('join-error-message');
     const roleInputs = document.querySelectorAll('input[name="user-role"]');
-
-    let userRole = 'referee'; // Default role
-
-    roleInputs.forEach(input => {
-        input.addEventListener('change', (event) => {
-            userRole = event.target.value;
-            console.log(`User role set to: ${userRole}`);
-        });
-    });
-
-    // NEW: WebSocket will be connected later
-    let ws = null;
-
-    let gameState = {
-        date: '',
-        location: '',
-        team1Name: 'Home Team',
-        team2Name: 'Away Team',
-        scores: { team1: 0, team2: 0 },
-        timeoutsUsed: { '1': 0, '2': 0 },
-        gameTimeLeft: 1200,
-        playTimeLeft: 40,
-        currentDown: 1,
-        halfDuration: 1200,
-        playClockDuration: 40,
-        timeoutsPerHalf: 2,
-        scoreLogHTML: '',
-        timeoutLogHTML: '',
-        gameClockRunning: false,
-        playClockRunning: false,
-        coinTossResult: null,
-        twoMinuteWarningIssued: false
-    };
-
     const startGameBtn = document.getElementById('start-game-btn');
     const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
@@ -85,8 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const undoBtn = document.getElementById('undo-btn');
     const team1TimeoutLabel = document.getElementById('team1-timeout-label');
     const team2TimeoutLabel = document.getElementById('team2-timeout-label');
-
-    // New element references for the score pop-up
     const scorePopup = document.getElementById('score-popup');
     const popupHeader = document.getElementById('popup-header');
     const qbNumberInput = document.getElementById('qb-number');
@@ -96,22 +55,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const safetyNumberInput = document.getElementById('safety-number');
     const logScoreBtn = document.getElementById('log-score-btn');
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
-
-    // Updated element reference for the single coin toss button
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
 
-    // Temporary variables to hold scoring data
-    let tempScoreEvent = null;
-    
-    // NEW: Local flag to manage the visual/audible warning
-    let twoMinuteWarningIssuedLocally = false;
-    
-    // NEW: Local history of score and timeout changes for the undo button
-    let actionHistory = [];
+    // NEW: Add a new element to display the game ID in the settings form
+    const gameIdDisplay = document.createElement('p');
+    gameIdDisplay.id = 'current-game-id';
+    gameIdDisplay.innerHTML = '<strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)';
+    gameIdDisplay.style.display = 'none'; // Initially hidden
+    settingsForm.insertBefore(gameIdDisplay, settingsForm.querySelector('#settings-form-element'));
 
-    // A simple audio element for the warning sound
-    const audio = new Audio('/assets/warning.mp3'); 
+    let userRole = 'referee';
+    roleInputs.forEach(input => {
+        input.addEventListener('change', (event) => {
+            userRole = event.target.value;
+        });
+    });
+
+    let ws = null;
+    let gameState = {};
+    let tempScoreEvent = null;
+    let twoMinuteWarningIssuedLocally = false;
+    let actionHistory = [];
+    const audio = new Audio('/assets/warning.mp3');
 
     // --- WebSocket Event Handlers ---
     const connectWebSocket = (gameId) => {
@@ -124,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
             console.log('Received from server:', message);
-            gameState = { ...gameState, ...message };
+            Object.assign(gameState, message);
             updateUI();
         };
 
@@ -144,20 +110,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const toggleInterface = () => {
-        // This function will now be more complex, but for now we'll keep it simple
-        // to handle the transition from settings to game interface.
-        if (gameState.team1Name && gameState.team2Name && gameState.team1Name !== 'Home Team' && gameState.team2Name !== 'Away Team') {
+    const updateUI = () => {
+        if (Object.keys(gameState).length === 0) {
+            gameLobby.classList.remove('hidden');
+            settingsForm.classList.add('hidden');
+            gameInterface.classList.add('hidden');
+            return;
+        }
+
+        const urlGameId = window.location.pathname.split('/').pop();
+        if (urlGameId) {
+            gameIdDisplay.style.display = 'block';
+            document.getElementById('game-id-text').textContent = urlGameId;
+        } else {
+            gameIdDisplay.style.display = 'none';
+        }
+
+        // Now, we control which section to show based on whether a game state exists
+        if (gameState.team1Name && gameState.team2Name) {
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
         } else {
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
         }
-    };
 
-    const updateUI = () => {
-        toggleInterface();
         gameDateDisplay.textContent = gameState.date;
         gameLocationDisplay.textContent = gameState.location;
         team1NameDisplay.textContent = gameState.team1Name;
@@ -168,31 +145,27 @@ document.addEventListener('DOMContentLoaded', () => {
         team2TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['2'];
         gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
         playClockDisplay.textContent = gameState.playTimeLeft;
-        
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         updateDownDisplay();
         updateButtonLabels();
         team1TimeoutLabel.textContent = gameState.team1Name;
         team2TimeoutLabel.textContent = gameState.team2Name;
-        
+
         if (gameState.coinTossResult) {
             coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
         }
-
-        // Two-minute warning logic (now uses the local flag)
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
             audio.play();
             twoMinuteWarningIssuedLocally = true;
         }
     };
-    
+
     const updateButtonLabels = () => {
         gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
         playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
     };
-
 
     const formatTime = (totalSeconds) => {
         const minutes = Math.floor(totalSeconds / 60);
@@ -200,24 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    // This function now returns the new log string with player details
     const getNewScoreLog = (event, players = {}) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        
         let playerDetails = [];
         if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
         if (players.wr) { playerDetails.push(`WR #${players.wr}`); }
         if (players.rb) { playerDetails.push(`RB #${players.rb}`); }
         if (players.int) { playerDetails.push(`INT #${players.int}`); }
         if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
-        
         const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
         const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
         return newLogEntry + gameState.scoreLogHTML;
     };
 
-    // This function now returns the new log string instead of sending a separate action
     const getNewTimeoutLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
@@ -241,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         popupHeader.textContent = `Log ${scoreLabel} for ${teamName}`;
         scorePopup.classList.remove('hidden');
     };
-    
+
     const hideScorePopup = () => {
         scorePopup.classList.add('hidden');
         qbNumberInput.value = '';
@@ -252,24 +221,45 @@ document.addEventListener('DOMContentLoaded', () => {
         tempScoreEvent = null;
     };
 
-
     // --- Event Listeners ---
-    // NEW: Handle lobby button clicks
-    startNewGameBtn.addEventListener('click', () => {
+    // NEW: Check URL for game ID on page load
+    const pathParts = window.location.pathname.split('/');
+    const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2] : null;
+
+    if (gameIdFromUrl) {
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
-        // You'll need to generate a unique game ID here and connect the WebSocket
-        const newGameId = Math.random().toString(36).substring(2, 8); // Simple ID generation
+        connectWebSocket(gameIdFromUrl);
+    } else {
+        gameLobby.classList.remove('hidden');
+    }
+
+    startNewGameBtn.addEventListener('click', () => {
+        // Generate a new unique game ID
+        const newGameId = Math.random().toString(36).substring(2, 8);
+        
+        // NEW: Update the URL without reloading the page
+        history.pushState(null, '', `/game/${newGameId}`);
+
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.remove('hidden');
+        
+        // NEW: Display the new game ID to the user
+        document.getElementById('game-id-text').textContent = newGameId;
+        gameIdDisplay.style.display = 'block';
+        
         connectWebSocket(newGameId);
     });
 
     joinGameBtn.addEventListener('click', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            // In a real scenario, you'd need to validate the ID with the server
-            // For now, we'll just connect with whatever is provided.
+            // NEW: Update the URL when joining a game
+            history.pushState(null, '', `/game/${gameId}`);
+            
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
+            // We don't know the game's state yet, so we show the interface after connecting
             gameInterface.classList.remove('hidden');
             connectWebSocket(gameId);
         } else {
@@ -284,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
-        actionHistory = []; // Reset action history for new game
+        actionHistory = [];
 
         const newGameState = {
             date: dateField.value || 'N/A',
@@ -319,11 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
             showScorePopup(team, scoreToAdd, scoreLabel);
         });
     });
-    
+
     logScoreBtn.addEventListener('click', () => {
         if (!tempScoreEvent) return;
-        
-        // Save the current score state before the change
         actionHistory.push({
             type: 'score',
             scores: { ...gameState.scores },
@@ -332,13 +320,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const { team, scoreToAdd } = tempScoreEvent;
         const newScores = { ...gameState.scores };
-        
         if (team === '1') {
             newScores.team1 += scoreToAdd;
         } else {
             newScores.team2 += scoreToAdd;
         }
-        
         const players = {
             qb: qbNumberInput.value || '',
             wr: wrNumberInput.value || '',
@@ -346,7 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
             int: intNumberInput.value || '',
             safety: safetyNumberInput.value || ''
         };
-        
         const newScoreLogHTML = getNewScoreLog(tempScoreEvent, players);
         sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: newScoreLogHTML });
         hideScorePopup();
@@ -356,13 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
         hideScorePopup();
     });
 
-    // Manual Score Adjustment Buttons
     adjustButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Manual adjustments are not logged for undo
             const team = button.dataset.team;
             const adjustment = button.dataset.adjust;
-
             const newScores = { ...gameState.scores };
             if (team === '1') {
                 newScores.team1 += (adjustment === '+' ? 1 : -1);
@@ -377,14 +359,11 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const team = button.dataset.team;
             if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
-                
-                // Save the current timeout state before the change
                 actionHistory.push({
                     type: 'timeout',
                     timeoutsUsed: { ...gameState.timeoutsUsed },
                     timeoutLogHTML: gameState.timeoutLogHTML
                 });
-
                 const newTimeoutsUsed = { ...gameState.timeoutsUsed };
                 newTimeoutsUsed[team]++;
                 const newTimeoutLogHTML = getNewTimeoutLog({ team: team });
@@ -405,7 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
     gameClockToggleBtn.addEventListener('click', () => {
         if (gameState.gameClockRunning) {
             sendAction('STOP_GAME_CLOCK');
-            // When stopping the clock, remove the warning flash
             gameClockDisplay.parentElement.classList.remove('warning');
         } else {
             sendAction('START_GAME_CLOCK');
@@ -414,11 +392,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gameClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_GAME_CLOCK');
-        // When resetting the clock, remove the warning flash and reset the local flag
         gameClockDisplay.parentElement.classList.remove('warning');
         twoMinuteWarningIssuedLocally = false;
-        sendAction('UPDATE_STATE', { 
-            gameTimeLeft: gameState.halfDuration, 
+        sendAction('UPDATE_STATE', {
+            gameTimeLeft: gameState.halfDuration,
             timeoutsUsed: { '1': 0, '2': 0 },
             twoMinuteWarningIssued: false
         });
@@ -428,7 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.playClockRunning) {
             sendAction('STOP_PLAY_CLOCK');
         } else {
-            // Check for auto-advance before starting the clock
             if (autoAdvanceCheckbox.checked) {
                 const newDown = (gameState.currentDown % 4) + 1;
                 sendAction('UPDATE_STATE', { currentDown: newDown });
