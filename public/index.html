@@ -9,7 +9,31 @@
 </head>
 <body>
     <div class="app-container">
-        <div id="settings-form">
+        
+        <div id="game-lobby">
+            <h2>Game Lobby</h2>
+            <div class="lobby-actions">
+                <button id="start-new-game-btn">Start a New Game</button>
+                <div class="join-game-container">
+                    <input type="text" id="game-id-input" placeholder="Enter Game ID">
+                    <button id="join-game-btn">Join Game</button>
+                    <p id="join-error-message" class="error-message hidden">Game ID not found. Please try again.</p>
+                </div>
+            </div>
+            <h3>Join as:</h3>
+            <div class="role-selection">
+                <input type="radio" id="role-referee" name="user-role" value="referee" checked>
+                <label for="role-referee">Referee</label>
+                <input type="radio" id="role-scorer" name="user-role" value="scorer">
+                <label for="role-scorer">Scorer</label>
+                <input type="radio" id="role-clock-manager" name="user-role" value="clock-manager">
+                <label for="role-clock-manager">Clock Manager</label>
+                <input type="radio" id="role-coach" name="user-role" value="coach">
+                <label for="role-coach">Coach</label>
+            </div>
+        </div>
+
+        <div id="settings-form" class="hidden">
             <h2>Game Settings</h2>
             <form id="settings-form-element">
                 <label for="date-field">Date:</label>

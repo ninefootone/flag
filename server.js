@@ -2,12 +2,17 @@ const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
+const url = require('url');
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 
-let currentGameState = {
+// NEW: Use a Map to store game states, keyed by gameId
+const games = new Map();
+
+// Default state for a new game
+const initialGameState = {
     date: '',
     location: '',
     team1Name: 'Home Team',
@@ -23,72 +28,91 @@ let currentGameState = {
     scoreLogHTML: '',
     timeoutLogHTML: '',
     gameClockRunning: false,
-    playClockRunning: false
+    playClockRunning: false,
+    coinTossResult: null,
+    twoMinuteWarningIssued: false
 };
 
-const initialGameState = { ...currentGameState };
+const gameClockIntervals = new Map();
+const playClockIntervals = new Map();
+const gameClients = new Map();
+const gameHistories = new Map();
 
-let gameStateHistory = [];
-const MAX_HISTORY_SIZE = 10;
+const getGameState = (gameId) => {
+    if (!games.has(gameId)) {
+        games.set(gameId, JSON.parse(JSON.stringify(initialGameState)));
+        gameHistories.set(gameId, []);
+    }
+    return games.get(gameId);
+};
 
-let gameClockInterval;
-let playClockInterval;
-
-const saveStateToHistory = (state) => {
-    gameStateHistory.push(JSON.parse(JSON.stringify(state)));
-    if (gameStateHistory.length > MAX_HISTORY_SIZE) {
-        gameStateHistory.shift(); // Remove the oldest state
+const saveStateToHistory = (gameId, state) => {
+    const history = gameHistories.get(gameId);
+    history.push(JSON.parse(JSON.stringify(state)));
+    if (history.length > 10) {
+        history.shift(); // Remove the oldest state
     }
 };
 
-const startGameClock = () => {
-    if (!gameClockInterval) {
-        currentGameState.gameClockRunning = true;
-        gameClockInterval = setInterval(() => {
-            if (currentGameState.gameTimeLeft > 0) {
-                currentGameState.gameTimeLeft--;
-                broadcastState();
+const startGameClock = (gameId) => {
+    if (!gameClockIntervals.has(gameId)) {
+        const gameState = getGameState(gameId);
+        gameState.gameClockRunning = true;
+        gameClockIntervals.set(gameId, setInterval(() => {
+            if (gameState.gameTimeLeft > 0) {
+                gameState.gameTimeLeft--;
+                broadcastState(gameId);
             } else {
-                stopGameClock();
+                stopGameClock(gameId);
             }
-        }, 1000);
+        }, 1000));
     }
 };
 
-const stopGameClock = () => {
-    clearInterval(gameClockInterval);
-    gameClockInterval = null;
-    currentGameState.gameClockRunning = false;
-    broadcastState();
+const stopGameClock = (gameId) => {
+    if (gameClockIntervals.has(gameId)) {
+        clearInterval(gameClockIntervals.get(gameId));
+        gameClockIntervals.delete(gameId);
+        const gameState = getGameState(gameId);
+        gameState.gameClockRunning = false;
+        broadcastState(gameId);
+    }
 };
 
-const startPlayClock = () => {
-    if (!playClockInterval) {
-        currentGameState.playClockRunning = true;
-        playClockInterval = setInterval(() => {
-            if (currentGameState.playTimeLeft > 0) {
-                currentGameState.playTimeLeft--;
-                broadcastState();
+const startPlayClock = (gameId) => {
+    if (!playClockIntervals.has(gameId)) {
+        const gameState = getGameState(gameId);
+        gameState.playClockRunning = true;
+        playClockIntervals.set(gameId, setInterval(() => {
+            if (gameState.playTimeLeft > 0) {
+                gameState.playTimeLeft--;
+                broadcastState(gameId);
             } else {
-                stopPlayClock();
+                stopPlayClock(gameId);
             }
-        }, 1000);
+        }, 1000));
     }
 };
 
-const stopPlayClock = () => {
-    clearInterval(playClockInterval);
-    playClockInterval = null;
-    currentGameState.playClockRunning = false;
-    broadcastState();
+const stopPlayClock = (gameId) => {
+    if (playClockIntervals.has(gameId)) {
+        clearInterval(playClockIntervals.get(gameId));
+        playClockIntervals.delete(gameId);
+        const gameState = getGameState(gameId);
+        gameState.playClockRunning = false;
+        broadcastState(gameId);
+    }
 };
 
-const broadcastState = () => {
-    wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(currentGameState));
-        }
-    });
+const broadcastState = (gameId) => {
+    if (gameClients.has(gameId)) {
+        gameClients.get(gameId).forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                const gameState = getGameState(gameId);
+                client.send(JSON.stringify(gameState));
+            }
+        });
+    }
 };
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -97,47 +121,73 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// NEW: Handle upgrade for WebSocket connections on the /game/:gameId path
+server.on('upgrade', (request, socket, head) => {
+    const pathname = url.parse(request.url).pathname;
+    const match = pathname.match(/^\/game\/(\w+)$/);
+
+    if (match) {
+        const gameId = match[1];
+        wss.handleUpgrade(request, socket, head, (ws) => {
+            ws.gameId = gameId; // Store gameId on the WebSocket connection
+            if (!gameClients.has(gameId)) {
+                gameClients.set(gameId, new Set());
+            }
+            gameClients.get(gameId).add(ws);
+            wss.emit('connection', ws, request);
+        });
+    } else {
+        socket.destroy();
+    }
+});
+
+
 wss.on('connection', function connection(ws) {
-    console.log('A new client connected!');
-    ws.send(JSON.stringify(currentGameState));
+    console.log(`A new client connected to game ${ws.gameId}!`);
+    const gameState = getGameState(ws.gameId);
+    ws.send(JSON.stringify(gameState));
 
     ws.on('message', function incoming(message) {
         const parsedMessage = JSON.parse(message);
-        console.log('received action:', parsedMessage.type);
+        console.log(`Received action from game ${ws.gameId}:`, parsedMessage.type);
         
-        // Save state to history before processing the new action
+        const gameState = getGameState(ws.gameId);
+        const gameHistory = gameHistories.get(ws.gameId);
+
         if (parsedMessage.type === 'UPDATE_STATE' || parsedMessage.type === 'END_GAME') {
-            saveStateToHistory(currentGameState);
+            saveStateToHistory(ws.gameId, gameState);
         }
 
         if (parsedMessage.type === 'START_GAME_CLOCK') {
-            startGameClock();
+            startGameClock(ws.gameId);
         } else if (parsedMessage.type === 'STOP_GAME_CLOCK') {
-            stopGameClock();
+            stopGameClock(ws.gameId);
         } else if (parsedMessage.type === 'START_PLAY_CLOCK') {
-            startPlayClock();
+            startPlayClock(ws.gameId);
         } else if (parsedMessage.type === 'STOP_PLAY_CLOCK') {
-            stopPlayClock();
+            stopPlayClock(ws.gameId);
         } else if (parsedMessage.type === 'UPDATE_STATE') {
             // Check if this update is a game clock reset
-            if (parsedMessage.payload.gameTimeLeft !== undefined && parsedMessage.payload.gameTimeLeft === currentGameState.halfDuration) {
+            if (parsedMessage.payload.gameTimeLeft !== undefined && parsedMessage.payload.gameTimeLeft === gameState.halfDuration) {
                 const endHalfLog = '<li>--- End of First Half ---</li>';
-                currentGameState.scoreLogHTML = endHalfLog + currentGameState.scoreLogHTML;
+                gameState.scoreLogHTML = endHalfLog + gameState.scoreLogHTML;
             }
-            currentGameState = { ...currentGameState, ...parsedMessage.payload };
-            broadcastState();
+            Object.assign(gameState, parsedMessage.payload);
+            broadcastState(ws.gameId);
         } else if (parsedMessage.type === 'END_GAME') {
-            stopGameClock();
-            stopPlayClock();
-            currentGameState = { ...initialGameState };
-            gameStateHistory = [];
-            broadcastState();
+            stopGameClock(ws.gameId);
+            stopPlayClock(ws.gameId);
+            games.delete(ws.gameId);
+            gameHistories.delete(ws.gameId);
+            ws.send(JSON.stringify(initialGameState));
+            ws.close();
         } else if (parsedMessage.type === 'UNDO_ACTION') {
-            if (gameStateHistory.length > 0) {
-                currentGameState = gameStateHistory.pop();
-                stopGameClock();
-                stopPlayClock();
-                broadcastState();
+            if (gameHistory.length > 0) {
+                const lastState = gameHistory.pop();
+                Object.assign(gameState, lastState);
+                stopGameClock(ws.gameId);
+                stopPlayClock(ws.gameId);
+                broadcastState(ws.gameId);
             } else {
                 console.log('No more actions to undo.');
             }
@@ -145,17 +195,17 @@ wss.on('connection', function connection(ws) {
     });
 
     ws.on('close', () => {
-        console.log('A client disconnected.');
+        console.log(`A client disconnected from game ${ws.gameId}.`);
+        if (gameClients.has(ws.gameId)) {
+            gameClients.get(ws.gameId).delete(ws);
+            if (gameClients.get(ws.gameId).size === 0) {
+                console.log(`All clients disconnected from game ${ws.gameId}. Game state preserved.`);
+            }
+        }
     });
 
     ws.on('error', (error) => {
         console.error('WebSocket error:', error);
-    });
-});
-
-server.on('upgrade', (request, socket, head) => {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-        wss.emit('connection', ws, request);
     });
 });
 

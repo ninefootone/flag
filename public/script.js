@@ -4,7 +4,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
 
-    const ws = new WebSocket(`wss://${location.host}`);
+    // NEW: Hide all sections initially
+    const gameLobby = document.getElementById('game-lobby');
+    const settingsForm = document.getElementById('settings-form');
+    const gameInterface = document.getElementById('game-interface');
+    gameLobby.classList.remove('hidden');
+    settingsForm.classList.add('hidden');
+    gameInterface.classList.add('hidden');
+
+    // NEW: Add references to lobby elements
+    const startNewGameBtn = document.getElementById('start-new-game-btn');
+    const joinGameBtn = document.getElementById('join-game-btn');
+    const gameIdInput = document.getElementById('game-id-input');
+    const joinErrorMessage = document.getElementById('join-error-message');
+    const roleInputs = document.querySelectorAll('input[name="user-role"]');
+
+    let userRole = 'referee'; // Default role
+
+    roleInputs.forEach(input => {
+        input.addEventListener('change', (event) => {
+            userRole = event.target.value;
+            console.log(`User role set to: ${userRole}`);
+        });
+    });
+
+    // NEW: WebSocket will be connected later
+    let ws = null;
 
     let gameState = {
         date: '',
@@ -27,8 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         twoMinuteWarningIssued: false
     };
 
-    const settingsForm = document.getElementById('settings-form');
-    const gameInterface = document.getElementById('game-interface');
     const startGameBtn = document.getElementById('start-game-btn');
     const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
@@ -91,33 +114,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = new Audio('/assets/warning.mp3'); 
 
     // --- WebSocket Event Handlers ---
-    ws.onopen = () => {
-        console.log('Connected to the WebSocket server!');
-    };
+    const connectWebSocket = (gameId) => {
+        ws = new WebSocket(`wss://${location.host}/game/${gameId}`);
 
-    ws.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        console.log('Received from server:', message);
-        gameState = { ...gameState, ...message };
-        updateUI();
-    };
+        ws.onopen = () => {
+            console.log(`Connected to the WebSocket server for game ${gameId}!`);
+        };
 
-    ws.onclose = () => {
-        console.log('Disconnected from the WebSocket server.');
-    };
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            console.log('Received from server:', message);
+            gameState = { ...gameState, ...message };
+            updateUI();
+        };
 
-    ws.onerror = (error) => {
-        console.error('WebSocket Error:', error);
+        ws.onclose = () => {
+            console.log('Disconnected from the WebSocket server.');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket Error:', error);
+        };
     };
 
     // --- State Management and UI Updates ---
     const sendAction = (type, payload = {}) => {
-        if (ws.readyState === WebSocket.OPEN) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type, payload }));
         }
     };
 
     const toggleInterface = () => {
+        // This function will now be more complex, but for now we'll keep it simple
+        // to handle the transition from settings to game interface.
         if (gameState.team1Name && gameState.team2Name && gameState.team1Name !== 'Home Team' && gameState.team2Name !== 'Away Team') {
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
@@ -225,6 +254,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Event Listeners ---
+    // NEW: Handle lobby button clicks
+    startNewGameBtn.addEventListener('click', () => {
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.remove('hidden');
+        // You'll need to generate a unique game ID here and connect the WebSocket
+        const newGameId = Math.random().toString(36).substring(2, 8); // Simple ID generation
+        connectWebSocket(newGameId);
+    });
+
+    joinGameBtn.addEventListener('click', () => {
+        const gameId = gameIdInput.value.trim();
+        if (gameId) {
+            // In a real scenario, you'd need to validate the ID with the server
+            // For now, we'll just connect with whatever is provided.
+            joinErrorMessage.classList.add('hidden');
+            gameLobby.classList.add('hidden');
+            gameInterface.classList.remove('hidden');
+            connectWebSocket(gameId);
+        } else {
+            joinErrorMessage.classList.remove('hidden');
+        }
+    });
+
     startGameBtn.addEventListener('click', () => {
         if (!gameState.coinTossResult) {
             alert("Please complete the coin toss before starting the game.");
