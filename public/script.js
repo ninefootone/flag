@@ -123,13 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
-        } else if (Object.keys(gameState).length > 0) {
-            // A game has been created, but not yet started (team names are default)
+        } else if (window.location.pathname.startsWith('/game/') && Object.keys(gameState).length > 0) {
+            // A game ID exists in the URL, but the game has not been started with custom names.
+            // This is the state for a new game or a joined game before the settings are saved.
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
         } else {
-            // No game active, show the lobby
+            // Default state: no game active and no game ID in URL.
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
@@ -420,6 +421,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     endGameBtn.addEventListener('click', () => {
         sendAction('END_GAME');
+        // NEW: Return to the home screen and clear the URL.
+        history.pushState(null, '', '/');
+        gameLobby.classList.remove('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.add('hidden');
     });
 
     undoBtn.addEventListener('click', () => {
