@@ -57,6 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
+    
+    // NEW: Add references to elements that need to be hidden/shown based on role
+    const gameClockSection = document.getElementById('game-clock-section');
+    const playClockSection = document.getElementById('play-clock-section');
+    const downSection = document.getElementById('down-section');
+    const scoreboardSection = document.getElementById('scoreboard-section');
+    const adjustScoreSection = document.getElementById('adjust-score-section');
+    const scoreButtonsSection = document.getElementById('score-buttons-section');
+    const timeoutButtonsSection = document.getElementById('timeout-buttons-section');
 
     const gameIdDisplay = document.createElement('p');
     gameIdDisplay.id = 'current-game-id';
@@ -110,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateUI = () => {
-        const urlGameId = window.location.pathname.split('/').pop();
+        const urlGameId = window.location.pathname.split('/').pop().split('?')[0]; // NEW: get the game id from url without parameters
         if (urlGameId) {
             gameIdDisplay.style.display = 'block';
             document.getElementById('game-id-text').textContent = urlGameId;
@@ -165,8 +174,40 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.play();
             twoMinuteWarningIssuedLocally = true;
         }
+        
+        // NEW: Apply permissions based on the user role
+        applyRolePermissions();
     };
 
+    // NEW: Function to apply role-based permissions
+    const applyRolePermissions = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role') || 'referee'; // Default to referee if not specified
+        
+        // Hide all interactive sections by default, then show them based on role
+        gameClockSection.classList.add('hidden');
+        playClockSection.classList.add('hidden');
+        downSection.classList.add('hidden');
+        adjustScoreSection.classList.add('hidden');
+        scoreButtonsSection.classList.add('hidden');
+        timeoutButtonsSection.classList.add('hidden');
+        
+        if (role === 'referee') {
+            gameClockSection.classList.remove('hidden');
+            playClockSection.classList.remove('hidden');
+            downSection.classList.remove('hidden');
+            adjustScoreSection.classList.remove('hidden');
+            scoreButtonsSection.classList.remove('hidden');
+            timeoutButtonsSection.classList.remove('hidden');
+        } else if (role === 'scorer') {
+            adjustScoreSection.classList.remove('hidden');
+            scoreButtonsSection.classList.remove('hidden');
+        } else if (role === 'clock') {
+            gameClockSection.classList.remove('hidden');
+            playClockSection.classList.remove('hidden');
+        }
+    };
+    
     const updateButtonLabels = () => {
         gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
         playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
@@ -228,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     const pathParts = window.location.pathname.split('/');
-    const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2] : null;
+    const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null; // NEW: handle url parameters
 
     if (gameIdFromUrl) {
         gameLobby.classList.add('hidden');
@@ -243,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startNewGameBtn.addEventListener('click', () => {
         const newGameId = Math.random().toString(36).substring(2, 8);
-        history.pushState(null, '', `/game/${newGameId}`);
+        history.pushState(null, '', `/game/${newGameId}?role=${userRole}`); // NEW: add role to URL
 
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
@@ -257,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
     joinGameBtn.addEventListener('click', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            history.pushState(null, '', `/game/${gameId}`);
+            history.pushState(null, '', `/game/${gameId}?role=${userRole}`); // NEW: add role to URL
 
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
@@ -421,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     endGameBtn.addEventListener('click', () => {
         sendAction('END_GAME');
-        // NEW: Return to the home screen and clear the URL.
+        // Return to the home screen and clear the URL.
         history.pushState(null, '', '/');
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
