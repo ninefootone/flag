@@ -58,11 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
 
-    // NEW: Add a new element to display the game ID in the settings form
     const gameIdDisplay = document.createElement('p');
     gameIdDisplay.id = 'current-game-id';
     gameIdDisplay.innerHTML = '<strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)';
-    gameIdDisplay.style.display = 'none'; // Initially hidden
+    gameIdDisplay.style.display = 'none';
     settingsForm.insertBefore(gameIdDisplay, settingsForm.querySelector('#settings-form-element'));
 
     let userRole = 'referee';
@@ -111,10 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateUI = () => {
+        // This function will only update the UI based on the current state.
+        // It will no longer handle showing/hiding main sections.
         if (Object.keys(gameState).length === 0) {
-            gameLobby.classList.remove('hidden');
-            settingsForm.classList.add('hidden');
-            gameInterface.classList.add('hidden');
             return;
         }
 
@@ -124,15 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('game-id-text').textContent = urlGameId;
         } else {
             gameIdDisplay.style.display = 'none';
-        }
-
-        // Now, we control which section to show based on whether a game state exists
-        if (gameState.team1Name && gameState.team2Name) {
-            settingsForm.classList.add('hidden');
-            gameInterface.classList.remove('hidden');
-        } else {
-            settingsForm.classList.remove('hidden');
-            gameInterface.classList.add('hidden');
         }
 
         gameDateDisplay.textContent = gameState.date;
@@ -222,29 +211,31 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Event Listeners ---
-    // NEW: Check URL for game ID on page load
+    // Check URL for game ID on page load
     const pathParts = window.location.pathname.split('/');
     const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2] : null;
 
     if (gameIdFromUrl) {
+        // A game ID exists in the URL, so connect and show the game interface
         gameLobby.classList.add('hidden');
-        settingsForm.classList.remove('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.remove('hidden');
         connectWebSocket(gameIdFromUrl);
     } else {
+        // No game ID in the URL, show the lobby
         gameLobby.classList.remove('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.add('hidden');
     }
 
     startNewGameBtn.addEventListener('click', () => {
-        // Generate a new unique game ID
         const newGameId = Math.random().toString(36).substring(2, 8);
-        
-        // NEW: Update the URL without reloading the page
         history.pushState(null, '', `/game/${newGameId}`);
-
+        
+        // After starting a new game, show the settings form, not the game interface
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
         
-        // NEW: Display the new game ID to the user
         document.getElementById('game-id-text').textContent = newGameId;
         gameIdDisplay.style.display = 'block';
         
@@ -254,12 +245,10 @@ document.addEventListener('DOMContentLoaded', () => {
     joinGameBtn.addEventListener('click', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            // NEW: Update the URL when joining a game
             history.pushState(null, '', `/game/${gameId}`);
             
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
-            // We don't know the game's state yet, so we show the interface after connecting
             gameInterface.classList.remove('hidden');
             connectWebSocket(gameId);
         } else {
