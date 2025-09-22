@@ -67,6 +67,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreButtonsSection = document.getElementById('score-buttons-section');
     const timeoutButtonsSection = document.getElementById('timeout-buttons-section');
 
+    const allRoleElements = [
+        gameClockSection,
+        playClockSection,
+        downSection,
+        adjustScoreSection,
+        scoreButtonsSection,
+        timeoutButtonsSection
+    ];
+
+    const roleElements = {
+        'referee': allRoleElements,
+        'scorer': [adjustScoreSection, scoreButtonsSection],
+        'clock': [gameClockSection, playClockSection]
+    };
+
     const gameIdDisplay = document.createElement('p');
     gameIdDisplay.id = 'current-game-id';
     gameIdDisplay.innerHTML = '<strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)';
@@ -119,6 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateUI = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        userRole = urlParams.get('role') || 'referee';
+
         const urlGameId = window.location.pathname.split('/').pop().split('?')[0]; // NEW: get the game id from url without parameters
         if (urlGameId) {
             gameIdDisplay.style.display = 'block';
@@ -181,31 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NEW: Function to apply role-based permissions
     const applyRolePermissions = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const role = urlParams.get('role') || 'referee'; // Default to referee if not specified
-        
-        // Hide all interactive sections by default, then show them based on role
-        gameClockSection.classList.add('hidden');
-        playClockSection.classList.add('hidden');
-        downSection.classList.add('hidden');
-        adjustScoreSection.classList.add('hidden');
-        scoreButtonsSection.classList.add('hidden');
-        timeoutButtonsSection.classList.add('hidden');
-        
-        if (role === 'referee') {
-            gameClockSection.classList.remove('hidden');
-            playClockSection.classList.remove('hidden');
-            downSection.classList.remove('hidden');
-            adjustScoreSection.classList.remove('hidden');
-            scoreButtonsSection.classList.remove('hidden');
-            timeoutButtonsSection.classList.remove('hidden');
-        } else if (role === 'scorer') {
-            adjustScoreSection.classList.remove('hidden');
-            scoreButtonsSection.classList.remove('hidden');
-        } else if (role === 'clock') {
-            gameClockSection.classList.remove('hidden');
-            playClockSection.classList.remove('hidden');
-        }
+        // First, hide all elements that are role-specific
+        allRoleElements.forEach(element => element.classList.add('hidden'));
+
+        // Then, show only the elements for the current user's role
+        const elementsToShow = roleElements[userRole] || [];
+        elementsToShow.forEach(element => element.classList.remove('hidden'));
     };
     
     const updateButtonLabels = () => {
@@ -269,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     const pathParts = window.location.pathname.split('/');
-    const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null; // NEW: handle url parameters
+    const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
 
     if (gameIdFromUrl) {
         gameLobby.classList.add('hidden');
@@ -284,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startNewGameBtn.addEventListener('click', () => {
         const newGameId = Math.random().toString(36).substring(2, 8);
-        history.pushState(null, '', `/game/${newGameId}?role=${userRole}`); // NEW: add role to URL
+        history.pushState(null, '', `/game/${newGameId}?role=${userRole}`);
 
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
@@ -298,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     joinGameBtn.addEventListener('click', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            history.pushState(null, '', `/game/${gameId}?role=${userRole}`); // NEW: add role to URL
+            history.pushState(null, '', `/game/${gameId}?role=${userRole}`);
 
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
