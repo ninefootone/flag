@@ -28,10 +28,9 @@ body {
     display: none !important;
 }
 
+/* New: Hide disabled elements completely */
 .disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
+    display: none !important;
 }
 
 h2, h3 {
@@ -58,229 +57,74 @@ input[type="text"], input[type="number"], input[type="date"] {
 button {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    padding: 10px 15px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s;
+    margin-top: 10px;
 }
 
-button:hover:not(.disabled) {
+button:hover {
     background-color: #0056b3;
 }
 
-.main-btn {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-}
-
-/* New: Styles for the role selection buttons */
-.role-selection-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.role-selection input[type="radio"] {
-    display: none;
-}
-
-.role-selection label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 10px;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: normal;
-    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-}
-
-.role-selection label:hover {
-    background-color: #dee2e6;
-}
-
-.role-selection input[type="radio"]:checked + label {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.join-game-section {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.error-message {
-    color: #dc3545;
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
-hr {
-    border: 0;
-    height: 1px;
-    background-color: #ccc;
-    margin: 20px 0;
-}
-
-/* Game Interface Styling */
-#game-interface {
-    text-align: center;
-}
-
+/* Header and Game Clocks Section */
 header {
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 8px;
+    text-align: center;
     margin-bottom: 20px;
 }
 
 .game-info {
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-.clocks-section {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+    font-size: 1.1rem;
+    color: #666;
     margin-bottom: 20px;
 }
 
-@media (min-width: 600px) {
-    .clocks-section {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+/* New: Style for stacked layout */
+#game-interface > section, #game-interface > div {
+    margin-bottom: 20px;
 }
 
 .clock-display {
-    background-color: #212529;
-    color: #fff;
+    border: 2px solid #000;
+    padding: 10px;
     border-radius: 8px;
-    padding: 20px;
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    margin-bottom: 10px;
 }
 
 .clock-time {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: bold;
 }
 
 .clock-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.clock-controls button {
     font-size: 0.9rem;
-    margin-top: 5px;
-    color: #adb5bd;
+    padding: 5px 10px;
+    margin: 0 5px;
 }
 
-.clock-controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.clock-btn {
-    padding: 10px 15px;
-}
-
-.start-stop-btn {
-    background-color: #28a745;
-}
-
-.start-stop-btn:hover:not(.disabled) {
-    background-color: #218838;
-}
-
-.reset-btn {
-    background-color: #dc3545;
-}
-
-.reset-btn:hover:not(.disabled) {
-    background-color: #c82333;
-}
-
-.warning {
-    background-color: #ffc107;
-}
-
-.warning .clock-time {
-    color: #212529;
-}
-
-.down-buttons {
+/* Scoreboard and Timeouts Section */
+.scoreboard-section {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-}
-
-.down-buttons p {
-    font-weight: bold;
-    margin: 0;
-}
-
-.down-buttons .down-btn {
-    padding: 15px;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #e9ecef;
-    color: #333;
-}
-
-.down-buttons .down-btn.active {
-    background-color: #007bff;
-    color: white;
-}
-
-.play-clock-options {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
-.main-controls {
-    display: grid;
-    grid-template-columns: 1fr;
     gap: 20px;
 }
 
-@media (min-width: 768px) {
-    .main-controls {
-        grid-template-columns: 2fr 1fr;
-    }
-}
-
 .team-score {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .team-name {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
@@ -288,118 +132,149 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin: 10px 0;
+    margin-bottom: 10px;
 }
 
 .score {
     font-size: 3rem;
     font-weight: bold;
-    color: #343a40;
+    color: #007bff;
+    line-height: 1;
+    margin: 0 10px;
 }
 
 .adjust-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.5rem;
+    padding: 2px 8px;
+    font-size: 1rem;
     line-height: 1;
+    margin: 2px 0;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .score-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 5px;
-    margin-top: 10px;
 }
 
-.score-btn {
+.score-buttons button {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    font-size: 0.8rem;
-    line-height: 1;
+    height: auto;
+    min-width: 60px;
+    padding: 10px 5px;
+    background-color: #eee;
+    color: #333;
+    border: 1px solid #ccc;
+    width: auto;
 }
 
-.score-btn .button-label {
-    font-size: 0.9rem;
+.score-buttons button:hover {
+    background-color: #ddd;
+}
+
+.score-buttons .button-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.score-buttons .button-score {
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
-.score-btn .button-score {
+.down-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.down-buttons button {
+    width: 40px;
+    height: 40px;
+    padding: 0;
     font-size: 1.2rem;
+    border-radius: 50%;
+}
+
+.down-buttons button.active {
+    background-color: #0056b3;
 }
 
 .timeout-buttons {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
     text-align: center;
-}
-
-.timeout-buttons p {
-    font-weight: bold;
 }
 
 .timeout-button-wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 5px;
 }
 
 .timeout-label {
+    font-size: 1rem;
     font-weight: bold;
 }
 
 .use-timeout-btn {
-    width: 60px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
+    background-color: #ffc107;
+    color: #333;
+    width: 80px;
+    height: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.use-timeout-btn:hover {
+    background-color: #e0a800;
 }
 
 .timeout-count {
-    font-size: 1.2rem;
+    font-size: 2rem;
     font-weight: bold;
 }
 
-.log-container {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    max-height: 200px;
-    overflow-y: auto;
+/* Log and End Game Section */
+.score-log {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
 }
 
-.log-title {
-    margin-top: 0;
-}
-
-.score-log, .timeout-log {
+ul {
     list-style-type: none;
     padding: 0;
-    margin: 0;
 }
 
-.score-log li, .timeout-log li {
-    background-color: #e9ecef;
+li {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
     padding: 8px;
     margin-bottom: 5px;
     border-radius: 4px;
-    font-size: 0.9rem;
-    color: #495057;
 }
 
+/* Styles for the undo and end game buttons */
 .action-buttons {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 10px;
-    margin-top: 20px;
 }
 
 .undo-btn, .end-game-btn {
@@ -412,7 +287,7 @@ header {
     background-color: #6c757d;
 }
 
-.undo-btn:hover:not(.disabled) {
+.undo-btn:hover {
     background-color: #5a6268;
 }
 
@@ -420,7 +295,7 @@ header {
     background-color: #dc3545;
 }
 
-.end-game-btn:hover:not(.disabled) {
+.end-game-btn:hover {
     background-color: #c82333;
 }
 
@@ -449,27 +324,36 @@ header {
 
 .player-input-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.player-input-grid > div {
+    display: flex;
+    flex-direction: column;
 }
 
 .popup-buttons {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
     margin-top: 20px;
 }
 
-.log-score-btn, .cancel-popup-btn {
-    flex-grow: 1;
-    padding: 10px;
+/* Mobile-first adjustments for small screens */
+@media (max-width: 600px) {
+    .clocks-section {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
-.log-score-btn {
-    background-color: #28a745;
+/* Two-minute warning animation */
+@keyframes flash-warning {
+    0%   { background-color: #dc3545; color: white; }
+    50%  { background-color: #c82333; color: white; }
+    100% { background-color: #dc3545; color: white; }
 }
 
-.cancel-popup-btn {
-    background-color: #dc3545;
+.warning {
+    animation: flash-warning 1s infinite;
 }
