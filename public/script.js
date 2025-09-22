@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         userRole = urlParams.get('role') || 'referee';
 
-        const urlGameId = window.location.pathname.split('/').pop().split('?')[0]; // NEW: get the game id from url without parameters
+        const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
         if (urlGameId) {
             gameIdDisplay.style.display = 'block';
             document.getElementById('game-id-text').textContent = urlGameId;
@@ -196,16 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
             twoMinuteWarningIssuedLocally = true;
         }
         
-        // NEW: Apply permissions based on the user role
         applyRolePermissions();
     };
 
     // NEW: Function to apply role-based permissions
     const applyRolePermissions = () => {
-        // First, hide all controls by default
         allControls.forEach(control => control.classList.add('disabled'));
 
-        // Then, show only the controls for the current user's role
         const controlsToEnable = rolePermissions[userRole] || [];
         controlsToEnable.forEach(control => control.classList.remove('disabled'));
     };
@@ -303,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
-            gameInterface.classList.remove('hidden');
+            settingsForm.classList.remove('hidden');
             connectWebSocket(gameId);
         } else {
             joinErrorMessage.classList.remove('hidden');
