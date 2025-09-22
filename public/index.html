@@ -9,32 +9,34 @@
 </head>
 <body>
     <div class="app-container">
-        
         <div id="game-lobby">
-            <h2>Game Lobby</h2>
-            <div class="lobby-actions">
-                <button id="start-new-game-btn">Start a New Game</button>
-                <div class="join-game-container">
-                    <input type="text" id="game-id-input" placeholder="Enter Game ID">
-                    <button id="join-game-btn">Join Game</button>
-                    <p id="join-error-message" class="error-message hidden">Game ID not found. Please try again.</p>
+            <h2>Start or Join a Game</h2>
+            <div class="role-selection">
+                <h3>Select Your Role</h3>
+                <div class="role-buttons">
+                    <input type="radio" id="role-referee" name="user-role" value="referee" checked>
+                    <label for="role-referee">Referee</label>
+
+                    <input type="radio" id="role-scorer" name="user-role" value="scorer">
+                    <label for="role-scorer">Scorer</label>
+
+                    <input type="radio" id="role-clock" name="user-role" value="clock">
+                    <label for="role-clock">Clock</label>
                 </div>
             </div>
-            <h3>Join as:</h3>
-            <div class="role-selection">
-                <input type="radio" id="role-referee" name="user-role" value="referee" checked>
-                <label for="role-referee">Referee</label>
-                <input type="radio" id="role-scorer" name="user-role" value="scorer">
-                <label for="role-scorer">Scorer</label>
-                <input type="radio" id="role-clock-manager" name="user-role" value="clock-manager">
-                <label for="role-clock-manager">Clock Manager</label>
-                <input type="radio" id="role-coach" name="user-role" value="coach">
-                <label for="role-coach">Coach</label>
+            <button id="start-new-game-btn" class="main-btn">Start a New Game</button>
+            <div class="join-game-section">
+                <hr>
+                <p>Or join an existing game:</p>
+                <input type="text" id="game-id-input" placeholder="Enter Game ID">
+                <button id="join-game-btn" class="main-btn">Join Game</button>
+                <p id="join-error-message" class="hidden error-message">Please enter a valid Game ID.</p>
             </div>
         </div>
 
         <div id="settings-form" class="hidden">
             <h2>Game Settings</h2>
+            <p id="current-game-id" class="hidden"><strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)</p>
             <form id="settings-form-element">
                 <label for="date-field">Date:</label>
                 <input type="date" id="date-field">
@@ -85,52 +87,58 @@
             </header>
 
             <section class="clocks-section">
-                <div class="game-clocks">
-                    <div class="clock-display game-clock-bg">
-                        <span id="game-clock-display" class="clock-time"></span>
-                        <p class="clock-label">Game Clock</p>
-                    </div>
-                    <div class="clock-controls">
-                        <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
-                        <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
+                <div id="game-clock-section">
+                    <div class="game-clocks">
+                        <div class="clock-display game-clock-bg">
+                            <span id="game-clock-display" class="clock-time"></span>
+                            <p class="clock-label">Game Clock</p>
+                        </div>
+                        <div class="clock-controls">
+                            <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
+                            <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="down-buttons">
-                    <p>Down</p>
-                    <button class="down-btn" data-down="1">1</button>
-                    <button class="down-btn" data-down="2">2</button>
-                    <button class="down-btn" data-down="3">3</button>
-                    <button class="down-btn" data-down="4">4</button>
+                <div id="down-section">
+                    <div class="down-buttons">
+                        <p>Down</p>
+                        <button class="down-btn" data-down="1">1</button>
+                        <button class="down-btn" data-down="2">2</button>
+                        <button class="down-btn" data-down="3">3</button>
+                        <button class="down-btn" data-down="4">4</button>
+                    </div>
                 </div>
 
-                <div class="play-clock-section">
-                    <div class="clock-display play-clock-bg">
-                        <span id="play-clock-display" class="clock-time"></span>
-                        <p class="clock-label">Play Clock</p>
-                    </div>
-                    <div class="play-clock-controls">
-                        <button id="play-clock-toggle" class="clock-btn start-stop-btn">Start</button>
-                        <button id="play-clock-reset" class="clock-btn reset-btn">Reset</button>
-                    </div>
-                    <div class="play-clock-options">
-                        <label for="auto-advance-play-clock">
-                            <input type="checkbox" id="auto-advance-play-clock"> Auto Advance
-                        </label>
+                <div id="play-clock-section">
+                    <div class="play-clock-section">
+                        <div class="clock-display play-clock-bg">
+                            <span id="play-clock-display" class="clock-time"></span>
+                            <p class="clock-label">Play Clock</p>
+                        </div>
+                        <div class="play-clock-controls">
+                            <button id="play-clock-toggle" class="clock-btn start-stop-btn">Start</button>
+                            <button id="play-clock-reset" class="clock-btn reset-btn">Reset</button>
+                        </div>
+                        <div class="play-clock-options">
+                            <label for="auto-advance-play-clock">
+                                <input type="checkbox" id="auto-advance-play-clock"> Auto Advance
+                            </label>
+                        </div>
                     </div>
                 </div>
             </section>
             
             <section class="main-controls">
-                <div class="scoreboard-and-downs">
+                <div id="scoreboard-section">
                     <div class="team-score">
                         <span id="team1-name-display" class="team-name"></span>
-                        <div class="score-container">
+                        <div class="score-container" id="adjust-score-section">
                             <button class="adjust-btn" data-team="1" data-adjust="-">-</button>
                             <span id="team1-score-display" class="score"></span>
                             <button class="adjust-btn" data-team="1" data-adjust="+">+</button>
                         </div>
-                        <div class="score-buttons">
+                        <div class="score-buttons" id="score-buttons-section">
                             <button class="score-btn" data-team="1" data-score="6" data-label="Touchdown">
                                 <span class="button-label">TD</span>
                                 <span class="button-score">6</span>
@@ -177,19 +185,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="timeout-buttons">
-                    <p>Timeouts</p>
-                    <div class="timeout-button-wrapper">
-                        <span class="timeout-label" id="team1-timeout-label"></span>
-                        <button class="use-timeout-btn" data-team="1">
-                            <span class="timeout-count" id="team1-timeouts"></span>
-                        </button>
-                    </div>
-                    <div class="timeout-button-wrapper">
-                        <span class="timeout-label" id="team2-timeout-label"></span>
-                        <button class="use-timeout-btn" data-team="2">
-                            <span class="timeout-count" id="team2-timeouts"></span>
-                        </button>
+
+                <div id="timeout-buttons-section">
+                    <div class="timeout-buttons">
+                        <p>Timeouts</p>
+                        <div class="timeout-button-wrapper">
+                            <span class="timeout-label" id="team1-timeout-label"></span>
+                            <button class="use-timeout-btn" data-team="1">
+                                <span class="timeout-count" id="team1-timeouts"></span>
+                            </button>
+                        </div>
+                        <div class="timeout-button-wrapper">
+                            <span class="timeout-label" id="team2-timeout-label"></span>
+                            <button class="use-timeout-btn" data-team="2">
+                                <span class="timeout-count" id="team2-timeouts"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
