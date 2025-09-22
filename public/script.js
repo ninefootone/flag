@@ -58,34 +58,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
     
-    // NEW: Add references to elements that need to be hidden/shown based on role
-    const gameClockSection = document.getElementById('game-clock-section');
-    const playClockSection = document.getElementById('play-clock-section');
-    const downSection = document.getElementById('down-section');
-    const scoreboardSection = document.getElementById('scoreboard-section');
-    const adjustScoreSection = document.getElementById('adjust-score-section');
-    const scoreButtonsSection = document.getElementById('score-buttons-section');
-    const timeoutButtonsSection = document.getElementById('timeout-buttons-section');
-    const undoBtnEl = document.getElementById('undo-btn');
-    const endGameBtnEl = document.getElementById('end-game-btn');
-
-
-    const allRoleElements = [
-        gameClockSection,
-        playClockSection,
-        downSection,
-        adjustScoreSection,
-        scoreButtonsSection,
-        timeoutButtonsSection,
-        undoBtnEl,
-        endGameBtnEl
+    // NEW: Collect all control elements into a single array for easy management
+    const allControls = [
+        gameClockToggleBtn,
+        gameClockResetBtn,
+        playClockToggleBtn,
+        playClockResetBtn,
+        autoAdvanceCheckbox,
+        ...downButtons,
+        ...scoreButtons,
+        ...adjustButtons,
+        ...useTimeoutBtns,
+        undoBtn,
+        endGameBtn
     ];
 
-    const roleElements = {
-        'referee': allRoleElements,
-        'scorer': [adjustScoreSection, scoreButtonsSection, undoBtnEl],
-        'clock': [gameClockSection, playClockSection, downSection],
-        'coach': [timeoutButtonsSection]
+    // NEW: Map roles to the specific controls they can use
+    const rolePermissions = {
+        'referee': allControls,
+        'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
+        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons],
+        'coach': [...useTimeoutBtns]
     };
 
     const gameIdDisplay = document.createElement('p');
@@ -98,6 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     roleInputs.forEach(input => {
         input.addEventListener('change', (event) => {
             userRole = event.target.value;
+            // When the role changes in the lobby, update the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('role', userRole);
+            history.replaceState(null, '', `?${urlParams.toString()}`);
         });
     });
 
@@ -205,12 +202,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // NEW: Function to apply role-based permissions
     const applyRolePermissions = () => {
-        // First, hide all elements that are role-specific
-        allRoleElements.forEach(element => element.classList.add('hidden'));
+        // First, disable all controls by default
+        allControls.forEach(control => control.classList.add('disabled'));
 
-        // Then, show only the elements for the current user's role
-        const elementsToShow = roleElements[userRole] || [];
-        elementsToShow.forEach(element => element.classList.remove('hidden'));
+        // Then, enable only the controls for the current user's role
+        const controlsToEnable = rolePermissions[userRole] || [];
+        controlsToEnable.forEach(control => control.classList.remove('disabled'));
     };
     
     const updateButtonLabels = () => {

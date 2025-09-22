@@ -28,6 +28,12 @@ body {
     display: none !important;
 }
 
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
 h2, h3 {
     text-align: center;
     color: #444;
@@ -60,7 +66,7 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+button:hover:not(.disabled) {
     background-color: #0056b3;
 }
 
@@ -194,7 +200,7 @@ header {
     background-color: #28a745;
 }
 
-.start-stop-btn:hover {
+.start-stop-btn:hover:not(.disabled) {
     background-color: #218838;
 }
 
@@ -202,7 +208,7 @@ header {
     background-color: #dc3545;
 }
 
-.reset-btn:hover {
+.reset-btn:hover:not(.disabled) {
     background-color: #c82333;
 }
 
@@ -406,7 +412,7 @@ header {
     background-color: #6c757d;
 }
 
-.undo-btn:hover {
+.undo-btn:hover:not(.disabled) {
     background-color: #5a6268;
 }
 
@@ -414,7 +420,7 @@ header {
     background-color: #dc3545;
 }
 
-.end-game-btn:hover {
+.end-game-btn:hover:not(.disabled) {
     background-color: #c82333;
 }
 
