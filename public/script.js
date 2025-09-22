@@ -66,6 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const adjustScoreSection = document.getElementById('adjust-score-section');
     const scoreButtonsSection = document.getElementById('score-buttons-section');
     const timeoutButtonsSection = document.getElementById('timeout-buttons-section');
+    const undoBtnEl = document.getElementById('undo-btn');
+    const endGameBtnEl = document.getElementById('end-game-btn');
+
 
     const allRoleElements = [
         gameClockSection,
@@ -73,13 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
         downSection,
         adjustScoreSection,
         scoreButtonsSection,
-        timeoutButtonsSection
+        timeoutButtonsSection,
+        undoBtnEl,
+        endGameBtnEl
     ];
 
     const roleElements = {
         'referee': allRoleElements,
-        'scorer': [adjustScoreSection, scoreButtonsSection],
-        'clock': [gameClockSection, playClockSection]
+        'scorer': [adjustScoreSection, scoreButtonsSection, undoBtnEl],
+        'clock': [gameClockSection, playClockSection, downSection],
+        'coach': [timeoutButtonsSection]
     };
 
     const gameIdDisplay = document.createElement('p');
