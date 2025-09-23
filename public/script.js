@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryTeam2Score = document.getElementById('summary-team2-score');
     const summaryScoreLog = document.getElementById('summary-score-log');
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
+    const gameIdText = document.getElementById('game-id-text');
+    const currentGameIdSection = document.getElementById('current-game-id');
 
 
     // Role-based permissions
@@ -107,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameState = {};
     let tempScoreEvent = null;
     let twoMinuteWarningIssuedLocally = false;
-    let actionHistory = [];
 
     const audio = new Audio('/assets/warning.mp3');
 
@@ -152,10 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const broadcastState = () => {
-        sendAction('UPDATE_STATE', gameState);
-    };
-
     // --- UI Update Functions ---
     const updateUI = () => {
         team1NameDisplay.textContent = gameState.team1Name || '';
@@ -170,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         gameDateDisplay.textContent = gameState.date;
         gameLocationDisplay.textContent = gameState.location;
+        gameIdText.textContent = gameState.gameId;
 
         // Display current down
         downButtons.forEach(btn => {
@@ -197,8 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
-            document.getElementById('game-id-text').textContent = gameState.gameId;
-            document.getElementById('current-game-id').classList.remove('hidden');
+            currentGameIdSection.classList.remove('hidden');
         } else {
             // Default lobby screen
             gameLobby.classList.remove('hidden');
@@ -277,13 +274,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('gameId', newGameId);
         history.replaceState(null, '', `?${urlParams.toString()}`);
-
-        const newGameState = {
-            gameId: newGameId
-        };
+        
         // Connect to WebSocket and update the state to show the settings form
         connectWebSocket(newGameId);
-        sendAction('UPDATE_STATE', newGameState);
     });
 
     joinGameBtn.addEventListener('click', () => {
@@ -309,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
-        actionHistory = [];
 
         const newGameState = {
             gameStarted: true,
@@ -337,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     coinTossBtn.addEventListener('click', () => {
         const result = Math.random() < 0.5 ? 'Team 1 (Heads)' : 'Team 2 (Tails)';
+        sendAction('UPDATE_STATE', { coinTossResult: result });
         coinTossResultDisplay.textContent = `Coin Toss Result: ${result}`;
         coinTossResultDisplay.classList.remove('hidden');
     });
@@ -364,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const newScores = { ...gameState.scores };
         newScores[`team${tempScoreEvent.team}`] += tempScoreEvent.score;
 
-        actionHistory.push({ type: 'score', scores: gameState.scores, scoreLogHTML: gameState.scoreLogHTML });
         sendAction('UPDATE_STATE', {
             scores: newScores,
             scoreLogHTML: scoreLog + gameState.scoreLogHTML
@@ -397,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
                 const timeoutLog = `<li>${formatTime(gameState.halfDuration - gameState.gameTimeLeft)} - Timeout: ${teamName}</li>`;
 
-                actionHistory.push({ type: 'timeout', timeoutsUsed: gameState.timeoutsUsed, timeoutLogHTML: gameState.timeoutLogHTML });
                 sendAction('UPDATE_STATE', {
                     timeoutsUsed: newTimeoutsUsed,
                     timeoutLogHTML: timeoutLog + gameState.timeoutLogHTML
@@ -483,22 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     undoBtn.addEventListener('click', () => {
-        if (actionHistory.length > 0) {
-            const lastAction = actionHistory.pop();
-            if (lastAction.type === 'score') {
-                sendAction('UPDATE_STATE', {
-                    scores: lastAction.scores,
-                    scoreLogHTML: lastAction.scoreLogHTML
-                });
-            } else if (lastAction.type === 'timeout') {
-                sendAction('UPDATE_STATE', {
-                    timeoutsUsed: lastAction.timeoutsUsed,
-                    timeoutLogHTML: lastAction.timeoutLogHTML
-                });
-            }
-        } else {
-            alert("No actions to undo.");
-        }
+        sendAction('UNDO_ACTION');
     });
 
     // Check URL for gameId on page load and connect if present
