@@ -148,19 +148,15 @@ document.addEventListener('DOMContentLoaded', () => {
             gameIdDisplay.style.display = 'none';
         }
 
-        // Correctly handle showing/hiding main sections based on state
-        if (gameState.team1Name && gameState.team2Name && gameState.team1Name !== 'Home Team' && gameState.team2Name !== 'Away Team') {
+        if (Object.keys(gameState).length > 0 && gameState.gameStarted) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
-        } else if (window.location.pathname.startsWith('/game/') && Object.keys(gameState).length > 0) {
-            // A game ID exists in the URL, but the game has not been started with custom names.
-            // This is the state for a new game or a joined game before the settings are saved.
+        } else if (window.location.pathname.startsWith('/game/')) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
         } else {
-            // Default state: no game active and no game ID in URL.
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
@@ -308,6 +304,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     startGameBtn.addEventListener('click', () => {
+        const team1Name = team1NameInput.value.trim();
+        const team2Name = team2NameInput.value.trim();
+        
+        if (!team1Name || !team2Name) {
+            alert("Please enter names for both teams.");
+            return;
+        }
+
         if (!gameState.coinTossResult) {
             alert("Please complete the coin toss before starting the game.");
             return;
@@ -317,10 +321,11 @@ document.addEventListener('DOMContentLoaded', () => {
         actionHistory = [];
 
         const newGameState = {
+            gameStarted: true,
             date: dateField.value || 'N/A',
             location: locationField.value || 'N/A',
-            team1Name: team1NameInput.value || 'Home Team',
-            team2Name: team2NameInput.value || 'Away Team',
+            team1Name: team1Name,
+            team2Name: team2Name,
             halfDuration: parseInt(halfDurationInput.value, 10) * 60,
             playClockDuration: parseInt(playClockDurationInput.value, 10),
             timeoutsPerHalf: parseInt(timeoutsPerHalfInput.value, 10),
