@@ -22,7 +22,7 @@
                 <div class="role-selection-wrapper">
                     <input type="radio" id="role-administrator" name="user-role" value="administrator" checked>
                     <label for="role-administrator">Game Administrator</label>
-                    
+
                     <input type="radio" id="role-head-referee" name="user-role" value="head-referee">
                     <label for="role-head-referee">Head Referee</label>
 
@@ -39,7 +39,7 @@
             <button id="join-game-btn" class="main-btn">Join Game</button>
             <p id="join-error-message" class="hidden error-message">Please enter a valid Game ID.</p>
         </div>
-        
+
         <div id="settings-form" class="hidden">
             <h2>Game Settings</h2>
             <p id="current-game-id" class="hidden"><strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)</p>
@@ -55,7 +55,7 @@
 
                 <label for="team2-name">Away Team Name:</label>
                 <input type="text" id="team2-name" placeholder="Away Team">
-                
+
                 <div class="settings-grid">
                     <div>
                         <label for="half-duration">Half Duration (min):</label>
@@ -79,7 +79,7 @@
                     </div>
                     <p id="coin-toss-result"></p>
                 </div>
-                
+
                 <button type="button" id="start-game-btn">Start Game</button>
             </form>
         </div>
@@ -102,7 +102,7 @@
                     <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
                 </div>
             </section>
-            
+
             <section class="play-clock-section">
                 <div class="clock-display play-clock-bg">
                     <span id="play-clock-display" class="clock-time"></span>
@@ -118,7 +118,7 @@
                     </label>
                 </div>
             </section>
-            
+
             <section class="down-buttons-section">
                 <p>Down</p>
                 <div class="down-buttons">
@@ -128,7 +128,7 @@
                     <button class="down-btn" data-down="4">4</button>
                 </div>
             </section>
-            
+
             <section class="scoreboard-section">
                 <div class="team-score">
                     <span id="team1-name-display" class="team-name"></span>
@@ -156,7 +156,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="team-score">
                     <span id="team2-name-display" class="team-name"></span>
                     <div class="score-container">
@@ -184,7 +184,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <section class="timeout-buttons-section">
                 <p>Timeouts</p>
                 <div class="timeout-buttons">
@@ -202,7 +202,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <section class="score-log">
                 <div class="log-container">
                     <h3 class="log-title">Score and Timeout Log</h3>
@@ -210,13 +210,13 @@
                     <ul id="timeout-log"></ul>
                 </div>
             </section>
-            
+
             <div class="action-buttons">
                 <button id="undo-btn" class="undo-btn">Undo Last Action</button>
                 <button id="end-game-btn" class="end-game-btn">End Game</button>
             </div>
         </div>
-        
+
         <div id="score-popup" class="hidden">
             <div class="popup-content">
                 <h3 id="popup-header">Log Score Details</h3>

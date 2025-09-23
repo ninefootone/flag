@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryScoreLog = document.getElementById('summary-score-log');
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
     const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
-    
+
     // Collect all control elements into a single array for easy management
     const allControls = [
         gameClockToggleBtn,
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.play();
             twoMinuteWarningIssuedLocally = true;
         }
-        
+
         applyRolePermissions();
     };
 
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     };
-    
+
     const updateButtonLabels = () => {
         gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
         playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameBtn.addEventListener('click', () => {
         const team1Name = team1NameInput.value.trim();
         const team2Name = team2NameInput.value.trim();
-        
+
         if (!team1Name || !team2Name) {
             alert("Please enter names for both teams.");
             return;
