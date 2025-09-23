@@ -51,10 +51,10 @@
                 <input type="text" id="location-field" placeholder="City, State">
 
                 <label for="team1-name">Home Team Name:</label>
-                <input type="text" id="team1-name" placeholder="Home Team">
+                <input type="text" id="team1-name" value="Home Team">
 
                 <label for="team2-name">Away Team Name:</label>
-                <input type="text" id="team2-name" placeholder="Away Team">
+                <input type="text" id="team2-name" value="Away Team">
 
                 <div class="settings-grid">
                     <div>
@@ -65,153 +65,111 @@
                         <label for="play-clock-duration">Play Clock (sec):</label>
                         <input type="number" id="play-clock-duration" value="40" min="5">
                     </div>
-                    <div>
-                        <label for="timeouts-per-half">Timeouts Per Half:</label>
-                        <input type="number" id="timeouts-per-half" value="2" min="0">
-                    </div>
                 </div>
 
-                <div class="coin-toss-section">
-                    <h3>Coin Toss</h3>
-                    <p>Tap the button to flip a coin and decide who gets the ball first.</p>
-                    <div class="coin-toss-buttons">
-                        <button type="button" id="coin-toss-btn">Flip Coin</button>
-                    </div>
-                    <p id="coin-toss-result"></p>
-                </div>
+                <label for="timeouts-per-half">Timeouts Per Half:</label>
+                <input type="number" id="timeouts-per-half" value="2" min="0">
 
-                <button type="button" id="start-game-btn">Start Game</button>
+                <button type="button" id="coin-toss-btn" class="main-btn">Coin Toss</button>
+                <p id="coin-toss-result" class="hidden"></p>
+
+                <button type="button" id="start-game-btn" class="main-btn">Start Game</button>
             </form>
         </div>
 
         <div id="game-interface" class="hidden">
-            <header>
-                <h1 class="game-info">
-                    <span id="game-date"></span><br>
-                    <span id="game-location"></span>
-                </h1>
-            </header>
+            <div class="game-info">
+                <p>Game Date: <span id="game-date"></span></p>
+                <p>Location: <span id="game-location"></span></p>
+            </div>
 
-            <section class="game-clocks-section">
-                <div class="clock-display game-clock-bg">
-                    <span id="game-clock-display" class="clock-time"></span>
-                    <p class="clock-label">Game Clock</p>
+            <div class="clocks">
+                <div class="clock-display">
+                    <div id="game-clock-display" class="game-clock">20:00</div>
+                    <div id="play-clock-display" class="play-clock">40</div>
                 </div>
-                <div class="clock-controls">
-                    <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
-                    <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
+                <div class="clock-labels">
+                    <p>GAME CLOCK</p>
+                    <p>PLAY CLOCK</p>
                 </div>
-            </section>
+            </div>
 
-            <section class="play-clock-section">
-                <div class="clock-display play-clock-bg">
-                    <span id="play-clock-display" class="clock-time"></span>
-                    <p class="clock-label">Play Clock</p>
-                </div>
-                <div class="play-clock-controls">
-                    <button id="play-clock-toggle" class="clock-btn start-stop-btn">Start</button>
-                    <button id="play-clock-reset" class="clock-btn reset-btn">Reset</button>
-                </div>
-                <div class="play-clock-options">
-                    <label for="auto-advance-play-clock">
-                        <input type="checkbox" id="auto-advance-play-clock"> Auto Advance
-                    </label>
-                </div>
-            </section>
+            <div class="clock-controls">
+                <button id="game-clock-toggle">Start</button>
+                <button id="game-clock-reset">Reset</button>
+                <button id="play-clock-toggle">Start</button>
+                <button id="play-clock-reset">Reset</button>
+                <label>
+                    <input type="checkbox" id="auto-advance-play-clock" checked> Auto Advance
+                </label>
+            </div>
 
-            <section class="down-buttons-section">
-                <p>Down</p>
-                <div class="down-buttons">
-                    <button class="down-btn" data-down="1">1</button>
-                    <button class="down-btn" data-down="2">2</button>
-                    <button class="down-btn" data-down="3">3</button>
-                    <button class="down-btn" data-down="4">4</button>
-                </div>
-            </section>
-
-            <section class="scoreboard-section">
-                <div class="team-score">
-                    <span id="team1-name-display" class="team-name"></span>
-                    <div class="score-container">
-                        <button class="adjust-btn" data-team="1" data-adjust="-">-</button>
-                        <span id="team1-score-display" class="score"></span>
-                        <button class="adjust-btn" data-team="1" data-adjust="+">+</button>
+            <div class="main-controls">
+                <div class="scoreboard-and-downs">
+                    <div class="team-score" id="team1-score-display-container">
+                        <span id="team1-name-display">Home Team</span>
+                        <div class="score-and-timeouts">
+                            <span id="team1-score-display" class="team-score-display">0</span>
+                            <span id="team1-timeouts" class="team-timeouts">2</span>
+                            <label id="team1-timeout-label">Timeouts</label>
+                        </div>
                     </div>
-                    <div class="score-buttons">
-                        <button class="score-btn" data-team="1" data-score="6" data-label="Touchdown">
-                            <span class="button-label">TD</span>
-                            <span class="button-score">6</span>
-                        </button>
-                        <button class="score-btn" data-team="1" data-score="1" data-label="PAT">
-                            <span class="button-label">1XP</span>
-                            <span class="button-score">1</span>
-                        </button>
-                        <button class="score-btn" data-team="1" data-score="2" data-label="2PT">
-                            <span class="button-label">2XP</span>
-                            <span class="button-score">2</span>
-                        </button>
-                        <button class="score-btn" data-team="1" data-score="2" data-label="Safety">
-                            <span class="button-label">Safety</span>
-                            <span class="button-score">2</span>
-                        </button>
+                    <div class="team-score" id="team2-score-display-container">
+                        <span id="team2-name-display">Away Team</span>
+                        <div class="score-and-timeouts">
+                            <span id="team2-score-display" class="team-score-display">0</span>
+                            <span id="team2-timeouts" class="team-timeouts">2</span>
+                            <label id="team2-timeout-label">Timeouts</label>
+                        </div>
+                    </div>
+                    <div class="down-buttons">
+                        <button class="down-btn" data-down="1">1st Down</button>
+                        <button class="down-btn" data-down="2">2nd Down</button>
+                        <button class="down-btn" data-down="3">3rd Down</button>
+                        <button class="down-btn" data-down="4">4th Down</button>
                     </div>
                 </div>
 
-                <div class="team-score">
-                    <span id="team2-name-display" class="team-name"></span>
-                    <div class="score-container">
-                        <button class="adjust-btn" data-team="2" data-adjust="-">-</button>
-                        <span id="team2-score-display" class="score"></span>
-                        <button class="adjust-btn" data-team="2" data-adjust="+">+</button>
-                    </div>
-                    <div class="score-buttons">
-                        <button class="score-btn" data-team="2" data-score="6" data-label="Touchdown">
-                            <span class="button-label">TD</span>
-                            <span class="button-score">6</span>
-                        </button>
-                        <button class="score-btn" data-team="2" data-score="1" data-label="PAT">
-                            <span class="button-label">1XP</span>
-                            <span class="button-score">1</span>
-                        </button>
-                        <button class="score-btn" data-team="2" data-score="2" data-label="2PT">
-                            <span class="button-label">2XP</span>
-                            <span class="button-score">2</span>
-                        </button>
-                        <button class="score-btn" data-team="2" data-score="2" data-label="Safety">
-                            <span class="button-label">Safety</span>
-                            <span class="button-score">2</span>
-                        </button>
-                    </div>
+                <div class="adjust-buttons">
+                    <button class="adjust-btn" data-type="game-clock" data-amount="1">+1min</button>
+                    <button class="adjust-btn" data-type="game-clock" data-amount="-1">-1min</button>
+                    <button class="adjust-btn" data-type="play-clock" data-amount="5">+5sec</button>
+                    <button class="adjust-btn" data-type="play-clock" data-amount="-5">-5sec</button>
                 </div>
-            </section>
 
-            <section class="timeout-buttons-section">
-                <p>Timeouts</p>
+                <div class="score-buttons">
+                    <button class="score-btn" data-team="1" data-score="6" data-label="TD">
+                        <span class="button-label">TOUCHDOWN</span>
+                        <span class="button-score">6</span>
+                    </button>
+                    <button class="score-btn" data-team="1" data-score="1" data-label="XP">
+                        <span class="button-label">XP</span>
+                        <span class="button-score">1</span>
+                    </button>
+                    <button class="score-btn" data-team="1" data-score="2" data-label="2PT">
+                        <span class="button-label">2XP</span>
+                        <span class="button-score">2</span>
+                    </button>
+                    <button class="score-btn" data-team="1" data-score="2" data-label="Safety">
+                        <span class="button-label">Safety</span>
+                        <span class="button-score">2</span>
+                    </button>
+                </div>
+
                 <div class="timeout-buttons">
-                    <div class="timeout-button-wrapper">
-                        <span class="timeout-label" id="team1-timeout-label"></span>
-                        <button class="use-timeout-btn" data-team="1">
-                            <span class="timeout-count" id="team1-timeouts"></span>
-                        </button>
-                    </div>
-                    <div class="timeout-button-wrapper">
-                        <span class="timeout-label" id="team2-timeout-label"></span>
-                        <button class="use-timeout-btn" data-team="2">
-                            <span class="timeout-count" id="team2-timeouts"></span>
-                        </button>
-                    </div>
+                    <button class="use-timeout-btn" data-team="1">Team 1 Timeout</button>
+                    <button class="use-timeout-btn" data-team="2">Team 2 Timeout</button>
                 </div>
-            </section>
 
-            <section class="score-log">
-                <div class="log-container">
-                    <h3 class="log-title">Score and Timeout Log</h3>
-                    <ul id="score-log"></ul>
-                    <ul id="timeout-log"></ul>
+                <div class="log-section">
+                    <h3>Score Log</h3>
+                    <ul id="score-log" class="log-container"></ul>
+                    <h3>Timeout Log</h3>
+                    <ul id="timeout-log" class="log-container"></ul>
                 </div>
-            </section>
+            </div>
 
-            <div class="action-buttons">
+            <div class="game-controls-bottom">
                 <button id="undo-btn" class="undo-btn">Undo Last Action</button>
                 <button id="end-game-btn" class="end-game-btn">End Game</button>
             </div>
@@ -271,7 +229,7 @@
             <button id="start-new-game-from-summary-btn" class="main-btn">Start a New Game</button>
         </div>
     </div>
-    <p class="version">v1.7</p>
+    <p class="version">v1.7.1</p>
     <script src="/script.js"></script>
 </body>
 </html>
