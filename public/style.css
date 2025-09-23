@@ -479,7 +479,7 @@ header {
     background-color: #218838;
 }
 
-/* Mobile-first adjustments for small screens */
+/* Mobile-first adjustments for small screens. */
 @media (max-width: 600px) {
     body {
         padding: 10px;

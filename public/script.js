@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Check URL for existing game ID on page load
+    // Check URL for existing game ID on page load.
     const pathSegments = window.location.pathname.split('/');
     const urlGameId = pathSegments[pathSegments.length - 1];
     if (urlGameId && urlGameId !== 'game.html') {
