@@ -436,6 +436,43 @@ li {
     margin-top: 20px;
 }
 
+/* New styles for the game summary screen */
+#game-summary {
+    padding: 20px;
+    text-align: center;
+}
+
+.summary-scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.summary-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-team-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #444;
+}
+
+.summary-score {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.summary-logs {
+    margin-top: 40px;
+    text-align: left;
+}
+
+
 /* Mobile-first adjustments for small screens */
 @media (max-width: 600px) {
     .clocks-section {

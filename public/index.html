@@ -248,8 +248,30 @@
                 </div>
             </div>
         </div>
+
+        <div id="game-summary" class="hidden">
+            <h2>Game Summary</h2>
+            <div class="summary-scoreboard">
+                <div class="summary-team">
+                    <span id="summary-team1-name" class="summary-team-name"></span>
+                    <span id="summary-team1-score" class="summary-score"></span>
+                </div>
+                <div class="summary-team">
+                    <span id="summary-team2-name" class="summary-team-name"></span>
+                    <span id="summary-team2-score" class="summary-score"></span>
+                </div>
+            </div>
+            <div class="summary-logs">
+                <div class="log-container">
+                    <h3 class="log-title">Score and Timeout Log</h3>
+                    <ul id="summary-score-log"></ul>
+                    <ul id="summary-timeout-log"></ul>
+                </div>
+            </div>
+            <button id="start-new-game-from-summary-btn" class="main-btn">Start a New Game</button>
+        </div>
     </div>
-    <p class="version">v1.5</p>
+    <p class="version">v1.6</p>
     <script src="/script.js"></script>
 </body>
 </html>

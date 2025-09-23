@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '1.5';
+    const appVersion = '1.6';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameLobby = document.getElementById('game-lobby');
     const settingsForm = document.getElementById('settings-form');
     const gameInterface = document.getElementById('game-interface');
+    const gameSummary = document.getElementById('game-summary');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
     const joinGameBtn = document.getElementById('join-game-btn');
     const gameIdInput = document.getElementById('game-id-input');
@@ -64,6 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
+    const summaryTeam1Name = document.getElementById('summary-team1-name');
+    const summaryTeam2Name = document.getElementById('summary-team2-name');
+    const summaryTeam1Score = document.getElementById('summary-team1-score');
+    const summaryTeam2Score = document.getElementById('summary-team2-score');
+    const summaryScoreLog = document.getElementById('summary-score-log');
+    const summaryTimeoutLog = document.getElementById('summary-timeout-log');
+    const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
     
     // Collect all control elements into a single array for easy management
     const allControls = [
@@ -158,14 +166,31 @@ document.addEventListener('DOMContentLoaded', () => {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
+            gameSummary.classList.add('hidden');
+        } else if (Object.keys(gameState).length > 0 && !gameState.gameStarted) {
+            // This is the end game state
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.add('hidden');
+            gameInterface.classList.add('hidden');
+            gameSummary.classList.remove('hidden');
+            // Update the summary screen with final scores and logs
+            summaryTeam1Name.textContent = gameState.team1Name;
+            summaryTeam2Name.textContent = gameState.team2Name;
+            summaryTeam1Score.textContent = gameState.scores.team1;
+            summaryTeam2Score.textContent = gameState.scores.team2;
+            summaryScoreLog.innerHTML = gameState.scoreLogHTML;
+            summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+
         } else if (window.location.pathname.startsWith('/game/')) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
+            gameSummary.classList.add('hidden');
         } else {
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
+            gameSummary.classList.add('hidden');
         }
 
         if (Object.keys(gameState).length === 0) {
@@ -479,11 +504,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     endGameBtn.addEventListener('click', () => {
         sendAction('END_GAME');
-        // Return to the home screen and clear the URL.
+    });
+
+    startNewGameFromSummaryBtn.addEventListener('click', () => {
         history.pushState(null, '', '/');
         gameLobby.classList.remove('hidden');
-        settingsForm.classList.add('hidden');
-        gameInterface.classList.add('hidden');
+        gameSummary.classList.add('hidden');
     });
 
     undoBtn.addEventListener('click', () => {
