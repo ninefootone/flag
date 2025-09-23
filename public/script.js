@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '1.8';
+    const appVersion = '1.9';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -9,10 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Automatically set the date field to the current date
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-    const dateField = document.getElementById('date-field');
-    if (dateField) {
-        dateField.value = formattedDate;
-    }
+    document.getElementById('date-field').value = formattedDate;
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -25,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const joinErrorMessage = document.getElementById('join-error-message');
     const roleInputs = document.querySelectorAll('input[name="user-role"]');
     const startGameBtn = document.getElementById('start-game-btn');
+    const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
     const team1NameInput = document.getElementById('team1-name');
     const team2NameInput = document.getElementById('team2-name');
@@ -67,37 +65,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
-    const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
     const summaryTeam2Name = document.getElementById('summary-team2-name');
     const summaryTeam1Score = document.getElementById('summary-team1-score');
     const summaryTeam2Score = document.getElementById('summary-team2-score');
     const summaryScoreLog = document.getElementById('summary-score-log');
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
-    const gameIdText = document.getElementById('game-id-text');
-    const currentGameIdSection = document.getElementById('current-game-id');
-    const shareGameIdText = document.getElementById('share-game-id-text');
-    const copyGameIdBtn = document.getElementById('copy-game-id-btn');
-    const shareGameLinkBtn = document.getElementById('share-game-link-btn');
+    const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
+    const gameIdDisplay = document.getElementById('current-game-id');
+    const shareGameBtn = document.getElementById('share-game-btn');
 
-
-    // Role-based permissions
-    const allGameControls = [
-        gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn,
-        ...scoreButtons, ...useTimeoutBtns, ...downButtons, autoAdvanceCheckbox,
-        endGameBtn, undoBtn, coinTossBtn, ...adjustButtons
+    // Collect all control elements into a single array for easy management
+    const allControls = [
+        gameClockToggleBtn,
+        gameClockResetBtn,
+        playClockToggleBtn,
+        playClockResetBtn,
+        autoAdvanceCheckbox,
+        ...downButtons,
+        ...scoreButtons,
+        ...adjustButtons,
+        ...useTimeoutBtns,
+        undoBtn,
+        endGameBtn
     ];
 
+    // Map roles to the specific controls they can use
     const rolePermissions = {
-        'administrator': allGameControls,
-        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, coinTossBtn, ...adjustButtons],
-        'scorer': [...scoreButtons, undoBtn],
-        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, undoBtn],
+        'administrator': allControls,
+        'head-referee': allControls,
+        'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
+        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons],
         'coach': [...useTimeoutBtns]
     };
 
     let userRole = 'administrator';
-
     roleInputs.forEach(input => {
         input.addEventListener('change', (event) => {
             userRole = event.target.value;
@@ -112,14 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameState = {};
     let tempScoreEvent = null;
     let twoMinuteWarningIssuedLocally = false;
-
+    let actionHistory = [];
     const audio = new Audio('/assets/warning.mp3');
 
     // --- WebSocket Event Handlers ---
     const connectWebSocket = (gameId) => {
-        if (ws) {
-            ws.close();
-        }
         ws = new WebSocket(`wss://${location.host}/game/${gameId}`);
 
         ws.onopen = () => {
@@ -128,15 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         ws.onmessage = (event) => {
-            const receivedState = JSON.parse(event.data);
-            console.log('Received new state:', receivedState);
-
-            // Check if the game state is different from the current one before updating
-            if (JSON.stringify(gameState) !== JSON.stringify(receivedState)) {
-                gameState = receivedState;
-                updateUI();
-                checkTwoMinuteWarning();
-            }
+            const message = JSON.parse(event.data);
+            console.log('Received from server:', message);
+            Object.assign(gameState, message);
+            updateUI();
         };
 
         ws.onclose = () => {
@@ -144,102 +138,140 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
+            console.error('WebSocket Error:', error);
         };
     };
 
+    // --- State Management and UI Updates ---
     const sendAction = (type, payload = {}) => {
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type, payload }));
-        } else {
-            console.warn('WebSocket is not connected. Action not sent.');
         }
     };
 
-    // --- UI Update Functions ---
     const updateUI = () => {
-        team1NameDisplay.textContent = gameState.team1Name || '';
-        team2NameDisplay.textContent = gameState.team2Name || '';
-        team1ScoreDisplay.textContent = gameState.scores.team1;
-        team2ScoreDisplay.textContent = gameState.scores.team2;
-        team1TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['1'];
-        team2TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['2'];
-        gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
-        playClockDisplay.textContent = gameState.playTimeLeft;
-        scoreLogList.innerHTML = gameState.scoreLogHTML;
-        timeoutLogList.innerHTML = gameState.timeoutLogHTML;
-        gameDateDisplay.textContent = gameState.date;
-        gameLocationDisplay.textContent = gameState.location;
-        gameIdText.textContent = gameState.gameId;
-        shareGameIdText.textContent = gameState.gameId;
+        const urlParams = new URLSearchParams(window.location.search);
+        userRole = urlParams.get('role') || 'administrator';
 
-        // Display current down
-        downButtons.forEach(btn => {
-            btn.classList.remove('active');
-            if (parseInt(btn.dataset.down) === gameState.currentDown) {
-                btn.classList.add('active');
-            }
-        });
+        const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
+        if (urlGameId && urlGameId !== 'game.html') {
+            gameIdDisplay.classList.remove('hidden');
+            document.getElementById('game-id-text').textContent = urlGameId;
+        } else {
+            gameIdDisplay.classList.add('hidden');
+        }
 
-        // Hide/show the correct screen based on game state
         if (gameState.gameStarted) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
-            gameSummary.classList.add('hidden');
-        } else if (gameState.gameEnded) {
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.add('hidden');
-            gameInterface.classList.add('hidden');
-            gameSummary.classList.remove('hidden');
-            updateSummaryScreen();
-        } else if (gameState.gameId) {
-            // This is the settings form for a new game
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.remove('hidden');
-            gameInterface.classList.add('hidden');
-            gameSummary.classList.add('hidden');
-            currentGameIdSection.classList.remove('hidden');
+            updateButtonLabels();
+            updateScores();
+            updateTimeouts();
+            updateDowns();
+            updateClocks();
+            updateLogs();
+            if (gameState.date) gameDateDisplay.textContent = new Date(gameState.date).toLocaleDateString();
+            if (gameState.location) gameLocationDisplay.textContent = gameState.location;
+            if (gameState.team1Name) team1NameDisplay.textContent = gameState.team1Name;
+            if (gameState.team2Name) team2NameDisplay.textContent = gameState.team2Name;
         } else {
-            // Default lobby screen
-            gameLobby.classList.remove('hidden');
-            settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
-            gameSummary.classList.add('hidden');
+            gameLobby.classList.remove('hidden');
+            if (urlGameId && urlGameId !== 'game.html' && urlGameId !== '') {
+                // If a gameId is in the URL but the game hasn't started, show the lobby and fill the input.
+                gameLobby.classList.remove('hidden');
+                settingsForm.classList.add('hidden');
+                gameIdInput.value = urlGameId;
+            } else {
+                gameLobby.classList.remove('hidden');
+                settingsForm.classList.add('hidden');
+            }
         }
 
-        updateButtonLabels();
-        applyRolePermissions();
-    };
+        if (gameState.gameEnded) {
+            gameInterface.classList.add('hidden');
+            gameSummary.classList.remove('hidden');
+            displaySummary();
+        }
 
-    const updateSummaryScreen = () => {
-        summaryTeam1Name.textContent = gameState.team1Name;
-        summaryTeam2Name.textContent = gameState.team2Name;
-        summaryTeam1Score.textContent = gameState.scores.team1;
-        summaryTeam2Score.textContent = gameState.scores.team2;
-        summaryScoreLog.innerHTML = gameState.scoreLogHTML;
-        summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+        applyRolePermissions();
     };
 
     const applyRolePermissions = () => {
         // Disable all controls initially
-        allGameControls.forEach(control => {
+        allControls.forEach(control => {
             if (control) {
                 control.classList.add('disabled');
             }
         });
-        // Enable controls for the selected role
+
+        // Enable controls based on the user's role
         const controlsToEnable = rolePermissions[userRole] || [];
         controlsToEnable.forEach(control => {
             if (control) {
                 control.classList.remove('disabled');
             }
         });
+
+        // Disable timeout buttons if no timeouts are left
+        if (gameState.timeoutsUsed && gameState.timeoutsPerHalf) {
+            if (gameState.timeoutsUsed['1'] >= gameState.timeoutsPerHalf) {
+                document.querySelector('.use-timeout-btn[data-team="1"]').classList.add('disabled');
+            } else {
+                document.querySelector('.use-timeout-btn[data-team="1"]').classList.remove('disabled');
+            }
+
+            if (gameState.timeoutsUsed['2'] >= gameState.timeoutsPerHalf) {
+                document.querySelector('.use-timeout-btn[data-team="2"]').classList.add('disabled');
+            } else {
+                document.querySelector('.use-timeout-btn[data-team="2"]').classList.remove('disabled');
+            }
+        }
     };
 
     const updateButtonLabels = () => {
         gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
         playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
+    };
+
+    const updateScores = () => {
+        team1ScoreDisplay.textContent = gameState.scores.team1;
+        team2ScoreDisplay.textContent = gameState.scores.team2;
+    };
+
+    const updateTimeouts = () => {
+        const totalTimeouts = gameState.timeoutsPerHalf;
+        const timeoutsUsed1 = gameState.timeoutsUsed['1'];
+        const timeoutsUsed2 = gameState.timeoutsUsed['2'];
+        team1TimeoutsDisplay.textContent = `${totalTimeouts - timeoutsUsed1}/${totalTimeouts}`;
+        team2TimeoutsDisplay.textContent = `${totalTimeouts - timeoutsUsed2}/${totalTimeouts}`;
+    };
+
+    const updateDowns = () => {
+        downButtons.forEach(btn => {
+            const downValue = parseInt(btn.dataset.down);
+            if (downValue === gameState.currentDown) {
+                btn.style.backgroundColor = 'red';
+            } else {
+                btn.style.backgroundColor = '';
+            }
+        });
+    };
+
+    const updateClocks = () => {
+        gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
+        playClockDisplay.textContent = formatTime(gameState.playTimeLeft);
+
+        // Two-minute warning logic
+        if (gameState.gameTimeLeft <= 120 && !twoMinuteWarningIssuedLocally) {
+            audio.play();
+            twoMinuteWarningIssuedLocally = true;
+            gameClockDisplay.parentElement.classList.add('warning');
+            setTimeout(() => {
+                gameClockDisplay.parentElement.classList.remove('warning');
+            }, 5000);
+        }
     };
 
     const formatTime = (totalSeconds) => {
@@ -252,205 +284,124 @@ document.addEventListener('DOMContentLoaded', () => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
         let playerDetails = [];
-        if (players.qb) playerDetails.push(`QB #${players.qb}`);
-        if (players.wr) playerDetails.push(`WR #${players.wr}`);
-        if (players.rb) playerDetails.push(`RB #${players.rb}`);
-        if (players.int) playerDetails.push(`INT #${players.int}`);
-        if (players.safety) playerDetails.push(`Safety #${players.safety}`);
-        const playerText = playerDetails.length > 0 ? ` by ${playerDetails.join(', ')}` : '';
-        return `<li>${formatTime(elapsedTime)} - ${teamName} scored ${event.score} (${event.label})${playerText}</li>`;
+        if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
+        if (players.wr) { playerDetails.push(`WR #${players.wr}`); }
+        if (players.rb) { playerDetails.push(`RB #${players.rb}`); }
+        if (players.int) { playerDetails.push(`INT #${players.int}`); }
+        if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
+        const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
+        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
+        return newLogEntry + gameState.scoreLogHTML;
     };
 
-    const checkTwoMinuteWarning = () => {
-        const twoMinuteMark = 120; // 2 minutes in seconds
-        if (gameState.gameTimeLeft <= twoMinuteMark && !twoMinuteWarningIssuedLocally) {
-            gameClockDisplay.parentElement.classList.add('warning');
-            audio.play();
-            twoMinuteWarningIssuedLocally = true;
-        }
+    const getNewTimeoutLog = (team) => {
+        const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
+        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} used a timeout.</li>`;
+        return newLogEntry + gameState.timeoutLogHTML;
     };
 
+    const updateLogs = () => {
+        scoreLogList.innerHTML = gameState.scoreLogHTML;
+        timeoutLogList.innerHTML = gameState.timeoutLogHTML;
+    };
 
-    // --- Event Listeners ---
+    const displaySummary = () => {
+        summaryTeam1Name.textContent = gameState.team1Name;
+        summaryTeam2Name.textContent = gameState.team2Name;
+        summaryTeam1Score.textContent = gameState.scores.team1;
+        summaryTeam2Score.textContent = gameState.scores.team2;
+        summaryScoreLog.innerHTML = gameState.scoreLogHTML;
+        summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+    };
+
+    // --- User Actions ---
     startNewGameBtn.addEventListener('click', () => {
-        // Generate a new unique game ID and show the settings form
-        const newGameId = Math.random().toString(36).substring(2, 8);
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('gameId', newGameId);
-        history.replaceState(null, '', `?${urlParams.toString()}`);
-        
-        // Connect to WebSocket and update the state to show the settings form
-        connectWebSocket(newGameId);
+        history.pushState(null, '', '/game.html');
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.remove('hidden');
+        gameIdDisplay.classList.add('hidden');
     });
 
     joinGameBtn.addEventListener('click', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
             joinErrorMessage.classList.add('hidden');
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('gameId', gameId);
-            history.replaceState(null, '', `?${urlParams.toString()}`);
             connectWebSocket(gameId);
+            history.pushState(null, '', `/${gameId}`);
+            gameLobby.classList.add('hidden');
         } else {
             joinErrorMessage.classList.remove('hidden');
         }
     });
 
     startGameBtn.addEventListener('click', () => {
-        const team1Name = team1NameInput.value.trim() || 'Home Team';
-        const team2Name = team2NameInput.value.trim() || 'Away Team';
+        const team1Name = team1NameInput.value.trim();
+        const team2Name = team2NameInput.value.trim();
         if (!team1Name || !team2Name) {
             alert("Please enter names for both teams.");
             return;
         }
-
+        if (!gameState.coinTossResult) {
+            alert("Please complete the coin toss before starting the game.");
+            return;
+        }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
-
+        actionHistory = [];
         const newGameState = {
             gameStarted: true,
             date: dateField.value || 'N/A',
             location: locationField.value || 'N/A',
             team1Name: team1Name,
             team2Name: team2Name,
-            halfDuration: parseInt(halfDurationInput.value) * 60,
-            playClockDuration: parseInt(playClockDurationInput.value),
-            timeoutsPerHalf: parseInt(timeoutsPerHalfInput.value),
-            gameTimeLeft: parseInt(halfDurationInput.value) * 60,
-            playTimeLeft: parseInt(playClockDurationInput.value),
+            halfDuration: parseInt(halfDurationInput.value, 10) * 60,
+            playClockDuration: parseInt(playClockDurationInput.value, 10),
+            timeoutsPerHalf: parseInt(timeoutsPerHalfInput.value, 10),
             scores: { team1: 0, team2: 0 },
             timeoutsUsed: { '1': 0, '2': 0 },
+            gameTimeLeft: parseInt(halfDurationInput.value, 10) * 60,
+            playTimeLeft: parseInt(playClockDurationInput.value, 10),
+            currentDown: 1,
             scoreLogHTML: '',
             timeoutLogHTML: '',
-            currentDown: 1,
             gameClockRunning: false,
             playClockRunning: false,
-            twoMinuteWarningIssued: false,
-            gameEnded: false
+            gameEnded: false,
+            coinTossResult: gameState.coinTossResult
         };
+
+        const gameId = 'game-' + Math.random().toString(36).substr(2, 9);
+        connectWebSocket(gameId);
+        history.pushState(null, '', `/${gameId}`);
         sendAction('START_GAME', newGameState);
     });
 
     coinTossBtn.addEventListener('click', () => {
-        const result = Math.random() < 0.5 ? 'Team 1 (Heads)' : 'Team 2 (Tails)';
-        sendAction('UPDATE_STATE', { coinTossResult: result });
-        coinTossResultDisplay.textContent = `Coin Toss Result: ${result}`;
+        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        gameState.coinTossResult = result;
+        coinTossResultDisplay.textContent = `It's ${result}!`;
         coinTossResultDisplay.classList.remove('hidden');
     });
 
-    scoreButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const team = button.dataset.team;
-            const score = parseInt(button.dataset.score);
-            const label = button.dataset.label;
-            tempScoreEvent = { team, score, label };
-            popupHeader.textContent = `Log Score: ${team === '1' ? gameState.team1Name : gameState.team2Name} - ${label} (${score} pts)`;
-            scorePopup.classList.remove('hidden');
-        });
-    });
-
-    logScoreBtn.addEventListener('click', () => {
-        const players = {
-            qb: qbNumberInput.value,
-            wr: wrNumberInput.value,
-            rb: rbNumberInput.value,
-            int: intNumberInput.value,
-            safety: safetyNumberInput.value
-        };
-        const scoreLog = getNewScoreLog(tempScoreEvent, players);
-        const newScores = { ...gameState.scores };
-        newScores[`team${tempScoreEvent.team}`] += tempScoreEvent.score;
-
-        sendAction('UPDATE_STATE', {
-            scores: newScores,
-            scoreLogHTML: scoreLog + gameState.scoreLogHTML
-        });
-        scorePopup.classList.add('hidden');
-        qbNumberInput.value = '';
-        wrNumberInput.value = '';
-        rbNumberInput.value = '';
-        intNumberInput.value = '';
-        safetyNumberInput.value = '';
-    });
-
-    cancelPopupBtn.addEventListener('click', () => {
-        scorePopup.classList.add('hidden');
-    });
-
-    downButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const newDown = parseInt(button.dataset.down);
-            sendAction('UPDATE_STATE', { currentDown: newDown });
-        });
-    });
-
-    useTimeoutBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            const team = button.dataset.team;
-            if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
-                const newTimeoutsUsed = { ...gameState.timeoutsUsed };
-                newTimeoutsUsed[team]++;
-                const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
-                const timeoutLog = `<li>${formatTime(gameState.halfDuration - gameState.gameTimeLeft)} - Timeout: ${teamName}</li>`;
-
-                sendAction('UPDATE_STATE', {
-                    timeoutsUsed: newTimeoutsUsed,
-                    timeoutLogHTML: timeoutLog + gameState.timeoutLogHTML
-                });
-            } else {
-                alert(`Team ${team} has no timeouts left.`);
-            }
-        });
-    });
-
-    adjustButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const type = button.dataset.type;
-            const amount = parseInt(button.dataset.amount);
-            if (type === 'game-clock') {
-                const newGameTime = Math.max(0, gameState.gameTimeLeft + amount * 60);
-                if (gameState.gameClockRunning) {
-                    sendAction('STOP_GAME_CLOCK');
-                    // Check for two-minute warning after adjustment
-                    if (newGameTime <= 120 && !twoMinuteWarningIssuedLocally) {
-                        gameClockDisplay.parentElement.classList.add('warning');
-                        audio.play();
-                        twoMinuteWarningIssuedLocally = true;
-                    } else if (newGameTime > 120 && twoMinuteWarningIssuedLocally) {
-                        gameClockDisplay.parentElement.classList.remove('warning');
-                        twoMinuteWarningIssuedLocally = false;
-                    }
-                }
-                sendAction('UPDATE_STATE', { gameTimeLeft: newGameTime });
-            } else if (type === 'play-clock') {
-                const newPlayTime = Math.max(0, gameState.playTimeLeft + amount);
-                sendAction('UPDATE_STATE', { playTimeLeft: newPlayTime });
-            }
-        });
-    });
-
     gameClockToggleBtn.addEventListener('click', () => {
+        if (gameState.gameTimeLeft === 0) return;
         if (gameState.gameClockRunning) {
             sendAction('STOP_GAME_CLOCK');
             gameClockDisplay.parentElement.classList.remove('warning');
         } else {
-            if (gameState.gameTimeLeft > 0) {
-                sendAction('START_GAME_CLOCK');
-            }
+            sendAction('START_GAME_CLOCK');
         }
     });
 
     gameClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_GAME_CLOCK');
+        sendAction('UPDATE_STATE', { gameTimeLeft: gameState.halfDuration, twoMinuteWarningIssued: false });
         gameClockDisplay.parentElement.classList.remove('warning');
-        twoMinuteWarningIssuedLocally = false;
-        sendAction('UPDATE_STATE', {
-            gameTimeLeft: gameState.halfDuration,
-            twoMinuteWarningIssued: false
-        });
     });
 
     playClockToggleBtn.addEventListener('click', () => {
+        if (gameState.playTimeLeft === 0) return;
         if (gameState.playClockRunning) {
             sendAction('STOP_PLAY_CLOCK');
         } else {
@@ -467,6 +418,66 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
     });
 
+    downButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const newDown = parseInt(event.target.dataset.down, 10);
+            sendAction('UPDATE_STATE', { currentDown: newDown, playTimeLeft: gameState.playClockDuration, playClockRunning: false });
+        });
+    });
+
+    scoreButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const team = event.currentTarget.dataset.team;
+            const scoreToAdd = parseInt(event.currentTarget.dataset.score, 10);
+            const scoreLabel = event.currentTarget.dataset.label;
+            tempScoreEvent = { team, scoreToAdd, scoreLabel };
+            popupHeader.textContent = `Log ${scoreLabel} for ${team === '1' ? gameState.team1Name : gameState.team2Name}`;
+            scorePopup.classList.remove('hidden');
+        });
+    });
+
+    logScoreBtn.addEventListener('click', () => {
+        const players = {
+            qb: qbNumberInput.value,
+            wr: wrNumberInput.value,
+            rb: rbNumberInput.value,
+            int: intNumberInput.value,
+            safety: safetyNumberInput.value,
+        };
+        actionHistory.push({ type: 'score', scores: { ...gameState.scores }, scoreLogHTML: gameState.scoreLogHTML });
+        sendAction('SCORE_CHANGE', { ...tempScoreEvent, players: players });
+        scorePopup.classList.add('hidden');
+        qbNumberInput.value = '';
+        wrNumberInput.value = '';
+        rbNumberInput.value = '';
+        intNumberInput.value = '';
+        safetyNumberInput.value = '';
+    });
+
+    cancelPopupBtn.addEventListener('click', () => {
+        scorePopup.classList.add('hidden');
+    });
+
+    adjustButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const team = event.currentTarget.dataset.team;
+            const adjustment = event.currentTarget.dataset.adjust === '+' ? 1 : -1;
+            const newScore = gameState.scores[`team${team}`] + adjustment;
+            actionHistory.push({ type: 'score', scores: { ...gameState.scores }, scoreLogHTML: gameState.scoreLogHTML });
+            sendAction('UPDATE_STATE', { scores: { ...gameState.scores, [`team${team}`]: Math.max(0, newScore) } });
+        });
+    });
+
+    useTimeoutBtns.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const team = event.currentTarget.dataset.team;
+            if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
+                actionHistory.push({ type: 'timeout', timeoutsUsed: { ...gameState.timeoutsUsed }, timeoutLogHTML: gameState.timeoutLogHTML });
+                sendAction('USE_TIMEOUT', { team });
+            }
+        });
+    });
+
     endGameBtn.addEventListener('click', () => {
         sendAction('END_GAME');
     });
@@ -478,48 +489,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     undoBtn.addEventListener('click', () => {
-        sendAction('UNDO_ACTION');
-    });
-
-    // Share functionality
-    copyGameIdBtn.addEventListener('click', () => {
-        const gameId = shareGameIdText.textContent;
-        navigator.clipboard.writeText(gameId).then(() => {
-            alert("Game ID copied to clipboard!");
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
-            alert("Failed to copy Game ID.");
-        });
-    });
-
-    shareGameLinkBtn.addEventListener('click', () => {
-        const gameId = shareGameIdText.textContent;
-        const gameUrl = `${window.location.origin}/game/${gameId}`;
-        const shareData = {
-            title: 'Join my Referee App Game',
-            text: `Join the game using this Game ID: ${gameId}`,
-            url: gameUrl,
-        };
-
-        if (navigator.share) {
-            navigator.share(shareData).catch(err => {
-                console.error('Share failed: ', err);
-            });
+        if (actionHistory.length > 0) {
+            const lastAction = actionHistory.pop();
+            if (lastAction.type === 'score') {
+                sendAction('UPDATE_STATE', {
+                    scores: lastAction.scores,
+                    scoreLogHTML: lastAction.scoreLogHTML
+                });
+            } else if (lastAction.type === 'timeout') {
+                sendAction('UPDATE_STATE', {
+                    timeoutsUsed: lastAction.timeoutsUsed,
+                    timeoutLogHTML: lastAction.timeoutLogHTML
+                });
+            }
         } else {
-            // Fallback for browsers that don't support the Web Share API
-            navigator.clipboard.writeText(gameUrl).then(() => {
-                alert("Game link copied to clipboard! Share it with others.");
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-                alert("Failed to copy game link.");
-            });
+            alert("No actions to undo.");
         }
     });
 
-    // Check URL for gameId on page load and connect if present
-    const urlParams = new URLSearchParams(window.location.search);
-    const gameId = urlParams.get('gameId');
-    if (gameId) {
-        connectWebSocket(gameId);
+    shareGameBtn.addEventListener('click', handleShare);
+
+    function handleShare() {
+        if (!gameState.gameId) {
+            alert('Please start a game before sharing.');
+            return;
+        }
+
+        const shareUrl = `${window.location.origin}/${gameState.gameId}?role=${userRole}`;
+        const shareData = {
+            title: `Join Game ${gameState.gameId}`,
+            text: `Join the game as a ${userRole}:`,
+            url: shareUrl,
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData)
+                .then(() => console.log('Successfully shared'))
+                .catch((error) => console.error('Error sharing:', error));
+        } else {
+            navigator.clipboard.writeText(shareUrl)
+                .then(() => {
+                    alert('Game link copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+        }
+    }
+
+    // Check URL for existing game ID on page load
+    const pathSegments = window.location.pathname.split('/');
+    const urlGameId = pathSegments[pathSegments.length - 1];
+    if (urlGameId && urlGameId !== 'game.html') {
+        connectWebSocket(urlGameId);
+        gameLobby.classList.add('hidden');
     }
 });
