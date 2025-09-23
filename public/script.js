@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '1.7.1';
+    const appVersion = '1.8';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Automatically set the date field to the current date
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-    document.getElementById('date-field').value = formattedDate;
+    const dateField = document.getElementById('date-field');
+    if (dateField) {
+        dateField.value = formattedDate;
+    }
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -22,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const joinErrorMessage = document.getElementById('join-error-message');
     const roleInputs = document.querySelectorAll('input[name="user-role"]');
     const startGameBtn = document.getElementById('start-game-btn');
-    const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
     const team1NameInput = document.getElementById('team1-name');
     const team2NameInput = document.getElementById('team2-name');
@@ -111,6 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- WebSocket Event Handlers ---
     const connectWebSocket = (gameId) => {
+        if (ws) {
+            ws.close();
+        }
         ws = new WebSocket(`wss://${location.host}/game/${gameId}`);
 
         ws.onopen = () => {
@@ -153,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UI Update Functions ---
     const updateUI = () => {
-        team1NameDisplay.textContent = gameState.team1Name || 'Home Team';
-        team2NameDisplay.textContent = gameState.team2Name || 'Away Team';
+        team1NameDisplay.textContent = gameState.team1Name || '';
+        team2NameDisplay.textContent = gameState.team2Name || '';
         team1ScoreDisplay.textContent = gameState.scores.team1;
         team2ScoreDisplay.textContent = gameState.scores.team2;
         team1TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['1'];
@@ -163,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
         playClockDisplay.textContent = gameState.playTimeLeft;
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
+        gameDateDisplay.textContent = gameState.date;
+        gameLocationDisplay.textContent = gameState.location;
 
         // Display current down
         downButtons.forEach(btn => {
@@ -184,7 +191,16 @@ document.addEventListener('DOMContentLoaded', () => {
             gameInterface.classList.add('hidden');
             gameSummary.classList.remove('hidden');
             updateSummaryScreen();
+        } else if (gameState.gameId) {
+            // This is the settings form for a new game
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.remove('hidden');
+            gameInterface.classList.add('hidden');
+            gameSummary.classList.add('hidden');
+            document.getElementById('game-id-text').textContent = gameState.gameId;
+            document.getElementById('current-game-id').classList.remove('hidden');
         } else {
+            // Default lobby screen
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
@@ -256,24 +272,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     startNewGameBtn.addEventListener('click', () => {
-        gameLobby.classList.add('hidden');
-        settingsForm.classList.remove('hidden');
-        // Generate a new unique game ID
+        // Generate a new unique game ID and show the settings form
         const newGameId = Math.random().toString(36).substring(2, 8);
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('gameId', newGameId);
         history.replaceState(null, '', `?${urlParams.toString()}`);
-        document.getElementById('game-id-text').textContent = newGameId;
-        document.getElementById('current-game-id').classList.remove('hidden');
+
+        const newGameState = {
+            gameId: newGameId
+        };
+        // Connect to WebSocket and update the state to show the settings form
         connectWebSocket(newGameId);
+        sendAction('UPDATE_STATE', newGameState);
     });
 
     joinGameBtn.addEventListener('click', () => {
         const gameId = gameIdInput.value.trim();
         if (gameId) {
             joinErrorMessage.classList.add('hidden');
-            gameLobby.classList.add('hidden');
-            gameInterface.classList.remove('hidden');
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('gameId', gameId);
             history.replaceState(null, '', `?${urlParams.toString()}`);
@@ -288,10 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const team2Name = team2NameInput.value.trim() || 'Away Team';
         if (!team1Name || !team2Name) {
             alert("Please enter names for both teams.");
-            return;
-        }
-        if (!gameState.coinTossResult) {
-            alert("Please complete the coin toss before starting the game.");
             return;
         }
 
@@ -317,14 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
             currentDown: 1,
             gameClockRunning: false,
             playClockRunning: false,
-            twoMinuteWarningIssued: false
+            twoMinuteWarningIssued: false,
+            gameEnded: false
         };
         sendAction('START_GAME', newGameState);
     });
 
     coinTossBtn.addEventListener('click', () => {
         const result = Math.random() < 0.5 ? 'Team 1 (Heads)' : 'Team 2 (Tails)';
-        sendAction('UPDATE_STATE', { coinTossResult: result });
         coinTossResultDisplay.textContent = `Coin Toss Result: ${result}`;
         coinTossResultDisplay.classList.remove('hidden');
     });
@@ -488,4 +500,11 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("No actions to undo.");
         }
     });
+
+    // Check URL for gameId on page load and connect if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('gameId');
+    if (gameId) {
+        connectWebSocket(gameId);
+    }
 });
