@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (gameState.gameStarted) {
             gameLobby.classList.add('hidden');
-            settingsForm.classList.add('hidden');
+            settingsForm.classList.add('hidden'); // Ensure settings form is hidden
             gameInterface.classList.remove('hidden');
             updateButtonLabels();
             updateScores();
@@ -374,6 +374,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const gameId = 'game-' + Math.random().toString(36).substr(2, 9);
         connectWebSocket(gameId);
         history.pushState(null, '', `/${gameId}`);
+
+        // Immediately update UI to show the game interface
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.remove('hidden');
+        Object.assign(gameState, newGameState);
+        updateUI();
+
         sendAction('START_GAME', newGameState);
     });
 
