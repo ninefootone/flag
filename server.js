@@ -7,9 +7,6 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Initial game state
 const initialGameState = {
     date: '',
@@ -94,11 +91,18 @@ function stopPlayClock(gameState, gameId) {
     broadcastState(gameId);
 }
 
+// Express app routing
+app.use(express.static('public'));
+
+app.get('/game/:gameId', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// WebSocket server setup
 server.on('upgrade', (request, socket, head) => {
     const pathname = request.url.split('?')[0];
-    const gameId = pathname.split('/')[2];
-
-    if (pathname.startsWith('/game/') && gameId) {
+    if (pathname.startsWith('/game/')) {
+        const gameId = pathname.substring(6);
         wss.handleUpgrade(request, socket, head, (ws) => {
             wss.emit('connection', ws, request, gameId);
         });
@@ -107,64 +111,18 @@ server.on('upgrade', (request, socket, head) => {
     }
 });
 
-wss.on('connection', (ws, req, gameId) => {
-    ws.gameId = gameId;
-    console.log(`Client connected to game ${gameId}`);
-
-    // Initialize or retrieve game state
-    let currentGameState = gameStates[gameId];
-    if (!currentGameState) {
-        currentGameState = { ...initialGameState };
-        currentGameState.gameId = gameId; // Store gameId in state
-        gameStates[gameId] = currentGameState;
-        console.log(`Created new game state for ${gameId}`);
+wss.on('connection', (ws, request, gameId) => {
+    ws.gameId = gameId; // Store gameId on the client for easy lookup
+    if (!gameStates[gameId]) {
+        console.log(`Creating new game state for ID: ${gameId}`);
+        gameStates[gameId] = JSON.parse(JSON.stringify(initialGameState));
     }
+    const currentGameState = gameStates[gameId];
 
     ws.on('message', (message) => {
         const parsedMessage = JSON.parse(message);
-        const { type, payload } = parsedMessage;
-
-        switch (type) {
-            case 'START_GAME':
-                const halfDuration = payload.halfDuration;
-                const playClockDuration = payload.playClockDuration;
-                const timeoutsPerHalf = payload.timeoutsPerHalf;
-                currentGameState.halfDuration = halfDuration * 60; // Convert minutes to seconds
-                currentGameState.playClockDuration = playClockDuration;
-                currentGameState.timeoutsPerHalf = timeoutsPerHalf;
-                currentGameState.gameTimeLeft = currentGameState.halfDuration;
-                currentGameState.playTimeLeft = currentGameState.playClockDuration;
-                currentGameState.team1Name = payload.team1Name;
-                currentGameState.team2Name = payload.team2Name;
-                currentGameState.date = payload.date;
-                currentGameState.location = payload.location;
-                currentGameState.gameStarted = true;
-                broadcastState(gameId);
-                break;
-            case 'SCORE_UPDATE':
-                const scoreTeam = payload.team;
-                const scorePoints = payload.points;
-                const scoreType = payload.scoreType;
-                const scoreTime = formatTime(payload.gameTimeLeft);
-                const teamName = currentGameState[scoreTeam + 'Name'];
-                currentGameState.scores[scoreTeam] += scorePoints;
-                let scoreText = `${teamName} scores a ${scoreType} for ${scorePoints} points!`;
-                if (payload.playerNumbers && payload.playerNumbers.length > 0) {
-                    scoreText += ` (Players: ${payload.playerNumbers.join(', ')})`;
-                }
-                const scoreLogEntry = `<li>[${scoreTime}] ${scoreText}</li>`;
-                currentGameState.scoreLogHTML += scoreLogEntry;
-                broadcastState(gameId);
-                break;
-            case 'TIMEOUT_USED':
-                const timeoutTeam = payload.team;
-                const timeoutTime = formatTime(payload.gameTimeLeft);
-                const timeoutTeamName = currentGameState[timeoutTeam + 'Name'];
-                currentGameState.timeoutsUsed[timeoutTeam === 'team1' ? '1' : '2']++;
-                const timeoutLogEntry = `<li>[${timeoutTime}] Timeout called by ${timeoutTeamName}.</li>`;
-                currentGameState.timeoutLogHTML += timeoutLogEntry;
-                broadcastState(gameId);
-                break;
+        
+        switch (parsedMessage.type) {
             case 'START_GAME_CLOCK':
                 startGameClock(currentGameState, gameId);
                 break;
