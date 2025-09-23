@@ -162,12 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
             gameIdDisplay.classList.add('hidden');
         }
 
+        // The critical fix is here, we check if the game has started correctly
         if (Object.keys(gameState).length > 0 && gameState.gameStarted) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
             gameSummary.classList.add('hidden');
-        } else if (Object.keys(gameState).length > 0 && !gameState.gameStarted) {
+        } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
             // This is the end game state
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
