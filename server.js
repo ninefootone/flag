@@ -7,13 +7,18 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 
-// Serve static files from the current directory
-app.use(express.static(__dirname));
+// Serve index.html for the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Route to serve the index.html file for game-specific URLs
 app.get('/game/:gameId', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+// Serve static files from the current directory
+app.use(express.static(__dirname));
 
 // Initial game state
 const initialGameState = {
