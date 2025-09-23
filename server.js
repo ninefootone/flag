@@ -4,8 +4,6 @@ const WebSocket = require('ws');
 const path = require('path');
 
 const app = express();
-app.use(express.static(path.join(__dirname, '')));
-
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 
@@ -50,67 +48,61 @@ function broadcastState(gameId) {
     }
 }
 
-// Function to start the game clock
+// Clock control functions
 function startGameClock(gameState, gameId) {
-    if (gameState.gameClockRunning) return;
-    gameState.gameClockRunning = true;
-    gameClockFunctions[gameId] = setInterval(() => {
-        if (gameState.gameTimeLeft > 0) {
-            gameState.gameTimeLeft--;
-            if (gameState.gameTimeLeft === 120 && !gameState.twoMinuteWarningIssued) {
-                gameState.twoMinuteWarningIssued = true;
-                // You can add a notification here or an audio cue
-                console.log('Two-minute warning!');
+    if (!gameClockFunctions[gameId]) {
+        gameState.gameClockRunning = true;
+        gameClockFunctions[gameId] = setInterval(() => {
+            if (gameState.gameTimeLeft > 0) {
+                gameState.gameTimeLeft--;
+                broadcastState(gameId);
+            } else {
+                stopGameClock(gameState, gameId);
             }
-            broadcastState(gameId);
-        } else {
-            stopGameClock(gameState, gameId);
-        }
-    }, 1000);
+        }, 1000);
+    }
 }
 
-// Function to stop the game clock
 function stopGameClock(gameState, gameId) {
     clearInterval(gameClockFunctions[gameId]);
+    delete gameClockFunctions[gameId];
     gameState.gameClockRunning = false;
     broadcastState(gameId);
 }
 
-// Function to start the play clock
 function startPlayClock(gameState, gameId) {
-    if (gameState.playClockRunning) return;
-    gameState.playClockRunning = true;
-    playClockFunctions[gameId] = setInterval(() => {
-        if (gameState.playTimeLeft > 0) {
-            gameState.playTimeLeft--;
-            broadcastState(gameId);
-        } else {
-            stopPlayClock(gameState, gameId);
-        }
-    }, 1000);
+    if (!playClockFunctions[gameId]) {
+        gameState.playClockRunning = true;
+        playClockFunctions[gameId] = setInterval(() => {
+            if (gameState.playTimeLeft > 0) {
+                gameState.playTimeLeft--;
+                broadcastState(gameId);
+            } else {
+                stopPlayClock(gameState, gameId);
+            }
+        }, 1000);
+    }
 }
 
-// Function to stop the play clock
 function stopPlayClock(gameState, gameId) {
     clearInterval(playClockFunctions[gameId]);
+    delete playClockFunctions[gameId];
     gameState.playClockRunning = false;
     broadcastState(gameId);
 }
 
+// Express app routing
+app.use(express.static('public'));
+
+app.get('/game/:gameId', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// WebSocket server setup
 server.on('upgrade', (request, socket, head) => {
-    const pathname = request.url;
-    console.log(`Upgrade request for path: ${pathname}`);
-    
-    // Check if the request URL is a valid WebSocket path
-    // In this case, we'll assume any request to a path starting with /game/ is for a WebSocket
-    const gameMatch = pathname.match(/^\/game\/(.*)$/);
-    if (gameMatch) {
-        const gameId = gameMatch[1];
-        if (!gameStates[gameId]) {
-            console.log(`Creating new game with ID: ${gameId}`);
-            gameStates[gameId] = JSON.parse(JSON.stringify(initialGameState)); // Deep copy
-        }
-        
+    const pathname = request.url.split('?')[0];
+    if (pathname.startsWith('/game/')) {
+        const gameId = pathname.substring(6);
         wss.handleUpgrade(request, socket, head, (ws) => {
             wss.emit('connection', ws, request, gameId);
         });
@@ -120,19 +112,17 @@ server.on('upgrade', (request, socket, head) => {
 });
 
 wss.on('connection', (ws, request, gameId) => {
-    console.log(`Client connected to game ${gameId}`);
-    ws.gameId = gameId;
-
+    ws.gameId = gameId; // Store gameId on the client for easy lookup
+    if (!gameStates[gameId]) {
+        console.log(`Creating new game state for ID: ${gameId}`);
+        gameStates[gameId] = JSON.parse(JSON.stringify(initialGameState));
+    }
     const currentGameState = gameStates[gameId];
 
     ws.on('message', (message) => {
         const parsedMessage = JSON.parse(message);
-        console.log('Received message:', parsedMessage);
-
+        
         switch (parsedMessage.type) {
-            case 'CREATE_GAME':
-                // Handled in the upgrade listener
-                break;
             case 'START_GAME_CLOCK':
                 startGameClock(currentGameState, gameId);
                 break;
