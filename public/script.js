@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ws.onopen = () => {
             console.log(`Connected to the WebSocket server for game ${gameId}!`);
+            applyRolePermissions(); // Apply permissions immediately upon connection
         };
 
         ws.onmessage = (event) => {
@@ -288,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameIdDisplay.style.display = 'block';
 
         connectWebSocket(newGameId);
+        applyRolePermissions();
     });
 
     joinGameBtn.addEventListener('click', () => {
@@ -299,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             connectWebSocket(gameId);
+            applyRolePermissions();
         } else {
             joinErrorMessage.classList.remove('hidden');
         }
@@ -471,6 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.add('hidden');
+        // Make sure to re-apply permissions for the lobby interface
+        applyRolePermissions();
     });
 
     undoBtn.addEventListener('click', () => {
