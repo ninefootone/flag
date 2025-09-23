@@ -76,6 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
     const gameIdText = document.getElementById('game-id-text');
     const currentGameIdSection = document.getElementById('current-game-id');
+    const shareGameIdText = document.getElementById('share-game-id-text');
+    const copyGameIdBtn = document.getElementById('copy-game-id-btn');
+    const shareGameLinkBtn = document.getElementById('share-game-link-btn');
 
 
     // Role-based permissions
@@ -168,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameDateDisplay.textContent = gameState.date;
         gameLocationDisplay.textContent = gameState.location;
         gameIdText.textContent = gameState.gameId;
+        shareGameIdText.textContent = gameState.gameId;
 
         // Display current down
         downButtons.forEach(btn => {
@@ -475,6 +479,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     undoBtn.addEventListener('click', () => {
         sendAction('UNDO_ACTION');
+    });
+
+    // Share functionality
+    copyGameIdBtn.addEventListener('click', () => {
+        const gameId = shareGameIdText.textContent;
+        navigator.clipboard.writeText(gameId).then(() => {
+            alert("Game ID copied to clipboard!");
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            alert("Failed to copy Game ID.");
+        });
+    });
+
+    shareGameLinkBtn.addEventListener('click', () => {
+        const gameId = shareGameIdText.textContent;
+        const gameUrl = `${window.location.origin}/game/${gameId}`;
+        const shareData = {
+            title: 'Join my Referee App Game',
+            text: `Join the game using this Game ID: ${gameId}`,
+            url: gameUrl,
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch(err => {
+                console.error('Share failed: ', err);
+            });
+        } else {
+            // Fallback for browsers that don't support the Web Share API
+            navigator.clipboard.writeText(gameUrl).then(() => {
+                alert("Game link copied to clipboard! Share it with others.");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert("Failed to copy game link.");
+            });
+        }
     });
 
     // Check URL for gameId on page load and connect if present
