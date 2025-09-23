@@ -4,21 +4,10 @@ const WebSocket = require('ws');
 const path = require('path');
 
 const app = express();
+app.use(express.static(path.join(__dirname, '')));
+
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
-
-// Serve index.html for the root URL
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Route to serve the index.html file for game-specific URLs
-app.get('/game/:gameId', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Serve static files from the current directory
-app.use(express.static(__dirname));
 
 // Initial game state
 const initialGameState = {
@@ -61,54 +50,67 @@ function broadcastState(gameId) {
     }
 }
 
-// Clock control functions
+// Function to start the game clock
 function startGameClock(gameState, gameId) {
-    if (!gameClockFunctions[gameId]) {
-        gameState.gameClockRunning = true;
-        gameClockFunctions[gameId] = setInterval(() => {
-            if (gameState.gameTimeLeft > 0) {
-                gameState.gameTimeLeft--;
-                broadcastState(gameId);
-            } else {
-                stopGameClock(gameState, gameId);
+    if (gameState.gameClockRunning) return;
+    gameState.gameClockRunning = true;
+    gameClockFunctions[gameId] = setInterval(() => {
+        if (gameState.gameTimeLeft > 0) {
+            gameState.gameTimeLeft--;
+            if (gameState.gameTimeLeft === 120 && !gameState.twoMinuteWarningIssued) {
+                gameState.twoMinuteWarningIssued = true;
+                // You can add a notification here or an audio cue
+                console.log('Two-minute warning!');
             }
-        }, 1000);
-    }
+            broadcastState(gameId);
+        } else {
+            stopGameClock(gameState, gameId);
+        }
+    }, 1000);
 }
 
+// Function to stop the game clock
 function stopGameClock(gameState, gameId) {
     clearInterval(gameClockFunctions[gameId]);
-    delete gameClockFunctions[gameId];
     gameState.gameClockRunning = false;
     broadcastState(gameId);
 }
 
+// Function to start the play clock
 function startPlayClock(gameState, gameId) {
-    if (!playClockFunctions[gameId]) {
-        gameState.playClockRunning = true;
-        playClockFunctions[gameId] = setInterval(() => {
-            if (gameState.playTimeLeft > 0) {
-                gameState.playTimeLeft--;
-                broadcastState(gameId);
-            } else {
-                stopPlayClock(gameState, gameId);
-            }
-        }, 1000);
-    }
+    if (gameState.playClockRunning) return;
+    gameState.playClockRunning = true;
+    playClockFunctions[gameId] = setInterval(() => {
+        if (gameState.playTimeLeft > 0) {
+            gameState.playTimeLeft--;
+            broadcastState(gameId);
+        } else {
+            stopPlayClock(gameState, gameId);
+        }
+    }, 1000);
 }
 
+// Function to stop the play clock
 function stopPlayClock(gameState, gameId) {
     clearInterval(playClockFunctions[gameId]);
-    delete playClockFunctions[gameId];
     gameState.playClockRunning = false;
     broadcastState(gameId);
 }
 
 server.on('upgrade', (request, socket, head) => {
-    const pathname = request.url.split('?')[0];
-    const gameId = pathname.split('/')[2];
-
-    if (pathname.startsWith('/game/') && gameId) {
+    const pathname = request.url;
+    console.log(`Upgrade request for path: ${pathname}`);
+    
+    // Check if the request URL is a valid WebSocket path
+    // In this case, we'll assume any request to a path starting with /game/ is for a WebSocket
+    const gameMatch = pathname.match(/^\/game\/(.*)$/);
+    if (gameMatch) {
+        const gameId = gameMatch[1];
+        if (!gameStates[gameId]) {
+            console.log(`Creating new game with ID: ${gameId}`);
+            gameStates[gameId] = JSON.parse(JSON.stringify(initialGameState)); // Deep copy
+        }
+        
         wss.handleUpgrade(request, socket, head, (ws) => {
             wss.emit('connection', ws, request, gameId);
         });
@@ -117,63 +119,19 @@ server.on('upgrade', (request, socket, head) => {
     }
 });
 
-wss.on('connection', (ws, req, gameId) => {
-    ws.gameId = gameId;
+wss.on('connection', (ws, request, gameId) => {
     console.log(`Client connected to game ${gameId}`);
+    ws.gameId = gameId;
 
-    // Initialize or retrieve game state
-    let currentGameState = gameStates[gameId];
-    if (!currentGameState) {
-        currentGameState = { ...initialGameState };
-        currentGameState.gameId = gameId; // Store gameId in state
-        gameStates[gameId] = currentGameState;
-        console.log(`Created new game state for ${gameId}`);
-    }
+    const currentGameState = gameStates[gameId];
 
     ws.on('message', (message) => {
         const parsedMessage = JSON.parse(message);
-        const { type, payload } = parsedMessage;
+        console.log('Received message:', parsedMessage);
 
-        switch (type) {
-            case 'START_GAME':
-                const halfDuration = payload.halfDuration;
-                const playClockDuration = payload.playClockDuration;
-                const timeoutsPerHalf = payload.timeoutsPerHalf;
-                currentGameState.halfDuration = halfDuration * 60; // Convert minutes to seconds
-                currentGameState.playClockDuration = playClockDuration;
-                currentGameState.timeoutsPerHalf = timeoutsPerHalf;
-                currentGameState.gameTimeLeft = currentGameState.halfDuration;
-                currentGameState.playTimeLeft = currentGameState.playClockDuration;
-                currentGameState.team1Name = payload.team1Name;
-                currentGameState.team2Name = payload.team2Name;
-                currentGameState.date = payload.date;
-                currentGameState.location = payload.location;
-                currentGameState.gameStarted = true;
-                broadcastState(gameId);
-                break;
-            case 'SCORE_UPDATE':
-                const scoreTeam = payload.team;
-                const scorePoints = payload.points;
-                const scoreType = payload.scoreType;
-                const scoreTime = formatTime(payload.gameTimeLeft);
-                const teamName = currentGameState[scoreTeam + 'Name'];
-                currentGameState.scores[scoreTeam] += scorePoints;
-                let scoreText = `${teamName} scores a ${scoreType} for ${scorePoints} points!`;
-                if (payload.playerNumbers && payload.playerNumbers.length > 0) {
-                    scoreText += ` (Players: ${payload.playerNumbers.join(', ')})`;
-                }
-                const scoreLogEntry = `<li>[${scoreTime}] ${scoreText}</li>`;
-                currentGameState.scoreLogHTML += scoreLogEntry;
-                broadcastState(gameId);
-                break;
-            case 'TIMEOUT_USED':
-                const timeoutTeam = payload.team;
-                const timeoutTime = formatTime(payload.gameTimeLeft);
-                const timeoutTeamName = currentGameState[timeoutTeam + 'Name'];
-                currentGameState.timeoutsUsed[timeoutTeam === 'team1' ? '1' : '2']++;
-                const timeoutLogEntry = `<li>[${timeoutTime}] Timeout called by ${timeoutTeamName}.</li>`;
-                currentGameState.timeoutLogHTML += timeoutLogEntry;
-                broadcastState(gameId);
+        switch (parsedMessage.type) {
+            case 'CREATE_GAME':
+                // Handled in the upgrade listener
                 break;
             case 'START_GAME_CLOCK':
                 startGameClock(currentGameState, gameId);
