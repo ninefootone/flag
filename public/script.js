@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '1.6';
+    const appVersion = '1.7';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryScoreLog = document.getElementById('summary-score-log');
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
     const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
+    const gameIdDisplay = document.getElementById('current-game-id');
 
     // Collect all control elements into a single array for easy management
     const allControls = [
@@ -97,13 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'coach': [...useTimeoutBtns]
     };
 
-    const gameIdDisplay = document.getElementById('current-game-id');
-
-    let userRole = 'administrator'; // Default to the new administrator role
+    let userRole = 'administrator';
     roleInputs.forEach(input => {
         input.addEventListener('change', (event) => {
             userRole = event.target.value;
-            // When the role changes in the lobby, update the URL
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('role', userRole);
             history.replaceState(null, '', `?${urlParams.toString()}`);
@@ -124,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ws.onopen = () => {
             console.log(`Connected to the WebSocket server for game ${gameId}!`);
-            applyRolePermissions(); // Apply permissions immediately upon connection
+            applyRolePermissions();
         };
 
         ws.onmessage = (event) => {
@@ -162,19 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
             gameIdDisplay.classList.add('hidden');
         }
 
-        // The critical fix is here, we check if the game has started correctly
-        if (Object.keys(gameState).length > 0 && gameState.gameStarted) {
+        if (Object.keys(gameState).length > 0 && gameState.gameStarted && !gameState.gameEnded) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
             gameSummary.classList.add('hidden');
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
-            // This is the end game state
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.remove('hidden');
-            // Update the summary screen with final scores and logs
             summaryTeam1Name.textContent = gameState.team1Name;
             summaryTeam2Name.textContent = gameState.team2Name;
             summaryTeam1Score.textContent = gameState.scores.team1;
