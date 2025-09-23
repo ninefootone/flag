@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const appVersion = '1.3';
+    console.log(`Referee App - Version: ${appVersion}`);
+    const versionDisplay = document.querySelector('.version');
+    if (versionDisplay) {
+        versionDisplay.textContent = `v${appVersion}`;
+    }
+
     // Automatically set the date field to the current date
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
@@ -24,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1NameDisplay = document.getElementById('team1-name-display');
     const team2NameDisplay = document.getElementById('team2-name-display');
     const gameDateDisplay = document.getElementById('game-date');
-    const gameLocationDisplay = document = document.getElementById('game-location');
+    const gameLocationDisplay = document.getElementById('game-location');
     const team1ScoreDisplay = document.getElementById('team1-score-display');
     const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
@@ -96,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('role', userRole);
             history.replaceState(null, '', `?${urlParams.toString()}`);
+            applyRolePermissions();
         });
     });
 
@@ -199,10 +207,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to apply role-based permissions
     const applyRolePermissions = () => {
-        allControls.forEach(control => control.classList.add('disabled'));
+        allControls.forEach(control => {
+            if (control) {
+                control.classList.add('disabled');
+            }
+        });
 
         const controlsToEnable = rolePermissions[userRole] || [];
-        controlsToEnable.forEach(control => control.classList.remove('disabled'));
+        controlsToEnable.forEach(control => {
+            if (control) {
+                control.classList.remove('disabled');
+            }
+        });
     };
     
     const updateButtonLabels = () => {
@@ -289,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gameIdDisplay.style.display = 'block';
 
         connectWebSocket(newGameId);
-        applyRolePermissions();
     });
 
     joinGameBtn.addEventListener('click', () => {
@@ -301,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             connectWebSocket(gameId);
-            applyRolePermissions();
         } else {
             joinErrorMessage.classList.remove('hidden');
         }
@@ -474,8 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.add('hidden');
-        // Make sure to re-apply permissions for the lobby interface
-        applyRolePermissions();
     });
 
     undoBtn.addEventListener('click', () => {

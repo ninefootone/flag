@@ -64,6 +64,12 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* New: Disabled state for controls */
+.disabled {
+    pointer-events: none; /* Prevents clicks */
+    opacity: 0.5; /* Visually dims the element */
+}
+
 /* LOBBY-SPECIFIC STYLES */
 #game-lobby {
     padding: 20px;
@@ -447,4 +453,13 @@ li {
 
 .warning {
     animation: flash-warning 1s infinite;
+}
+
+/* Version number styling */
+.version {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 0.7rem;
+    color: #999;
 }
