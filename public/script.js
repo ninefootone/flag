@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossResultDisplay = document.getElementById('coin-toss-result');
     
-    // NEW: Collect all control elements into a single array for easy management
+    // Collect all control elements into a single array for easy management
     const allControls = [
         gameClockToggleBtn,
         gameClockResetBtn,
@@ -73,9 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
         endGameBtn
     ];
 
-    // NEW: Map roles to the specific controls they can use
+    // Map roles to the specific controls they can use
     const rolePermissions = {
-        'referee': allControls,
+        'administrator': allControls,
+        'head-referee': allControls,
         'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
         'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons],
         'coach': [...useTimeoutBtns]
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gameIdDisplay.style.display = 'none';
     settingsForm.insertBefore(gameIdDisplay, settingsForm.querySelector('#settings-form-element'));
 
-    let userRole = 'referee';
+    let userRole = 'administrator'; // Default to the new administrator role
     roleInputs.forEach(input => {
         input.addEventListener('change', (event) => {
             userRole = event.target.value;
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        userRole = urlParams.get('role') || 'referee';
+        userRole = urlParams.get('role') || 'administrator';
 
         const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
         if (urlGameId) {
@@ -195,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyRolePermissions();
     };
 
-    // NEW: Function to apply role-based permissions
+    // Function to apply role-based permissions
     const applyRolePermissions = () => {
         allControls.forEach(control => control.classList.add('disabled'));
 
