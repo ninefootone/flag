@@ -48,7 +48,7 @@
                 <input type="date" id="date-field">
 
                 <!-- <label for="location-field">Location:</label> -->
-                <input type="text" id="location-field" placeholder="City, State">
+                <input type="text" id="location-field" placeholder="Location">
 
                 <!-- <label for="team1-name">Home Team Name:</label> -->
                 <input type="text" id="team1-name" placeholder="Home Team">
@@ -59,15 +59,18 @@
                 <div class="settings-grid">
                     <div class="one-third one">
                         <label for="half-duration">Half</label>
-                        <input type="number" id="half-duration" value="20" min="1">
+                        <input type="number" id="half-duration" value="15" min="1">
+                        <div class="settings-notes">minutes</div>
                     </div>
                     <div class="one-third two">
                         <label for="play-clock-duration">Play Clock</label>
-                        <input type="number" id="play-clock-duration" value="40" min="5">
+                        <input type="number" id="play-clock-duration" value="25" min="5">
+                        <div class="settings-notes">seconds</div>
                     </div>
                     <div class="one-third three">
                         <label for="timeouts-per-half">Timeouts</label>
                         <input type="number" id="timeouts-per-half" value="2" min="0">
+                        <div class="settings-notes">timeouts</div>
                     </div>
                 </div>
 
