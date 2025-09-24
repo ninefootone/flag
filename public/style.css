@@ -6,9 +6,9 @@ body {
     background-color: #ffffff;
     color: #333;
     margin: 0;
-    padding: 20px;
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
@@ -48,8 +48,8 @@ button:hover {
 
 .app-container {
     width: 100%;
-    max-width: 800px;
-    padding: 20px;
+    /* max-width: 800px; */
+    padding: 10px;
     box-sizing: border-box;
     background-color: #fff;
     border-radius: 8px;
@@ -614,4 +614,5 @@ li {
     right: 10px;
     font-size: 0.7rem;
     color: #999;
+    text-align: center;
 }
