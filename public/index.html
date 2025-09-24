@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Flag</title>
+    <title>Referee App</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="app-container">
-        <div id="game-lobby" class="">
-            <!-- <h2>Referee App</h2> -->
-            <img src="/assets/sheffield-giants-logo.png" class="giants-logo"/>
+        <div id="game-lobby">
+            <h2>Referee App</h2>
             <button id="start-new-game-btn" class="main-btn">Start a New Game</button>
             <div class="join-game-section">
                 <hr>
-                <h2>Or join an existing game:</h2>
+                <p>Or join an existing game:</p>
                 <input type="text" id="game-id-input" placeholder="Enter Game ID">
             </div>
             <div class="role-selection">
@@ -42,52 +41,44 @@
         </div>
 
         <div id="settings-form" class="hidden">
-            <!-- <h2>Game Settings</h2> -->
+            <h2>Game Settings</h2>
+            <p id="current-game-id" class="hidden"><strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)</p>
             <form id="settings-form-element">
-                <label for="date-field" class="hidden">Date:</label>
+                <label for="date-field">Date:</label>
                 <input type="date" id="date-field">
 
-                <label for="location-field" class="hidden">Location:</label>
+                <label for="location-field">Location:</label>
                 <input type="text" id="location-field" placeholder="City, State">
 
-                <label for="team1-name" class="hidden">Home Team Name:</label>
+                <label for="team1-name">Home Team Name:</label>
                 <input type="text" id="team1-name" placeholder="Home Team">
 
-                <label for="team2-name" class="hidden">Away Team Name:</label>
+                <label for="team2-name">Away Team Name:</label>
                 <input type="text" id="team2-name" placeholder="Away Team">
 
                 <div class="settings-grid">
-                    <div class="one-third one">
-                        <label for="half-duration">Half</label>
-                        <input type="number" id="half-duration" value="15" min="1">
-                        <div class="settings-notes">minutes</div>
+                    <div>
+                        <label for="half-duration">Half Duration (min):</label>
+                        <input type="number" id="half-duration" value="20" min="1">
                     </div>
-                    <div class="one-third two">
-                        <label for="play-clock-duration">Play Clock</label>
-                        <input type="number" id="play-clock-duration" value="25" min="5">
-                        <div class="settings-notes">seconds</div>
+                    <div>
+                        <label for="play-clock-duration">Play Clock (sec):</label>
+                        <input type="number" id="play-clock-duration" value="40" min="5">
                     </div>
-                    <div class="one-third three">
-                        <label for="timeouts-per-half">Timeouts</label>
+                    <div>
+                        <label for="timeouts-per-half">Timeouts Per Half:</label>
                         <input type="number" id="timeouts-per-half" value="2" min="0">
-                        <div class="settings-notes">per half</div>
                     </div>
                 </div>
 
                 <div class="coin-toss-section">
-                    <!-- <h3>Coin Toss</h3> -->
-                    <!-- <p>Tap the button to flip a coin and decide who gets the ball first.</p> -->
+                    <h3>Coin Toss</h3>
+                    <p>Tap the button to flip a coin and decide who gets the ball first.</p>
                     <div class="coin-toss-buttons">
                         <button type="button" id="coin-toss-btn">Flip Coin</button>
                     </div>
                     <p id="coin-toss-result"></p>
                 </div>
-
-                <div id="current-game-id" class="hidden">
-                <p><strong>Game ID:</strong><br />
-                <span id="game-id-text"></span></p>
-               <p id="current-game-id" ><span class="share-notes">Share this with others to join</span></p>
-               </div>
 
                 <button type="button" id="start-game-btn">Start Game</button>
             </form>
