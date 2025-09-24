@@ -3,7 +3,7 @@
 /* General Body and Container Styling */
 body {
     font-family: "proxima-nova", sans-serif !important;
-    background-color: #009bdb;
+    background-color: #106386;
     color: #333;
     margin: 0;
     padding: 20px;
@@ -32,7 +32,7 @@ input:focus {
 
 button {
     font-family: "proxima-nova", sans-serif !important;
-    background-color:#009bdb !important;
+    background-color:#106386 !important;
     color: white;
     border-radius:10px !important;
     border: none;
@@ -43,7 +43,7 @@ button {
 }
 
 button:hover {
-    background-color:#106386 !important;
+    background-color:#009bdb !important;
 }
 
 .app-container {
@@ -59,6 +59,87 @@ button:hover {
 .giants-logo {
     width:320px;
     max-width:70%;
+}
+
+/* Settings Form */
+
+#settings-form input {
+    font-size:20px;
+    font-weight:700;
+}
+
+.settings-grid {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.settings-grid .one-third {
+    width:32%;
+}
+
+@media only screen and (max-width: 480px) {
+    .settings-grid .one, .settings-grid .two {
+        width:48%;
+    }
+    .settings-grid .three {
+        width:100%;
+    }
+}
+
+
+.settings-grid label {
+    font-size:12px;
+    text-transform: uppercase;
+    color:#106386;
+    text-align: left;
+}
+
+.settings-grid input {
+    text-align: left;
+    font-size:48px !important;
+    margin-bottom:5px !important;
+}
+
+.settings-grid .settings-notes {
+    text-align: cenleftter;
+    color:#aaaaaa;
+    font-size:12px;
+    font-weight:700;
+}
+
+.settings-grid #half-duration, .settings-grid #play-clock-duration, .settings-grid #timeouts-per-half {
+    background-color:#e4f4fa;
+    border:1px solid #e4f4fa !important;
+    padding:0 10px 0 10px;
+}
+
+.coin-toss-section {
+    text-align: center;
+    margin-top:30px;
+}
+
+#coin-toss-btn, #start-game-btn {
+    width:100%;
+    font-size:24px;
+    font-weight:700;
+}
+
+#current-game-id {
+    text-align: center;
+    margin:20px 0;
+}
+
+#game-id-text {
+    color:#106386;
+    font-size:48px;
+    line-height: 44px;
+    font-weight: 700;
+    padding-bottom:10px;
+}
+
+#current-game-id .share-notes {
+    color:#aaaaaa !important;
 }
 
 /* Common Form and Button Styles */
