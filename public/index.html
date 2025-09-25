@@ -92,30 +92,43 @@
         <div id="game-interface" class="hidden">
             <header>
                 <h1 class="game-info">
-                    <span id="game-date"></span><br>
+                    <span id="game-date"></span>, 
                     <span id="game-location"></span>
                 </h1>
             </header>
 
+        <div class="clock-container">
             <section class="game-clocks-section">
                 <div class="clock-display game-clock-bg">
-                    <span id="game-clock-display" class="clock-time"></span>
-                    <p class="clock-label">Game Clock</p>
-                </div>
-                <div class="clock-controls">
-                    <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
-                    <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
+                     <p class="title">Game Clock</p>
+                     <span id="game-clock-display" class="clock-time"></span>
+                    <div class="clock-controls">
+                        <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
+                        <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
+                    </div>
                 </div>
             </section>
 
             <section class="play-clock-section">
                 <div class="clock-display play-clock-bg">
+                    <p class="title">Play Clock</p>
                     <span id="play-clock-display" class="clock-time"></span>
-                    <p class="clock-label">Play Clock</p>
+                    <div class="play-clock-controls">
+                        <button id="play-clock-toggle" class="clock-btn start-stop-btn">Start</button>
+                        <button id="play-clock-reset" class="clock-btn reset-btn">Reset</button>
+                    </div>
                 </div>
-                <div class="play-clock-controls">
-                    <button id="play-clock-toggle" class="clock-btn start-stop-btn">Start</button>
-                    <button id="play-clock-reset" class="clock-btn reset-btn">Reset</button>
+            </section>
+        </div>
+
+            <section class="down-buttons-section">
+                <div class="down-buttons-section-wrapper">
+                <p class="title">Down</p>
+                <div class="down-buttons">
+                    <button class="down-btn" data-down="1">1st</button>
+                    <button class="down-btn" data-down="2">2nd</button>
+                    <button class="down-btn" data-down="3">3rd</button>
+                    <button class="down-btn" data-down="4">4th</button>
                 </div>
                 <div class="play-clock-options">
                     <label for="auto-advance-play-clock">
@@ -124,17 +137,8 @@
                 </div>
             </section>
 
-            <section class="down-buttons-section">
-                <p>Down</p>
-                <div class="down-buttons">
-                    <button class="down-btn" data-down="1">1</button>
-                    <button class="down-btn" data-down="2">2</button>
-                    <button class="down-btn" data-down="3">3</button>
-                    <button class="down-btn" data-down="4">4</button>
-                </div>
-            </section>
-
-            <section class="scoreboard-section">
+        <div class="scoreboard-container">
+            <section class="home-team-scoreboard-section">
                 <div class="team-score">
                     <span id="team1-name-display" class="team-name"></span>
                     <div class="score-container">
@@ -145,23 +149,25 @@
                     <div class="score-buttons">
                         <button class="score-btn" data-team="1" data-score="6" data-label="Touchdown">
                             <span class="button-label">TD</span>
-                            <span class="button-score">6</span>
+                            <span class="button-score">(6)</span>
                         </button>
                         <button class="score-btn" data-team="1" data-score="1" data-label="PAT">
                             <span class="button-label">1XP</span>
-                            <span class="button-score">1</span>
+                            <span class="button-score">(1)</span>
                         </button>
                         <button class="score-btn" data-team="1" data-score="2" data-label="2PT">
                             <span class="button-label">2XP</span>
-                            <span class="button-score">2</span>
+                            <span class="button-score">(2)</span>
                         </button>
                         <button class="score-btn" data-team="1" data-score="2" data-label="Safety">
                             <span class="button-label">Safety</span>
-                            <span class="button-score">2</span>
+                            <span class="button-score">(2)</span>
                         </button>
                     </div>
                 </div>
+            </section>
 
+            <section class="away-team-scoreboard-section">
                 <div class="team-score">
                     <span id="team2-name-display" class="team-name"></span>
                     <div class="score-container">
@@ -172,26 +178,28 @@
                     <div class="score-buttons">
                         <button class="score-btn" data-team="2" data-score="6" data-label="Touchdown">
                             <span class="button-label">TD</span>
-                            <span class="button-score">6</span>
+                            <span class="button-score">(6)</span>
                         </button>
                         <button class="score-btn" data-team="2" data-score="1" data-label="PAT">
                             <span class="button-label">1XP</span>
-                            <span class="button-score">1</span>
+                            <span class="button-score">(1)</span>
                         </button>
                         <button class="score-btn" data-team="2" data-score="2" data-label="2PT">
                             <span class="button-label">2XP</span>
-                            <span class="button-score">2</span>
+                            <span class="button-score">(2)</span>
                         </button>
                         <button class="score-btn" data-team="2" data-score="2" data-label="Safety">
                             <span class="button-label">Safety</span>
-                            <span class="button-score">2</span>
+                            <span class="button-score">(2)</span>
                         </button>
                     </div>
                 </div>
             </section>
+        </div>
 
             <section class="timeout-buttons-section">
-                <p>Timeouts</p>
+                <div class="timeout-buttons-section-wrapper">
+                <p class="title">Timeouts</p>
                 <div class="timeout-buttons">
                     <div class="timeout-button-wrapper">
                         <span class="timeout-label" id="team1-timeout-label"></span>
@@ -205,6 +213,7 @@
                             <span class="timeout-count" id="team2-timeouts"></span>
                         </button>
                     </div>
+                </div>
                 </div>
             </section>
 
