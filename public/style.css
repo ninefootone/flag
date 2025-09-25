@@ -1,145 +1,22 @@
-@import url("https://use.typekit.net/fnt1wxx.css");
-
 /* General Body and Container Styling */
 body {
-    font-family: "proxima-nova", sans-serif !important;
-    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     color: #333;
     margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
-    flex-direction: column;
-}
-
-h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
-    font-family: "proxima-nova", sans-serif !important;
-    color:#106386;
-}
-
-input::placeholder {
-    color:#dedede;
-}
-
-input:focus::placeholder {
-    color:#ffffff;
-}
-
-input:focus {
-    background-color:#e4f4fa;
-    border:1px solid #e4f4fa !important;
-    outline: #106386 !important;
-}
-
-button {
-    font-family: "proxima-nova", sans-serif !important;
-    background-color:#106386 !important;
-    color: white;
-    border-radius:10px !important;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color:#009bdb !important;
 }
 
 .app-container {
     width: 100%;
-    /* max-width: 800px; */
-    padding: 10px;
+    max-width: 800px;
+    padding: 20px;
     box-sizing: border-box;
     background-color: #fff;
     border-radius: 8px;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
-}
-
-.giants-logo {
-    width:320px;
-    max-width:70%;
-}
-
-/* Settings Form */
-
-#settings-form input {
-    font-size:20px;
-    font-weight:700;
-}
-
-.settings-grid {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.settings-grid .one-third {
-    width:32%;
-}
-
-@media only screen and (max-width: 480px) {
-    .settings-grid .one, .settings-grid .two {
-        width:48%;
-    }
-    .settings-grid .three {
-        width:100%;
-    }
-}
-
-
-.settings-grid label {
-    font-size:12px;
-    text-transform: uppercase;
-    color:#106386;
-    text-align: left;
-}
-
-.settings-grid input {
-    text-align: left;
-    font-size:48px !important;
-    margin-bottom:5px !important;
-}
-
-.settings-grid .settings-notes {
-    text-align: cenleftter;
-    color:#aaaaaa;
-    font-size:12px;
-    font-weight:700;
-}
-
-.settings-grid #half-duration, .settings-grid #play-clock-duration, .settings-grid #timeouts-per-half {
-    background-color:#e4f4fa;
-    border:1px solid #e4f4fa !important;
-    padding:0 10px 0 10px;
-}
-
-.coin-toss-section {
-    text-align: center;
-    margin-top:30px;
-}
-
-#coin-toss-btn, #start-game-btn {
-    width:100%;
-    font-size:24px;
-    font-weight:700;
-}
-
-#current-game-id {
-    text-align: center;
-    margin:20px 0;
-}
-
-#game-id-text {
-    color:#106386;
-    font-size:48px;
-    line-height: 44px;
-    font-weight: 700;
-    padding-bottom:10px;
-}
-
-#current-game-id .share-notes {
-    color:#aaaaaa !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Common Form and Button Styles */
@@ -153,6 +30,7 @@ button:hover {
 
 h2, h3 {
     text-align: center;
+    color: #444;
 }
 
 label {
@@ -169,6 +47,21 @@ input[type="text"], input[type="number"], input[type="date"] {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 /* New: Disabled state for controls */
@@ -195,21 +88,14 @@ input[type="text"], input[type="number"], input[type="date"] {
     margin-top: 20px;
 }
 
-.join-game-section h2 {
-    margin-bottom:5px;
-}
-
 .join-game-section hr {
     margin: 20px 0;
     border: 0;
-    /* border-top: 1px solid #ccc; */
+    border-top: 1px solid #ccc;
 }
 
 .join-game-section input {
-    font-size:36px;
-    font-weight:800;
-    text-align: center;
-    border:none !important;
+    margin-top: 10px;
 }
 
 .error-message {
@@ -240,18 +126,18 @@ input[type="text"], input[type="number"], input[type="date"] {
 .role-selection-wrapper label {
     display: inline-block;
     padding: 10px 15px;
-    border: 2px solid #106386;
+    border: 2px solid #007bff;
     border-radius: 5px;
     cursor: pointer;
     background-color: #fff;
-    color: #106386;
+    color: #007bff;
     font-weight: bold;
     text-align: center;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .role-selection-wrapper input[type="radio"]:checked + label {
-    background-color: #106386;
+    background-color: #007bff;
     color: #fff;
 }
 
@@ -608,11 +494,9 @@ li {
 
 /* Version number styling */
 .version {
-    display: block;
-    /* position: absolute; */
+    position: absolute;
     bottom: 10px;
     right: 10px;
     font-size: 0.7rem;
     color: #999;
-    text-align: center;
 }
