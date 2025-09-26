@@ -93,9 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const rolePermissions = {
         'administrator': allControls,
         'head-referee': allControls,
-        'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
-        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons],
-        'coach': [...useTimeoutBtns]
+        'scorer': [...downButtons, ...scoreButtons, ...adjustButtons, ...useTimeoutBtns, undoBtn],
+        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns],
+        'coach': [...useTimeoutBtns, ...downButtons]
     };
 
     let userRole = 'administrator';
