@@ -191,7 +191,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 /* New: Disabled state for controls */
 .disabled {
     pointer-events: none; /* Prevents clicks */
-    display: none !important; /* Hides the element completely */
+    /* display: none !important; */ /* Hides the element completely */
 }
 
 /* LOBBY-SPECIFIC STYLES */
@@ -747,6 +747,32 @@ li {
 
 .warning {
     animation: flash-warning 1s infinite;
+}
+
+/* 1. Ensure the element is visible (overrides any problematic 'display: none' or 'visibility: hidden') */
+.disabled {
+    /* If another rule is hiding it, these will force it to show: */
+    display: inline-block !important; /* or block/flex, depending on the button's original display */
+    visibility: visible !important;
+}
+
+/* 2. Apply the visual and functional disabling styles */
+.disabled {
+    /* Set the cursor to indicate the button is not clickable */
+    cursor: not-allowed !important;
+
+    /* Visually grey out the button/control to indicate it's inactive */
+    opacity: 0.5 !important;
+    background-color: #f0f0f0 !important; /* Add a neutral background */
+    color: #666 !important; /* Grey out the text */
+
+    /* IMPORTANT: This is the only functional change needed to prevent clicks */
+    pointer-events: none !important;
+
+    /* Remove hover/active effects */
+    box-shadow: none !important;
+    transform: none !important;
+    border-color: #ccc !important;
 }
 
 /* Version number styling */
