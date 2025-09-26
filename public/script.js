@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rolePermissions = {
         'administrator': allControls,
         'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns],
-        'scorer': [...downButtons, ...scoreButtons, ...adjustButtons, undoBtn],
+        'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
         'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons],
         'coach': []
     };
