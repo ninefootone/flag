@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.71';
+    const appVersion = '3.0.72';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -420,24 +420,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Start New Code Block ---
 
-    // Define the core action function
-    const handleCoinToss = (event) => {
-    // Prevent the default browser action (like scrolling or form submission)
+// --- New, More Robust Coin Toss Listener ---
+const handleCoinToss = (event) => {
+    // 1. Stop propagation to ensure a parent element doesn't cancel the touch
+    event.stopPropagation();
+    // 2. Prevent the default browser action
     event.preventDefault(); 
     
-    // Check if the game has already started and the coin toss is set
-    // A simplified check is often needed on mobile to avoid double-firing events
-    // We'll rely on the server to prevent redundant updates, but this prevents a visual flicker
-
-    const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+    // Only proceed if the event is either a 'click' (for desktop) or 'touchend'
+    // This prevents double-firing if both fire on some devices.
+    if (event.type === 'click' || event.type === 'touchend') {
+        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
-    };
+    }
+};
 
-    // 1. Add 'touchend' listener for reliable mobile activation (especially iOS Safari)
-    coinTossBtn.addEventListener('touchend', handleCoinToss, { passive: false });
+// Use 'touchend' for reliable mobile input
+coinTossBtn.addEventListener('touchend', handleCoinToss, { passive: false });
 
-    // 2. Keep the 'click' listener for desktop/other browsers (and as a fallback)
-    coinTossBtn.addEventListener('click', handleCoinToss);
+// Keep 'click' for desktop and as a fail-safe
+coinTossBtn.addEventListener('click', handleCoinToss);
+
+// The START GAME button logic remains separate:
+startGameBtn.addEventListener('click', () => {
+    // ... (rest of the startGameBtn logic)
+    // ... (It's already correct to check the coinTossResult here)
+});
 
     // --- End New Code Block ---
 
