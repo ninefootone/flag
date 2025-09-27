@@ -804,14 +804,13 @@ li {
 .share-links-section {
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid var(--notes-color);
     text-align: center;
 }
 
 .share-links-grid {
     display: grid;
     /* Two columns for desktop/wide view */
-    grid-template-columns: 1fr 1fr; 
+    grid-template-columns: 1fr 1fr 1fr 1fr;  
     gap: 10px;
     margin-bottom: 15px;
 }
@@ -820,22 +819,23 @@ li {
 @media only screen and (max-width: 480px) {
     .share-links-grid {
         /* Single column for mobile */
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
     }
 }
 
 .share-link-btn {
     width: 100%;
-    padding: 10px 15px;
-    font-size: 1rem;
-    /* Use secondary color to distinguish them from main action buttons */
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
+    padding: 8px 12px;
+    font-size: 18px;
+    color:var(--primary-color);
+    background-color: white;
+    border-color: var(--primary-color);
 }
 
 .share-link-btn:hover {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
+    color:white;
 }
 
 #share-feedback {
