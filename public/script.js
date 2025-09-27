@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        gameDateDisplay.textContent = gameState.date;
+        gameDateDisplay.textContent = formatDisplayDate(gameState.date);
         gameLocationDisplay.textContent = gameState.location;
         team1NameDisplay.textContent = gameState.team1Name;
         team2NameDisplay.textContent = gameState.team2Name;
@@ -221,6 +221,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         applyRolePermissions();
+    };
+
+        // Date Formatting
+        const formatDisplayDate = (dateString) => {
+        // If the date is not set or is the 'N/A' default, return it as is.
+        if (!dateString || dateString === 'N/A') return 'N/A';
+        
+        // Split the YYYY-MM-DD string
+        const parts = dateString.split('-'); 
+        
+        // Ensure we have all three parts (Year, Month, Day)
+        if (parts.length === 3) {
+            // Re-order and join as DD/MM/YYYY
+            const [year, month, day] = parts;
+            return `${day}/${month}/${year}`;
+        }
+        
+        // Return the original string if the format is unexpected
+        return dateString;
     };
 
     // Function to apply role-based permissions
