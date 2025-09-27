@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.6.9';
+    const appVersion = '3.0.7';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -407,7 +407,13 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAction('UPDATE_STATE', newGameState);
     });
 
-    coinTossBtn.addEventListener('click', () => {
+    /* coinTossBtn.addEventListener('click', () => {
+        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        sendAction('UPDATE_STATE', { coinTossResult: result });
+    }); */
+
+    coinTossBtn.addEventListener('click', (event) => { // ⬅️ ADD '(event)' here
+        event.preventDefault(); // ⬅️ ADD THIS LINE
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
     });
