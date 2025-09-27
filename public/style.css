@@ -169,10 +169,7 @@ button:hover {
 
 #game-id-text {
     color: var(--primary-color);
-    font-size:48px;
-    line-height: 44px;
     font-weight: 700;
-    padding-bottom:10px;
 }
 
 #current-game-id .share-notes {
