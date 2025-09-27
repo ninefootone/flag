@@ -104,7 +104,6 @@ button:hover {
     }
 }
 
-
 .settings-grid label {
     font-size:12px;
     text-transform: uppercase;
@@ -136,7 +135,19 @@ button:hover {
     margin-top:30px;
 }
 
-#coin-toss-btn, #start-game-btn {
+#coin-toss-btn {
+    width:100%;
+    font-size:24px;
+    font-weight:700;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.coin-toss-section h3, .coin-toss-section p {
+    display:none;
+}
+
+#start-game-btn {
     width:100%;
     font-size:24px;
     font-weight:700;
@@ -773,6 +784,11 @@ li {
     box-shadow: none !important;
     transform: none !important;
     border-color: #ccc !important;
+}
+
+/* 3. Hide sections that don't need to be visible */
+.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled {
+    visibility: hidden;
 }
 
 /* Version number styling */
