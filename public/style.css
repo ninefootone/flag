@@ -140,7 +140,12 @@ button:hover {
     font-size:24px;
     font-weight:700;
     color: var(--primary-color);
+    background-color:white;
     border-color: var(--primary-color);
+}
+
+#coin-toss-btn:hover {
+    color:white;
 }
 
 .coin-toss-section h3, .coin-toss-section p {
@@ -788,7 +793,7 @@ li {
 
 /* 3. Hide sections that don't need to be visible */
 .clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled {
-    visibility: hidden;
+    display: none !important;
 }
 
 /* Version number styling */
