@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.6.7';
+    const appVersion = '3.0.6.8';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreLogList = document.getElementById('score-log');
     const timeoutLogList = document.getElementById('timeout-log');
     const downButtons = document.querySelectorAll('.down-btn');
+    const playClockOptions = document.querySelector('.play-clock-options');
     const autoAdvanceCheckbox = document.getElementById('auto-advance-play-clock');
     const scoreButtons = document.querySelectorAll('.score-buttons button');
     const useTimeoutBtns = document.querySelectorAll('.use-timeout-btn');
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allControls = [
         gameClockToggleBtn,
         gameClockResetBtn,
+        playClockOptions,
         playClockToggleBtn,
         playClockResetBtn,
         autoAdvanceCheckbox,
@@ -92,9 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Map roles to the specific controls they can use
     const rolePermissions = {
         'administrator': allControls,
-        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns],
+        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns],
         'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
-        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons],
+        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons],
         'coach': []
     };
 
