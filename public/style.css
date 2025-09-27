@@ -118,7 +118,7 @@ button:hover {
 }
 
 .settings-grid .settings-notes {
-    text-align: center;
+    text-align: left;
     color: var(--notes-color);
     font-size:12px;
     font-weight:700;
