@@ -144,6 +144,12 @@ button:hover {
     border-color: var(--primary-color);
     position: relative; 
     z-index: 10000;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    height: 50px; /* Ensures a good tap area */
+    padding: 10px 15px; /* Button padding */
+    cursor: pointer;
 }
 
 #coin-toss-btn:hover {
