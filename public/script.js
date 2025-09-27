@@ -223,23 +223,32 @@ document.addEventListener('DOMContentLoaded', () => {
         applyRolePermissions();
     };
 
-        // Date Formatting
-        const formatDisplayDate = (dateString) => {
-        // If the date is not set or is the 'N/A' default, return it as is.
-        if (!dateString || dateString === 'N/A') return 'N/A';
-        
-        // Split the YYYY-MM-DD string
-        const parts = dateString.split('-'); 
-        
-        // Ensure we have all three parts (Year, Month, Day)
-        if (parts.length === 3) {
-            // Re-order and join as DD/MM/YYYY
-            const [year, month, day] = parts;
-            return `${day}/${month}/${year}`;
-        }
-        
-        // Return the original string if the format is unexpected
-        return dateString;
+    // New/Updated function to format date for display (e.g., "27 September 2025")
+    const formatDisplayDate = (dateString) => {
+    // If the date is not set or is the 'N/A' default, return it as is.
+    if (!dateString || dateString === 'N/A') return 'N/A';
+    
+    // 1. Create a Date object from the YYYY-MM-DD string.
+    const dateObj = new Date(dateString + 'T00:00:00'); // Add time to ensure correct timezone parsing
+
+    // Check if the date object is valid
+    if (isNaN(dateObj)) {
+        return dateString; // Return original string if the date is invalid
+    }
+
+    // 2. Define the options for the desired display format:
+    // 'numeric' for the day number (27)
+    // 'long' for the full month name (September)
+    // 'numeric' for the four-digit year (2025)
+    const options = { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+    };
+
+    // 3. Use 'en-GB' (British English) locale to ensure the format is 
+    // Day, then Month, then Year (e.g., 27 September 2025).
+    return dateObj.toLocaleDateString('en-GB', options);
     };
 
     // Function to apply role-based permissions
