@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.76';
+    const appVersion = '3.0.77';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -74,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
     const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
     const gameIdDisplay = document.getElementById('current-game-id');
+    // New references for share links
+    const shareLinkBtns = document.querySelectorAll('.share-link-btn');
+    const shareFeedback = document.getElementById('share-feedback');
 
     // Collect all control elements into a single array for easy management
     const allControls = [
@@ -557,4 +560,73 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("No actions to undo.");
         }
     });
+
+    // --- New Share Link Logic ---
+    const getShareUrl = (role) => {
+        // Extracts the game ID from the current URL path.
+        const gameId = window.location.pathname.split('/').pop().split('?')[0];
+        // Uses window.location.origin (e.g., https://referee-app.onrender.com) for the base URL
+        return `${window.location.origin}/game/${gameId}?role=${role}`;
+    };
+
+    const copyToClipboard = (text) => {
+        if (!navigator.clipboard) {
+            // Fallback for non-secure contexts or older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  // Prevents scrolling to bottom of page
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                return true;
+            } catch (err) {
+                console.error('Fallback: Unable to copy', err);
+                return false;
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+        // Use modern clipboard API (returns a Promise)
+        return navigator.clipboard.writeText(text);
+    };
+
+    shareLinkBtns.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const role = button.dataset.role;
+            const shareUrl = getShareUrl(role);
+            
+            // Function to handle feedback display
+            const showFeedback = (message, isError = false) => {
+                shareFeedback.textContent = message;
+                shareFeedback.classList.remove('hidden');
+                shareFeedback.style.color = isError ? 'var(--error-color)' : 'var(--primary-color)';
+                setTimeout(() => {
+                    shareFeedback.classList.add('hidden');
+                }, 2000);
+            };
+
+            // Try modern API first
+            if (navigator.clipboard) {
+                copyToClipboard(shareUrl)
+                    .then(() => {
+                        showFeedback(`${button.textContent} link copied!`);
+                    })
+                    .catch(() => {
+                        showFeedback(`Error copying ${button.textContent} link.`, true);
+                    });
+            } else {
+                 // Use fallback and check return value
+                 const success = copyToClipboard(shareUrl);
+                 if (success) {
+                    showFeedback(`${button.textContent} link copied! (Fallback)`);
+                 } else {
+                    showFeedback(`Error copying ${button.textContent} link.`, true);
+                 }
+            }
+        });
+    });
+
+
 });
