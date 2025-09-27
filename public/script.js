@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.77';
+    const appVersion = '3.0.78';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // New references for share links
     const shareLinkBtns = document.querySelectorAll('.share-link-btn');
     const shareFeedback = document.getElementById('share-feedback');
+    // ADDED: REFERENCE FOR THE SHARE LINKS SECTION
+    const shareLinksSection = document.querySelector('.share-links-section'); 
 
     // Collect all control elements into a single array for easy management
     const allControls = [
@@ -165,33 +167,41 @@ document.addEventListener('DOMContentLoaded', () => {
             gameIdDisplay.classList.add('hidden');
         }
 
-        if (Object.keys(gameState).length > 0 && gameState.gameStarted && !gameState.gameEnded) {
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.add('hidden');
+        // Logic to show/hide the main screens based on game status
+        if (gameState.gameId && gameState.gameStatus === 'active') {
             gameInterface.classList.remove('hidden');
             gameSummary.classList.add('hidden');
-        } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
             gameLobby.classList.add('hidden');
-            settingsForm.classList.add('hidden');
+            // ADDED: Show share links when game is active
+            shareLinksSection.classList.remove('hidden');
+        } else if (gameState.gameStatus === 'finished') {
             gameInterface.classList.add('hidden');
             gameSummary.classList.remove('hidden');
+            gameLobby.classList.add('hidden');
+            // ADDED: Hide share links when summary is shown
+            shareLinksSection.classList.add('hidden');
             summaryTeam1Name.textContent = gameState.team1Name;
             summaryTeam2Name.textContent = gameState.team2Name;
             summaryTeam1Score.textContent = gameState.scores.team1;
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-
         } else if (window.location.pathname.startsWith('/game/')) {
+            // Game setup screen (settings form)
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
+            // ADDED: Hide share links on the settings screen
+            shareLinksSection.classList.add('hidden');
         } else {
+            // Lobby screen
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
+            // ADDED: Hide share links on the lobby screen
+            shareLinksSection.classList.add('hidden');
         }
 
         if (Object.keys(gameState).length === 0) {
@@ -540,6 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
         history.pushState(null, '', '/');
         gameLobby.classList.remove('hidden');
         gameSummary.classList.add('hidden');
+        // ADDED: Hide links when returning to lobby
+        shareLinksSection.classList.add('hidden');
     });
 
     undoBtn.addEventListener('click', () => {
