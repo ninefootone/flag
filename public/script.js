@@ -211,7 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
         team2TimeoutLabel.textContent = gameState.team2Name;
 
         if (gameState.coinTossResult) {
-            coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`;
+            coinTossResultDisplay.textContent = `${gameState.coinTossResult}.`;
+            /* coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`; */
         }
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');

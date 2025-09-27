@@ -150,6 +150,11 @@ button:hover {
     border-color:var(--secondary-color);
 }
 
+#coin-toss-result {
+    font-size:24px;
+    font-weight:700;
+}
+
 #start-game-btn {
     width:100%;
     font-size:24px;
