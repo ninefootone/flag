@@ -795,7 +795,7 @@ li {
 }
 
 /* 3. Hide sections that don't need to be visible */
-.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled {
+.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled {
     display: none !important;
 }
 
