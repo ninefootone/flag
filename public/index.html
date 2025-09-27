@@ -45,7 +45,7 @@
             <!-- <h2>Game Settings</h2> -->
             <form id="settings-form-element">
                 <!-- <label for="date-field">Date:</label> -->
-                <input type="date" id="date-field">
+                <!-- <input type="date" id="date-field"> -->
 
                 <!-- <label for="location-field">Location:</label> -->
                 <input type="text" id="location-field" placeholder="Location">
@@ -75,17 +75,22 @@
                 </div>
 
                 <div class="coin-toss-section">
-                    <h3>Coin Toss</h3>
-                    <p>Tap the button to flip a coin and decide who gets the ball first.</p>
+                    <!-- <h3>Coin Toss</h3> -->
+                    <!-- <p>Tap the button to flip a coin and decide who gets the ball first.</p> -->
                     <div class="coin-toss-buttons">
                         <button type="button" id="coin-toss-btn">Flip Coin</button>
                     </div>
                     <p id="coin-toss-result"></p>
                 </div>
 
-                <div id="current-game-id" class="hidden"><strong>Game ID:</strong> <span id="game-id-text"></span> (Share this with others to join)</div>
-
                 <button type="button" id="start-game-btn">Start Game</button>
+
+                <div id="current-game-id" class="hidden">
+                    <strong>Game ID:</strong><br />
+                    <span id="game-id-text"></span>
+                    <!-- (Share this with others to join)-->
+                </div>
+
             </form>
         </div>
 

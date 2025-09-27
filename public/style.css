@@ -146,10 +146,8 @@ button:hover {
 
 #coin-toss-btn:hover {
     color:white;
-}
-
-.coin-toss-section h3, .coin-toss-section p {
-    display:none;
+    background-color: var(--secondary-color);
+    border-color:var(--secondary-color);
 }
 
 #start-game-btn {
@@ -792,7 +790,7 @@ li {
 }
 
 /* 3. Hide sections that don't need to be visible */
-.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled {
+.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled {
     display: none !important;
 }
 
