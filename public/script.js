@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.7';
+    const appVersion = '3.0.71';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -412,11 +412,34 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAction('UPDATE_STATE', { coinTossResult: result });
     }); */
 
-    coinTossBtn.addEventListener('click', (event) => { // ⬅️ ADD '(event)' here
+    /* coinTossBtn.addEventListener('click', (event) => { // ⬅️ ADD '(event)' here
         event.preventDefault(); // ⬅️ ADD THIS LINE
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
-    });
+    }); */
+
+    // --- Start New Code Block ---
+
+    // Define the core action function
+    const handleCoinToss = (event) => {
+    // Prevent the default browser action (like scrolling or form submission)
+    event.preventDefault(); 
+    
+    // Check if the game has already started and the coin toss is set
+    // A simplified check is often needed on mobile to avoid double-firing events
+    // We'll rely on the server to prevent redundant updates, but this prevents a visual flicker
+
+    const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        sendAction('UPDATE_STATE', { coinTossResult: result });
+    };
+
+    // 1. Add 'touchend' listener for reliable mobile activation (especially iOS Safari)
+    coinTossBtn.addEventListener('touchend', handleCoinToss, { passive: false });
+
+    // 2. Keep the 'click' listener for desktop/other browsers (and as a fallback)
+    coinTossBtn.addEventListener('click', handleCoinToss);
+
+    // --- End New Code Block ---
 
     scoreButtons.forEach(button => {
         button.addEventListener('click', () => {
