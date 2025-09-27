@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.75';
+    const appVersion = '3.0.76';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -407,47 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sendAction('UPDATE_STATE', newGameState);
     });
 
-    /* coinTossBtn.addEventListener('click', () => {
+    coinTossBtn.addEventListener('click', () => {
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
-    }); */
-
-    /* coinTossBtn.addEventListener('click', (event) => { // ⬅️ ADD '(event)' here
-        event.preventDefault(); // ⬅️ ADD THIS LINE
-        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-        sendAction('UPDATE_STATE', { coinTossResult: result });
-    }); */
-
-    // --- Start New Code Block ---
-
-// --- New, More Robust Coin Toss Listener ---
-const handleCoinToss = (event) => {
-    // 1. Stop propagation to ensure a parent element doesn't cancel the touch
-    event.stopPropagation();
-    // 2. Prevent the default browser action
-    event.preventDefault(); 
-    
-    // Only proceed if the event is either a 'click' (for desktop) or 'touchend'
-    // This prevents double-firing if both fire on some devices.
-    if (event.type === 'click' || event.type === 'touchend') {
-        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-        sendAction('UPDATE_STATE', { coinTossResult: result });
-    }
-};
-
-// Use 'touchend' for reliable mobile input
-coinTossBtn.addEventListener('touchend', handleCoinToss, { passive: false });
-
-// Keep 'click' for desktop and as a fail-safe
-coinTossBtn.addEventListener('click', handleCoinToss);
-
-// The START GAME button logic remains separate:
-startGameBtn.addEventListener('click', () => {
-    // ... (rest of the startGameBtn logic)
-    // ... (It's already correct to check the coinTossResult here)
-});
-
-    // --- End New Code Block ---
+    });
 
     scoreButtons.forEach(button => {
         button.addEventListener('click', () => {
