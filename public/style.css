@@ -851,3 +851,11 @@ li {
     color: #999;
     text-align: center;
 }
+
+/* Custom temporary style to hide join/role selection functionality */
+.join-game-section,
+.role-selection,
+#join-game-btn,
+#join-error-message {
+    display: none !important;
+}
