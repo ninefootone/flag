@@ -793,7 +793,7 @@ li {
 }
 
 /* 3. Hide sections that don't need to be visible */
-.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled {
+.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled, .share-links-section.disabled {
     display: none !important;
 }
 

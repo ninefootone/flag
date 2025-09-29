@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.86';
+    const appVersion = '3.0.87';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // New references for share links
     const shareLinkBtns = document.querySelectorAll('.share-link-btn');
     const shareFeedback = document.getElementById('share-feedback');
+    const shareLinksSection = document.querySelector('.share-links-section');
 
     // Collect all control elements into a single array for easy management
     const allControls = [
@@ -91,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ...adjustButtons,
         ...useTimeoutBtns,
         undoBtn,
-        endGameBtn
+        endGameBtn,
+        shareLinksSection
     ];
 
     // Map roles to the specific controls they can use
