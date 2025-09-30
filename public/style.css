@@ -11,7 +11,7 @@
 
 /* General Body and Container Styling */
 body {
-    font-family: 'Host Grotesk', sans-serif !important;
+    font-family: 'Host Grotesk', sans-serif;
     background-color: #ffffff;
     color: var(--text-color);
     margin: 0;
