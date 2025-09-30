@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.956';
+    const appVersion = '3.0.957';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -121,7 +121,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let tempScoreEvent = null;
     let twoMinuteWarningIssuedLocally = false;
     let actionHistory = [];
-    const audio = new Audio('/assets/warning.mp3');
+    // const audio = new Audio('/assets/warning.mp3'); // OLD: Removed the direct Audio object creation
+    const audio = document.getElementById('warning-audio'); // NEW: Reference the HTML element
+    let audioUnlocked = false; // NEW: Flag to ensure we only try to unlock once
+
+    // --- Audio Unlock Function for iOS/Safari ---
+    const unlockAudio = () => {
+        if (audioUnlocked) return; // Only run once
+        
+        // Attempt to play and immediately pause the audio on user interaction
+        // This is a common workaround to bypass iOS/Safari's autoplay policy
+        if (audio) {
+            audio.play().then(() => {
+                audio.pause();
+                audioUnlocked = true;
+                console.log("Audio playback successfully unlocked by user gesture.");
+            }).catch(error => {
+                // Audio might still fail if not a direct gesture, but we tried.
+                console.error("Audio unlock failed:", error);
+            });
+        }
+    };
+
 
     // --- WebSocket Event Handlers ---
     const connectWebSocket = (gameId) => {
@@ -223,7 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
-            audio.play();
+            if (audio) { // Check if audio element exists before trying to play
+                audio.play();
+            }
             twoMinuteWarningIssuedLocally = true;
         }
 
@@ -348,6 +371,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startNewGameBtn.addEventListener('click', () => {
+        // NEW: Call the unlock function on the user's first click
+        unlockAudio();
+
         const newGameId = Math.random().toString(36).substring(2, 8);
         history.pushState(null, '', `/game/${newGameId}?role=${userRole}`);
 
@@ -361,6 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     joinGameBtn.addEventListener('click', () => {
+        // NEW: Also call unlock on the join button for compatibility
+        unlockAudio(); 
+
         const gameId = gameIdInput.value.trim();
         if (gameId) {
             history.pushState(null, '', `/game/${gameId}?role=${userRole}`);
