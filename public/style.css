@@ -127,6 +127,8 @@ button:hover {
     background-color: var(--focus-color);
     border:1px solid var(--focus-color) !important;
     padding:0 10px 0 10px;
+    font-family: "inter-variable", sans-serif;
+    font-weight: 800;
 }
 
 .coin-toss-section {
@@ -355,8 +357,8 @@ header {
 
 .clock-time {
     font-family: "inter-variable", sans-serif;
-    font-size: 72px;
-    font-weight: 800;
+    font-size: 60px;
+    font-weight: 900;
     line-height:1em;
     color: var(--primary-color);
 }
@@ -503,7 +505,7 @@ header {
 .score {
     font-family: "inter-variable", sans-serif;
     font-size: 60px;
-    font-weight: bold;
+    font-weight: 900;
     color: var(--primary-color);;
     line-height: 1;
     margin: 0 10px; /* New: Added horizontal margin for spacing */
@@ -624,7 +626,7 @@ header {
 .timeout-count {
     font-family: "inter-variable", sans-serif;
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 /* Log and End Game Section */
