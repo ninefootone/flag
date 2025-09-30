@@ -1,4 +1,4 @@
-@import url("https://use.typekit.net/fnt1wxx.css");
+/* @import url("https://use.typekit.net/fnt1wxx.css"); */
 
 :root {
   --primary-color: #106386;
@@ -11,7 +11,7 @@
 
 /* General Body and Container Styling */
 body {
-    font-family: "Host Grotesk", sans-serif !important;
+    font-family: 'Host Grotesk', sans-serif !important;
     background-color: #ffffff;
     color: var(--text-color);
     margin: 0;
@@ -21,7 +21,6 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
-    font-family: "Host Grotesk", sans-serif !important;
     color: var(--primary-color);
 }
 
@@ -47,7 +46,6 @@ input:focus {
 }
 
 button {
-    font-family: "Host Grotesk", sans-serif !important;
     background-color: var(--primary-color);
     color: white;
     border-radius:6px !important;
