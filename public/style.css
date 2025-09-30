@@ -1,4 +1,4 @@
-/* @import url("https://use.typekit.net/fnt1wxx.css"); */
+@import url("https://use.typekit.net/fnt1wxx.css");
 
 :root {
   --primary-color: #106386;
@@ -11,7 +11,7 @@
 
 /* General Body and Container Styling */
 body {
-    font-family: 'Host Grotesk', sans-serif;
+    font-family: "inter-variable", sans-serif;
     background-color: #ffffff;
     color: var(--text-color);
     margin: 0;
