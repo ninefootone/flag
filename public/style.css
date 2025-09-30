@@ -232,7 +232,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 }
 
 #start-new-game-btn {
-    wdith:240px;
+    width:240px;
 }
 
 .join-game-section {
@@ -768,6 +768,9 @@ li {
     text-align: left;
 }
 
+#start-new-game-from-summary-btn {
+    width:240px;
+}
 
 /* Mobile-first adjustments for small screens */
 @media (max-width: 600px) {
