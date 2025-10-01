@@ -849,7 +849,7 @@ li {
     animation: flash-warning 1s infinite;
 }
 
-.warning .clock-time {
+.warning .clock-time, .warning .title {
     color: white;
 }
 

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.967';
+    const appVersion = '3.0.968';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -358,9 +358,10 @@ fetchAndLoadTeamNames();
             coinTossResultDisplay.textContent = `${gameState.coinTossResult}.`;
             /* coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`; */
         }
-        if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
+        // 🚨 FIX: Only check for the two-minute warning if the game is actively started.
+        if (gameState.gameStarted && gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
-            if (audio) { // Check if audio element exists before trying to play
+            if (audio) {
                 audio.play();
             }
             twoMinuteWarningIssuedLocally = true;
