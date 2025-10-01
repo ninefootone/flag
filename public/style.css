@@ -118,7 +118,7 @@ button:hover {
     margin-bottom:5px !important;
 }
 
-.settings-grid input#location-field {
+#location-field {
     margin-bottom:20px;
 }
 
