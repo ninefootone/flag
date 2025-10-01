@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.972';
+    const appVersion = '3.0.965';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
-
-    let scrolledToGameInterface = false; // Initialize flag to false
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -234,23 +232,20 @@ fetchAndLoadTeamNames();
     const audio = document.getElementById('warning-audio'); // NEW: Reference the HTML element
     let audioUnlocked = false; // NEW: Flag to ensure we only try to unlock once
 
-// --- Audio Unlock Function for iOS/Safari ---
+    // --- Audio Unlock Function for iOS/Safari ---
     const unlockAudio = () => {
         if (audioUnlocked) return; // Only run once
         
         // Attempt to play and immediately pause the audio on user interaction
+        // This is a common workaround to bypass iOS/Safari's autoplay policy
         if (audio) {
-            // NEW: Temporarily mute the audio to prevent the warning sound from being heard
-            audio.volume = 0; 
-
             audio.play().then(() => {
                 audio.pause();
-                audio.volume = 1; // NEW: Restore volume after successful unlock
                 audioUnlocked = true;
                 console.log("Audio playback successfully unlocked by user gesture.");
             }).catch(error => {
+                // Audio might still fail if not a direct gesture, but we tried.
                 console.error("Audio unlock failed:", error);
-                audio.volume = 1; // NEW: Ensure volume is restored even if unlock fails
             });
         }
     };
@@ -305,19 +300,6 @@ fetchAndLoadTeamNames();
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
             gameSummary.classList.add('hidden');
-
-            // NEW LOGIC: Only scroll once when the game interface becomes visible
-            if (!scrolledToGameInterface) {
-                gameInterface.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                scrolledToGameInterface = true; // Set flag to true so it never runs again
-            }
-
-        } else if (gameState.gameEnded || !gameState.gameStarted) {
-            // NEW LOGIC: Reset the flag if the user returns to the lobby or the game ends
-            scrolledToGameInterface = false; 
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
@@ -367,10 +349,9 @@ fetchAndLoadTeamNames();
             coinTossResultDisplay.textContent = `${gameState.coinTossResult}.`;
             /* coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`; */
         }
-        // 🚨 FIX: Only check for the two-minute warning if the game is actively started.
-        if (gameState.gameStarted && gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
+        if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
-            if (audio) {
+            if (audio) { // Check if audio element exists before trying to play
                 audio.play();
             }
             twoMinuteWarningIssuedLocally = true;
