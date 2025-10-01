@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.971';
+    const appVersion = '3.0.9681';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
-
-    let scrolledToGameInterface = false; // Initialize flag to false
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -238,26 +236,21 @@ fetchAndLoadTeamNames();
     const unlockAudio = () => {
         if (audioUnlocked) return; // Only run once
         
-        // Use a new, completely silent Audio object (empty MP3 data URI) 
-        // to satisfy the user gesture requirement without playing the warning sound.
-        const silentAudio = new Audio("data:audio/mp3;base64,SUQzBAAAAAAA");
-        
-        silentAudio.volume = 0; // Ensure silence
-        
-        silentAudio.play().then(() => {
-            silentAudio.pause();
-            audioUnlocked = true;
-            
-            // 💡 NEW FIX: Manually load the actual warning audio file here
-            // This prepares it for instantaneous playback later when the 2-minute mark is hit.
-            if (audio) { 
-                audio.load(); 
-            }
+        // Attempt to play and immediately pause the audio on user interaction
+        if (audio) {
+            // NEW: Temporarily mute the audio to prevent the warning sound from being heard
+            audio.volume = 0; 
 
-            console.log("Audio playback successfully unlocked by user gesture with silent audio.");
-        }).catch(error => {
-            console.error("Silent Audio unlock failed:", error);
-        });
+            audio.play().then(() => {
+                audio.pause();
+                audio.volume = 1; // NEW: Restore volume after successful unlock
+                audioUnlocked = true;
+                console.log("Audio playback successfully unlocked by user gesture.");
+            }).catch(error => {
+                console.error("Audio unlock failed:", error);
+                audio.volume = 1; // NEW: Ensure volume is restored even if unlock fails
+            });
+        }
     };
 
 
@@ -310,19 +303,12 @@ fetchAndLoadTeamNames();
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
             gameSummary.classList.add('hidden');
-
-            // NEW LOGIC: Only scroll once when the game interface becomes visible
-        if (!scrolledToGameInterface) {
+            
+            // NEW: Scrolls the game interface to the top of the viewport
             gameInterface.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+                behavior: 'smooth', // Optional: provides a smooth animation
+                block: 'start'      // Essential: aligns the top of the element to the top of the viewport
             });
-            scrolledToGameInterface = true; // Set flag to true so it never runs again
-            }
-
-        } else if (gameState.gameEnded || !gameState.gameStarted) {
-            // NEW LOGIC: Reset the flag if the user returns to the lobby or the game ends
-            scrolledToGameInterface = false; 
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
