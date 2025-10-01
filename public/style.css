@@ -75,7 +75,7 @@ button:hover {
 
 .giants-logo {
     width:320px;
-    max-width:70%;
+    max-width:90%;
 }
 
 /* Settings Form */
@@ -83,6 +83,7 @@ button:hover {
 #settings-form input {
     font-size:20px;
     font-weight:600;
+    text-align: center;
 }
 
 .settings-grid {
@@ -108,7 +109,7 @@ button:hover {
     font-size:12px;
     text-transform: uppercase;
     color: var(--primary-color);
-    text-align: left;
+    text-align: center;
 }
 
 .settings-grid input {
@@ -118,7 +119,7 @@ button:hover {
 }
 
 .settings-grid .settings-notes {
-    text-align: left;
+    text-align: center;
     color: var(--notes-color);
     font-size:12px;
     font-weight:600;
