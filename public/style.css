@@ -23,6 +23,7 @@ body {
 h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
     font-family: "canada-type-gibson", sans-serif;
     color: var(--primary-color);
+    font-weight: 600;
 }
 
 .title {
@@ -81,7 +82,7 @@ button:hover {
 
 #settings-form input {
     font-size:20px;
-    font-weight:700;
+    font-weight:600;
 }
 
 .settings-grid {
@@ -315,6 +316,7 @@ header {
     font-size: 1.1rem;
     color: var(--primary-color);;
     margin-bottom: 10px;
+    font-weight:600;
 }
 
 .clock-container {
