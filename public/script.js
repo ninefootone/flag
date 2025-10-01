@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.968';
+    const appVersion = '3.0.969';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
+
+    let scrolledToGameInterface = false; // Initialize flag to false
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -303,12 +305,19 @@ fetchAndLoadTeamNames();
             settingsForm.classList.add('hidden');
             gameInterface.classList.remove('hidden');
             gameSummary.classList.add('hidden');
-            
-            // NEW: Scrolls the game interface to the top of the viewport
+
+            // NEW LOGIC: Only scroll once when the game interface becomes visible
+        if (!scrolledToGameInterface) {
             gameInterface.scrollIntoView({
-                behavior: 'smooth', // Optional: provides a smooth animation
-                block: 'start'      // Essential: aligns the top of the element to the top of the viewport
+                behavior: 'smooth',
+                block: 'start'
             });
+            scrolledToGameInterface = true; // Set flag to true so it never runs again
+            }
+
+        } else if (gameState.gameEnded || !gameState.gameStarted) {
+            // NEW LOGIC: Reset the flag if the user returns to the lobby or the game ends
+            scrolledToGameInterface = false; 
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.add('hidden');
