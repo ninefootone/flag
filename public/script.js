@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.960';
+    const appVersion = '3.0.961';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -74,10 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
     const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
     const gameIdDisplay = document.getElementById('current-game-id');
-    // New references for share links
     const shareLinkBtns = document.querySelectorAll('.share-link-btn');
     const shareFeedback = document.getElementById('share-feedback');
     const shareLinksSection = document.querySelector('.share-links-section');
+    const teamNamesDatalist = document.getElementById('team-names'); 
 
     // Collect all control elements into a single array for easy management
     const allControls = [
@@ -659,5 +659,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- New: Function to load and populate the searchable dropdown ---
+    const loadTeamNames = async () => {
+    try {
+        // Assuming your team names are in a file named 'teams.json'
+        const response = await fetch('/teams.json'); 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const teamNames = await response.json();
+
+        // Ensure the fetched data is an array
+        if (Array.isArray(teamNames)) {
+            // Clear existing options
+            teamNamesDatalist.innerHTML = ''; 
+
+            // Create and append a new <option> for each team name
+            teamNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                teamNamesDatalist.appendChild(option);
+            });
+            console.log(`Successfully loaded ${teamNames.length} team names.`);
+        } else {
+            console.error("teams.json content is not an array.");
+        }
+    } catch (error) {
+        console.error("Could not load team names:", error);
+        // Fallback: Optionally add a few default names if loading fails
+        // ['Default Team A', 'Default Team B'].forEach(...)
+    }
+    };
+
+// ...
+
+// At the very end of the document.addEventListener('DOMContentLoaded', () => { ... }); block:
+// Call the new function to load the data when the page loads
+loadTeamNames();
 
 });
