@@ -118,6 +118,10 @@ button:hover {
     margin-bottom:5px !important;
 }
 
+.settings-grid input#location-field {
+    margin-bottom:20px;
+}
+
 .settings-grid input#half-duration, .settings-grid input#play-clock-duration, .settings-grid input#timeouts-per-half {
     text-align: center;
 }
