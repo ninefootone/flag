@@ -58,15 +58,15 @@
                 <!-- <label for="location-field">Location:</label> -->
                 <input type="text" id="location-field" placeholder="Location">
 
-                <!-- <label for="team1-name">Home Team Name:</label> -->
-                <input type="text" id="team1-name" placeholder="Home Team" list="team-names">
+                <div class="team-input-wrapper">
+                    <input type="text" id="team1-name" placeholder="Home Team" autocomplete="off">
+                    <ul id="team1-options" class="team-options-list hidden"></ul>
+                </div>
 
-                <!-- <label for="team2-name">Away Team Name:</label> -->
-                <input type="text" id="team2-name" placeholder="Away Team" list="team-names">
-
-                <datalist id="team-names">
-                </datalist>
-
+                <div class="team-input-wrapper">
+                    <input type="text" id="team2-name" placeholder="Away Team" autocomplete="off">
+                    <ul id="team2-options" class="team-options-list hidden"></ul>
+                </div>
 
                 <div class="settings-grid">
                     <div class="one-third one">
