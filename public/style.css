@@ -849,6 +849,10 @@ li {
     animation: flash-warning 1s infinite;
 }
 
+.warning .clock-time {
+    color: white;
+}
+
 /* 1. Ensure the element is visible (overrides any problematic 'display: none' or 'visibility: hidden') */
 .disabled {
     /* If another rule is hiding it, these will force it to show: */
