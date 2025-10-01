@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.969';
+    const appVersion = '3.0.970';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -238,21 +238,19 @@ fetchAndLoadTeamNames();
     const unlockAudio = () => {
         if (audioUnlocked) return; // Only run once
         
-        // Attempt to play and immediately pause the audio on user interaction
-        if (audio) {
-            // NEW: Temporarily mute the audio to prevent the warning sound from being heard
-            audio.volume = 0; 
-
-            audio.play().then(() => {
-                audio.pause();
-                audio.volume = 1; // NEW: Restore volume after successful unlock
-                audioUnlocked = true;
-                console.log("Audio playback successfully unlocked by user gesture.");
-            }).catch(error => {
-                console.error("Audio unlock failed:", error);
-                audio.volume = 1; // NEW: Ensure volume is restored even if unlock fails
-            });
-        }
+        // Use a new, completely silent Audio object (empty MP3 data URI) 
+        // to satisfy the user gesture requirement without playing the warning sound.
+        const silentAudio = new Audio("data:audio/mp3;base64,SUQzBAAAAAAA");
+        
+        silentAudio.volume = 0; // Ensure silence
+        
+        silentAudio.play().then(() => {
+            silentAudio.pause();
+            audioUnlocked = true;
+            console.log("Audio playback successfully unlocked by user gesture with silent audio.");
+        }).catch(error => {
+            console.error("Silent Audio unlock failed:", error);
+        });
     };
 
 
