@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.970';
+    const appVersion = '3.0.971';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -247,6 +247,13 @@ fetchAndLoadTeamNames();
         silentAudio.play().then(() => {
             silentAudio.pause();
             audioUnlocked = true;
+            
+            // 💡 NEW FIX: Manually load the actual warning audio file here
+            // This prepares it for instantaneous playback later when the 2-minute mark is hit.
+            if (audio) { 
+                audio.load(); 
+            }
+
             console.log("Audio playback successfully unlocked by user gesture with silent audio.");
         }).catch(error => {
             console.error("Silent Audio unlock failed:", error);
