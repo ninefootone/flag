@@ -143,39 +143,6 @@ wss.on('connection', (ws, request, gameId) => {
                 gameStates[gameId] = currentGameState;
                 broadcastState(gameId);
                 break;
-            // NEW: Defensive Stat Logging
-            case 'LOG_DEFENSIVE_STAT':
-                {
-                    const payload = parsedMessage.payload;
-                    const teamId = payload.teamId;
-                    const statType = payload.statType;
-                    const notes = payload.notes;
-                    const timeDisplay = payload.time;
-
-                    // 1. Format the stat type for display
-                    const formattedStat = statType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-                    // 2. Access team names
-                    const teamName = teamId == 1 ? currentGameState.team1Name : currentGameState.team2Name;
-                    const opposingTeamName = teamId == 1 ? currentGameState.team2Name : currentGameState.team1Name;
-
-                    const actionDescription = `${formattedStat} logged for **${teamName}** (vs ${opposingTeamName})`;
-                    const notesText = notes ? ` - ${notes}` : '';
-                    
-                    // 3. Build the HTML log entry
-                    const liHTML = `<li class="log-item defensive-log-item">[${timeDisplay}] <span class="log-stat-type">DEFENSE:</span> ${actionDescription}${notesText}</li>`;
-
-                    // 4. Update the state's score log HTML
-                    // NOTE: scoreLogHTML is the correct property based on your initialGameState structure
-                    currentGameState.scoreLogHTML += liHTML;
-                    
-                    // 5. Save and broadcast
-                    gameStates[gameId] = currentGameState;
-                    broadcastState(gameId);
-                }
-                break;
-
- 
             case 'END_GAME':
                 stopGameClock(currentGameState, gameId);
                 stopPlayClock(currentGameState, gameId);

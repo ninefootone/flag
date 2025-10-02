@@ -104,8 +104,6 @@
 
             </form>
 
-        <datalist id="team-names-datalist"></datalist>  
-        
         </div>
 
         <div id="game-interface" class="hidden">
@@ -236,38 +234,6 @@
                 </div>
             </section>
 
-            <div id="defensive-stats-buttons-section" class="scoreboard-row button-row">
-                <button id="team1-defensive-stats-btn" class="main-btn team1-color team1-btn" data-team="1">Log Defensive Stat (Team 1)</button>
-                <button id="team2-defensive-stats-btn" class="main-btn team2-color team2-btn" data-team="2">Log Defensive Stat (Team 2)</button>
-            </div>
-
-            <div id="defensive-stats-popup" class="popup-overlay hidden">
-                <div class="popup-content">
-                    <h3 id="defensive-stats-popup-title">Log Defensive Stat for <span id="defensive-stats-team-name"></span></h3>
-                        <div class="popup-body">
-                            <div class="score-input-section">
-                                <p class="input-label">Select Stat:</p>
-                                <div class="defensive-stat-buttons">
-                                    <button class="stat-select-btn" data-stat-type="tackle">Tackle</button>
-                                    <button class="stat-select-btn" data-stat-type="tackle-for-loss">Tackle for Loss</button>
-                                    <button class="stat-select-btn" data-stat-type="sack">Sack</button>
-                                    <button class="stat-select-btn" data-stat-type="interception">Interception</button>
-                                </div>
-                            </div>
-            
-                            <div class="popup-notes-section">
-                                <p class="input-label">Notes (Optional):</p>
-                                <input type="text" id="defensive-stats-notes" placeholder="e.g., Player #12, 3rd Down Stop">
-                            </div>
-            
-                        </div>
-                        <div class="popup-buttons">
-                            <button id="log-defensive-stat-btn" class="log-score-btn" disabled>Log Stat</button>
-                            <button id="cancel-defensive-stats-popup-btn" class="cancel-popup-btn">Cancel</button>
-                        </div>
-                </div>
-            </div>
-            
             <section class="score-log">
                 <div class="log-container">
                     <h3 class="log-title">Score and Timeout Log</h3>
