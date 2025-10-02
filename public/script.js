@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.05';
+    const appVersion = '0.0.06';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -806,6 +806,13 @@ fetchAndLoadTeamNames();
     // --- New: Function to load and populate the searchable dropdown ---
     const loadTeamNames = async () => {
     try {
+        // ADD THIS CHECK: Ensure the datalist element is available
+        const teamNamesDatalist = document.getElementById('team-names-datalist');
+        if (!teamNamesDatalist) {
+            console.warn("Could not find element #team-names-datalist. Skipping team name loading.");
+            return; // Exit the function if the element is null
+        }
+
         // Assuming your team names are in a file named 'teams.json'
         const response = await fetch('/teams.json'); 
         if (!response.ok) {
