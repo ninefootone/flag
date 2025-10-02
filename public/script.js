@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.04';
+    const appVersion = '0.0.05';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -835,31 +835,25 @@ fetchAndLoadTeamNames();
     }
     };
 
-// --- NEW Defensive Stat Logging Logic ---
+// --- CORRECTED Defensive Stat Logging Logic ---
 
     const logDefensiveStat = (teamId, statType, notes) => {
+        // Get the current game time
+        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+        const timeDisplay = formatTime(elapsedTime); // Assuming formatTime() is available in scope
+
         // CORRECTED: Accessing team names from the gameState root
         const teamName = teamId === 1 ? gameState.team1Name : gameState.team2Name;
-        // Identify the opposing team name for clarity in the log
-        const opposingTeamName = teamId === 1 ? gameState.team2Name : gameState.team1Name;
 
-        // Capitalize the first letter of each stat word for a cleaner log
-        const formattedStat = statType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-        const actionDescription = `${formattedStat} logged for **${teamName}** (vs ${opposingTeamName})`;
-        // The game doesn't have a getTimeDisplay function, but it has formatTime(elapsedTime)
-        // We will assume a way to get the current time display exists, or use a simple formatted version
-        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        const timeDisplay = formatTime(elapsedTime); 
-
-        const logEntry = {
-            type: 'defensive-stat',
-            team: teamId,
-            stat: statType,
-            notes: notes,
+        // Log the action to the server via WebSocket
+        sendAction('LOG_DEFENSIVE_STAT', {
+            teamId: teamId,
+            statType: statType,
+            notes: notes.trim(),
             time: timeDisplay,
-            timestamp: Date.now() 
-        };
+            timestamp: Date.now(),
+            teamName: teamName // Pass the team name for server logging clarity
+        });
 
         // --- NEW: History and Server Synchronization (Critical for state management) ---
         // This is necessary if you want the log to persist and be available on reconnect/summary.
@@ -901,6 +895,7 @@ fetchAndLoadTeamNames();
 
         hideDefensiveStatsPopup();
         console.log(`Defensive stat logged: ${statType} for Team ${teamId}`);
+        console.log(`Defensive stat action sent for: ${statType} for Team ${teamId}`);
     };
 
     // --- NEW Event Listeners ---
