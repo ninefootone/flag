@@ -1,8 +1,9 @@
 [
-    "Sheffield Giants",
-    "Manchester Titans",
-    "Burnley Tornadoes",
-    "Salford Scorpions",
-    "Lancashire Bombers",
-    "Yorkshire Assassins"
+    { "name": "Sheffield Giants", "logo": "/assets/sheffield-giants-logo.png" },
+    { "name": "Chorley Buccaneers", "logo": "/assets/chorley-buccaneers-logo.png" },
+    { "name": "Burnley Tornadoes", "logo": "/assets/burnley-tornadoes-logo.webp" },
+    { "name": "Salford Scorpions", "logo": "/assets/salford-scorpions-logo.webp" },
+    { "name": "Lancashire Bombers", "logo": "/assets/lancashire-bombers-logo.png" },
+    { "name": "Yorkshire Assassins", "logo": "/assets/yorkshire-assassins-logo.webp" },
+    { "name": "Nuneaton Jaguars", "logo": "/assets/nuneaton-jaguars-logo.webp" }
 ]

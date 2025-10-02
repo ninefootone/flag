@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.08';
+    const appVersion = '0.0.09';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -80,10 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamNamesDatalist = document.getElementById('team-names'); 
     const team1OptionsList = document.getElementById('team1-options');
     const team2OptionsList = document.getElementById('team2-options');
+    const team1LogoEl = document.getElementById('team1-logo');
+    const team2LogoEl = document.getElementById('team2-logo');
+    const summaryTeam1LogoEl = document.getElementById('summary-team1-logo');
+    const summaryTeam2LogoEl = document.getElementById('summary-team2-logo');
 
     // Team List Functions
 
 let allTeamNames = []; // Global array to store all loaded team names
+let teamLogoMap = new Map();
 
 // --- Dropdown Logic ---
 
@@ -262,6 +267,27 @@ fetchAndLoadTeamNames();
 
         ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
+            gameState = newState; // Update global state
+    
+            // Update Scoreboard Elements (e.g., names and scores)
+            team1ScoreName.textContent = gameState.team1Name;
+            team2ScoreName.textContent = gameState.team2Name;
+
+            // D. UPDATE LOGO ELEMENTS (Main Scoreboard)
+            team1LogoEl.src = gameState.team1Logo || '';
+            team1LogoEl.alt = gameState.team1Name + " Logo";
+            team1LogoEl.style.display = gameState.team1Logo ? 'inline' : 'none';
+
+            team2LogoEl.src = gameState.team2Logo || '';
+            team2LogoEl.alt = gameState.team2Name + " Logo";
+            team2LogoEl.style.display = gameState.team2Logo ? 'inline' : 'none';
+
+            // D. UPDATE LOGO ELEMENTS (Summary Screen)
+            summaryTeam1LogoEl.src = gameState.team1Logo || '';
+            summaryTeam1LogoEl.alt = gameState.team1Name + " Logo";
+            summaryTeam2LogoEl.src = gameState.team2Logo || '';
+            summaryTeam2LogoEl.alt = gameState.team2Name + " Logo";
+    
             console.log('Received from server:', message);
             Object.assign(gameState, message);
             updateUI();
@@ -279,7 +305,19 @@ fetchAndLoadTeamNames();
     // --- State Management and UI Updates ---
     const sendAction = (type, payload = {}) => {
         if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type, payload }));
+            ws.send(JSON.stringify({
+                type: 'UPDATE_STATE',
+                payload: {
+                    date: dateField.value,
+                    location: locationField.value.trim(),
+                    team1Name: team1Name,
+                    team2Name: team2Name,
+                    team1Logo: team1Logo, 
+                    team2Logo: team2Logo,
+                    halfDuration: halfDurationInput.value,
+                    gameStarted: true,
+                }
+            }));
         }
     };
 
@@ -513,6 +551,8 @@ fetchAndLoadTeamNames();
     startGameBtn.addEventListener('click', () => {
         const team1Name = team1NameInput.value.trim();
         const team2Name = team2NameInput.value.trim();
+        const team1Logo = teamLogoMap.get(team1Name) || '';
+        const team2Logo = teamLogoMap.get(team2Name) || '';
 
         if (!team1Name || !team2Name) {
             alert("Please enter names for both teams.");
@@ -768,34 +808,39 @@ fetchAndLoadTeamNames();
 
     // --- New: Function to load and populate the searchable dropdown ---
     const loadTeamNames = async () => {
-    try {
-        // Assuming your team names are in a file named 'teams.json'
-        const response = await fetch('/teams.json'); 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const teamNames = await response.json();
+        try {
+            const teamNamesDatalist = document.getElementById('team-names-datalist');
+            
+            // 1. Fetch the team data (now an array of objects)
+            const response = await fetch('/teams.json'); 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const teamData = await response.json(); // Fetches array of {name, logo} objects
 
-        // Ensure the fetched data is an array
-        if (Array.isArray(teamNames)) {
-            // Clear existing options
-            teamNamesDatalist.innerHTML = ''; 
+            // 2. Ensure the fetched data is an array
+            if (Array.isArray(teamData)) {
+                // Clear existing options and map
+                teamNamesDatalist.innerHTML = ''; 
+                teamLogoMap = new Map(); // Reset map
 
-            // Create and append a new <option> for each team name
-            teamNames.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                teamNamesDatalist.appendChild(option);
-            });
-            console.log(`Successfully loaded ${teamNames.length} team names.`);
-        } else {
-            console.error("teams.json content is not an array.");
+                // 3. Populate the map and the datalist
+                teamData.forEach(team => {
+                    // Store the logo URL mapped to the team name
+                    teamLogoMap.set(team.name, team.logo);
+                    
+                    // The datalist only supports the name (string)
+                    const option = document.createElement('option');
+                    option.value = team.name;
+                    teamNamesDatalist.appendChild(option);
+                });
+                console.log(`Successfully loaded ${teamLogoMap.size} team names with logos.`);
+            } else {
+                console.error("teams.json content is not an array of team objects.");
+            }
+        } catch (error) {
+            console.error("Could not load team names:", error);
         }
-    } catch (error) {
-        console.error("Could not load team names:", error);
-        // Fallback: Optionally add a few default names if loading fails
-        // ['Default Team A', 'Default Team B'].forEach(...)
-    }
     };
 
 // ...

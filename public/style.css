@@ -83,7 +83,7 @@ button:hover {
 #settings-form input {
     font-size:20px;
     font-weight:600;
-    text-align: left;
+    text-align: center;
 }
 
 .settings-grid {
@@ -150,6 +150,7 @@ button:hover {
     max-height: 200px; /* Make the list scrollable */
     overflow-y: auto;
     z-index: 10; /* Ensure it appears over other elements */
+    text-align: center;
 }
 
 .team-options-list.hidden {
@@ -938,6 +939,34 @@ li {
     color: #999;
     text-align: center;
 }
+
+/* Team Logos */
+
+/* Styling for the logo images */
+.team-logo {
+    height: 40px; /* Standard size for main scoreboard */
+    width: auto;
+    margin-right: 10px;
+}
+
+.summary-team-logo {
+    height: 30px; /* Slightly smaller for the summary screen */
+    width: auto;
+    margin-right: 10px;
+}
+
+/* Ensure the team name, score, and logo align nicely */
+.team-score, .summary-team {
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+}
+
+/* Hide logos by default if they don't load or aren't set */
+.team-logo[src=""], .summary-team-logo[src=""] {
+    display: none;
+}
+
+/* End Team Logos */
 
 /* Custom temporary style to hide join/role selection functionality */
 .join-game-section,
