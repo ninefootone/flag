@@ -940,34 +940,6 @@ li {
     text-align: center;
 }
 
-/* Team Logos */
-
-/* Styling for the logo images */
-.team-logo {
-    height: 40px; /* Standard size for main scoreboard */
-    width: auto;
-    margin-right: 10px;
-}
-
-.summary-team-logo {
-    height: 30px; /* Slightly smaller for the summary screen */
-    width: auto;
-    margin-right: 10px;
-}
-
-/* Ensure the team name, score, and logo align nicely */
-.team-score, .summary-team {
-    display: flex;
-    align-items: center; /* Vertical center alignment */
-}
-
-/* Hide logos by default if they don't load or aren't set */
-.team-logo[src=""], .summary-team-logo[src=""] {
-    display: none;
-}
-
-/* End Team Logos */
-
 /* Custom temporary style to hide join/role selection functionality */
 .join-game-section,
 .role-selection,

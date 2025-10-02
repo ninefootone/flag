@@ -13,8 +13,6 @@ const initialGameState = {
     location: '',
     team1Name: 'Home Team',
     team2Name: 'Away Team',
-    team1Logo: '', 
-    team2Logo: '',
     scores: { team1: 0, team2: 0 },
     timeoutsUsed: { '1': 0, '2': 0 },
     gameTimeLeft: 1200,
