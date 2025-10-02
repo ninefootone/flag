@@ -790,7 +790,7 @@ li {
 }
 
 /* New: Styles for the pop-up modal overlay */
-#score-popup {
+#score-popup, .popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
