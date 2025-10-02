@@ -683,6 +683,55 @@ header {
     font-weight: 700;
 }
 
+/* Defensive Stats */
+
+/* Defensive Stats Buttons Section */
+#defensive-stats-buttons-section {
+    margin-top: 15px;
+    padding: 0 10px; 
+}
+
+/* Defensive Stat Popup Specifics */
+.defensive-stat-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.stat-select-btn {
+    flex-grow: 1; 
+    min-width: 120px; 
+    padding: 10px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: white;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.stat-select-btn:hover {
+    background-color: var(--focus-color);
+}
+
+.stat-select-btn.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Style for the Log button when disabled */
+#log-defensive-stat-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    color: #666;
+}
+
+/* End Defensive Stats */
+
 /* Log and End Game Section */
 .score-log {
     margin-top: 20px;

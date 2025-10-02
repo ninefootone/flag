@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '3.0.965';
+    const appVersion = '0.0.02';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -80,10 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamNamesDatalist = document.getElementById('team-names'); 
     const team1OptionsList = document.getElementById('team1-options');
     const team2OptionsList = document.getElementById('team2-options');
+    const team1DefensiveStatsBtn = document.getElementById('team1-defensive-stats-btn');
+    const team2DefensiveStatsBtn = document.getElementById('team2-defensive-stats-btn');
+    const defensiveStatsPopup = document.getElementById('defensive-stats-popup');
+    const defensiveStatsTeamNameSpan = document.getElementById('defensive-stats-team-name');
+    const defensiveStatButtons = defensiveStatsPopup.querySelectorAll('.stat-select-btn');
+    const logDefensiveStatBtn = document.getElementById('log-defensive-stat-btn');
+    const cancelDefensiveStatsPopupBtn = document.getElementById('cancel-defensive-stats-popup-btn');
+    const defensiveStatsNotesInput = document.getElementById('defensive-stats-notes');
 
-    // Team List Functions
+    // Team List & Defensive Stats Functions
 
-let allTeamNames = []; // Global array to store all loaded team names
+    let allTeamNames = []; // Global array to store all loaded team names
+    let currentDefensiveStatTeamId = null;
+    let selectedDefensiveStatType = null;
 
 // --- Dropdown Logic ---
 
@@ -463,6 +473,31 @@ fetchAndLoadTeamNames();
         tempScoreEvent = null;
     };
 
+    // Function to reset the defensive stats popup state
+    const resetDefensiveStatsPopup = () => {
+        defensiveStatButtons.forEach(btn => btn.classList.remove('selected'));
+        logDefensiveStatBtn.disabled = true;
+        defensiveStatsNotesInput.value = '';
+        selectedDefensiveStatType = null;
+        currentDefensiveStatTeamId = null;
+    };
+
+// Function to show the defensive stats popup
+    const showDefensiveStatsPopup = (teamId) => {
+        currentDefensiveStatTeamId = teamId;
+        // Determine the name of the team logging the stat (the one on *defense*)
+        const teamName = teamId === 1 ? gameState.team1.name : gameState.team2.name;
+        defensiveStatsTeamNameSpan.textContent = teamName;
+        resetDefensiveStatsPopup();
+        defensiveStatsPopup.classList.remove('hidden');
+    };
+
+// Function to hide the defensive stats popup
+    const hideDefensiveStatsPopup = () => {
+        defensiveStatsPopup.classList.add('hidden');
+        resetDefensiveStatsPopup();
+    };
+
     // --- Event Listeners ---
     const pathParts = window.location.pathname.split('/');
     const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
@@ -798,12 +833,91 @@ fetchAndLoadTeamNames();
     }
     };
 
-// ...
+    // --- NEW Defensive Stat Logging Logic ---
 
-// At the very end of the document.addEventListener('DOMContentLoaded', () => { ... }); block:
-// Call the new function to load the data when the page loads
-loadTeamNames();
+    const logDefensiveStat = (teamId, statType, notes) => {
+    const teamName = teamId === 1 ? gameState.team1.name : gameState.team2.name;
+    // Identify the opposing team name for clarity in the log
+    const opposingTeamName = teamId === 1 ? gameState.team2.name : gameState.team1.name;
 
+    // Capitalize the first letter of each stat word for a cleaner log
+    const formattedStat = statType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
+    const actionDescription = `${formattedStat} logged for **${teamName}** (vs ${opposingTeamName})`;
+    const timeDisplay = getTimeDisplay(); // Assuming getTimeDisplay() exists and returns the current game time
+
+    const logEntry = {
+        type: 'defensive-stat',
+        team: teamId,
+        stat: statType,
+        notes: notes,
+        time: timeDisplay,
+        timestamp: Date.now() 
+    };
+
+    // Assuming you have a gameState.log array for history tracking
+    if (gameState.log) {
+        gameState.log.push(logEntry);
+    }
+
+    // Update the Summary Log (#summary-score-log) as requested
+    const scoreLogList = document.getElementById('summary-score-log');
+        if (scoreLogList) {
+            const li = document.createElement('li');
+            li.className = 'log-item defensive-log-item'; 
+            const notesText = notes ? ` - ${notes}` : '';
+            li.innerHTML = `[${timeDisplay}] <span class="log-stat-type">DEFENSE:</span> ${actionDescription}${notesText}`;
+            scoreLogList.appendChild(li);
+            scoreLogList.scrollTop = scoreLogList.scrollHeight; // Scroll to bottom
+        }
+
+        hideDefensiveStatsPopup();
+        console.log(`Defensive stat logged: ${statType} for Team ${teamId}`);
+    };
+
+    // --- NEW Event Listeners ---
+
+    // 1. Buttons to open the pop-up
+    team1DefensiveStatsBtn.addEventListener('click', () => {
+    // Check if the game is running before allowing a log
+        if (gameState.isRunning) {
+            showDefensiveStatsPopup(1);
+        }
+    });
+
+    team2DefensiveStatsBtn.addEventListener('click', () => {
+        if (gameState.isRunning) {
+            showDefensiveStatsPopup(2);
+        }
+    });
+
+    // 2. Stat selection buttons inside the pop-up
+    defensiveStatButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // Deselect all
+            defensiveStatButtons.forEach(b => b.classList.remove('selected'));
+            // Select current
+            e.currentTarget.classList.add('selected');
+            selectedDefensiveStatType = e.currentTarget.dataset.statType;
+            logDefensiveStatBtn.disabled = false; // Enable the Log button
+        });
+    });
+
+    // 3. Log Stat Button
+    logDefensiveStatBtn.addEventListener('click', () => {
+        if (currentDefensiveStatTeamId !== null && selectedDefensiveStatType !== null) {
+            const notes = defensiveStatsNotesInput.value.trim();
+            logDefensiveStat(currentDefensiveStatTeamId, selectedDefensiveStatType, notes);
+        }
+    });
+
+    // 4. Cancel Button
+    cancelDefensiveStatsPopupBtn.addEventListener('click', hideDefensiveStatsPopup);
+
+    // ...
+
+    // At the very end of the document.addEventListener('DOMContentLoaded', () => { ... }); block:
+    // Call the new function to load the data when the page loads
+        loadTeamNames();
 
 });
