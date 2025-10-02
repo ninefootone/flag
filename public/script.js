@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.06';
+    const appVersion = '0.0.07';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -94,6 +94,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let allTeamNames = []; // Global array to store all loaded team names
     let currentDefensiveStatTeamId = null;
     let selectedDefensiveStatType = null;
+
+    /**
+    * Safely sends an action message to the WebSocket server.
+    * Ensures the connection is OPEN before attempting to send.
+    */
+    function sendAction(type, payload = {}) {
+        // CRITICAL CHECK: Ensure ws is defined and the connection is OPEN (readyState == 1)
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            const message = { type, payload };
+            ws.send(JSON.stringify(message));
+            console.log(`Action SENT: ${type}`, payload);
+        } else {
+            console.error("WebSocket is not connected (or not OPEN). Cannot send action:", type);
+        }
+    }
 
 // --- Dropdown Logic ---
 
@@ -845,22 +860,23 @@ fetchAndLoadTeamNames();
 // --- CORRECTED Defensive Stat Logging Logic ---
 
     const logDefensiveStat = (teamId, statType, notes) => {
-        // Get the current game time
-        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        const timeDisplay = formatTime(elapsedTime); // Assuming formatTime() is available in scope
+    // 1. Get the current game time (safe calculation)
+    const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+    const timeDisplay = formatTime(elapsedTime); 
 
-        // CORRECTED: Accessing team names from the gameState root
-        const teamName = teamId === 1 ? gameState.team1Name : gameState.team2Name;
+    // 2. Identify team name (for console output, the server does the heavy lifting)
+    const teamName = teamId === 1 ? gameState.team1Name : gameState.team2Name;
 
-        // Log the action to the server via WebSocket
-        sendAction('LOG_DEFENSIVE_STAT', {
-            teamId: teamId,
-            statType: statType,
-            notes: notes.trim(),
-            time: timeDisplay,
-            timestamp: Date.now(),
-            teamName: teamName // Pass the team name for server logging clarity
-        });
+    // 3. Use the new safe function to send the action to the server
+    sendAction('LOG_DEFENSIVE_STAT', {
+        teamId: teamId,
+        statType: statType,
+        notes: notes.trim(),
+        time: timeDisplay,
+        timestamp: Date.now(),
+        teamName: teamName
+    });
+
 
         // --- NEW: History and Server Synchronization (Critical for state management) ---
         // This is necessary if you want the log to persist and be available on reconnect/summary.
