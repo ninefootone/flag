@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.02';
+    const appVersion = '0.0.03';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -485,9 +485,11 @@ fetchAndLoadTeamNames();
 // Function to show the defensive stats popup
     const showDefensiveStatsPopup = (teamId) => {
         currentDefensiveStatTeamId = teamId;
-        // Determine the name of the team logging the stat (the one on *defense*)
-        const teamName = teamId === 1 ? gameState.team1.name : gameState.team2.name;
+        // CORRECTED: Accessing team names from the gameState root
+        const teamName = teamId === 1 ? gameState.team1Name : gameState.team2Name;
         defensiveStatsTeamNameSpan.textContent = teamName;
+        // Apply the correct team color to the popup title if necessary (Optional but good)
+        // defensiveStatsPopupTitle.style.backgroundColor = teamId === 1 ? 'var(--team1-color)' : 'var(--team2-color)';
         resetDefensiveStatsPopup();
         defensiveStatsPopup.classList.remove('hidden');
     };
@@ -833,42 +835,68 @@ fetchAndLoadTeamNames();
     }
     };
 
-    // --- NEW Defensive Stat Logging Logic ---
+// --- NEW Defensive Stat Logging Logic ---
 
     const logDefensiveStat = (teamId, statType, notes) => {
-    const teamName = teamId === 1 ? gameState.team1.name : gameState.team2.name;
-    // Identify the opposing team name for clarity in the log
-    const opposingTeamName = teamId === 1 ? gameState.team2.name : gameState.team1.name;
+        // CORRECTED: Accessing team names from the gameState root
+        const teamName = teamId === 1 ? gameState.team1Name : gameState.team2Name;
+        // Identify the opposing team name for clarity in the log
+        const opposingTeamName = teamId === 1 ? gameState.team2Name : gameState.team1Name;
 
-    // Capitalize the first letter of each stat word for a cleaner log
-    const formattedStat = statType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        // Capitalize the first letter of each stat word for a cleaner log
+        const formattedStat = statType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-    const actionDescription = `${formattedStat} logged for **${teamName}** (vs ${opposingTeamName})`;
-    const timeDisplay = getTimeDisplay(); // Assuming getTimeDisplay() exists and returns the current game time
+        const actionDescription = `${formattedStat} logged for **${teamName}** (vs ${opposingTeamName})`;
+        // The game doesn't have a getTimeDisplay function, but it has formatTime(elapsedTime)
+        // We will assume a way to get the current time display exists, or use a simple formatted version
+        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+        const timeDisplay = formatTime(elapsedTime); 
 
-    const logEntry = {
-        type: 'defensive-stat',
-        team: teamId,
-        stat: statType,
-        notes: notes,
-        time: timeDisplay,
-        timestamp: Date.now() 
-    };
+        const logEntry = {
+            type: 'defensive-stat',
+            team: teamId,
+            stat: statType,
+            notes: notes,
+            time: timeDisplay,
+            timestamp: Date.now() 
+        };
 
-    // Assuming you have a gameState.log array for history tracking
-    if (gameState.log) {
-        gameState.log.push(logEntry);
-    }
+        // --- NEW: History and Server Synchronization (Critical for state management) ---
+        // This is necessary if you want the log to persist and be available on reconnect/summary.
+        // You would typically send an action to the server to update the main log HTML string.
+        
+        // 1. Create the new HTML log item
+        const li = document.createElement('li');
+        li.className = 'log-item defensive-log-item'; 
+        const notesText = notes ? ` - ${notes}` : '';
+        li.innerHTML = `[${timeDisplay}] <span class="log-stat-type">DEFENSE:</span> ${actionDescription}${notesText}`;
 
-    // Update the Summary Log (#summary-score-log) as requested
-    const scoreLogList = document.getElementById('summary-score-log');
-        if (scoreLogList) {
-            const li = document.createElement('li');
-            li.className = 'log-item defensive-log-item'; 
-            const notesText = notes ? ` - ${notes}` : '';
-            li.innerHTML = `[${timeDisplay}] <span class="log-stat-type">DEFENSE:</span> ${actionDescription}${notesText}`;
-            scoreLogList.appendChild(li);
-            scoreLogList.scrollTop = scoreLogList.scrollHeight; // Scroll to bottom
+        // 2. Append to the ACTIVE log list (which you named scoreLogList in the references)
+        // The HTML structure in index.html is: <ul id="score-log"></ul>
+        const activeLogList = document.getElementById('score-log'); 
+        if (activeLogList) {
+            activeLogList.appendChild(li);
+            activeLogList.scrollTop = activeLogList.scrollHeight; // Scroll to bottom
+        }
+
+        // 3. For a real server-side application, you would send the new log entry
+        // and let the server manage the complete HTML string and history.
+        // For simplicity here, we'll assume we need to update the history structure.
+        
+        // A full implementation would look like this:
+        /*
+        sendAction('LOG_DEFENSIVE_STAT', {
+            teamId: teamId,
+            statType: statType,
+            notes: notes,
+            timeDisplay: timeDisplay,
+            // (The server would then update gameState.scoreLogHTML and push the change)
+        });
+        */
+
+        // Assuming you have a gameState.log array for history tracking
+        if (gameState.log) {
+            gameState.log.push(logEntry);
         }
 
         hideDefensiveStatsPopup();
@@ -877,16 +905,16 @@ fetchAndLoadTeamNames();
 
     // --- NEW Event Listeners ---
 
-    // 1. Buttons to open the pop-up
+// 1. Buttons to open the pop-up
     team1DefensiveStatsBtn.addEventListener('click', () => {
-    // Check if the game is running before allowing a log
-        if (gameState.isRunning) {
+    // Check if the game has started before allowing a log
+        if (gameState.gameStarted) { 
             showDefensiveStatsPopup(1);
         }
     });
 
     team2DefensiveStatsBtn.addEventListener('click', () => {
-        if (gameState.isRunning) {
+        if (gameState.gameStarted) { 
             showDefensiveStatsPopup(2);
         }
     });
