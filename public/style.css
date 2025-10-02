@@ -74,7 +74,7 @@ button:hover {
 }
 
 .giants-logo {
-    width:320px;
+    width:180px;
     max-width:90%;
 }
 
@@ -290,7 +290,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 }
 
 #start-new-game-btn {
-    width:240px;
+    max-width:240px;
 }
 
 .join-game-section {
