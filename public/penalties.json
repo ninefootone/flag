@@ -5,7 +5,7 @@
         "enforcedFrom": "Dead Ball Spot",
         "lossOfDown": false,
         "automaticFirstDown": false,
-        "repeatDown": false,
+        "lossOfTimeout": false,
         "keywords": "snap, offense, pre-snap"
     },
     {
@@ -14,7 +14,7 @@
         "enforcedFrom": "Line of Scrimmage",
         "lossOfDown": false,
         "automaticFirstDown": false,
-        "repeatDown": false,
+        "lossOfTimeout": false,
         "keywords": "snap, delay"
     },
     {
@@ -23,7 +23,7 @@
         "enforcedFrom": "Dead Ball Spot",
         "lossOfDown": false,
         "automaticFirstDown": false,
-        "repeatDown": false,
+        "lossOfTimeout": false,
         "keywords": "illegal"
     },
     {
@@ -32,7 +32,7 @@
         "enforcedFrom": "Dead Ball Spot",
         "lossOfDown": false,
         "automaticFirstDown": false,
-        "repeatDown": false,
+        "lossOfTimeout": false,
         "keywords": "movement"
     },
     {
@@ -41,7 +41,7 @@
         "enforcedFrom": "Dead Ball Spot",
         "lossOfDown": false,
         "automaticFirstDown": false,
-        "repeatDown": true,
-        "keywords": "restrain, block, grab, contact, offense"
+        "lossOfTimeout": true,
+        "keywords": "challenge"
     }
 ]
