@@ -1030,7 +1030,7 @@ li {
 .penalty-header-row, .penalty-item-grid {
     display: grid;
     /* Use fixed pixel widths to ensure the table content forces horizontal scrolling on small screens */
-    grid-template-columns: 180px 80px 150px 100px; /* Total 510px wide content */
+    grid-template-columns: 200px 80px 120px 200px; /* Total 700px wide content */
     padding: 10px 15px;
     align-items: center;
     border-bottom: 1px solid var(--focus-color); 
