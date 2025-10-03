@@ -1021,6 +1021,7 @@ li {
     border: none;
     border-radius: 0px;
     overflow: hidden; /* Ensures rounded corners */
+    min-width: 550px; 
 }
 
 /* Base grid layout for header and items (4 columns) */
