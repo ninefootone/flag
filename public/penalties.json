@@ -1,92 +1,47 @@
 [
     {
-        "name": "False Start",
-        "yards": "5",
-        "enforcedFrom": "Previous Spot (PS)",
-        "lossOfDown": true,
-        "automaticFirstDown": false,
-        "repeatDown": false,
-        "keywords": "snap, movement, offense, pre-snap"
-    },
-    {
-        "name": "Encroachment/Offsides",
-        "yards": "5",
-        "enforcedFrom": "Previous Spot (PS)",
-        "lossOfDown": false,
-        "automaticFirstDown": true,
-        "repeatDown": false,
-        "keywords": "snap, defense, line, illegal, pre-snap"
-    },
-    {
-        "name": "Illegal Motion",
-        "yards": "5",
-        "enforcedFrom": "Previous Spot (PS)",
-        "lossOfDown": false,
-        "automaticFirstDown": false,
-        "repeatDown": true,
-        "keywords": "motion, offense, illegal"
-    },
-    {
-        "name": "Illegal Flag Pull",
-        "yards": "5",
-        "enforcedFrom": "Spot of Foul (SF)",
-        "lossOfDown": false,
-        "automaticFirstDown": true,
-        "repeatDown": false,
-        "keywords": "flag, pull, possession, defense, illegal"
-    },
-    {
-        "name": "Holding (Offense)",
-        "yards": "10",
-        "enforcedFrom": "Previous Spot (PS)",
-        "lossOfDown": false,
-        "automaticFirstDown": false,
-        "repeatDown": true,
-        "keywords": "restrain, block, grab, contact, offense"
-    },
-    {
-        "name": "Holding (Defense)",
-        "yards": "10",
-        "enforcedFrom": "Previous Spot (PS)",
-        "lossOfDown": false,
-        "automaticFirstDown": true,
-        "repeatDown": false,
-        "keywords": "restrain, block, grab, contact, defense"
-    },
-    {
-        "name": "Defensive Pass Interference",
-        "yards": "10 / Spot of Foul",
-        "enforcedFrom": "Previous Spot or Spot of Foul (SF)",
-        "lossOfDown": false,
-        "automaticFirstDown": true,
-        "repeatDown": false,
-        "keywords": "pass, interference, contact, illegal, catch, defense"
-    },
-    {
-        "name": "Offensive Pass Interference",
-        "yards": "10",
-        "enforcedFrom": "Previous Spot (PS)",
-        "lossOfDown": true,
-        "automaticFirstDown": false,
-        "repeatDown": false,
-        "keywords": "pass, interference, contact, illegal, catch, offense"
-    },
-    {
-        "name": "Flag Guarding",
-        "yards": "5",
-        "enforcedFrom": "Spot of Foul (SF)",
-        "lossOfDown": true,
-        "automaticFirstDown": false,
-        "repeatDown": false,
-        "keywords": "flag, guard, illegal, run"
-    },
-    {
         "name": "Delay of Game",
         "yards": "5",
         "enforcedFrom": "Dead Ball Spot",
         "lossOfDown": false,
         "automaticFirstDown": false,
         "repeatDown": false,
-        "keywords": "clock, time, snap"
+        "keywords": "snap, offense, pre-snap"
+    },
+    {
+        "name": "Delay of Pass",
+        "yards": "-",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "repeatDown": false,
+        "keywords": "snap, delay"
+    },
+    {
+        "name": "Disconcerting Signals",
+        "yards": "5",
+        "enforcedFrom": "Dead Ball Spot",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "repeatDown": false,
+        "keywords": "illegal"
+    },
+    {
+        "name": "Encroachment",
+        "yards": "5",
+        "enforcedFrom": "Dead Ball Spot",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "repeatDown": false,
+        "keywords": "movement"
+    },
+    {
+        "name": "Failed Challenge",
+        "yards": "-",
+        "enforcedFrom": "Dead Ball Spot",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "repeatDown": true,
+        "keywords": "restrain, block, grab, contact, offense"
     }
 ]

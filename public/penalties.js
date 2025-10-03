@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getPenaltyEffect = (penalty) => {
         if (penalty.automaticFirstDown) return "Automatic 1st Down";
         if (penalty.lossOfDown) return "Loss of Down";
-        if (penalty.repeatDown) return "Repeat Down"; // Changed from "Repeat Down (None)"
+        if (penalty.lossOfTimeout) return "Loss of Timeout";
         return "-"; // Changed from "None"
     }
 
