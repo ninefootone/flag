@@ -83,10 +83,10 @@
     {
         "name": "Delay of Game",
         "yards": "5",
-        "enforcedFrom": "Previous Spot (PS)",
+        "enforcedFrom": "Dead Ball Spot",
         "lossOfDown": false,
         "automaticFirstDown": false,
-        "repeatDown": true,
+        "repeatDown": false,
         "keywords": "clock, time, snap"
     }
 ]
