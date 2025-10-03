@@ -22,24 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------
 
 
-    // --- Existing Penalty Lookup Logic (Modified for new fetch path) ---
+    // --- Existing Penalty Lookup Logic (Modified) ---
     const penaltiesListContainer = document.getElementById('penalties-list');
     const noResultsMessage = document.getElementById('no-results');
     let penaltiesData = []; // Store the fetched data
 
     /**
      * Helper to get the descriptive effect string based on the booleans.
+     * Updated to return '-' when no specific effect applies.
      */
     const getPenaltyEffect = (penalty) => {
         if (penalty.automaticFirstDown) return "Automatic 1st Down";
         if (penalty.lossOfDown) return "Loss of Down";
-        if (penalty.repeatDown) return "Repeat Down (None)"; 
-        return "None";
+        if (penalty.repeatDown) return "Repeat Down"; // Changed from "Repeat Down (None)"
+        return "-"; // Changed from "None"
     }
 
     /**
      * Renders the list of penalties based on the provided array.
-     * (Same rendering logic from the previous solution)
      */
     const renderPenaltiesList = (list) => {
         penaltiesListContainer.innerHTML = ''; 
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         list.forEach(penalty => {
             const effectText = getPenaltyEffect(penalty);
-            const hasEffect = penalty.automaticFirstDown || penalty.lossOfDown || penalty.repeatDown;
+            // Removed hasEffect check as the tick is no longer needed
 
             const item = document.createElement('div');
             item.className = 'penalty-item-grid'; 
@@ -72,9 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="col-yards penalty-yards">${penalty.yards}</div>
                 <div class="col-enforced penalty-enforced">${penalty.enforcedFrom}</div>
                 <div class="col-effect penalty-effect">
-                    <span>${effectText}</span>
-                    <span class="effect-tick">${hasEffect ? '✅' : '—'}</span>
-                </div>
+                    ${effectText}
+                    </div>
             `;
             penaltiesListContainer.appendChild(item);
         });
