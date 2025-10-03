@@ -1007,6 +1007,13 @@ li {
     color:var(--primary-color);
 }
 
+/* --- Wrapper for Horizontal Overflow (The Key Change) --- */
+/* This container ensures the content scrolls horizontally if it's too wide */
+.penalties-table-wrapper {
+    overflow-x: auto; 
+}
+
+
 .penalties-list {
     display: flex;
     flex-direction: column;
@@ -1019,11 +1026,12 @@ li {
 /* Base grid layout for header and items (4 columns) */
 .penalty-header-row, .penalty-item-grid {
     display: grid;
-    /* Define the 4 columns: Name (40%), Yards (15%), Enforced (25%), Effect (20%) */
-    grid-template-columns: 40% 15% 25% 20%;
+    /* Use fixed pixel widths to ensure the table content forces horizontal scrolling on small screens */
+    grid-template-columns: 180px 80px 150px 100px; /* Total 510px wide content */
     padding: 10px 15px;
     align-items: center;
     border-bottom: 1px solid var(--focus-color); 
+    white-space: nowrap; 
 }
 
 /* Header Row Styling */
@@ -1057,19 +1065,14 @@ li {
 }
 
 .penalty-header-row .col-yards {
-    text-align: center;
     font-weight: 600;
 }
 
 .penalty-header-row .col-enforced {
-    text-align: center;
     font-weight: 600;
 }
 
 .penalty-header-row .col-effect {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     font-weight: 600;
 }
 
@@ -1105,21 +1108,6 @@ li {
     font-size: 1.2em;
     line-height: 1; 
     margin-left: 5px;
-}
-
-/* Mobile Adjustments: Drop the 'Enforced From' column */
-@media only screen and (max-width: 600px) {
-    .penalty-header-row, .penalty-item-grid {
-        /* Redefine the grid for 3 columns: Name (45%), Yards (15%), Effect (40%) */
-        grid-template-columns: 40% 20% 40%; 
-        padding: 8px 10px;
-        font-size: 1em;
-        border:1px solid #efefef;
-    }
-    
-    .col-enforced {
-        display: none; /* Hide 'Enforced From' on small screens */
-    }
 }
 
 /* --- New Modal/Overlay Styles for Penalty Lookup --- */
@@ -1162,4 +1150,3 @@ li {
     background-color: var(--error-color); /* Use a strong color for the close button */
     border-color: var(--error-color);
 }
-/* Ensure the .search-input and .penalties-list styles you previously added are still present for the content inside this container */
