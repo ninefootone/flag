@@ -997,6 +997,8 @@ li {
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
+    font-weight:400;
+    color:var(--text-color);
 }
 
 .search-input:focus {
@@ -1004,7 +1006,7 @@ li {
 }
 
 .search-input::placeholder {
-    color:var(--primary-color);
+    color:#999999;
 }
 
 /* --- Wrapper for Horizontal Overflow (The Key Change) --- */
@@ -1021,7 +1023,7 @@ li {
     border: none;
     border-radius: 0px;
     overflow: hidden; /* Ensures rounded corners */
-    min-width: 550px; 
+    min-width: 700px; 
 }
 
 /* Base grid layout for header and items (4 columns) */
@@ -1155,6 +1157,10 @@ li {
 .penalty-finder-container .close-btn {
     margin-top: 20px;
     width: 100%;
-    background-color: var(--error-color); /* Use a strong color for the close button */
-    border-color: var(--error-color);
+    background-color: var(--primary-color); 
+    border:none;
+}
+
+.penalty-finder-container .close-btn:hover {
+    background-color: var(--secondary-color); 
 }
