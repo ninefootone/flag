@@ -966,3 +966,114 @@ li {
 #join-error-message {
     display: none !important;
 }
+
+/* Penalties */
+
+/* --- NEW Styles for Penalty Search List (Grid Layout) --- */
+
+.penalty-finder-container {
+    padding: 10px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: calc(100% - 20px); 
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--notes-color);
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.penalties-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px; /* Small gap to create a table look */
+    border: 1px solid var(--notes-color);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners */
+}
+
+/* Base grid layout for header and items (4 columns) */
+.penalty-header-row, .penalty-item-grid {
+    display: grid;
+    /* Define the 4 columns: Name (40%), Yards (15%), Enforced (25%), Effect (20%) */
+    grid-template-columns: 40% 15% 25% 20%;
+    padding: 10px 15px;
+    align-items: center;
+    border-bottom: 1px solid var(--focus-color); 
+}
+
+/* Header Row Styling */
+.penalty-header-row {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 700;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Penalty Item Styling */
+.penalty-item-grid {
+    background-color: white;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
+.penalty-item-grid:nth-child(even) {
+    background-color: var(--focus-color); /* Zebra stripping */
+}
+
+.penalty-item-grid:last-child {
+    border-bottom: none;
+}
+
+/* Column Specific Styles */
+.col-name {
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: left;
+}
+
+.col-yards {
+    text-align: center;
+    font-weight: 700;
+    color: var(--error-color);
+}
+
+.col-enforced {
+    text-align: center;
+    font-weight: 400;
+    color: var(--notes-color);
+}
+
+/* Effect column containing both text and the tick */
+.col-effect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.effect-tick {
+    font-size: 1.2em;
+    line-height: 1; 
+    margin-left: 5px;
+}
+
+/* Mobile Adjustments: Drop the 'Enforced From' column */
+@media only screen and (max-width: 600px) {
+    .penalty-header-row, .penalty-item-grid {
+        /* Redefine the grid for 3 columns: Name (45%), Yards (15%), Effect (40%) */
+        grid-template-columns: 45% 15% 40%; 
+        padding: 8px 10px;
+        font-size: 0.8em;
+    }
+    
+    .col-enforced {
+        display: none; /* Hide 'Enforced From' on small screens */
+    }
+}
