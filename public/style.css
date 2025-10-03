@@ -971,6 +971,18 @@ li {
 
 /* --- NEW Styles for Penalty Search List (Grid Layout) --- */
 
+#penalty-lookup-btn {
+    width:100%;
+    max-width:100%;
+    color: var(--primary-color);
+    background-color: #ffffff;
+    border: none;    
+}
+
+#penalty-lookup-btn:hover {
+    color: var(--secondary-color);
+}
+
 .penalty-finder-container {
     padding: 10px;
     width: 100%;
@@ -987,12 +999,20 @@ li {
     box-sizing: border-box;
 }
 
+.search-input:focus {
+    background-color:#ffffff;
+}
+
+.search-input::placeholder {
+    color:var(--primary-color);
+}
+
 .penalties-list {
     display: flex;
     flex-direction: column;
     gap: 1px; /* Small gap to create a table look */
-    border: 1px solid var(--notes-color);
-    border-radius: 8px;
+    border: none;
+    border-radius: 0px;
     overflow: hidden; /* Ensures rounded corners */
 }
 
@@ -1008,54 +1028,77 @@ li {
 
 /* Header Row Styling */
 .penalty-header-row {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: #f3f4f6;
+    color: var(--primary-color);
     font-weight: 700;
-    font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 1em;
+    letter-spacing: 0px;
 }
 
 /* Penalty Item Styling */
 .penalty-item-grid {
     background-color: white;
-    font-size: 0.9em;
+    font-size: 1em;
     color: var(--text-color);
 }
 
 .penalty-item-grid:nth-child(even) {
-    background-color: var(--focus-color); /* Zebra stripping */
+    background-color: white; /* Zebra stripping */
 }
 
 .penalty-item-grid:last-child {
     border-bottom: none;
 }
 
+/* Header Column Styles */
+.penalty-header-row .col-name {
+    font-weight: 600;
+    text-align: left;
+}
+
+.penalty-header-row .col-yards {
+    text-align: center;
+    font-weight: 600;
+}
+
+.penalty-header-row .col-enforced {
+    text-align: center;
+    font-weight: 600;
+}
+
+.penalty-header-row .col-effect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
 /* Column Specific Styles */
 .col-name {
+    color:var(--text-color);
     font-weight: 600;
-    color: var(--primary-color);
     text-align: left;
 }
 
 .col-yards {
+    color:var(--text-color);
     text-align: center;
-    font-weight: 700;
-    color: var(--error-color);
+    font-weight: 600;
 }
 
 .col-enforced {
+    color:var(--text-color);
     text-align: center;
     font-weight: 400;
-    color: var(--notes-color);
 }
 
 /* Effect column containing both text and the tick */
 .col-effect {
+    color:var(--text-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .effect-tick {
@@ -1068,9 +1111,10 @@ li {
 @media only screen and (max-width: 600px) {
     .penalty-header-row, .penalty-item-grid {
         /* Redefine the grid for 3 columns: Name (45%), Yards (15%), Effect (40%) */
-        grid-template-columns: 45% 15% 40%; 
+        grid-template-columns: 40% 20% 40%; 
         padding: 8px 10px;
-        font-size: 0.8em;
+        font-size: 1em;
+        border:1px solid #efefef;
     }
     
     .col-enforced {
@@ -1086,7 +1130,7 @@ li {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Dark overlay */
+    background-color: rgba(0, 0, 0, 0); /* Dark overlay */
     z-index: 1000; /* Ensure it is above all other content */
     display: flex;
     justify-content: center;
@@ -1100,14 +1144,14 @@ li {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 700px; /* Wider to support the four columns */
     margin: auto;
 }
 
 .penalty-finder-container .title {
-    margin-top: 0;
+    margin: 0 0 10px 0;
     text-align: center;
     color: var(--primary-color);
 }
