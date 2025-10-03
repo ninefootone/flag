@@ -1,5 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- New Modal Toggle Logic ---
+    const penaltyLookupBtn = document.getElementById('penalty-lookup-btn');
+    const penaltyModal = document.getElementById('penalty-lookup-modal');
+    const closeModalBtn = document.getElementById('close-penalty-modal-btn');
     const searchInput = document.getElementById('penalty-search');
+
+    if (penaltyLookupBtn) {
+        penaltyLookupBtn.addEventListener('click', () => {
+            penaltyModal.classList.remove('hidden');
+            searchInput.focus();
+        });
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            penaltyModal.classList.add('hidden');
+            searchInput.value = ''; // Clear search when closing
+            renderPenaltiesList(penaltiesData); // Reset to full list
+        });
+    }
+    // -----------------------------
+
+
+    // --- Existing Penalty Lookup Logic (Modified for new fetch path) ---
     const penaltiesListContainer = document.getElementById('penalties-list');
     const noResultsMessage = document.getElementById('no-results');
     let penaltiesData = []; // Store the fetched data
@@ -10,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const getPenaltyEffect = (penalty) => {
         if (penalty.automaticFirstDown) return "Automatic 1st Down";
         if (penalty.lossOfDown) return "Loss of Down";
-        if (penalty.repeatDown) return "Repeat Down (None)"; // When the only effect is repeating the down
+        if (penalty.repeatDown) return "Repeat Down (None)"; 
         return "None";
     }
 
     /**
      * Renders the list of penalties based on the provided array.
-     * @param {Array<Object>} list The array of penalty objects to display.
+     * (Same rendering logic from the previous solution)
      */
     const renderPenaltiesList = (list) => {
         penaltiesListContainer.innerHTML = ''; 
@@ -27,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Add a header row for the new, structured format
+        // Add a header row for the structured format
         penaltiesListContainer.innerHTML = `
             <div class="penalty-header-row">
                 <div class="col-name">Penalty</div>
@@ -42,9 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const hasEffect = penalty.automaticFirstDown || penalty.lossOfDown || penalty.repeatDown;
 
             const item = document.createElement('div');
-            item.className = 'penalty-item-grid'; // New class for grid layout
+            item.className = 'penalty-item-grid'; 
             
-            // Build the row for the penalty
             item.innerHTML = `
                 <div class="col-name penalty-name">${penalty.name}</div>
                 <div class="col-yards penalty-yards">${penalty.yards}</div>
@@ -83,13 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const loadPenalties = async () => {
         try {
-            // Fetch data from the new JSON file
             const response = await fetch('/penalties.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             penaltiesData = await response.json();
-            console.log(`Successfully loaded ${penaltiesData.length} penalties.`);
             renderPenaltiesList(penaltiesData); // Render on load
         } catch (error) {
             console.error("Could not load penalty data:", error);

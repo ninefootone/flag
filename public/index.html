@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Flag</title>
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk&display=swap" rel="stylesheet"> -->
     <link rel="stylesheet" href="/style.css">
-    <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon"> -->
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -18,7 +14,6 @@
 <body>
     <div class="app-container">
         <div id="game-lobby">
-            <!--<h2>Referee App</h2> -->
             <img src="/assets/sheffield-giants-logo.png" class="giants-logo"/>
             <button id="start-new-game-btn" class="main-btn">START</button>
             <div class="join-game-section">
@@ -50,12 +45,9 @@
         </div>
 
         <div id="settings-form" class="hidden">
-            <!-- <h2>Game Settings</h2> -->
             <form id="settings-form-element">
-                <!-- <label for="date-field">Date:</label> -->
                 <input type="date" id="date-field" hidden>
 
-                <!-- <label for="location-field">Location:</label> -->
                 <input type="text" id="location-field" placeholder="Location">
 
                 <div class="team-input-wrapper">
@@ -87,8 +79,6 @@
                 </div>
 
                 <div class="coin-toss-section">
-                    <!-- <h3>Coin Toss</h3> -->
-                    <!-- <p>Tap the button to flip a coin and decide who gets the ball first.</p> -->
                     <div class="coin-toss-buttons">
                         <button type="button" id="coin-toss-btn">Flip Coin</button>
                     </div>
@@ -99,8 +89,7 @@
 
                 <div id="current-game-id" class="hidden">
                     <strong>Game ID:</strong> <span id="game-id-text"></span>
-                    <!-- (Share this with others to join)-->
-                </div>
+                    </div>
 
             </form>
 
@@ -154,6 +143,9 @@
                 </div>
             </section>
 
+        <button id="penalty-lookup-btn" class="main-btn" style="margin: 10px auto; display: block; width: 80%; max-width: 400px; font-size: 1.1em;">
+            📋 Penalty Lookup
+        </button>
         <div class="scoreboard-container">
             <section class="home-team-scoreboard-section">
                 <div class="team-score">
@@ -260,6 +252,17 @@
 
         </div>
 
+        <div id="penalty-lookup-modal" class="hidden modal-overlay">
+            <div class="penalty-finder-container">
+                <h2 class="title">Flag Football Penalties</h2>
+                <input type="text" id="penalty-search" placeholder="Search Penalty Name, Yardage, or Keyword..." class="search-input">
+                
+                <div id="penalties-list" class="penalties-list">
+                    <p id="no-results" style="display: none; text-align: center; margin-top: 20px;">No penalties match your search.</p>
+                </div>
+                <button id="close-penalty-modal-btn" class="main-btn close-btn">Close</button>
+            </div>
+        </div>
         <div id="score-popup" class="hidden">
             <div class="popup-content">
                 <h3 id="popup-header">Log Score Details</h3>
@@ -319,5 +322,6 @@
 
     <p class="version">v3.0.6.1</p>
     <script src="/script.js"></script>
+    <script src="/penalties.js"></script>
 </body>
 </html>

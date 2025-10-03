@@ -1077,3 +1077,45 @@ li {
         display: none; /* Hide 'Enforced From' on small screens */
     }
 }
+
+/* --- New Modal/Overlay Styles for Penalty Lookup --- */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Dark overlay */
+    z-index: 1000; /* Ensure it is above all other content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling within the overlay */
+}
+
+.penalty-finder-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 700px; /* Wider to support the four columns */
+    margin: auto;
+}
+
+.penalty-finder-container .title {
+    margin-top: 0;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.penalty-finder-container .close-btn {
+    margin-top: 20px;
+    width: 100%;
+    background-color: var(--error-color); /* Use a strong color for the close button */
+    border-color: var(--error-color);
+}
+/* Ensure the .search-input and .penalties-list styles you previously added are still present for the content inside this container */
