@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.32';
+    const appVersion = '0.0.33';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -228,9 +228,25 @@ fetchAndLoadTeamNames();
     let tempScoreEvent = null;
     let twoMinuteWarningIssuedLocally = false;
     let actionHistory = [];
-    // const audio = new Audio('/assets/warning.mp3'); // OLD: Removed the direct Audio object creation
     const audio = document.getElementById('warning-audio'); // NEW: Reference the HTML element
+    const defaultAudio = document.getElementById('default-audio'); 
     let audioUnlocked = false; // NEW: Flag to ensure we only try to unlock once
+
+    // Function to play the default audio when screens change
+    const playDefaultAudio = () => {
+        if (defaultAudio) {
+            defaultAudio.currentTime = 0;
+            defaultAudio.play().catch(e => console.log("Default audio playback blocked:", e));
+        }
+    };
+
+    // Function to play the 2-minute warning audio
+    const playWarningAudio = () => {
+        if (audio) { // 'audio' is your existing 'warning-audio' element
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log("Warning audio playback blocked:", e));
+        }
+    };
 
     // --- Audio Unlock Function for iOS/Safari ---
     const unlockAudio = () => {
@@ -238,9 +254,9 @@ fetchAndLoadTeamNames();
         
         // Attempt to play and immediately pause the audio on user interaction
         // This is a common workaround to bypass iOS/Safari's autoplay policy
-        if (audio) {
-            audio.play().then(() => {
-                audio.pause();
+        if (defaultAudio) {
+            defaultAudio.play().then(() => {
+                defaultAudio.pause();
                 audioUnlocked = true;
                 console.log("Audio playback successfully unlocked by user gesture.");
             }).catch(error => {
