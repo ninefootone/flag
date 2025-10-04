@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.26';
+    const appVersion = '0.0.27';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -519,10 +519,10 @@ fetchAndLoadTeamNames();
             return;
         }
 
-        if (!gameState.coinTossResult) {
-            alert("Please complete the coin toss before starting the game.");
-            return;
-        }
+        // if (!gameState.coinTossResult) {
+        //    alert("Please complete the coin toss before starting the game.");
+        //    return;
+        // }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
         actionHistory = [];

@@ -1023,14 +1023,14 @@ li {
     border: none;
     border-radius: 0px;
     overflow: hidden; /* Ensures rounded corners */
-    min-width: 750px; 
+    min-width: 720px; 
 }
 
 /* Base grid layout for header and items (4 columns) */
 .penalty-header-row, .penalty-item-grid {
     display: grid;
     /* Define the 5 columns: Name (150px), Description (200px), Yards (70px), Enforced (150px), Effect (100px) */
-    grid-template-columns: 150px 200px 70px 150px 100px; 
+    grid-template-columns: 150px 200px 70px 150px 150px; 
     padding: 10px 15px;
     align-items: center;
     border-bottom: 1px solid var(--focus-color); 
@@ -1049,8 +1049,9 @@ li {
 /* Penalty Item Styling */
 .penalty-item-grid {
     background-color: white;
-    font-size: 1em;
+    font-size: 14px;
     color: var(--text-color);
+    align-items:start;
 }
 
 .penalty-item-grid:nth-child(even) {
