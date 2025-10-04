@@ -2,46 +2,334 @@
     {
         "name": "Delay of Game",
         "yards": "5",
-        "enforcedFrom": "Dead Ball Spot",
+        "enforcedFrom": "Line of Scrimmage",
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "keywords": "snap, offense, pre-snap"
+        "keywords": "Pre-Snap, Dead Ball, Offence"
+    },
+    {
+        "name": "Illegal Snap",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Offence"
+    },
+    {
+        "name": "False Start",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Offence"
+    },
+    {
+        "name": "OB prior to snap",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Offence"
+    },
+    {
+        "name": "Illegal Shift / Motion",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Offence"
+    },
+    {
+        "name": "Offside",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Offence, Defence"
+    },
+    {
+        "name": "Encroachment",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Defence"
+    },
+    {
+        "name": "Disconcerting Signals",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Defence"
+    },
+    {
+        "name": "Illegal Signal",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Defence"
+    },
+    {
+        "name": "Ineligible Blitzer",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Defence"
+    },
+    {
+        "name": "Ineligible Blitzer",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
         "name": "Delay of Pass",
         "yards": "-",
         "enforcedFrom": "Line of Scrimmage",
-        "lossOfDown": false,
+        "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "keywords": "snap, delay"
+        "keywords": "Technical, Offence"
     },
     {
-        "name": "Disconcerting Signals",
-        "yards": "5",
-        "enforcedFrom": "Dead Ball Spot",
-        "lossOfDown": false,
-        "automaticFirstDown": false,
-        "lossOfTimeout": false,
-        "keywords": "illegal"
-    },
-    {
-        "name": "Encroachment",
-        "yards": "5",
-        "enforcedFrom": "Dead Ball Spot",
-        "lossOfDown": false,
-        "automaticFirstDown": false,
-        "lossOfTimeout": false,
-        "keywords": "movement"
-    },
-    {
-        "name": "Failed Challenge",
+        "name": "Illegal Touching #1",
         "yards": "-",
-        "enforcedFrom": "Dead Ball Spot",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Technical, Offence"
+    },
+    {
+        "name": "Illegal Touching #2",
+        "yards": "-",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Technical, Offence"
+    },
+    {
+        "name": "Illegal Subsitution #1",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Technical, Offence"
+    },
+    {
+        "name": "Illegal Subsitution #2",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Technical, Offence, Defence"
+    },
+    {
+        "name": "Illegal Participation",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Technical, Offence, Defence"
+    },
+    {
+        "name": "Sideline Interference",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": false,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Technical, Offence, Defence"
+    },
+    {
+        "name": "Illegal Equipment",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": true,
-        "keywords": "challenge"
+        "keywords": "Technical, Offence, Defence"
+    },
+    {
+        "name": "Illegal Forward Pass",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Illegal Backward Pass",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Illegal Rush",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Illegal Run Play",
+        "yards": "5",
+        "enforcedFrom": "Line of Scrimmage",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Illegal Hand-Off",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Illegal Kick",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Flag Guarding",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Jumping",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Diving",
+        "yards": "5",
+        "enforcedFrom": "Spot of Foul",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Runner, Offence"
+    },
+    {
+        "name": "Shielding",
+        "yards": "5",
+        "enforcedFrom": "Basic Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Play, Offence"
+    },
+    {
+        "name": "Illegal Flag Pull",
+        "yards": "5",
+        "enforcedFrom": "Basic Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Play, Offence, Defence"
+    },
+    {
+        "name": "Intentionally Kicking a Pass",
+        "yards": "5",
+        "enforcedFrom": "Basic Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Play, Offence, Defence"
+    },
+    {
+        "name": "Pass Interference",
+        "yards": "10",
+        "enforcedFrom": "Basic Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": true,
+        "lossOfTimeout": false,
+        "keywords": "Play, Offence, Defence"
+    },
+    {
+        "name": "Illegal Contact",
+        "yards": "10",
+        "enforcedFrom": "Basic Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": true,
+        "lossOfTimeout": false,
+        "keywords": "Play, Offence, Defence"
+    },
+    {
+        "name": "Game Interference",
+        "yards": "5",
+        "enforcedFrom": "Basic Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": true,
+        "lossOfTimeout": false,
+        "keywords": "Play, Offence, Defence"
+    },
+    {
+        "name": "Unsportsmanlike Conduct #1",
+        "yards": "10",
+        "enforcedFrom": "Dead Ball Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Unsportsmanlike, Offence, Defence"
+    },
+    {
+        "name": "Unsportsmanlike Conduct #2",
+        "yards": "10",
+        "enforcedFrom": "Dead Ball Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Unsportsmanlike, Offence, Defence"
+    },
+    {
+        "name": "Unsportsmanlike Conduct #3",
+        "yards": "10",
+        "enforcedFrom": "Dead Ball Spot",
+        "lossOfDown": true,
+        "automaticFirstDown": false,
+        "lossOfTimeout": false,
+        "keywords": "Unsportsmanlike, Offence, Defence"
     }
 ]
