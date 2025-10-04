@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.27';
+    const appVersion = '0.0.28';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -510,12 +510,16 @@ fetchAndLoadTeamNames();
         }
     });
 
-    startGameBtn.addEventListener('click', () => {
-        const team1Name = team1NameInput.value.trim();
-        const team2Name = team2NameInput.value.trim();
+    startGameBtn.addEventListener('click', (event) => {
+        event.preventDefault(); // Good practice to include this
 
-        if (!team1Name || !team2Name) {
-            alert("Please enter names for both teams.");
+        // 1. SET DEFAULTS: If the input is empty, default to 'Team 1' / 'Team 2'
+        const t1Name = team1NameInput.value.trim() || 'Team 1';
+        const t2Name = team2NameInput.value.trim() || 'Team 2';
+
+        // 2. RETAIN OTHER VALIDATION (Date and Location)
+        if (!dateField.value || !locationField.value) {
+            alert('Please fill in the Date and Location details.');
             return;
         }
 
@@ -531,8 +535,8 @@ fetchAndLoadTeamNames();
             gameStarted: true,
             date: dateField.value || 'N/A',
             location: locationField.value || 'N/A',
-            team1Name: team1Name,
-            team2Name: team2Name,
+            team1Name: t1Name,
+            team2Name: t2Name,
             halfDuration: parseInt(halfDurationInput.value, 10) * 60,
             playClockDuration: parseInt(playClockDurationInput.value, 10),
             timeoutsPerHalf: parseInt(timeoutsPerHalfInput.value, 10),
