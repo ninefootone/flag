@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.29';
+    const appVersion = '0.0.31';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -535,7 +535,7 @@ fetchAndLoadTeamNames();
         const newGameState = {
             gameStarted: true,
             date: dateField.value || 'N/A',
-            location: locationField.value || 'N/A',
+            location: locationField.value,
             team1Name: t1Name,
             team2Name: t2Name,
             halfDuration: parseInt(halfDurationInput.value, 10) * 60,
