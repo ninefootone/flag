@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.28';
+    const appVersion = '0.0.29';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -329,7 +329,8 @@ fetchAndLoadTeamNames();
         }
 
         gameDateDisplay.textContent = formatDisplayDate(gameState.date);
-        gameLocationDisplay.textContent = gameState.location;
+        gameLocationDisplay.textContent = gameState.location.trim() ? `, ${gameState.location.trim()}` : '';
+        //gameLocationDisplay.textContent = gameState.location;
         team1NameDisplay.textContent = gameState.team1Name;
         team2NameDisplay.textContent = gameState.team2Name;
         team1ScoreDisplay.textContent = gameState.scores.team1;
@@ -518,10 +519,10 @@ fetchAndLoadTeamNames();
         const t2Name = team2NameInput.value.trim() || 'Team 2';
 
         // 2. RETAIN OTHER VALIDATION (Date and Location)
-        if (!dateField.value || !locationField.value) {
-            alert('Please fill in the Date and Location details.');
-            return;
-        }
+        // if (!dateField.value || !locationField.value) {
+        //     alert('Please fill in the Date and Location details.');
+        //     return;
+        // }
 
         // if (!gameState.coinTossResult) {
         //    alert("Please complete the coin toss before starting the game.");
