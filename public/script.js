@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.31';
+    const appVersion = '0.0.32';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -675,8 +675,16 @@ fetchAndLoadTeamNames();
         sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
     });
 
+    // Event listener for the "End Game" button with confirmation
     endGameBtn.addEventListener('click', () => {
-        sendAction('END_GAME');
+        // Show a confirmation dialog
+        const confirmed = confirm('Are you sure you want to end the game? This action cannot be undone.');
+        
+        // Only proceed if the user clicked OK
+        if (confirmed) {
+            sendAction('END_GAME');
+        }
+        // If the user clicks Cancel, the action is ignored.
     });
 
     startNewGameFromSummaryBtn.addEventListener('click', () => {
