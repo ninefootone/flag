@@ -6,6 +6,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Offense fail to snap ball before 25-second play clock expires", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -15,6 +16,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -24,6 +26,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -33,6 +36,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -42,6 +46,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -51,6 +56,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Offence, Defence"
     },
     {
@@ -60,6 +66,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -69,6 +76,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -78,6 +86,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -87,6 +96,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -96,6 +106,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -105,6 +116,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence"
     },
     {
@@ -114,6 +126,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence"
     },
     {
@@ -123,6 +136,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence"
     },
     {
@@ -132,6 +146,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence"
     },
     {
@@ -141,6 +156,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -150,6 +166,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -159,6 +176,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -168,6 +186,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": true,
+        "description": "Description", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -177,6 +196,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -186,6 +206,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -195,6 +216,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -204,6 +226,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -213,6 +236,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -222,6 +246,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -231,6 +256,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -240,6 +266,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -249,6 +276,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Runner, Offence"
     },
     {
@@ -258,6 +286,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Play, Offence"
     },
     {
@@ -267,6 +296,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -276,6 +306,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -285,6 +316,7 @@
         "lossOfDown": true,
         "automaticFirstDown": true,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -294,6 +326,7 @@
         "lossOfDown": true,
         "automaticFirstDown": true,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -303,6 +336,7 @@
         "lossOfDown": true,
         "automaticFirstDown": true,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -312,6 +346,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Unsportsmanlike, Offence, Defence"
     },
     {
@@ -321,6 +356,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Unsportsmanlike, Offence, Defence"
     },
     {
@@ -330,6 +366,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
+        "description": "Description", 
         "keywords": "Unsportsmanlike, Offence, Defence"
     }
 ]

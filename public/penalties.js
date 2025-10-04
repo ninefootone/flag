@@ -50,10 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Add a header row for the structured format
+        // Add a header row for the structured format (5 columns now)
         penaltiesListContainer.innerHTML = `
             <div class="penalty-header-row">
                 <div class="col-name">Penalty</div>
+                <div class="col-description">Description</div>
                 <div class="col-yards">Yards</div>
                 <div class="col-enforced">Enforced From</div>
                 <div class="col-effect">Effect</div>
@@ -62,18 +63,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         list.forEach(penalty => {
             const effectText = getPenaltyEffect(penalty);
-            // Removed hasEffect check as the tick is no longer needed
 
             const item = document.createElement('div');
             item.className = 'penalty-item-grid'; 
             
             item.innerHTML = `
                 <div class="col-name penalty-name">${penalty.name}</div>
+                <div class="col-description penalty-description">${penalty.description || '-'}</div>
                 <div class="col-yards penalty-yards">${penalty.yards}</div>
                 <div class="col-enforced penalty-enforced">${penalty.enforcedFrom}</div>
                 <div class="col-effect penalty-effect">
                     ${effectText}
-                    </div>
+                </div>
             `;
             penaltiesListContainer.appendChild(item);
         });
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Search across all relevant text fields and keywords
             return (
                 penalty.name.toLowerCase().includes(query) ||
+                (penalty.description && penalty.description.toLowerCase().includes(query)) || // ADDED description search
                 String(penalty.yards).toLowerCase().includes(query) ||
                 penalty.enforcedFrom.toLowerCase().includes(query) ||
                 getPenaltyEffect(penalty).toLowerCase().includes(query) ||

@@ -1023,14 +1023,14 @@ li {
     border: none;
     border-radius: 0px;
     overflow: hidden; /* Ensures rounded corners */
-    min-width: 700px; 
+    min-width: 750px; 
 }
 
 /* Base grid layout for header and items (4 columns) */
 .penalty-header-row, .penalty-item-grid {
     display: grid;
-    /* Use fixed pixel widths to ensure the table content forces horizontal scrolling on small screens */
-    grid-template-columns: 200px 80px 180px 200px; /* Total 700px wide content */
+    /* Define the 5 columns: Name (150px), Description (200px), Yards (70px), Enforced (150px), Effect (100px) */
+    grid-template-columns: 150px 200px 70px 150px 100px; 
     padding: 10px 15px;
     align-items: center;
     border-bottom: 1px solid var(--focus-color); 
@@ -1075,6 +1075,11 @@ li {
     font-weight: 600;
 }
 
+.penalty-header-row .col-description {
+    font-weight:600;
+    text-align: left;
+}
+
 .penalty-header-row .col-effect {
     font-weight: 600;
 }
@@ -1098,6 +1103,14 @@ li {
 .col-enforced {
     color:var(--text-color);
     text-align: center;
+    font-weight: 400;
+    text-wrap: auto;
+    padding: 0 10px 0 10px;
+}
+
+.col-description {
+    color:var(--text-color);
+    text-align: left;
     font-weight: 400;
     text-wrap: auto;
     padding: 0 10px 0 10px;
