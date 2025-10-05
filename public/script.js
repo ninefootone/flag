@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.41';
+    const appVersion = '0.0.42';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -331,25 +331,25 @@ fetchAndLoadTeamNames();
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-            if (fixedFooter) {
-                fixedFooter.classList.add('visible'); 
-            }
+            // if (fixedFooter) {
+            //     fixedFooter.classList.add('visible'); 
+            // }
         } else if (window.location.pathname.startsWith('/game/')) {
             gameLobby.classList.add('hidden');
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
-            if (fixedFooter) {
-                fixedFooter.classList.add('visible');
-            }
+            // if (fixedFooter) {
+            //     fixedFooter.classList.add('visible');
+            // }
         } else {
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
-            if (fixedFooter) {
-                fixedFooter.classList.add('visible');
-            }
+            // if (fixedFooter) {
+            //     fixedFooter.classList.add('visible');
+            // }
         }
 
         if (Object.keys(gameState).length === 0) {

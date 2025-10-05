@@ -816,6 +816,7 @@ li {
 #game-summary {
     padding: 20px;
     text-align: center;
+    width:480px;
 }
 
 .summary-scoreboard {
