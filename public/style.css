@@ -1217,6 +1217,10 @@ li {
     display: flex; 
 }
 
+#fixed-footer-links-container.hidden {
+    display: none; 
+}
+
 .fixed-footer-links {
     display: flex;
     flex-direction: row;
