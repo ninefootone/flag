@@ -277,8 +277,14 @@ input[type="text"], input[type="number"], input[type="date"] {
     height: 90vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+}
+
+#game-lobby h2 {
+    text-align: left;
+    font-size:60px;
+    font-weight:700;
+    margin:0;
+    line-height: 1em;
 }
 
 .main-btn {
@@ -287,6 +293,21 @@ input[type="text"], input[type="number"], input[type="date"] {
     font-size: 1.2rem;
     font-weight: 600;
     margin-top: 20px;
+}
+
+#start-new-game-btn {
+    padding:0;
+    text-align:left;
+    font-weight:700;
+    font-size:60px;
+    background:none;
+    border:none;
+    margin:0;
+    color:var(--secondary-color);
+}
+
+#start-new-game-btn:hover {
+    color:var(--primary-color);
 }
 
 #start-new-game-btn {
