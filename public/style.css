@@ -1178,3 +1178,66 @@ li {
 .penalty-finder-container .close-btn:hover {
     background-color: var(--secondary-color); 
 }
+
+/* Fixed Footer */
+
+#fixed-footer-links-container {
+    position:fixed;
+    bottom:0;
+    width: 100%;
+    background-color: white;
+    border-top:1px solid #dedede;
+    justify-content: center;
+    display: flex;
+    box-shadow: 0 -4px 10px -2px rgba(0, 0, 0, 0.1); 
+}
+
+.fixed-footer-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding:0px 20px 8px 20px;
+    gap:20px;
+    justify-content: space-between;
+    max-width:580px;
+    width:100%;
+}
+
+.fixed-footer-links button {
+    font-size:18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    background-color: white;
+    color:var(--primary-color);
+    border:none;
+    padding:8px 0;
+    border-radius: 8px !important;
+}
+
+.fixed-footer-links button:hover {
+    color:var(--secondary-color);
+    background-color:var(--focus-color);
+}
+
+.fixed-footer-links button .button-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.fixed-footer-links button .button-text {
+    font-size: 11px;
+    font-weight:500;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
