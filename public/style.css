@@ -1209,7 +1209,6 @@ li {
     background-color: white;
     border-top:1px solid #dedede;
     justify-content: center;
-    display: flex;
     box-shadow: 0 -4px 10px -2px rgba(0, 0, 0, 0.1); 
 }
 
