@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.39';
+    const appVersion = '0.0.40';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -81,19 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1OptionsList = document.getElementById('team1-options');
     const team2OptionsList = document.getElementById('team2-options');
     const fixedFooter = document.getElementById('fixed-footer-links-container');
-
-    // --- New Footer Toggle Logic ---
-
-    // Add an event listener to the version display element to toggle the footer
-    // The versionDisplay variable is already defined earlier in the script.
-    versionDisplay.addEventListener('click', () => {
-        // The 'hidden' class is assumed to set 'display: none;' in your style.css
-        if (fixedFooter) {
-            fixedFooter.classList.toggle('hidden');
-        }
-    }); 
-
-    // --- End New Footer Toggle Logic ---
 
     // Team List Functions
 
@@ -352,6 +339,11 @@ fetchAndLoadTeamNames();
             settingsForm.classList.add('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
+        }
+
+        // Make Fixed Footer Visible
+        if (fixedFooter) {
+            fixedFooter.classList.add('visible');
         }
 
         if (Object.keys(gameState).length === 0) {
