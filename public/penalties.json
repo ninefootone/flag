@@ -6,7 +6,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Offense fail to snap ball before 25-second play clock expires", 
+        "description": "Offense fail to snap ball before 25-second play clock expires.", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -16,7 +16,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Simulated or ‘double snap’ from the Centre.", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -26,7 +26,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Offensive player moving prior to the snap (exception: motions).", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -36,7 +36,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Offensive player out of bounds prior to snap.", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -46,7 +46,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "2 or more players moving in motion at the time of the snap.", 
         "keywords": "Pre-Snap, Dead Ball, Offence"
     },
     {
@@ -56,7 +56,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "O/D player is over the LOS when the ball is snapped.", 
         "keywords": "Pre-Snap, Dead Ball, Offence, Defence"
     },
     {
@@ -66,7 +66,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Defensive player touches the ball / O player before ball is snapped.", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -76,7 +76,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Defensive player using words/signals to put off an O player prior to snap.", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -86,7 +86,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Player signals to blitz less than 7 yards from LOS, invalid signal or more than two players declaring.", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -96,17 +96,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
-        "keywords": "Pre-Snap, Dead Ball, Defence"
-    },
-    {
-        "name": "Ineligible Blitzer",
-        "yards": "5",
-        "enforcedFrom": "Line of Scrimmage",
-        "lossOfDown": false,
-        "automaticFirstDown": false,
-        "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Blitzer not starting 7+ yards from LOS prior to snap and/or crossing LOS before ball has been handed off, fake handed off or passed by QB.", 
         "keywords": "Pre-Snap, Dead Ball, Defence"
     },
     {
@@ -116,7 +106,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "QB fails to pass or hand off ball before 7-second timer has expired.", 
         "keywords": "Technical, Offence"
     },
     {
@@ -126,7 +116,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Passer touches or catches a pass thrown by themselves, has not touched D player.", 
         "keywords": "Technical, Offence"
     },
     {
@@ -136,7 +126,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Offensive player goes out of bounds and then touches the ball (unless forced out by foul play, in which case no penalty on O).", 
         "keywords": "Technical, Offence"
     },
     {
@@ -146,7 +136,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Offensive player leaves/enters the field after the snapper has touched the ball.", 
         "keywords": "Technical, Offence"
     },
     {
@@ -156,7 +146,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "O/D players leave or enter the field of play after the ball has been snapped.", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -166,7 +156,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "More than 5 players on the pitch for either O/D.", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -176,7 +166,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Coaches and/or players standing outside the team area during a down.", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -186,7 +176,7 @@
         "lossOfDown": false,
         "automaticFirstDown": false,
         "lossOfTimeout": true,
-        "description": "Description", 
+        "description": "Player wearing illegal or missing mandatory equipment after being asked to leave. (Timeout charged to offending team / -5 yards and repeat down if no TOs left.)", 
         "keywords": "Technical, Offence, Defence"
     },
     {
@@ -196,7 +186,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Player throws ball after progressing beyond LOS or 2nd forward pass on the same play.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -206,7 +196,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Lateral pass to teammate once runner or receiver is beyond LOS.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -216,7 +206,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "QB rushes beyond LOS, without the ball having first touched a player other than the Centre, or a defender.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -226,7 +216,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Run play takes place within the No Run Zone (between 5-yard cone and Endzone).", 
         "keywords": "Runner, Offence"
     },
     {
@@ -236,7 +226,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Ball is handed off beyond the LOS or hand or there is a forward hand-off to snapper.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -246,7 +236,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Ball carrier intentionally kicks the ball to progress it.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -256,7 +246,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "An attempt by the runner to avoid a flag pull by covering any part of the flag with a body part or the ball.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -266,7 +256,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Pushing off the ground to significantly raise the level of the flags (Dipping and Spinning are LEGAL.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -276,7 +266,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Moving the upper and lower body forward to make it difficult to pull flags / diving for endzone.", 
         "keywords": "Runner, Offence"
     },
     {
@@ -286,7 +276,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Obstructing an opponent without contact by moving into their path (inc. impeding blitzer).", 
         "keywords": "Play, Offence"
     },
     {
@@ -296,7 +286,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Pulling a flag from an opponent who does not yet have the ball.", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -306,7 +296,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Player intentionally kicks a pass or a fumble.", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -316,7 +306,7 @@
         "lossOfDown": true,
         "automaticFirstDown": true,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "O/D player physically interfering with a player during a legal forward pass (only applies while ball is in air, prior to ball being thrown is Illegal Contact). O Fouls = Loss of Down. D Fouls = Automatic First Down.", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -326,17 +316,17 @@
         "lossOfDown": true,
         "automaticFirstDown": true,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "(inc. Aiming (deliberately initiating contact) and Holding.) O/D player touching an opponent with impact so as to move them off course / touching an official. Automatic First Down for Defensive fouls.", 
         "keywords": "Play, Offence, Defence"
     },
     {
         "name": "Game Interference",
-        "yards": "5",
+        "yards": "10",
         "enforcedFrom": "Basic Spot",
         "lossOfDown": true,
         "automaticFirstDown": true,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Coach or substitute interfering with the ball or a player/official during the game. Automatic First Down for Defensive fouls.", 
         "keywords": "Play, Offence, Defence"
     },
     {
@@ -346,7 +336,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "Use of abusive language or gestures.", 
         "keywords": "Unsportsmanlike, Offence, Defence"
     },
     {
@@ -356,7 +346,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "O/D player not returning the ball to the next spot / dead ball spot after a play.", 
         "keywords": "Unsportsmanlike, Offence, Defence"
     },
     {
@@ -366,7 +356,7 @@
         "lossOfDown": true,
         "automaticFirstDown": false,
         "lossOfTimeout": false,
-        "description": "Description", 
+        "description": "O/D player neither returning a flag to a player or leaving it where it is on the floor (preference is to return to the player, if possible).", 
         "keywords": "Unsportsmanlike, Offence, Defence"
     }
 ]
