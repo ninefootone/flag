@@ -1278,15 +1278,34 @@ li {
     color: var(--primary-color);
 }
 
-.penalty-finder-container .close-btn {
-    margin-top: 20px;
-    width: 100%;
+#close-penalty-modal-btn {
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 500px !important;
     background-color: var(--primary-color); 
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border:none;
+    position: fixed;
+    top: 0px;
+    right: 20px;
+    z-index: 1001;
 }
 
-.penalty-finder-container .close-btn:hover {
-    background-color: var(--secondary-color); 
+#close-penalty-modal-btn:hover {
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+#close-penalty-modal-btn svg {
+    display: block; /* Ensure the SVG behaves as a block element */
+    width: 100%;    /* Make the SVG fill the button space */
+    height: 100%;
+    /* Inherit the stroke color from the button's 'color' property */
+    stroke: currentColor; 
 }
 
 /* Fixed Footer */
