@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.46';
+    const appVersion = '0.0.47';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -85,14 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Team List Functions
 
 let allTeamNames = []; // Global array to store all loaded team names
-
-// 2. Game Summary Screen Button
-document.getElementById('start-new-game-from-summary-btn').addEventListener('click', () => {
-    // Force a full page reload to clear all retained form values
-    location.reload(); 
-    // The following code will not execute because the page reloads immediately:
-    // showLobby();
-});
 
 // --- Dropdown Logic ---
 
