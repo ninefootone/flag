@@ -117,12 +117,12 @@ body {
 h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
     font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     color: var(--primary-color);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .title {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-color);
     margin:0;
 }
@@ -280,8 +280,8 @@ button:hover {
 .settings-grid #half-duration, .settings-grid #play-clock-duration, .settings-grid #timeouts-per-half {
     background-color: var(--focus-color);
     border:1px solid var(--focus-color) !important;
-    padding:0 10px 0 10px;
-    font-weight: 700;
+    padding:10px 10px 5px 10px;
+    font-weight: 800;
 }
 
 .coin-toss-section {
@@ -292,7 +292,7 @@ button:hover {
 #coin-toss-btn {
     width:100%;
     font-size:24px;
-    font-weight:600;
+    font-weight:800;
     color: var(--primary-color);
     background-color:white;
     border-color: var(--primary-color);
@@ -313,7 +313,7 @@ button:hover {
 #start-game-btn {
     width:100%;
     font-size:24px;
-    font-weight:600;
+    font-weight:700;
 }
 
 #current-game-id {
@@ -380,7 +380,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 #game-lobby h2 {
     text-align: left;
     font-size:60px;
-    font-weight:700;
+    font-weight:800;
     margin:0;
     line-height: 1em;
 }
@@ -396,7 +396,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 #start-new-game-btn {
     padding:0;
     text-align:left;
-    font-weight:700;
+    font-weight:800;
     font-size:60px;
     background:none;
     border:none;
@@ -535,9 +535,13 @@ header {
     margin: 10px;
 }
 
+.clock-display .title {
+    margin-bottom:10px;
+}
+
 .clock-time {
     font-size: 60px;
-    font-weight: 700;
+    font-weight: 900;
     line-height:1em;
     color: var(--primary-color);
 }
@@ -549,7 +553,7 @@ header {
     margin:0;
 }
 
-.clock-controls {
+.clock-controls, .play-clock-controls {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -678,12 +682,12 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin: 10px 0;
 }
 
 .score {
     font-size: 60px;
-    font-weight: 700;
+    font-weight: 900;
     color: var(--primary-color);;
     line-height: 1;
     margin: 0 10px; /* New: Added horizontal margin for spacing */
@@ -803,7 +807,7 @@ header {
 
 .timeout-count {
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 /* Log and End Game Section */
@@ -826,7 +830,8 @@ li {
 }
 
 #score-log li, #timeout-log li, #summary-score-log li, #summary-timeout-log li {
-    font-weight: 400;;
+    font-weight: 400;
+    line-height: 1.3em;
 }
 
 /* Styles for the undo and end game buttons */
@@ -946,14 +951,15 @@ li {
 
 .summary-team-name {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--primary-color);
 }
 
 .summary-score {
     font-size: 60px;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--primary-color);
+    margin-top:10px;
 }
 
 .summary-logs {
