@@ -5,8 +5,8 @@
 /* Thin Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-Thin.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-Thin.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-Thin.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Thin.woff') format('woff');
   font-weight: 100;
   font-style: normal;
   font-display: swap; /* Important for performance */
@@ -15,8 +15,8 @@
 /* Extra Light Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-ExtraLight.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-ExtraLight.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-ExtraLight.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap; /* Important for performance */
@@ -25,8 +25,8 @@
 /* Light Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-Light.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-Light.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-Light.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap; /* Important for performance */
@@ -35,8 +35,8 @@
 /* Regular Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-Regular.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-Regular.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-Regular.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap; /* Important for performance */
@@ -45,8 +45,8 @@
 /* Medium Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-Medium.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-Medium.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-Medium.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap; /* Important for performance */
@@ -55,8 +55,8 @@
 /* SemiBold Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-SemiBold.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-SemiBold.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-SemiBold.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap; /* Important for performance */
@@ -65,8 +65,8 @@
 /* Bold Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-Bold.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-Bold.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-Bold.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -75,8 +75,8 @@
 /* ExtraBold Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-ExtraBold.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-ExtraBold.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-ExtraBold.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-ExtraBold.woff') format('woff');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -85,8 +85,8 @@
 /* Black Weight */
 @font-face {
   font-family: 'Metropolis';
-  src: url('/assets/fonts/Metropolis/Metropolis-Black.woff2') format('woff2'),
-       url('/assets/fonts/Metropolis/Metropolis-Black.woff') format('woff');
+  src: url('/assets/fonts/metropolis/Metropolis-Black.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
