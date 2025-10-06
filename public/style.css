@@ -1,4 +1,98 @@
+/* Font Declarations */
+
 @import url("https://use.typekit.net/fnt1wxx.css");
+
+/* Thin Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-Thin.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
+
+/* Extra Light Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-ExtraLight.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
+
+/* Light Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-Light.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
+
+/* Regular Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-Regular.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
+
+/* Medium Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-Medium.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
+
+/* SemiBold Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-SemiBold.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap; /* Important for performance */
+}
+
+/* Bold Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-Bold.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ExtraBold Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-ExtraBold.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Black Weight */
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/Metropolis/Metropolis-Black.woff2') format('woff2'),
+       url('/assets/fonts/Metropolis/Metropolis-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* End Font Declarations */
 
 :root {
   --primary-color: #106386;
@@ -11,7 +105,7 @@
 
 /* General Body and Container Styling */
 body {
-    font-family: "canada-type-gibson", sans-serif;
+    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     background-color: #ffffff;
     color: var(--text-color);
     margin: 0;
@@ -21,7 +115,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
-    font-family: "canada-type-gibson", sans-serif;
+    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     color: var(--primary-color);
     font-weight: 600;
 }
@@ -264,6 +358,7 @@ input[type="text"], input[type="number"], input[type="date"] {
     border: 1px solid var(--notes-color);
     border-radius: 4px;
     box-sizing: border-box;
+    font-size:18px;
 }
 
 /* New: Disabled state for controls */
