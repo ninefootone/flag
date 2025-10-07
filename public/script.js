@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.54';
+    const appVersion = '0.0.55';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -347,9 +347,9 @@ fetchAndLoadTeamNames();
             settingsForm.classList.remove('hidden');
             gameInterface.classList.add('hidden');
             gameSummary.classList.add('hidden');
-            // if (fixedFooter) {
-            //     fixedFooter.classList.add('visible');
-            // }
+            if (fixedFooter) {
+                fixedFooter.classList.add('visible');
+            }
         } else {
             gameLobby.classList.remove('hidden');
             settingsForm.classList.add('hidden');
