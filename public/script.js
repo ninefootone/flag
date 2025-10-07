@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.74';
+    const appVersion = '0.0.76';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const shareLinksBtn  = document.getElementById('share-links-btn');
     const infoModal = document.getElementById('info-modal');
     const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
+    const shareModal = document.getElementById('share-modal');
+    const closeShareModalBtn = document.getElementById('close-share-modal-btn');
 
     // Team List Functions
 
@@ -771,25 +773,28 @@ fetchAndLoadTeamNames();
         }
     });
 
-        // --- MODAL EVENT LISTENERS ---
-
-        // Listener for the Penalty Lookup Modal
+    // Listener for the Penalty Lookup Modal
         penaltyLookupBtn.addEventListener('click', () => {
-            // 1. Show the Penalty Modal
             penaltyLookupModal.style.display = 'block';
-            // 2. Hide the Info Modal (to implement the switching functionality)
             infoModal.style.display = 'none'; 
+            shareModal.style.display = 'none'; // ADDED: Hide Share Modal
         });
 
-        // Listener for the Info Modal (NEW)
+    // Listener for the Info Modal
         infoBtn.addEventListener('click', () => {
-            // 1. Show the Info Modal
             infoModal.style.display = 'block';
-            // 2. Hide the Penalty Modal (to implement the switching functionality)
             penaltyLookupModal.style.display = 'none'; 
+            shareModal.style.display = 'none'; // ADDED: Hide Share Modal
         });
 
-        // Listener for closing the modals via their close buttons ('&times;')
+    // --- NEW SHARE MODAL LISTENERS ---
+        shareLinksBtn.addEventListener('click', () => {
+            shareModal.style.display = 'block'; // Show Share Modal
+            infoModal.style.display = 'none'; // Hide Info Modal
+            penaltyLookupModal.style.display = 'none'; // Hide Penalty Modal
+        });
+
+    // Listener for closing the modals via their close buttons ('&times;')
         closePenaltyModalBtn.addEventListener('click', () => {
             penaltyLookupModal.style.display = 'none';
         });
@@ -798,17 +803,24 @@ fetchAndLoadTeamNames();
             infoModal.style.display = 'none';
         });
 
-        // Global click listener for closing modals by clicking the backdrop
+    // ADDED: Listener for Share Modal Close Button
+        closeShareModalBtn.addEventListener('click', () => {
+            shareModal.style.display = 'none';
+        });
+    
+    // Global click listener for closing modals by clicking the backdrop
         window.addEventListener('click', (event) => {
             if (event.target === infoModal) {
-                infoModal.style.display = 'none';
-            }
-            if (event.target === penaltyLookupModal) { 
-                penaltyLookupModal.style.display = 'none';
-            }
-        });
-
-    // --- END MODAL EVENT LISTENERS ---
+            infoModal.style.display = 'none';
+        }
+        if (event.target === penaltyLookupModal) { 
+            penaltyLookupModal.style.display = 'none';
+        }
+    // ADDED: Global close check for Share Modal
+        if (event.target === shareModal) { 
+            shareModal.style.display = 'none';
+        }
+    });
 
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {

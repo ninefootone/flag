@@ -384,6 +384,7 @@ input[type="number"]::-webkit-inner-spin-button {
 /* For Firefox */
 input[type="number"] {
     -moz-appearance: textfield; /* Removes the spinner in Firefox */
+    appearance: textfield;
 }
 
 /* New: Disabled state for controls */
@@ -1301,14 +1302,12 @@ li {
 .penalty-finder-container {
     background-color: white;
     padding: 20px 0 120px 0;
-    border-radius: 10px;
-    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
     width: 100%;
     max-width: 720px;
     margin: auto;
 }
 
-.info-modal-content {
+.info-modal-content, .share-modal-content {
     background-color: white;
     padding: 20px 0 120px 0;
     width: 100%;
@@ -1354,7 +1353,7 @@ li {
 
 /* Info Modal */
 
-#info-modal {
+#info-modal, #share-modal {
     display: none; /* Hidden by default */
 }
 
