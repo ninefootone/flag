@@ -1028,7 +1028,8 @@ li {
 }
 
 /* 3. Hide sections that don't need to be visible */
-.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled, .share-links-section.disabled {
+.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled, .share-links-section.disabled, #start-new-game-from-summary-btn.disabled, #info-btn.disabled, #undo-btn.disabled, #penalty-lookup-btn.disabled, #end-game-btn.disabled, #share-links-btn.disabled
+ {
     display: none !important;
 }
 
