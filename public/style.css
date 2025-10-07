@@ -105,7 +105,7 @@
 
 /* General Body and Container Styling */
 body {
-    font-family: "azo-sans-web", 'Metropolis', "canada-type-gibson", sans-serif;
+    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     background-color: #ffffff;
     color: var(--text-color);
     margin: 0;
@@ -114,16 +114,17 @@ body {
     flex-direction: column;
 }
 
-h1, h2, h3, h4, h5, h6, button, input {
-    font-family: "azo-sans-web", 'Metropolis', "canada-type-gibson", sans-serif;
+h1, h2, h3, h4, h5, h6, button {
+    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     color: var(--primary-color);
     font-weight: 700;
 }
 
-p, ul, ol {
+p, ul, ol, input {
     font-family: "azo-sans-web", 'Metropolis', "canada-type-gibson", sans-serif;
     color: var(--primary-color);
-    font-weight: 500;
+    font-weight: 400;
+    line-height: 1.4em;
 }
 
 .title {
@@ -178,10 +179,6 @@ button:hover {
 .giants-logo {
     width:180px;
     max-width:90%;
-}
-
-.text-intro h2 {
-    font-family: "azo-sans-uber", 'Metropolis', "canada-type-gibson", sans-serif;
 }
 
 /* Settings Form */
