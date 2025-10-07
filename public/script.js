@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.62';
+    const appVersion = '0.0.63';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoBtn = document.getElementById('info-btn');
     const penaltyLookupBtn  = document.getElementById('penalty-lookup-btn');
     const shareLinksBtn  = document.getElementById('share-links-btn');
+    const infoModal = document.getElementById('info-modal');
+    const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
 
     // Team List Functions
 
@@ -766,6 +768,25 @@ fetchAndLoadTeamNames();
             alert("No actions to undo.");
         }
     });
+
+    // --- NEW INFO MODAL LISTENERS ---
+        infoBtn.addEventListener('click', () => {
+            infoModal.style.display = 'block';
+        });
+
+        closeInfoModalBtn.addEventListener('click', () => {
+            infoModal.style.display = 'none';
+        });
+
+    // Global click listener for closing the modal by clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === infoModal) {
+                infoModal.style.display = 'none';
+            }
+            if (event.target === penaltyLookupModal) { // Keep the existing check for the penalty modal
+                penaltyLookupModal.style.display = 'none';
+            }
+        });
 
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {
