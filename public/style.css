@@ -1301,6 +1301,11 @@ li {
 .penalty-finder-container {
     background-color: white;
     padding: 20px 20px 120px 20px;
+    border-radius: 10px;
+    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
+    width: 100%;
+    max-width: 720px; /* Wider to support the four columns */
+    margin: auto;
 }
 
 .info-modal-content {
@@ -1308,7 +1313,6 @@ li {
     padding: 0px;
     width: 100%;
     margin: auto;
-    max-width:720px;
 }
 
 .penalty-finder-container .title, .info-modal-content .title {
