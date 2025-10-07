@@ -1304,7 +1304,7 @@ li {
     border-radius: 10px;
     /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
     width: 100%;
-    max-width: 720px; /* Wider to support the four columns */
+    max-width: 720px;
     margin: auto;
 }
 
@@ -1312,6 +1312,7 @@ li {
     background-color: white;
     padding: 20px 0 120px 0;
     width: 100%;
+    max-width: 720px;
     margin: auto;
 }
 
