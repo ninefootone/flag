@@ -114,10 +114,16 @@ body {
     flex-direction: column;
 }
 
-h1, h2, h3, h4, h5, h6, p, ul, ol, button, input {
+h1, h2, h3, h4, h5, h6, button, input {
     font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     color: var(--primary-color);
     font-weight: 700;
+}
+
+p, ul, ol {
+    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
+    color: var(--primary-color);
+    font-weight: 500;
 }
 
 .title {
@@ -1292,7 +1298,7 @@ li {
     overflow-x: hidden;
 }
 
-.penalty-finder-container {
+.penalty-finder-container, .info-modal-content {
     background-color: white;
     padding: 20px 20px 120px 20px;
     border-radius: 10px;
@@ -1302,13 +1308,13 @@ li {
     margin: auto;
 }
 
-.penalty-finder-container .title {
+.penalty-finder-container .title, .info-modal-content .title {
     margin: 0 0 10px 0;
     text-align: center;
     color: var(--primary-color);
 }
 
-#close-penalty-modal-btn {
+#close-penalty-modal-btn, #close-info-modal-btn {
     padding: 5px;
     width: 40px;
     height: 40px;
@@ -1325,12 +1331,12 @@ li {
     z-index: 1001;
 }
 
-#close-penalty-modal-btn:hover {
+#close-penalty-modal-btn:hover, #close-info-modal-btn:hover {
     background-color: var(--secondary-color);
     cursor: pointer;
 }
 
-#close-penalty-modal-btn svg {
+#close-penalty-modal-btn svg, #close-info-modal-btn svg {
     display: block; /* Ensure the SVG behaves as a block element */
     width: 100%;    /* Make the SVG fill the button space */
     height: 100%;
