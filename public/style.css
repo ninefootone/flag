@@ -1391,6 +1391,11 @@ li {
     background-color:var(--focus-color);
 }
 
+#penalty-lookup-btn:hover {
+    color:var(--secondary-color) !important;
+    background-color:var(--focus-color) !important;
+}
+
 .fixed-footer-links button .button-icon {
     width: 24px;
     height: 24px;
