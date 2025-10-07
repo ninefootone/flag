@@ -1308,6 +1308,7 @@ li {
     padding: 0px;
     width: 100%;
     margin: auto;
+    max-width:720px;
 }
 
 .penalty-finder-container .title, .info-modal-content .title {
