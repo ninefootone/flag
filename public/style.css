@@ -193,6 +193,12 @@ button:hover {
 }
 
 @media only screen and (max-width: 480px) {
+    .settings-grid input {
+        font-size:36px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
     .settings-grid .one, .settings-grid .two {
         width:48%;
     }
@@ -334,6 +340,7 @@ button:hover {
 /* Common Form and Button Styles */
 #settings-form, #game-interface {
     padding: 10px;
+    width:720px;
 }
 
 .hidden {
@@ -1130,7 +1137,6 @@ li {
     overflow-x: auto; 
 }
 
-
 .penalties-list {
     display: flex;
     flex-direction: column;
@@ -1139,6 +1145,7 @@ li {
     border-radius: 0px;
     overflow: hidden; /* Ensures rounded corners */
     min-width: 720px; 
+    width:740px;
 }
 
 /* Base grid layout for header and items (4 columns) */

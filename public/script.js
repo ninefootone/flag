@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.50';
+    const appVersion = '0.0.51';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -201,7 +201,8 @@ fetchAndLoadTeamNames();
         ...useTimeoutBtns,
         undoBtn,
         endGameBtn,
-        shareLinksSection
+        shareLinksSection,
+        startNewGameFromSummaryBtn
     ];
 
     // Map roles to the specific controls they can use
