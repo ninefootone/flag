@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.67';
+    const appVersion = '0.0.68';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -769,24 +769,44 @@ fetchAndLoadTeamNames();
         }
     });
 
-    // --- NEW INFO MODAL LISTENERS ---
+        // --- MODAL EVENT LISTENERS ---
+
+        // Listener for the Penalty Lookup Modal
+        penaltyLookupBtn.addEventListener('click', () => {
+            // 1. Show the Penalty Modal
+            penaltyLookupModal.style.display = 'block';
+            // 2. Hide the Info Modal (to implement the switching functionality)
+            infoModal.style.display = 'none'; 
+        });
+
+        // Listener for the Info Modal (NEW)
         infoBtn.addEventListener('click', () => {
+            // 1. Show the Info Modal
             infoModal.style.display = 'block';
+            // 2. Hide the Penalty Modal (to implement the switching functionality)
+            penaltyLookupModal.style.display = 'none'; 
+        });
+
+        // Listener for closing the modals via their close buttons ('&times;')
+        closePenaltyModalBtn.addEventListener('click', () => {
+            penaltyLookupModal.style.display = 'none';
         });
 
         closeInfoModalBtn.addEventListener('click', () => {
             infoModal.style.display = 'none';
         });
 
-    // Global click listener for closing the modal by clicking outside
+        // Global click listener for closing modals by clicking the backdrop
         window.addEventListener('click', (event) => {
             if (event.target === infoModal) {
                 infoModal.style.display = 'none';
             }
-            if (event.target === penaltyLookupModal) { // Keep the existing check for the penalty modal
+            if (event.target === penaltyLookupModal) { 
                 penaltyLookupModal.style.display = 'none';
             }
         });
+
+    // --- END MODAL EVENT LISTENERS ---
 
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {
