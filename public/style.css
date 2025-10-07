@@ -378,10 +378,14 @@ input[type="text"], input[type="number"], input[type="date"] {
 #game-lobby {
     padding: 20px;
     text-align: center;
-    /* height: 90vh; */
+    height: 480px;
     display: flex;
     flex-direction: column;
     width:480px;
+    background:url(/assets/play.svg);
+    background-repeat:no-repeat;
+    background-position: bottom right;
+    background-size: 50%;
 }
 
 #game-lobby h2 {

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.57';
+    const appVersion = '0.0.58';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -361,6 +361,9 @@ fetchAndLoadTeamNames();
             }
             if (endGameBtn) {
                 endGameBtn.classList.add('hidden');
+            }
+            if (fixedFooter) {
+                fixedFooter.classList.remove('hidden'); 
             }
         } else {
             gameLobby.classList.remove('hidden');
