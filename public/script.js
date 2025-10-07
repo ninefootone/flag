@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.56';
+    const appVersion = '0.0.57';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -327,6 +327,12 @@ fetchAndLoadTeamNames();
             gameSummary.classList.add('hidden');
             if (fixedFooter) {
                 fixedFooter.classList.add('visible'); 
+            }
+            if (undoBtn) {
+                undoBtn.classList.remove('hidden');
+            }
+            if (endGameBtn) {
+                endGameBtn.classList.remove('hidden');
             }
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
             gameLobby.classList.add('hidden');
