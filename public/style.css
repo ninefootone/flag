@@ -345,7 +345,7 @@ button:hover {
 
 /* Common Form and Button Styles */
 #settings-form, #game-interface {
-    padding: 10px;
+    padding: 10px 10px 120px 10px;
     width:720px;
 }
 
@@ -1321,7 +1321,7 @@ li {
     color: var(--primary-color);
 }
 
-#close-penalty-modal-btn, #close-info-modal-btn {
+#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn {
     padding: 5px;
     width: 40px;
     height: 40px;
