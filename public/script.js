@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.82';
+    const appVersion = '0.0.83';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -91,6 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const shareModal = document.getElementById('share-modal');
     const closeShareModalBtn = document.getElementById('close-share-modal-btn');
     const penaltySearchInput = document.getElementById('penalty-search');
+    const qrModal = document.getElementById('qr-modal');
+    const closeQrModalBtn = document.getElementById('close-qr-modal-btn');
+    const qrcodeContainer = document.getElementById('qrcode-container');
+    const qrRoleText = document.getElementById('qr-role-text');
 
     // Team List Functions
 
@@ -866,6 +870,7 @@ fetchAndLoadTeamNames();
     shareLinkBtns.forEach(button => {
         button.addEventListener('click', (event) => {
             const role = button.dataset.role;
+            const buttonText = button.textContent; // Capture the button text (e.g., "Head Ref")
             const shareUrl = getShareUrl(role);
             
             // Function to handle feedback display
@@ -883,6 +888,7 @@ fetchAndLoadTeamNames();
                 copyToClipboard(shareUrl)
                     .then(() => {
                         showFeedback(`${button.textContent} link copied!`);
+                        generateQrCode(shareUrl, buttonText); 
                     })
                     .catch(() => {
                         showFeedback(`Error copying ${button.textContent} link.`, true);
@@ -892,12 +898,54 @@ fetchAndLoadTeamNames();
                  const success = copyToClipboard(shareUrl);
                  if (success) {
                     showFeedback(`${button.textContent} link copied! (Fallback)`);
+                    generateQrCode(shareUrl, buttonText);
                  } else {
                     showFeedback(`Error copying ${button.textContent} link.`, true);
                  }
             }
         });
     });
+
+    /**
+    * Generates and displays the QR code for the given URL and role.
+    * @param {string} url The URL to encode.
+    * @param {string} roleText The name of the role (e.g., "Head Ref").
+    */
+    const generateQrCode = (url, roleText) => {
+    // Ensure the library and container exist
+        if (!qrcodeContainer || !window.QRCode) {
+            console.error("QR Code library not loaded or container not found.");
+            return;
+        }
+
+    // 1. Clear any previous QR code
+        qrcodeContainer.innerHTML = '';
+
+    // 2. Set the role text
+        qrRoleText.textContent = roleText;
+
+    // 3. Generate the new QR code
+        new QRCode(qrcodeContainer, {
+            text: url,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+    // 4. Display the modal
+        qrModal.style.display = 'block';
+    };
+
+    // Listener to close the new QR modal
+    if (closeQrModalBtn) {
+        closeQrModalBtn.addEventListener('click', () => {
+            qrModal.style.display = 'none';
+            // You can also clear the QR code container here if needed
+            // qrcodeContainer.innerHTML = ''; 
+        });
+    }
 
     // --- New: Function to load and populate the searchable dropdown ---
     const loadTeamNames = async () => {

@@ -234,6 +234,7 @@ button:hover {
 .settings-grid input#half-duration, .settings-grid input#play-clock-duration, .settings-grid input#timeouts-per-half {
     font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     text-align: center;
+    color:var(--primary-color);
 }
 
 /* Team Selection */

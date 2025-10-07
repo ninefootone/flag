@@ -10,7 +10,9 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Referee" />
-    <link rel="manifest" href="/assets/site.webmanifest" /></head>
+    <link rel="manifest" href="/assets/site.webmanifest" />
+    <script src="https://cdn.jsdelivr.net/npm/qrcode.js/qrcode.min.js"></script>
+</head>
 <body>
     <div class="app-container">
         <div id="game-lobby">
@@ -262,7 +264,7 @@
             <div class="penalty-finder-container">
                 <h2>Penalties</h2>
                 <input type="text" id="penalty-search" placeholder="Search Penalty Name, Yardage, or Keyword..." class="search-input" tabindex="-1">
-                
+                                
                 <div class="penalties-table-wrapper">
                     <div id="penalties-list" class="penalties-list">
                         <p id="no-results" style="display: none; text-align: center; margin-top: 20px;">No penalties match your search.</p>
@@ -432,6 +434,20 @@
                     </svg>
                     <span class="button-text">Share</span>
                 </button>
+            </div>
+        </div>
+
+        <div id="qr-modal" class="modal" style="display: none;">
+            <div class="modal-content qr-modal-content">
+                <span class="close-btn" id="close-qr-modal-btn">&times;</span>
+                <h2 id="qr-title">Share Link QR Code</h2>
+        
+                <div class="qr-code-display" style="text-align: center; margin-top: 20px;">
+                    <p>Scan the code below for the <strong id="qr-role-text"></strong> link:</p>
+                    <div id="qrcode-container" style="width: 200px; height: 200px; margin: 20px auto;"></div>
+                </div>
+        
+                <p style="margin-top: 20px;">The link has already been copied to your clipboard!</p>
             </div>
         </div>
 
