@@ -368,6 +368,18 @@ input[type="text"], input[type="number"], input[type="date"] {
     font-size:18px;
 }
 
+/* For WebKit browsers (Chrome, Safari) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Removes the default arrow appearance */
+    margin: 0; /* Important: Removes space reserved for the arrows */
+}
+
+/* For Firefox */
+input[type="number"] {
+    -moz-appearance: textfield; /* Removes the spinner in Firefox */
+}
+
 /* New: Disabled state for controls */
 .disabled {
     pointer-events: none; /* Prevents clicks */
