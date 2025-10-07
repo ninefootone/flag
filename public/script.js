@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.60';
+    const appVersion = '0.0.61';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logScoreBtn = document.getElementById('log-score-btn');
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
     const coinTossBtn = document.getElementById('coin-toss-btn');
-    const coinTossResultDisplay = document.getElementById('coin-toss-result');
+    // const coinTossResultDisplay = document.getElementById('coin-toss-result');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
     const summaryTeam2Name = document.getElementById('summary-team2-name');
     const summaryTeam1Score = document.getElementById('summary-team1-score');
@@ -398,9 +398,13 @@ fetchAndLoadTeamNames();
         team2TimeoutLabel.textContent = gameState.team2Name;
 
         if (gameState.coinTossResult) {
-            coinTossResultDisplay.textContent = `${gameState.coinTossResult}.`;
+            coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
             /* coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`; */
+        } else {
+            // Set the initial text if no toss has occurred
+            coinTossBtn.textContent = 'Flip Coin';
         }
+
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
             if (audio) { // Check if audio element exists before trying to play
