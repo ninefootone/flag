@@ -1281,7 +1281,7 @@ li {
 
 /* --- New Modal/Overlay Styles for Penalty Lookup --- */
 
-.modal-overlay {
+.modal-overlay, .modal {
     position: fixed;
     top: 0;
     left: 0;
