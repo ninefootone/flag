@@ -1341,7 +1341,7 @@ li {
     display: flex; 
 }
 
-#fixed-footer-links-container.hidden {
+#fixed-footer-links-container.hidden, #undoBtn.hidden, #endGameBtn.hidden {
     display: none; 
 }
 
