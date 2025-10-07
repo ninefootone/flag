@@ -1298,13 +1298,15 @@ li {
     overflow-x: hidden;
 }
 
-.penalty-finder-container, .info-modal-content {
+.penalty-finder-container {
     background-color: white;
     padding: 20px 20px 120px 20px;
-    border-radius: 10px;
-    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
+}
+
+.info-modal-content {
+    background-color: white;
+    padding: 0px;
     width: 100%;
-    max-width: 720px; /* Wider to support the four columns */
     margin: auto;
 }
 
