@@ -334,11 +334,12 @@ button:hover {
     text-align: center;
     margin:20px 0;
     color:var(--primary-color);
+    font-size:10px;
 }
 
 #game-id-text {
     color: var(--primary-color);
-    font-weight: 600;
+    font-weight: 400;
 }
 
 #current-game-id .share-notes {

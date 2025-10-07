@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.81';
+    const appVersion = '0.0.82';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
     const shareModal = document.getElementById('share-modal');
     const closeShareModalBtn = document.getElementById('close-share-modal-btn');
+    const penaltySearchInput = document.getElementById('penalty-search');
 
     // Team List Functions
 
@@ -778,6 +779,15 @@ fetchAndLoadTeamNames();
             penaltyLookupModal.style.display = 'block';
             infoModal.style.display = 'none'; 
             shareModal.style.display = 'none'; // ADDED: Hide Share Modal
+            
+    // Explicitly blur the input element to remove focus
+            if (penaltySearchInput) {
+                penaltySearchInput.blur();
+            }
+        
+        // Optionally, focus on the modal container itself if it has a tabindex
+        // penaltyLookupModal.focus(); 
+
         });
 
     // Listener for the Info Modal
