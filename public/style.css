@@ -192,12 +192,6 @@ button:hover {
     width:32%;
 }
 
-@media only screen and (max-width: 480px) {
-    .settings-grid input {
-        font-size:36px;
-    }
-}
-
 @media only screen and (max-width: 320px) {
     .settings-grid .one, .settings-grid .two {
         width:48%;
@@ -218,6 +212,12 @@ button:hover {
     text-align: left;
     font-size:48px !important;
     margin-bottom:5px !important;
+}
+
+@media only screen and (max-width: 480px) {
+    .settings-grid input {
+        font-size:36px;
+    }
 }
 
 #location-field {

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.51';
+    const appVersion = '0.0.52';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -81,6 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1OptionsList = document.getElementById('team1-options');
     const team2OptionsList = document.getElementById('team2-options');
     const fixedFooter = document.getElementById('fixed-footer-links-container');
+    const infoBtn = document.getElementById('info-btn');
+    const penaltyLookupBtn  = document.getElementById('penalty-lookup-btn');
+    const shareLinksBtn  = document.getElementById('share-links-btn');
 
     // Team List Functions
 
@@ -202,13 +205,16 @@ fetchAndLoadTeamNames();
         undoBtn,
         endGameBtn,
         shareLinksSection,
-        startNewGameFromSummaryBtn
+        startNewGameFromSummaryBtn,
+        infoBtn,
+        penaltyLookupBtn,
+        shareLinksBtn
     ];
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
         'administrator': allControls,
-        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns],
+        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn],
         'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
         'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons],
         'coach': []
