@@ -10,9 +10,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Referee" />
-    <link rel="manifest" href="/assets/site.webmanifest" />
-    <script src="https://cdn.jsdelivr.net/npm/qrcode.js/qrcode.min.js"></script>
-</head>
+    <link rel="manifest" href="/assets/site.webmanifest" /></head>
 <body>
     <div class="app-container">
         <div id="game-lobby">
@@ -264,7 +262,7 @@
             <div class="penalty-finder-container">
                 <h2>Penalties</h2>
                 <input type="text" id="penalty-search" placeholder="Search Penalty Name, Yardage, or Keyword..." class="search-input" tabindex="-1">
-                                
+                
                 <div class="penalties-table-wrapper">
                     <div id="penalties-list" class="penalties-list">
                         <p id="no-results" style="display: none; text-align: center; margin-top: 20px;">No penalties match your search.</p>
@@ -387,6 +385,13 @@
         </div>
     </div>
 
+    <audio id="warning-audio" src="/assets/warning.mp3" preload="auto"></audio>
+    <audio id="default-audio" src="/assets/default.mp3" preload="auto"></audio> 
+
+    <p class="version">v3.0.6.1</p>
+    <script src="/script.js"></script>
+    <script src="/penalties.js"></script>
+
         <div id="fixed-footer-links-container">
             <div class="fixed-footer-links">
                 <button id="info-btn">
@@ -430,32 +435,5 @@
             </div>
         </div>
 
-        <div id="qr-modal" class="modal" style="display: none;">
-            <div class="modal-content qr-modal-content">
-                <h2 id="qr-title">Share Link QR Code</h2>
-                
-                <div class="qr-code-display" style="text-align: center; margin-top: 20px;">
-                    <p>Scan the code below for the <strong id="qr-role-text"></strong> link:</p>
-                    <div id="qrcode-container" style="width: 200px; height: 200px; margin: 20px auto;"></div>
-                </div>
-                
-                <p style="margin-top: 20px;">The link has already been copied to your clipboard!</p>
-
-                <button id="close-qr-modal-btn" class="main-btn close-btn" style="margin-top: 15px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-    <audio id="warning-audio" src="/assets/warning.mp3" preload="auto"></audio>
-    <audio id="default-audio" src="/assets/default.mp3" preload="auto"></audio> 
-
-    <p class="version">v3.0.6.1</p>
-    <script src="/script.js"></script>
-    <script src="/penalties.js"></script>
-        
 </body>
 </html>
