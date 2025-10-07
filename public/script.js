@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.61';
+    const appVersion = '0.0.62';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -398,8 +398,8 @@ fetchAndLoadTeamNames();
         team2TimeoutLabel.textContent = gameState.team2Name;
 
         if (gameState.coinTossResult) {
-            coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
-            /* coinTossResultDisplay.textContent = `Result: The toss landed on ${gameState.coinTossResult}.`; */
+            coinTossBtn.textContent = `${gameState.coinTossResult}`;
+        //    coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
         } else {
             // Set the initial text if no toss has occurred
             coinTossBtn.textContent = 'Flip Coin';
