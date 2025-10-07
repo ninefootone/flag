@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.68';
+    const appVersion = '0.0.69';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -83,6 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const fixedFooter = document.getElementById('fixed-footer-links-container');
     const infoBtn = document.getElementById('info-btn');
     const penaltyLookupBtn  = document.getElementById('penalty-lookup-btn');
+    const penaltyLookupModal = document.getElementById('penalty-lookup-modal');
+    const closePenaltyModalBtn = document.getElementById('close-penalty-modal-btn');
     const shareLinksBtn  = document.getElementById('share-links-btn');
     const infoModal = document.getElementById('info-modal');
     const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
