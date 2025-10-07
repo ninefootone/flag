@@ -120,7 +120,7 @@ h1, h2, h3, h4, h5, h6, button {
     font-weight: 700;
 }
 
-p, ul, ol, input {
+p, ul, ol, input, .penalties-list {
     font-family: "azo-sans-web", 'Metropolis', "canada-type-gibson", sans-serif;
     color: var(--primary-color);
     font-weight: 400;
@@ -232,6 +232,7 @@ button:hover {
 }
 
 .settings-grid input#half-duration, .settings-grid input#play-clock-duration, .settings-grid input#timeouts-per-half {
+    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
     text-align: center;
 }
 
@@ -1314,6 +1315,16 @@ li {
     width: 100%;
     max-width: 480px;
     margin: auto;
+}
+
+.penalty-finder-container h2, .info-modal-content h2, .share-modal-content h2 {
+    text-align:left;
+}
+
+.info-modal-content h4, .info-modal-content p {
+    text-align:left;
+    line-height: 1.4em;
+    margin-bottom:10px;
 }
 
 .penalty-finder-container .title, .info-modal-content .title {
