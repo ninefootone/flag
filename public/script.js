@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.53';
+    const appVersion = '0.0.54';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -208,14 +208,15 @@ fetchAndLoadTeamNames();
         startNewGameFromSummaryBtn,
         infoBtn,
         penaltyLookupBtn,
-        shareLinksBtn
+        shareLinksBtn,
+        fixedFooter
     ];
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
         'administrator': allControls,
-        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn],
-        'scorer': [...scoreButtons, ...adjustButtons, undoBtn],
+        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn],
+        'scorer': [...scoreButtons, ...adjustButtons, fixedFooter, undoBtn],
         'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons],
         'coach': []
     };
