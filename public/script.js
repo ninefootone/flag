@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.90';
+    const appVersion = '0.0.91';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -234,7 +234,7 @@ fetchAndLoadTeamNames();
             userRole = event.target.value;
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('role', userRole);
-            history.replaceState(null, '', `?${urlParams.toString()}`);
+            // history.replaceState(null, '', `?${urlParams.toString()}`);
             applyRolePermissions();
         });
     });
@@ -503,7 +503,7 @@ fetchAndLoadTeamNames();
     startNewGameBtn.addEventListener('click', () => {
 
         const newGameId = Math.random().toString(36).substring(2, 8);
-        history.pushState(null, '', `/game/${newGameId}?role=${userRole}`);
+        history.replaceState(null, '', `/game/${newGameId}?role=${userRole}`);
 
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
@@ -518,7 +518,7 @@ fetchAndLoadTeamNames();
 
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            history.pushState(null, '', `/game/${gameId}?role=${userRole}`);
+            history.replaceState(null, '', `/game/${gameId}?role=${userRole}`);
 
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
