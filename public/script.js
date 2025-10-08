@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.03';
+    const appVersion = '0.1.04';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -305,7 +305,7 @@ fetchAndLoadTeamNames();
             // The ws.onclose event is supposed to fire after onerror, but 
             // in some unstable environments, the onerror handler runs first, 
             // preventing further recovery. This ensures recovery starts immediately.
-            if (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING) {
+            if (ws && (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING)) {
                 // Calling ws.onclose() manually here ensures the recovery starts 
                 // immediately if the error causes a permanent disconnect.
                 if (ws.onclose) {
