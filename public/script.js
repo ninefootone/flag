@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.97a';
+    const appVersion = '0.0.98';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -260,7 +260,7 @@ fetchAndLoadTeamNames();
             pingInterval = setInterval(() => {
                 if (ws && ws.readyState === WebSocket.OPEN) {
                    // Send a lightweight, non-game-changing message (e.g., 'PING')
-                    ws.send(JSON.stringify({ type: 'PING' })); 
+                    ws.send(JSON.stringify({ type: 'HEARTBEAT' })); 
                 }
             }, 10000); // 10 seconds
 
@@ -907,10 +907,6 @@ fetchAndLoadTeamNames();
     });
 
 // ...
-
-// At the very end of the document.addEventListener('DOMContentLoaded', () => { ... }); block:
-// Call the new function to load the data when the page loads
-loadTeamNames();
 
 
 
