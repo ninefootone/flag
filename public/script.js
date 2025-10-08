@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.99';
+    const appVersion = '0.1.01';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
+
+    const urlParams = new URLSearchParams(window.location.search);
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -541,6 +543,21 @@ fetchAndLoadTeamNames();
     if (gameIdFromUrl) {
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
+
+        // ONLY continue if we successfully parsed a game ID
+        if (gameIdFromUrl) {
+            // 1. Instantly hide lobby and show settings (Visual change)
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.remove('hidden');
+
+            // 2. Apply the CRITICAL 150ms Safari delay
+            setTimeout(() => {
+                // 3. Connect the WebSocket and update UI AFTER the pause
+                connectWebSocket(gameIdFromUrl);
+                updateUI();
+            }, 150);
+        }
+
     } else {
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
