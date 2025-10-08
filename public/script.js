@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.96';
+    const appVersion = '0.0.97';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const shareLinkBtns = document.querySelectorAll('.share-link-btn');
     const shareFeedback = document.getElementById('share-feedback');
     const shareLinksSection = document.querySelector('.share-links-section');
-    const teamNamesDatalist = document.getElementById('team-names'); 
+    const teamNamesDatalist = document.getElementById('team-names-datalist'); 
     const team1OptionsList = document.getElementById('team1-options');
     const team2OptionsList = document.getElementById('team2-options');
     const fixedFooter = document.getElementById('fixed-footer-links-container');
@@ -262,7 +262,7 @@ fetchAndLoadTeamNames();
                    // Send a lightweight, non-game-changing message (e.g., 'PING')
                     ws.send(JSON.stringify({ type: 'PING' })); 
                 }
-            }, 30000); // 30 seconds
+            }, 10000); // 10 seconds
 
         };
 
@@ -905,44 +905,6 @@ fetchAndLoadTeamNames();
             }
         });
     });
-
-    // --- New: Function to load and populate the searchable dropdown ---
-    const loadTeamNames = async () => {
-    
-        if (teamNamesDatalist === null) {
-            console.error("Datalist element missing from HTML. Team names not loaded.");
-            return; 
-        }
-
-        try {
-        // Assuming your team names are in a file named 'teams.json'
-        const response = await fetch('/teams.json'); 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const teamNames = await response.json();
-
-        // Ensure the fetched data is an array
-        if (Array.isArray(teamNames)) {
-            // Clear existing options
-            teamNamesDatalist.innerHTML = ''; 
-
-            // Create and append a new <option> for each team name
-            teamNames.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                teamNamesDatalist.appendChild(option);
-            });
-            console.log(`Successfully loaded ${teamNames.length} team names.`);
-        } else {
-            console.error("teams.json content is not an array.");
-        }
-    } catch (error) {
-        console.error("Could not load team names:", error);
-        // Fallback: Optionally add a few default names if loading fails
-        // ['Default Team A', 'Default Team B'].forEach(...)
-    }
-    };
 
 // ...
 
