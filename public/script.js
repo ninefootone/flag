@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.04';
+    const appVersion = '0.1.05';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -276,43 +276,32 @@ fetchAndLoadTeamNames();
         };
 
         ws.onclose = () => {
-    console.log(`Disconnected from the WebSocket server for game ${gameId}. Attempting reconnect...`);
-    ws = null; // Ensure ws is nullified
-    
-    // Reconnection logic using exponential backoff (up to 50 attempts)
-    if (reconnectAttempts < 50) { // NEW LIMIT: 50 attempts
-        // Calculate delay: 1s, 2s, 4s, 8s, 15s (capped at 15s)
-        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000); 
+            console.log(`Disconnected from the WebSocket server for game ${gameId}. Attempting reconnect...`);
+            ws = null; // Ensure ws is nullified
         
-        // This is the correct logic for RECONNECTION
-        setTimeout(() => {
-            reconnectAttempts++; // MUST INCREMENT HERE
-            connectWebSocket(gameId); // MUST use the local variable gameId
-            // The UI update is handled by ws.onopen when successful.
-        }, delay); // MUST use the calculated exponential delay
-
-    } else {
-        console.error("Maximum reconnect attempts reached. Please check server status and refresh.");
-        // The buttons remain locked until the user refreshes.
-    }
-};
-
+            if (pingInterval) {
+                clearInterval(pingInterval);
+                pingInterval = null;
+        }
+            
+            // Reconnection logic using exponential backoff (up to 5 attempts)
+            if (reconnectAttempts < 5) {
+                // Calculate delay: 1s, 2s, 4s, 8s, 15s (capped at 15s)
+                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000); 
+                
+                setTimeout(() => {
+                    connectWebSocket(gameIdFromUrl);
+                    updateUI();
+                }, 150); // 150ms delay gives Safari time to stabilize
+            } else {
+                console.error("Maximum reconnect attempts reached. Please refresh.");
+                // Since you cannot see the console, this is where the user would be stuck again.
+                // We rely on the role permissions lock to still be active here.
+            }
+        };
 
         ws.onerror = (error) => {
             console.error('WebSocket Error:', error);
-
-            // NEW LOGIC: Trigger the same recovery logic as ws.onclose
-            // The ws.onclose event is supposed to fire after onerror, but 
-            // in some unstable environments, the onerror handler runs first, 
-            // preventing further recovery. This ensures recovery starts immediately.
-            if (ws && (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING)) {
-                // Calling ws.onclose() manually here ensures the recovery starts 
-                // immediately if the error causes a permanent disconnect.
-                if (ws.onclose) {
-                     ws.onclose();
-                }
-            }
-
         };
     };
 
