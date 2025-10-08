@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.93';
+    const appVersion = '0.0.94';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -94,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Team List Functions
 
-let allTeamNames = []; // Global array to store all loaded team names
+    let reconnectAttempts = 0;
+    let allTeamNames = []; // Global array to store all loaded team names
 
 // --- Dropdown Logic ---
 
@@ -251,6 +252,7 @@ fetchAndLoadTeamNames();
 
         ws.onopen = () => {
             console.log(`Connected to the WebSocket server for game ${gameId}!`);
+            reconnectAttempts = 0; // NEW: Reset counter on successful connection
             applyRolePermissions();
         };
 
@@ -262,7 +264,23 @@ fetchAndLoadTeamNames();
         };
 
         ws.onclose = () => {
-            console.log('Disconnected from the WebSocket server.');
+            console.log(`Disconnected from the WebSocket server for game ${gameId}. Attempting reconnect...`);
+            ws = null; // Ensure ws is nullified
+            
+            // Reconnection logic using exponential backoff (up to 5 attempts)
+            if (reconnectAttempts < 5) {
+                // Calculate delay: 1s, 2s, 4s, 8s, 15s (capped at 15s)
+                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000); 
+                
+                setTimeout(() => {
+                    reconnectAttempts++;
+                    connectWebSocket(gameId); // Recursive call to reconnect
+                }, delay);
+            } else {
+                console.error("Maximum reconnect attempts reached. Please refresh.");
+                // Since you cannot see the console, this is where the user would be stuck again.
+                // We rely on the role permissions lock to still be active here.
+            }
         };
 
         ws.onerror = (error) => {
