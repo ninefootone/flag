@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.91';
+    const appVersion = '0.0.92';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -424,6 +424,21 @@ fetchAndLoadTeamNames();
                 control.classList.remove('disabled');
             }
         });
+
+        // --- WebSocket Connection Lock for Settings Form (iOS Fix) ---
+        const settingsIsVisible = !settingsForm.classList.contains('hidden');
+        const isConnected = ws && ws.readyState === WebSocket.OPEN;
+
+        if (settingsIsVisible && !isConnected) {
+            // Disable the buttons if we are on the settings form but not connected
+            startGameBtn.classList.add('disabled');
+            coinTossBtn.classList.add('disabled');
+        } else if (settingsIsVisible) {
+            // Re-enable them if we are connected (This block will run after ws.onopen)
+            startGameBtn.classList.remove('disabled');
+            coinTossBtn.classList.remove('disabled');
+        }
+
     };
 
     const updateButtonLabels = () => {
