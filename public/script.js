@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.94';
+    const appVersion = '0.0.96';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Team List Functions
 
     let reconnectAttempts = 0;
+    let pingInterval = null;   // NEW: For keeping the connection alive
     let allTeamNames = []; // Global array to store all loaded team names
 
 // --- Dropdown Logic ---
@@ -254,6 +255,15 @@ fetchAndLoadTeamNames();
             console.log(`Connected to the WebSocket server for game ${gameId}!`);
             reconnectAttempts = 0; // NEW: Reset counter on successful connection
             applyRolePermissions();
+
+            if (pingInterval) clearInterval(pingInterval); // Clear any old interval
+            pingInterval = setInterval(() => {
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                   // Send a lightweight, non-game-changing message (e.g., 'PING')
+                    ws.send(JSON.stringify({ type: 'PING' })); 
+                }
+            }, 30000); // 30 seconds
+
         };
 
         ws.onmessage = (event) => {
@@ -266,6 +276,11 @@ fetchAndLoadTeamNames();
         ws.onclose = () => {
             console.log(`Disconnected from the WebSocket server for game ${gameId}. Attempting reconnect...`);
             ws = null; // Ensure ws is nullified
+        
+            if (pingInterval) {
+                clearInterval(pingInterval);
+                pingInterval = null;
+        }
             
             // Reconnection logic using exponential backoff (up to 5 attempts)
             if (reconnectAttempts < 5) {
@@ -893,7 +908,13 @@ fetchAndLoadTeamNames();
 
     // --- New: Function to load and populate the searchable dropdown ---
     const loadTeamNames = async () => {
-    try {
+    
+        if (teamNamesDatalist === null) {
+            console.error("Datalist element missing from HTML. Team names not loaded.");
+            return; 
+        }
+
+        try {
         // Assuming your team names are in a file named 'teams.json'
         const response = await fetch('/teams.json'); 
         if (!response.ok) {
