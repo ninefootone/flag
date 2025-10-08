@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.86';
+    const appVersion = '0.0.87';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -534,6 +534,7 @@ fetchAndLoadTeamNames();
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
         connectWebSocket(gameIdFromUrl);
+        updateUI(); 
     } else {
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
@@ -575,6 +576,7 @@ fetchAndLoadTeamNames();
 
     startGameBtn.addEventListener('click', (event) => {
         event.preventDefault(); // Good practice to include this
+        unlockAudio(); 
 
         // 1. SET DEFAULTS: If the input is empty, default to 'Team 1' / 'Team 2'
         const t1Name = team1NameInput.value.trim() || 'Team 1';
@@ -616,6 +618,7 @@ fetchAndLoadTeamNames();
     });
 
     coinTossBtn.addEventListener('click', () => {
+        unlockAudio(); 
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
     });
