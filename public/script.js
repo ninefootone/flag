@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.87';
+    const appVersion = '0.0.88';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -244,44 +244,6 @@ fetchAndLoadTeamNames();
     let tempScoreEvent = null;
     let twoMinuteWarningIssuedLocally = false;
     let actionHistory = [];
-    const audio = document.getElementById('warning-audio'); // NEW: Reference the HTML element
-    const defaultAudio = document.getElementById('default-audio'); 
-    let audioUnlocked = false; // NEW: Flag to ensure we only try to unlock once
-
-    // Function to play the default audio when screens change
-    const playDefaultAudio = () => {
-        if (defaultAudio) {
-            defaultAudio.currentTime = 0;
-            defaultAudio.play().catch(e => console.log("Default audio playback blocked:", e));
-        }
-    };
-
-    // Function to play the 2-minute warning audio
-    const playWarningAudio = () => {
-        if (audio) { // 'audio' is your existing 'warning-audio' element
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log("Warning audio playback blocked:", e));
-        }
-    };
-
-    // --- Audio Unlock Function for iOS/Safari ---
-    const unlockAudio = () => {
-        if (audioUnlocked) return; // Only run once
-        
-        // Attempt to play and immediately pause the audio on user interaction
-        // This is a common workaround to bypass iOS/Safari's autoplay policy
-        if (defaultAudio) {
-            defaultAudio.play().then(() => {
-                defaultAudio.pause();
-                audioUnlocked = true;
-                console.log("Audio playback successfully unlocked by user gesture.");
-            }).catch(error => {
-                // Audio might still fail if not a direct gesture, but we tried.
-                console.error("Audio unlock failed:", error);
-            });
-        }
-    };
-
 
     // --- WebSocket Event Handlers ---
     const connectWebSocket = (gameId) => {
@@ -414,9 +376,6 @@ fetchAndLoadTeamNames();
 
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
-            if (audio) { // Check if audio element exists before trying to play
-                audio.play();
-            }
             twoMinuteWarningIssuedLocally = true;
         }
 
@@ -542,8 +501,6 @@ fetchAndLoadTeamNames();
     }
 
     startNewGameBtn.addEventListener('click', () => {
-        // NEW: Call the unlock function on the user's first click
-        unlockAudio();
 
         const newGameId = Math.random().toString(36).substring(2, 8);
         history.pushState(null, '', `/game/${newGameId}?role=${userRole}`);
@@ -558,8 +515,6 @@ fetchAndLoadTeamNames();
     });
 
     joinGameBtn.addEventListener('click', () => {
-        // NEW: Also call unlock on the join button for compatibility
-        unlockAudio(); 
 
         const gameId = gameIdInput.value.trim();
         if (gameId) {
@@ -576,7 +531,6 @@ fetchAndLoadTeamNames();
 
     startGameBtn.addEventListener('click', (event) => {
         event.preventDefault(); // Good practice to include this
-        unlockAudio(); 
 
         // 1. SET DEFAULTS: If the input is empty, default to 'Team 1' / 'Team 2'
         const t1Name = team1NameInput.value.trim() || 'Team 1';
@@ -618,7 +572,6 @@ fetchAndLoadTeamNames();
     });
 
     coinTossBtn.addEventListener('click', () => {
-        unlockAudio(); 
         const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
         sendAction('UPDATE_STATE', { coinTossResult: result });
     });
