@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.0.98';
+    const appVersion = '0.0.99';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -288,9 +288,9 @@ fetchAndLoadTeamNames();
                 const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000); 
                 
                 setTimeout(() => {
-                    reconnectAttempts++;
-                    connectWebSocket(gameId); // Recursive call to reconnect
-                }, delay);
+                    connectWebSocket(gameIdFromUrl);
+                    updateUI();
+                }, 150); // 150ms delay gives Safari time to stabilize
             } else {
                 console.error("Maximum reconnect attempts reached. Please refresh.");
                 // Since you cannot see the console, this is where the user would be stuck again.
@@ -541,8 +541,6 @@ fetchAndLoadTeamNames();
     if (gameIdFromUrl) {
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
-        connectWebSocket(gameIdFromUrl);
-        updateUI(); 
     } else {
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
