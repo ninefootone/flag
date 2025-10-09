@@ -431,9 +431,6 @@ input[type="number"] {
 }
 
 .main-btn {
-    display: flex; 
-    align-items: center;
-    justify-content: center; /* Center the icon and text horizontally */
     width: 100%;
     padding: 15px;
     font-size: 1.2rem;
@@ -1027,6 +1024,23 @@ li {
     background:var(--secondary-color);
     border-color:var(--secondary-color);
     color:white;  
+}
+
+/* Update the main button style for horizontal icon alignment */
+#download-summary-btn {
+    display: flex;
+    flex-direction: row; /* Aligns icon and text side-by-side */
+    align-items: center; /* Vertically center icon and text */
+    justify-content: center;
+    gap: 8px; /* Adds space between the icon and the text */
+}
+
+.download-icon {
+    margin-bottom: 0 !important; 
+    fill: currentColor !important; 
+    stroke: none !important;
+    width: 24px;
+    height: 24px;
 }
 
 #start-new-game-from-summary-btn {
