@@ -101,11 +101,13 @@
   --text-color: #333333;
   --notes-color: #aaaaaa;
   --error-color: #dc3545;
+  --headline-font: "greycliff-cf", 'Metropolis', sans-serif;
+  --body-font: "greycliff-cf", "azo-sans-web", sans-serif;
 }
 
 /* General Body and Container Styling */
 body {
-    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
+    font-family: var(--body-font);
     background-color: #ffffff;
     color: var(--text-color);
     margin: 0;
@@ -115,13 +117,13 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, button {
-    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
+    font-family: var(--headline-font);
     color: var(--primary-color);
     font-weight: 700;
 }
 
 p, ul, ol, input, .penalties-list {
-    font-family: "azo-sans-web", 'Metropolis', "canada-type-gibson", sans-serif;
+    font-family: var(--body-font);
     color: var(--text-color);
     font-weight: 400;
     line-height: 1.4em;
@@ -233,7 +235,7 @@ button:hover {
 }
 
 .settings-grid input#half-duration, .settings-grid input#play-clock-duration, .settings-grid input#timeouts-per-half {
-    font-family: 'Metropolis', "canada-type-gibson", sans-serif;
+    font-family: var(--headline-font);
     text-align: center;
 }
 
