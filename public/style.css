@@ -1013,6 +1013,18 @@ li {
     text-align: left;
 }
 
+#download-summary-btn {
+    background:white;
+    border-color:var(--primary-color);
+    color:var(--primary-color);   
+}
+
+#download-summary-btn:hover {
+    background:var(--secondary-color);
+    border-color:var(--secondary-color);
+    color:white;  
+}
+
 #start-new-game-from-summary-btn {
     width:240px;
 }

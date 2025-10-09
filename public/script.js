@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.09b';
+    const appVersion = '0.1.10';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryScoreLog = document.getElementById('summary-score-log');
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
     const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
+    const downloadSummaryBtn = document.getElementById('download-summary-btn'); 
     const gameIdDisplay = document.getElementById('current-game-id');
     const shareLinkBtns = document.querySelectorAll('.share-link-btn');
     const shareFeedback = document.getElementById('share-feedback');
@@ -771,6 +772,96 @@ fetchAndLoadTeamNames();
         // If the user clicks Cancel, the action is ignored.
     });
 
+    /**
+    * Gathers game data from gameState, formats it into a text file, and triggers a download.
+    */
+    const downloadGameSummary = () => {
+        // Ensure the date is available from the initial setup (it is defined globally in the script's scope)
+        const formattedDate = document.getElementById('date-field').value;
+
+        if (!gameState || !gameState.gameId) {
+            console.error("No game state to download.");
+            return;
+        }
+
+        const { 
+            gameId, 
+            gameDate, 
+            location, 
+            team1Name, 
+            team2Name, 
+            team1Score, 
+            team2Score, 
+            scoreLog = [], 
+            timeoutLog = [] 
+        } = gameState;
+
+        // --- 1. Format the data into a text string ---
+        let summaryText = `WHISTLE GAME SUMMARY\n`;
+        summaryText += `====================================================\n\n`;
+        summaryText += `Game ID: ${gameId || 'N/A'}\n`;
+        summaryText += `Date: ${gameDate || formattedDate}\n`;
+        summaryText += `Location: ${location || 'N/A'}\n\n`;
+        summaryText += `FINAL SCORE\n`;
+        summaryText += `----------------------------------------------------\n`;
+        summaryText += `${team1Name || 'Home Team'}: ${team1Score || 0}\n`;
+        summaryText += `${team2Name || 'Away Team'}: ${team2Score || 0}\n\n`;
+    
+        // --- 2. Score Log ---
+        summaryText += `SCORING LOG (${scoreLog.length} events)\n`;
+        summaryText += `----------------------------------------------------\n`;
+        if (scoreLog.length > 0) {
+            scoreLog.forEach(log => {
+                const teamName = log.team === 1 ? team1Name : team2Name;
+            
+                // Generate player details string
+                const playerDetails = Object.entries(log.player || {})
+                    .filter(([key, value]) => value && value !== '0' && value !== '')
+                    .map(([key, value]) => `${key.toUpperCase()}: #${value}`)
+                    .join(', ');
+            
+                const playerString = playerDetails ? ` (${playerDetails})` : '';
+
+                summaryText += `[${log.time}] ${teamName}: ${log.type} (+${log.points})${playerString}\n`;
+            });
+        } else {
+            summaryText += `No scoring plays recorded.\n`;
+        }
+
+        // --- 3. Timeout Log ---
+        summaryText += `\nTIMEOUT LOG (${timeoutLog.length} events)\n`;
+        summaryText += `----------------------------------------------------\n`;
+        if (timeoutLog.length > 0) {
+            timeoutLog.forEach(log => {
+                const teamName = log.team === 1 ? team1Name : team2Name;
+                summaryText += `[${log.time}] Timeout used by ${teamName}\n`;
+            });
+        } else {
+            summaryText += `No timeouts used.\n`;
+        }
+
+        // --- 4. Create and trigger download ---
+        // Use the team names and date for a unique filename
+        const team1Short = team1Name ? team1Name.replace(/\s/g, '_') : 'Home';
+        const team2Short = team2Name ? team2Name.replace(/\s/g, '_') : 'Away';
+        const filename = `${formattedDate}_${team1Short}_vs_${team2Short}_Summary.txt`;
+    
+        const blob = new Blob([summaryText], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+    
+        // Create a temporary anchor element and trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+    
+        // Clean up the temporary elements and URL
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url); 
+    };
+
+
     startNewGameFromSummaryBtn.addEventListener('click', () => {
         history.pushState(null, '', '/');
         gameLobby.classList.remove('hidden');
@@ -923,6 +1014,9 @@ fetchAndLoadTeamNames();
 
 // ...
 
-
+    // Event listener for the new Download Summary button
+    if (downloadSummaryBtn) {
+        downloadSummaryBtn.addEventListener('click', downloadGameSummary);
+    }
 
 });
