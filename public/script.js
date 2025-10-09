@@ -815,10 +815,6 @@ fetchAndLoadTeamNames();
         // Extract the logs (they are currently in LIFO order from the game screen)
         let scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
         let timeoutLogEntries = Array.from(summaryTimeoutLog.querySelectorAll('li'));
-        
-        // REVERSE ORDER for Download (earliest first - chronological)
-        scoreLogEntries.reverse();
-        timeoutLogEntries.reverse();
 
         // --- 1. Format the data into a text string ---
         let summaryText = `WHISTLE GAME SUMMARY\n`;
