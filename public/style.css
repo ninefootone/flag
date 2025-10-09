@@ -403,14 +403,16 @@ input[type="number"] {
 #game-lobby {
     padding: 20px;
     text-align: center;
-    height: 480px;
+    height: 70vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width:480px;
-    background:url(/assets/play.svg);
+    /* background:url(/assets/play.svg); */
     background-repeat:no-repeat;
     background-position: bottom right;
     background-size: 50%;
+    gap:50px;
 }
 
 #game-lobby h2 {
@@ -419,6 +421,10 @@ input[type="number"] {
     font-weight:900;
     margin:0;
     line-height: 1em;
+}
+
+.lobby-logo img {
+    max-width: 320px;
 }
 
 .main-btn {
@@ -431,18 +437,19 @@ input[type="number"] {
 
 #start-new-game-btn {
     padding:0;
-    text-align:left;
-    font-weight:900;
-    font-size:60px;
-    background:none;
+    text-align:center;
+    font-weight:800;
+    font-size:24px;
+    background:var(--primary-color);
     border:none;
-    margin:0;
-    color:var(--secondary-color);
-    max-width:200px;
+    border-radius: 500px !important;
+    margin:0 auto;
+    color:white;
+    padding:14px 24px;
 }
 
 #start-new-game-btn:hover {
-    color:var(--primary-color);
+    background:var(--secondary-color);
 }
 
 @media (max-width: 320px) {
