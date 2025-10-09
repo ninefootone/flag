@@ -301,10 +301,10 @@
                     <p><strong>Penalties:</strong> This will bring up a searchable list of penalties with description, yards lost etc.</p>
                     <p><strong>End Game:</strong> You'll get a confirmation pop-up just in case!</p>
                     <h3>Share</h3>
-                    <p>You can share a link/QR code with a head ref, scorer, clock manager and coach.</p>
-                    <p><strong>Head Ref:</strong> can manage the clock(s), downs and timeouts but not the score.</p>
+                    <p>You can share a link with a head ref, scorer, clock manager and coach.</p>
+                    <p><strong>Head Ref:</strong> can manage the clocks, downs and timeouts but not the score.</p>
                     <p><strong>Scorer:</strong> can only manage the scores.</p>
-                    <p><strong>Clock:</strong> can manage game clock(s) and downs.</p>
+                    <p><strong>Clock:</strong> can manage game clocks and downs.</p>
                     <p><strong>Coach:</strong> can only view.</p>
                 </div>
                 <button id="close-info-modal-btn" class="main-btn close-btn">
@@ -326,7 +326,14 @@
                             <button class="share-link-btn" data-role="coach">Coach</button>
                         </div>
                     <p id="share-feedback" class="hidden">Link copied!</p>
-                    <button id="close-share-modal-btn" class="main-btn close-btn">
+                    <div id="share-notes">
+                        <p>Clicking the buttons above will copy a URL to your clipboard. Simply share this with those you want to manage/view the game.</p>
+                        <p><strong>Head Ref:</strong> can manage the clocks, downs and timeouts but not the score.</p>
+                        <p><strong>Scorer:</strong> can only manage the scores.</p>
+                        <p><strong>Clock:</strong> can manage game clocks and downs.</p>
+                        <p><strong>Coach:</strong> can only view.</p>
+                    </div>
+                        <button id="close-share-modal-btn" class="main-btn close-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -368,6 +375,7 @@
         </div>
 
         <div id="game-summary" class="hidden">
+            <img src="/assets/whistle-logo-home-blue.svg" alt="Whistle" class="logo-image-summary">
             <h2>Game Summary</h2>
             <div class="summary-scoreboard">
                 <div class="summary-team">
@@ -405,6 +413,13 @@
 
         <div id="fixed-footer-links-container">
             <div class="fixed-footer-links">
+                <button id="undo-btn">
+                    <svg class="button-icon" viewBox="0 0 24 24">
+                        <path d="m5.25 21.747 -4.5 -4.5 4.5 -4.5" ></path>
+                        <path d="M0.75 17.247h15a7.5 7.5 0 0 0 0 -15h-6" ></path>
+                    </svg>
+                    <span class="button-text">Undo</span>
+                </button>
                 <button id="info-btn">
                     <svg class="button-icon" viewBox="0 0 24 24">
                         <path d="M11.9413 17.3205v-6.1278c0 -0.2322 -0.0922 -0.4549 -0.2564 -0.619 -0.1642 -0.1642 -0.3868 -0.2564 -0.619 -0.2564h-0.8754"></path>
@@ -415,12 +430,13 @@
                     </svg>
                     <span class="button-text">Info.</span>
                 </button>
-                <button id="undo-btn">
+                <button id="share-links-btn">
                     <svg class="button-icon" viewBox="0 0 24 24">
-                        <path d="m5.25 21.747 -4.5 -4.5 4.5 -4.5" ></path>
-                        <path d="M0.75 17.247h15a7.5 7.5 0 0 0 0 -15h-6" ></path>
+                        <path d="M17.25 8.25h1.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1 -1.5 1.5H5.25a1.5 1.5 0 0 1 -1.5 -1.5v-12a1.5 1.5 0 0 1 1.5 -1.5h1.5" ></path>
+                        <path d="m12 0.75 0 10.5" ></path>
+                        <path d="M8.25 4.5 12 0.75l3.75 3.75" ></path>
                     </svg>
-                    <span class="button-text">Undo</span>
+                    <span class="button-text">Share</span>
                 </button>
                 <button id="penalty-lookup-btn">
                     <svg class="button-icon" viewBox="0 0 24 24">
@@ -434,14 +450,6 @@
                         <path d="M5.25 3.75h13.5s1.5 0 1.5 1.5v13.5s0 1.5 -1.5 1.5H5.25s-1.5 0 -1.5 -1.5V5.25s0 -1.5 1.5 -1.5" ></path>
                     </svg>
                     <span class="button-text">End Game</span>
-                </button>
-                <button id="share-links-btn">
-                    <svg class="button-icon" viewBox="0 0 24 24">
-                        <path d="M17.25 8.25h1.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1 -1.5 1.5H5.25a1.5 1.5 0 0 1 -1.5 -1.5v-12a1.5 1.5 0 0 1 1.5 -1.5h1.5" ></path>
-                        <path d="m12 0.75 0 10.5" ></path>
-                        <path d="M8.25 4.5 12 0.75l3.75 3.75" ></path>
-                    </svg>
-                    <span class="button-text">Share</span>
                 </button>
             </div>
         </div>
