@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.12';
+    const appVersion = '0.1.13';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -776,30 +776,31 @@ fetchAndLoadTeamNames();
     * Gathers game data from gameState, formats it into a text file, and triggers a download.
     */
     const downloadGameSummary = () => {
-        // FIX 1: Retrieve Game ID from the URL, where it is always available on the game/summary screen.
+        // Retrieve Game ID from the URL
         const pathParts = window.location.pathname.split('/');
         const gameId = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : 'N/A';
         
-        // Ensure the date is available from the initial setup (used for fallback & filename)
+        // Ensure the date is available
         const formattedDate = document.getElementById('date-field').value;
 
-        // FIX 2: Update the safety check: check if gameState is merely empty.
-        // It uses Object.keys() because gameState is always initialized as {}.
         if (Object.keys(gameState).length === 0) {
             console.error("No game state to download. Game state object is empty.");
             return;
         }
 
-        // FIX 3: Correctly destructure nested scores and rename 'date' to 'gameDate'
+        // Correctly destructure core properties (scores are nested)
         const { 
-            date: gameDate, // Renames the 'date' property to 'gameDate'
+            date: gameDate, 
             location, 
             team1Name, 
             team2Name, 
-            scores: { team1: team1Score, team2: team2Score }, // Correctly extracts scores from the nested 'scores' object
-            scoreLog = [], // Assuming raw array data is present under this key
-            timeoutLog = [] // Assuming raw array data is present under this key
+            scores: { team1: team1Score, team2: team2Score }, 
         } = gameState;
+        
+        // --- CRITICAL FIX: Extract logs from the rendered DOM elements ---
+        // These elements (summaryScoreLog, summaryTimeoutLog) already contain the correct, formatted HTML content from gameState.scoreLogHTML.
+        const scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
+        const timeoutLogEntries = Array.from(summaryTimeoutLog.querySelectorAll('li'));
 
         // --- 1. Format the data into a text string ---
         let summaryText = `WHISTLE GAME SUMMARY\n`;
@@ -813,42 +814,32 @@ fetchAndLoadTeamNames();
         summaryText += `${team2Name || 'Away Team'}: ${team2Score || 0}\n\n`;
     
         // --- 2. Score Log ---
-        summaryText += `SCORING LOG (${scoreLog.length} events)\n`;
+        // Use the length of the extracted DOM elements for the count.
+        summaryText += `SCORING LOG (${scoreLogEntries.length} events)\n`;
         summaryText += `----------------------------------------------------\n`;
-        if (scoreLog.length > 0) {
-            scoreLog.forEach(log => {
-                // FIX 4: Use string '1' for comparison, as team numbers are strings in the log data (e.g., line 538)
-                const teamName = log.team === '1' ? team1Name : team2Name;
-            
-                // Generate player details string
-                const playerDetails = Object.entries(log.player || {})
-                    .filter(([key, value]) => value && value !== '0' && value !== '')
-                    .map(([key, value]) => `${key.toUpperCase()}: #${value}`)
-                    .join(', ');
-            
-                const playerString = playerDetails ? ` (${playerDetails})` : '';
-
-                summaryText += `[${log.time}] ${teamName}: ${log.type} (+${log.points})${playerString}\n`;
+        if (scoreLogEntries.length > 0) {
+            scoreLogEntries.forEach(li => {
+                // Extract the clean text content, which is already formatted: [Time] Team X scored...
+                summaryText += `${li.textContent}\n`;
             });
         } else {
             summaryText += `No scoring plays recorded.\n`;
         }
 
         // --- 3. Timeout Log ---
-        summaryText += `\nTIMEOUT LOG (${timeoutLog.length} events)\n`;
+        // Use the length of the extracted DOM elements for the count.
+        summaryText += `\nTIMEOUT LOG (${timeoutLogEntries.length} events)\n`;
         summaryText += `----------------------------------------------------\n`;
-        if (timeoutLog.length > 0) {
-            timeoutLog.forEach(log => {
-                // FIX 5: Use string '1' for comparison
-                const teamName = log.team === '1' ? team1Name : team2Name;
-                summaryText += `[${log.time}] Timeout used by ${teamName}\n`;
+        if (timeoutLogEntries.length > 0) {
+            timeoutLogEntries.forEach(li => {
+                // Extract the clean text content, which is already formatted: [Time] Team X called a timeout.
+                summaryText += `${li.textContent}\n`;
             });
         } else {
             summaryText += `No timeouts used.\n`;
         }
 
         // --- 4. Create and trigger download ---
-        // Use the team names and date for a unique filename
         const team1Short = team1Name ? team1Name.replace(/\s/g, '_') : 'Home';
         const team2Short = team2Name ? team2Name.replace(/\s/g, '_') : 'Away';
         const filename = `${formattedDate}_${team1Short}_vs_${team2Short}_Summary.txt`;
@@ -856,14 +847,12 @@ fetchAndLoadTeamNames();
         const blob = new Blob([summaryText], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
     
-        // Create a temporary anchor element and trigger the download
         const a = document.createElement('a');
         a.href = url;
         a.download = filename;
         document.body.appendChild(a);
         a.click();
     
-        // Clean up the temporary elements and URL
         document.body.removeChild(a);
         URL.revokeObjectURL(url); 
     };
