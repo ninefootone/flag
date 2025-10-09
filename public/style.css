@@ -431,6 +431,9 @@ input[type="number"] {
 }
 
 .main-btn {
+    display: flex; 
+    align-items: center;
+    justify-content: center; /* Center the icon and text horizontally */
     width: 100%;
     padding: 15px;
     font-size: 1.2rem;
@@ -1016,7 +1019,8 @@ li {
 #download-summary-btn {
     background:white;
     border-color:var(--primary-color);
-    color:var(--primary-color);   
+    color:var(--primary-color);  
+    width:240px; 
 }
 
 #download-summary-btn:hover {
