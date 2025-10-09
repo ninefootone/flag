@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.15';
+    const appVersion = '0.1.16';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -95,11 +95,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeShareModalBtn = document.getElementById('close-share-modal-btn');
     const penaltySearchInput = document.getElementById('penalty-search');
 
-    // Team List Functions
-
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
     let allTeamNames = []; // Global array to store all loaded team names
+
+    /**
+    * Reverses the order of list items (li) in a given <ul> or <ol> element.
+    */
+    const reverseLogOrder = (ulElement) => {
+        // Create an array from the live collection of children (li elements)
+        const listItems = Array.from(ulElement.children);
+    
+        // Detach and re-append items in reverse order
+        for (let i = listItems.length - 1; i >= 0; i--) {
+            ulElement.appendChild(listItems[i]);
+        }
+    };
+
 
 // --- Dropdown Logic ---
 
@@ -350,6 +362,8 @@ fetchAndLoadTeamNames();
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+            reverseLogOrder(summaryScoreLog);
+            reverseLogOrder(summaryTimeoutLog);
             if (fixedFooter) {
                 fixedFooter.classList.add('hidden'); 
             }
@@ -798,9 +812,13 @@ fetchAndLoadTeamNames();
         } = gameState;
         
         // --- CRITICAL FIX: Extract logs from the rendered DOM elements ---
-        // These elements (summaryScoreLog, summaryTimeoutLog) already contain the correct, formatted HTML content from gameState.scoreLogHTML.
-        const scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
-        const timeoutLogEntries = Array.from(summaryTimeoutLog.querySelectorAll('li'));
+        // Extract the logs (they are currently in LIFO order from the game screen)
+        let scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
+        let timeoutLogEntries = Array.from(summaryTimeoutLog.querySelectorAll('li'));
+        
+        // REVERSE ORDER for Download (earliest first - chronological)
+        scoreLogEntries.reverse();
+        timeoutLogEntries.reverse();
 
         // --- 1. Format the data into a text string ---
         let summaryText = `WHISTLE GAME SUMMARY\n`;
