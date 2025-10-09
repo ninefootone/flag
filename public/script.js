@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.16';
+    const appVersion = '0.1.18';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -524,6 +524,19 @@ fetchAndLoadTeamNames();
         return newLogEntry + gameState.timeoutLogHTML;
     };
 
+    /**
+    * Generates an HTML log entry marking the end of the half.
+    */
+    const getNewEndOfHalfLog = () => {
+        // The game clock reset is triggered at the end of the half, 
+        // so we use the full half duration as the elapsed time.
+        const elapsedTime = gameState.halfDuration; 
+    
+        // Creates a distinctive log entry (using formatTime which is already available)
+        const newLogEntry = `<li class="end-of-half-log">[${formatTime(elapsedTime)}] --- END OF HALF ---</li>`;
+        return newLogEntry;
+    };
+
     const updateDownDisplay = () => {
         downButtons.forEach(btn => {
             if (parseInt(btn.dataset.down) === gameState.currentDown) {
@@ -750,10 +763,22 @@ fetchAndLoadTeamNames();
         sendAction('STOP_GAME_CLOCK');
         gameClockDisplay.parentElement.classList.remove('warning');
         twoMinuteWarningIssuedLocally = false;
+    
+        // 1. Generate the 'End of Half' log entry
+        const endOfHalfLogEntry = getNewEndOfHalfLog();
+    
+        // 2. Prepend the new entry to the existing log HTML 
+        //    (The game log is newest-first on the game interface, so we prepend/add to the start)
+        const newScoreLogHTML = endOfHalfLogEntry + gameState.scoreLogHTML;
+
+        // 3. Send the reset state PLUS the updated score log
         sendAction('UPDATE_STATE', {
-            gameTimeLeft: gameState.halfDuration,
-            timeoutsUsed: { '1': 0, '2': 0 },
-            twoMinuteWarningIssued: false
+            gameTimeLeft: gameState.halfDuration, // Resets the clock to the start time
+            timeoutsUsed: { '1': 0, '2': 0 },     // Resets timeouts
+            twoMinuteWarningIssued: false,
+        
+            // Include the new log content
+            scoreLogHTML: newScoreLogHTML 
         });
     });
 
