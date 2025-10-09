@@ -298,7 +298,7 @@ button:hover {
     background-color: var(--focus-color);
     border:1px solid var(--focus-color) !important;
     padding:10px 10px 5px 10px;
-    font-weight: 800;
+    font-weight: 900;
 }
 
 .coin-toss-section {
@@ -416,7 +416,7 @@ input[type="number"] {
 #game-lobby h2 {
     text-align: left;
     font-size:60px;
-    font-weight:800;
+    font-weight:900;
     margin:0;
     line-height: 1em;
 }
@@ -432,7 +432,7 @@ input[type="number"] {
 #start-new-game-btn {
     padding:0;
     text-align:left;
-    font-weight:800;
+    font-weight:900;
     font-size:60px;
     background:none;
     border:none;
