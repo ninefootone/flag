@@ -153,9 +153,9 @@ input:focus {
 button {
     background-color: var(--primary-color);
     color: white;
-    border-radius:6px !important;
+    border-radius:500px !important;
     border: 1px solid var(--primary-color);
-    padding: 14px 15px 12px 15px;
+    padding: 12px 15px 12px 15px;
     cursor: pointer;
     font-size: 1rem;
     margin-top: 10px;
@@ -190,6 +190,7 @@ button:hover {
     font-weight:600;
     text-align: center;
     color:var(--primary-color);
+    border-radius: 500px;
 }
 
 .settings-grid {
@@ -237,6 +238,8 @@ button:hover {
 .settings-grid input#half-duration, .settings-grid input#play-clock-duration, .settings-grid input#timeouts-per-half {
     font-family: var(--headline-font);
     text-align: center;
+    border-radius:8px;
+    padding:5px 10px 10px 10px;
 }
 
 /* Team Selection */
@@ -606,7 +609,7 @@ header {
 .clock-controls button, .play-clock-controls button {
     font-size: 18px;
     font-weight:600;
-    padding: 8px 20px 8px 20px;
+    padding: 4px 20px 8px 20px;
 }
 
 .reset-btn {
@@ -831,8 +834,8 @@ header {
 }
 
 .use-timeout-btn {
-    background-color: #ffc107;
-    color: #333;
+    background-color: var(--primary-color);
+    color:white;
     width: 80px;
     height: 80px;
     padding: 10px;
@@ -844,7 +847,7 @@ header {
 }
 
 .use-timeout-btn:hover {
-    background-color: #ffc10782;
+    background-color: var(--secondary-color);
     border:none;
 }
 
@@ -1378,7 +1381,7 @@ li {
     cursor: pointer;
 }
 
-#close-penalty-modal-btn svg, #close-info-modal-btn svg {
+#close-penalty-modal-btn svg, #close-info-modal-btn svg, #close-share-modal-btn svg {
     display: block; /* Ensure the SVG behaves as a block element */
     width: 100%;    /* Make the SVG fill the button space */
     height: 100%;
@@ -1436,7 +1439,7 @@ li {
     background-color: white;
     color:var(--primary-color);
     border:none;
-    padding:8px 0;
+    padding:8px 8px;
     border-radius: 8px !important;
 }
 
