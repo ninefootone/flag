@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.11';
+    const appVersion = '0.1.12';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -772,7 +772,7 @@ fetchAndLoadTeamNames();
         // If the user clicks Cancel, the action is ignored.
     });
 
-    /**
+/**
     * Gathers game data from gameState, formats it into a text file, and triggers a download.
     */
     const downloadGameSummary = () => {
@@ -783,43 +783,41 @@ fetchAndLoadTeamNames();
         // Ensure the date is available from the initial setup (used for fallback & filename)
         const formattedDate = document.getElementById('date-field').value;
 
-        // Update the safety check: Only check if gameState is empty.
+        // FIX 2: Update the safety check: check if gameState is merely empty.
+        // It uses Object.keys() because gameState is always initialized as {}.
         if (Object.keys(gameState).length === 0) {
-            console.error("No game state to download.");
+            console.error("No game state to download. Game state object is empty.");
             return;
         }
 
-        // FIX 2: Correctly destructure nested properties (scores) and rename the date property.
+        // FIX 3: Correctly destructure nested scores and rename 'date' to 'gameDate'
         const { 
-            date: gameDate, // Renames the 'date' property from gameState to 'gameDate'
+            date: gameDate, // Renames the 'date' property to 'gameDate'
             location, 
             team1Name, 
             team2Name, 
-            scoreLog = [], 
-            timeoutLog = [],
-            // Extract the nested scores object's values and rename them to match the original function's variable names.
-            scores: { team1: team1Score, team2: team2Score } 
+            scores: { team1: team1Score, team2: team2Score }, // Correctly extracts scores from the nested 'scores' object
+            scoreLog = [], // Assuming raw array data is present under this key
+            timeoutLog = [] // Assuming raw array data is present under this key
         } = gameState;
 
         // --- 1. Format the data into a text string ---
         let summaryText = `WHISTLE GAME SUMMARY\n`;
         summaryText += `====================================================\n\n`;
-        summaryText += `Game ID: ${gameId || 'N/A'}\n`; // Now uses the corrected 'gameId' variable
-        summaryText += `Date: ${gameDate || formattedDate}\n`; 
+        summaryText += `Game ID: ${gameId || 'N/A'}\n`;
+        summaryText += `Date: ${gameDate || formattedDate}\n`;
         summaryText += `Location: ${location || 'N/A'}\n\n`;
         summaryText += `FINAL SCORE\n`;
         summaryText += `----------------------------------------------------\n`;
-        summaryText += `${team1Name || 'Home Team'}: ${team1Score || 0}\n`; // Now uses the corrected 'team1Score' variable
-        summaryText += `${team2Name || 'Away Team'}: ${team2Score || 0}\n\n`; // Now uses the corrected 'team2Score' variable
-        
-        // ... (The rest of the logic remains correct, using the newly defined variables)
-
+        summaryText += `${team1Name || 'Home Team'}: ${team1Score || 0}\n`;
+        summaryText += `${team2Name || 'Away Team'}: ${team2Score || 0}\n\n`;
+    
         // --- 2. Score Log ---
         summaryText += `SCORING LOG (${scoreLog.length} events)\n`;
         summaryText += `----------------------------------------------------\n`;
         if (scoreLog.length > 0) {
             scoreLog.forEach(log => {
-                // The original code was using '1' and '2' for team numbers here, which must be strings to match the log structure.
+                // FIX 4: Use string '1' for comparison, as team numbers are strings in the log data (e.g., line 538)
                 const teamName = log.team === '1' ? team1Name : team2Name;
             
                 // Generate player details string
@@ -841,13 +839,13 @@ fetchAndLoadTeamNames();
         summaryText += `----------------------------------------------------\n`;
         if (timeoutLog.length > 0) {
             timeoutLog.forEach(log => {
+                // FIX 5: Use string '1' for comparison
                 const teamName = log.team === '1' ? team1Name : team2Name;
                 summaryText += `[${log.time}] Timeout used by ${teamName}\n`;
             });
         } else {
             summaryText += `No timeouts used.\n`;
         }
-
 
         // --- 4. Create and trigger download ---
         // Use the team names and date for a unique filename
