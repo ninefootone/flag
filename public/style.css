@@ -112,6 +112,29 @@
   --body-font: "greycliff-cf", "azo-sans-web", sans-serif;
 }
 
+/* --- Dark Mode Overrides --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color:#106386;  
+        --primary-color: #ffffff;
+        --secondary-color: #009bdb;
+        --focus-color: #e4f4fa;
+        --text-color: #333333;
+        --notes-color: #aaaaaa;
+        --error-color: #dc3545;
+        --button-text: #ffffff;
+        --secondary-button-bgnd: #efefef;
+        --secondary-button-bgnd-hover: #dedede;
+        --modal-overlay: rgba(0,0,0,0.7);
+        --drop-shadow-color: rgba(0,0,0,0.2);
+    }
+    
+    /* Optional: If specific elements need custom dark mode styling not covered by variables */
+    /* .fixed-footer-links button {
+        background-color: var(--header-bg-color) !important;
+    } */
+}
+
 /* General Body and Container Styling */
 body {
     font-family: var(--body-font);
