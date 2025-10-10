@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.24';
+    const appVersion = '0.1.25';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -12,6 +12,27 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('date-field').value = formattedDate;
 
     const urlParams = new URLSearchParams(window.location.search);
+
+    let initialRole = 'viewer'; // Default to a safe, unprivileged role
+
+    const roleToken = urlParams.get('token');
+
+    if (roleToken) {
+        const confirmedRole = getRoleByToken(roleToken);
+        if (confirmedRole) {
+            initialRole = confirmedRole;
+        } else {
+            console.warn(`Invalid or expired token received: ${roleToken}. Defaulting to viewer.`);
+        }
+    } else {
+        // FALLBACK: Keep a temporary check for the old, unsecure 'role' parameter for backward compatibility
+        const unsecureRole = urlParams.get('role');
+        if (unsecureRole) {
+            initialRole = unsecureRole;
+            console.warn("Using unsecure 'role' parameter. Update share links to use 'token'.");
+        }
+    }
+
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -117,7 +138,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // SECURITY NOTE: This client-side obfuscation only hides the role.
+    // For true security, the tokens MUST be validated and mapped to roles on your server.
+    const ROLE_TOKENS = {
+        'referee': 'r3f3r33-t0k3n-9a1c', 
+        'scorer':  'sc0r3r-t0k3n-5f6d', 
+        'coach':   'c0ach-t0k3n-3x8z',  
+        // Add administrator or any other role here
+        'administrator': 'adm1n-t0k3n-7y2p',
+        'clock': 'cl0ck-t0k3n-7y2p'
+    };
 
+    /**
+    * Finds the role associated with a given token.
+    * @param {string} token - The obfuscated string from the URL.
+    * @returns {string|undefined} The plain role name (e.g., 'scorer') or undefined.
+    */
+    const getRoleByToken = (token) => {
+        // Reverse lookup the role from the token
+        // Note: Always use .toLowerCase() on the role if your roles are mixed-case in usage
+        return Object.keys(ROLE_TOKENS).find(role => ROLE_TOKENS[role] === token);
+    };
+
+
+    
 // --- Dropdown Logic ---
 
 const fetchAndLoadTeamNames = async () => {
@@ -989,13 +1033,20 @@ fetchAndLoadTeamNames();
         }
     });
 
-    // --- New Share Link Logic ---
     const getShareUrl = (role) => {
-        // Extracts the game ID from the current URL path.
-        const gameId = window.location.pathname.split('/').pop().split('?')[0];
-        // Uses window.location.origin (e.g., https://referee-app.onrender.com) for the base URL
-        return `${window.location.origin}/game/${gameId}?role=${role}`;
+        // Convert role to lowercase to ensure match with map keys
+        const roleToken = ROLE_TOKENS[role.toLowerCase()]; 
+        const gameId = urlParams.get('gameId'); 
+
+        if (!roleToken) {
+            console.error(`Error: No token defined for role: ${role}`);
+            return `${window.location.origin}${window.location.pathname}?gameId=${gameId}&role=viewer`; 
+        }
+
+        // This is the new, obfuscated link structure:
+        return `${window.location.origin}${window.location.pathname}?gameId=${gameId}&token=${roleToken}`;
     };
+
 
     const copyToClipboard = (text) => {
         if (!navigator.clipboard) {
