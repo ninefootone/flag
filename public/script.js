@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.28';
+    const appVersion = '0.1.29';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1029,30 +1029,27 @@ fetchAndLoadTeamNames();
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {
     // 1. Get gameId from the input element's value
-    // This correctly handles the gameId=null issue
     const gameId = gameIdInput.value; 
 
-    // 2. Convert the role to its secure token
+    // 2. Convert the role to its secure token (guaranteed to be defined for 'head-referee', etc.)
     const roleToken = ROLE_TOKENS[role.toLowerCase()]; 
 
-    // --- ERROR CHECKING ---
+    // --- CHECK FOR MISSING GAME ID (The cause of your blank link) ---
     if (!gameId || gameId === 'null') {
         console.error(`Cannot generate share URL for role ${role}: gameId is missing.`);
-        // Return a clean, base link
-        return `${window.location.origin}${window.location.pathname}`; 
+        // Return a link that points to the lobby
+        return `${window.location.origin}/`; 
     }
     
+    // --- CHECK FOR MISSING TOKEN (Should not happen if all roles are mapped) ---
     if (!roleToken) {
-        // If a role is defined but has no token (e.g., 'viewer' or a typo), 
-        // we return a link that defaults to viewer on the client-side.
-        console.error(`Token not defined for role: ${role}. Returning viewer link.`);
-        // We still use the secure token parameter, even if empty, to avoid the old system.
-        return `${window.location.origin}${window.location.pathname}?gameId=${gameId}`; 
+        console.warn(`Token not defined for role: ${role}. Returning secure link without a specific role.`);
+        // Still return the secure path, but without the token
+        return `${window.location.origin}/game/${gameId}`; 
     }
-    // --- END ERROR CHECKING ---
 
-    // 3. Return the new secure link structure: ...?gameId=XXXX&token=YYYY
-    return `${window.location.origin}${window.location.pathname}?gameId=${gameId}&token=${roleToken}`;
+    // 3. CRITICAL: Return the explicit, secure path: /game/[ID]?token=[TOKEN]
+    return `${window.location.origin}/game/${gameId}?token=${roleToken}`;
 };
 
 
