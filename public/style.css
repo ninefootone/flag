@@ -114,7 +114,7 @@
 }
 
 /* --- Dark Mode Overrides --- */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     :root {
         --background-color:#113f52;  
         --primary-color: #ffffff;
@@ -129,49 +129,24 @@
         --secondary-button-bgnd-hover: #106386;
         --modal-overlay: rgba(0,0,0,0.7);
         --drop-shadow-color: rgba(0,0,0,0.2);
-    }
+    } */
     
     /* Optional: If specific elements need custom dark mode styling not covered by variables */
-    .title { color: var(--secondary-color) !important; }
+    /* .title { color: var(--secondary-color) !important; }
     button { background-color: var(--secondary-color) !important; color:var(--primary-color) !important; }
-}
+} */
 
-/*
- * Default State (Light Mode)
- */
-.logo-swap {
-    /* Ensure the logos are the same size/position */
-    width: 150px; /* Adjust size as needed */
-    height: auto;
-}
-
-.light-logo {
-    /* Light logo is visible by default */
-    display: block; 
-}
-
-.dark-logo {
-    /* Dark logo is hidden by default */
-    display: none; 
-}
+/* Default State (Light Mode) */
+/* .logo-swap { height: auto; }
+.light-logo { display: block; }
+.dark-logo { display: none; } */
 
 
-/*
- * Dark Mode State
- */
-@media (prefers-color-scheme: dark) {
-    
-    .light-logo {
-        /* Hide the light logo in dark mode */
-        display: none !important; 
-    }
-
-    .dark-logo {
-        /* Show the dark logo in dark mode */
-        display: block !important; 
-    }
-}
-
+/* Dark Mode State */
+/* @media (prefers-color-scheme: dark) {    
+    .light-logo { display: none !important; }
+    .dark-logo { display: block !important; }
+} */
 
 /* General Body and Container Styling */
 body {
