@@ -99,6 +99,7 @@
   --background-color:#ffffff;  
   --primary-color: #106386;
   --secondary-color: #009bdb;
+  --section-border: #dddddd;
   --focus-color: #e4f4fa;
   --text-color: #333333;
   --notes-color: #aaaaaa;
@@ -115,25 +116,62 @@
 /* --- Dark Mode Overrides --- */
 @media (prefers-color-scheme: dark) {
     :root {
-        --background-color:#106386;  
+        --background-color:#113f52;  
         --primary-color: #ffffff;
+        --section-border: #106386;
         --secondary-color: #009bdb;
         --focus-color: #e4f4fa;
-        --text-color: #333333;
+        --text-color: #ffffff;
         --notes-color: #aaaaaa;
         --error-color: #dc3545;
-        --button-text: #ffffff;
-        --secondary-button-bgnd: #efefef;
-        --secondary-button-bgnd-hover: #dedede;
+        --button-text: #113f52;
+        --secondary-button-bgnd: rgba(255,255,255,0.1);
+        --secondary-button-bgnd-hover: #106386;
         --modal-overlay: rgba(0,0,0,0.7);
         --drop-shadow-color: rgba(0,0,0,0.2);
     }
     
     /* Optional: If specific elements need custom dark mode styling not covered by variables */
-    /* .fixed-footer-links button {
-        background-color: var(--header-bg-color) !important;
-    } */
+    .title { color: var(--secondary-color) !important; }
+    button { background-color: var(--secondary-color) !important; color:var(--primary-color) !important; }
 }
+
+/*
+ * Default State (Light Mode)
+ */
+.logo-swap {
+    /* Ensure the logos are the same size/position */
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
+
+.light-logo {
+    /* Light logo is visible by default */
+    display: block; 
+}
+
+.dark-logo {
+    /* Dark logo is hidden by default */
+    display: none; 
+}
+
+
+/*
+ * Dark Mode State
+ */
+@media (prefers-color-scheme: dark) {
+    
+    .light-logo {
+        /* Hide the light logo in dark mode */
+        display: none !important; 
+    }
+
+    .dark-logo {
+        /* Show the dark logo in dark mode */
+        display: block !important; 
+    }
+}
+
 
 /* General Body and Container Styling */
 body {
