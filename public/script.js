@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.27';
+    const appVersion = '0.1.28';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -16,8 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'referee': 'r3f3r33-t0k3n-9a1c', 
         'scorer':  'sc0r3r-t0k3n-5f6d', 
         'clock':   'cl0clh-t0k3n-4s7d',
-        'coach':   'c0ach-t0k3n-3x8z'
-    };
+        'coach':   'c0ach-t0k3n-3x8z',
+        'head-referee': 'h3ad-r3f-t0k3n-p9f3'
+};
 
     const getRoleByToken = (token) => {
         return Object.keys(ROLE_TOKENS).find(role => ROLE_TOKENS[role] === token);
