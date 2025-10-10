@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.26';
+    const appVersion = '0.1.27';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1026,29 +1026,33 @@ fetchAndLoadTeamNames();
     });
 
     // --- New Share Link Logic ---
-        const getShareUrl = (role) => {
-        // CRITICAL: Get gameId from the input element's value, not URL params,
-        // to ensure you have the ID for the newly created game.
-        const gameId = gameIdInput.value; 
+    const getShareUrl = (role) => {
+    // 1. Get gameId from the input element's value
+    // This correctly handles the gameId=null issue
+    const gameId = gameIdInput.value; 
 
-        // Find the obfuscated token for the requested role
-        const roleToken = ROLE_TOKENS[role.toLowerCase()]; 
+    // 2. Convert the role to its secure token
+    const roleToken = ROLE_TOKENS[role.toLowerCase()]; 
 
-        // Handle missing game ID (should result in a safe link)
-        if (!gameId || gameId === 'null') {
-            console.error("Cannot generate share URL: gameId is missing.");
-            return `${window.location.origin}${window.location.pathname}?role=viewer`; 
-        }
+    // --- ERROR CHECKING ---
+    if (!gameId || gameId === 'null') {
+        console.error(`Cannot generate share URL for role ${role}: gameId is missing.`);
+        // Return a clean, base link
+        return `${window.location.origin}${window.location.pathname}`; 
+    }
+    
+    if (!roleToken) {
+        // If a role is defined but has no token (e.g., 'viewer' or a typo), 
+        // we return a link that defaults to viewer on the client-side.
+        console.error(`Token not defined for role: ${role}. Returning viewer link.`);
+        // We still use the secure token parameter, even if empty, to avoid the old system.
+        return `${window.location.origin}${window.location.pathname}?gameId=${gameId}`; 
+    }
+    // --- END ERROR CHECKING ---
 
-        // If a valid token exists, use it in the link
-        if (roleToken) {
-            // New secure link structure: ...?gameId=XXXX&token=YYYY
-            return `${window.location.origin}${window.location.pathname}?gameId=${gameId}&token=${roleToken}`;
-        }
-
-        // Fallback if the role is valid but has no token (e.g., a viewer role)
-        return `${window.location.origin}${window.location.pathname}?gameId=${gameId}&role=${role}`; 
-    };
+    // 3. Return the new secure link structure: ...?gameId=XXXX&token=YYYY
+    return `${window.location.origin}${window.location.pathname}?gameId=${gameId}&token=${roleToken}`;
+};
 
 
     const copyToClipboard = (text) => {
