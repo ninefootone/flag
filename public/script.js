@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.21';
+    const appVersion = '0.1.22';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -94,6 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const shareModal = document.getElementById('share-modal');
     const closeShareModalBtn = document.getElementById('close-share-modal-btn');
     const penaltySearchInput = document.getElementById('penalty-search');
+    const infoModalAdmin = document.getElementById('info-modal-admin');
+    const infoModalRef = document.getElementById('info-modal-ref');
+    const infoModalScorer = document.getElementById('info-modal-scorer');
+    const infoModalClock = document.getElementById('info-modal-clock');
+    const infoModalCoach = document.getElementById('info-modal-coach');
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
@@ -233,16 +238,21 @@ fetchAndLoadTeamNames();
         infoBtn,
         penaltyLookupBtn,
         shareLinksBtn,
-        fixedFooter
+        fixedFooter,
+        infoModalAdmin,
+        infoModalRef,
+        infoModalScorer,
+        infoModalClock,
+        infoModalCoach
     ];
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
         'administrator': allControls,
-        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn],
-        'scorer': [...scoreButtons, ...adjustButtons, fixedFooter, undoBtn],
-        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons],
-        'coach': []
+        'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
+        'scorer': [...scoreButtons, ...adjustButtons, fixedFooter, undoBtn, infoBtn, infoModalScorer],
+        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, fixedFooter, infoBtn, infoModalClock],
+        'coach': [fixedFooter, infoBtn, infoModalCoach]
     };
 
     let userRole = 'administrator';
