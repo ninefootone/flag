@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.29';
+    const appVersion = '0.1.30';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -11,44 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
 
-    // --- START ROLE OBFUSCATION SETUP ---
-    const ROLE_TOKENS = {
-        'referee': 'r3f3r33-t0k3n-9a1c', 
-        'scorer':  'sc0r3r-t0k3n-5f6d', 
-        'clock':   'cl0clh-t0k3n-4s7d',
-        'coach':   'c0ach-t0k3n-3x8z',
-        'head-referee': 'h3ad-r3f-t0k3n-p9f3'
-};
-
-    const getRoleByToken = (token) => {
-        return Object.keys(ROLE_TOKENS).find(role => ROLE_TOKENS[role] === token);
-    };
-    // --- END ROLE OBFUSCATION SETUP ---
-
     const urlParams = new URLSearchParams(window.location.search);
-
-    // --- START SECURE ROLE DETERMINATION ---
-    let initialRole = 'viewer'; // Default to the safest role
-
-    const roleToken = urlParams.get('token');
-
-    if (roleToken) {
-        const confirmedRole = getRoleByToken(roleToken);
-        if (confirmedRole) {
-            // Token found and valid! Set the confirmed role.
-            initialRole = confirmedRole;
-        } else {
-            console.warn(`Invalid token received: ${roleToken}. Defaulting to viewer.`);
-        }
-    } else {
-        // OPTIONAL FALLBACK: Temporarily keep the unsecure 'role' parameter for testing/old links
-        const unsecureRole = urlParams.get('role');
-        if (unsecureRole) {
-            initialRole = unsecureRole;
-            console.warn("Using unsecure 'role' parameter. Update share links to use 'token'.");
-        }
-    }
-    // --- END SECURE ROLE DETERMINATION ---
 
     // Element references
     const gameLobby = document.getElementById('game-lobby');
@@ -374,7 +337,7 @@ fetchAndLoadTeamNames();
 
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        userRole = initialRole || 'administrator';
+        userRole = urlParams.get('role') || 'administrator';
 
         const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
         if (urlGameId && urlGameId !== 'game.html') {
@@ -1028,30 +991,11 @@ fetchAndLoadTeamNames();
 
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {
-    // 1. Get gameId from the input element's value
-    const gameId = gameIdInput.value; 
-
-    // 2. Convert the role to its secure token (guaranteed to be defined for 'head-referee', etc.)
-    const roleToken = ROLE_TOKENS[role.toLowerCase()]; 
-
-    // --- CHECK FOR MISSING GAME ID (The cause of your blank link) ---
-    if (!gameId || gameId === 'null') {
-        console.error(`Cannot generate share URL for role ${role}: gameId is missing.`);
-        // Return a link that points to the lobby
-        return `${window.location.origin}/`; 
-    }
-    
-    // --- CHECK FOR MISSING TOKEN (Should not happen if all roles are mapped) ---
-    if (!roleToken) {
-        console.warn(`Token not defined for role: ${role}. Returning secure link without a specific role.`);
-        // Still return the secure path, but without the token
-        return `${window.location.origin}/game/${gameId}`; 
-    }
-
-    // 3. CRITICAL: Return the explicit, secure path: /game/[ID]?token=[TOKEN]
-    return `${window.location.origin}/game/${gameId}?token=${roleToken}`;
-};
-
+        // Extracts the game ID from the current URL path.
+        const gameId = window.location.pathname.split('/').pop().split('?')[0];
+        // Uses window.location.origin (e.g., https://referee-app.onrender.com) for the base URL
+        return `${window.location.origin}/game/${gameId}?role=${role}`;
+    };
 
     const copyToClipboard = (text) => {
         if (!navigator.clipboard) {
