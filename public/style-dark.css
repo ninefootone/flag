@@ -12,6 +12,8 @@
         --button-text: #113f52 !important;
         --secondary-button-bgnd: rgba(255,255,255,0.1) !important;
         --secondary-button-bgnd-hover: #106386 !important;
+        --subtle-border-color:rgba(255,255,255,0.25) !important;
+        --placeholder-color:rgba(255,255,255,0.5) !important;
         --modal-overlay: rgba(0,0,0,0.7) !important;
         --drop-shadow-color: rgba(0,0,0,0.2) !important;
     }
@@ -19,7 +21,7 @@
     .title { color: var(--secondary-color) !important; }
     button { background-color: var(--secondary-color) !important; color:var(--primary-color) !important; }
     .light-logo { display: none !important; }
-    .dark-logo { display: block !important; }
+    .dark-logo { display: block !important; margin:0 auto !important; }
 
 /* General Body and Container Styling */
 body {
@@ -71,7 +73,7 @@ button:hover {
 /* Settings Form */
 
 #settings-form input {
-    color:var(--primary-color) !important;
+    color:var(--background-color) !important;
 }
 
 .settings-grid label {
@@ -105,18 +107,18 @@ button:hover {
 }
 
 .settings-grid #half-duration, .settings-grid #play-clock-duration, .settings-grid #timeouts-per-half {
-    background-color: var(--focus-color) !important;
-    border-color: var(--focus-color) !important;
+    background-color: var(--background-color) !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 #coin-toss-btn {
     color: var(--primary-color) !important;
     background-color:var(--background-color) !important;
-    border-color: var(--primary-color) !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 #coin-toss-btn:hover {
-    color:var(--button-text) !important;
+    color:var(--primary-color) !important;
     background-color: var(--secondary-color) !important;
     border-color:var(--secondary-color) !important;
 }
@@ -135,18 +137,19 @@ button:hover {
 
 /* Common Form and Button Styles */
 input[type="text"], input[type="number"], input[type="date"] {
-    border-color: var(--notes-color) !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 /* LOBBY-SPECIFIC STYLES */
 
 #start-new-game-btn {
     background:var(--primary-color) !important;
-    color:var(--button-text) !important;
+    color:var(--background-color) !important;
 }
 
 #start-new-game-btn:hover {
     background:var(--secondary-color) !important;
+    color:var(--text-color) !important;
 }
 
 .error-message {
@@ -486,8 +489,8 @@ li {
 /* Fixed Footer */
 
 .fixed-footer-links {
-    border-color: #dedede !important;
-    background: #ffffff !important;
+    border-color: var(--subtle-border-color) !important;
+    background: var(--background-color) !important;
     box-shadow: 0 0 20px -2px var(--drop-shadow-color) !important;    
 }
 
