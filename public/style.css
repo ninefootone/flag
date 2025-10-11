@@ -115,7 +115,7 @@
 
 /* Default State (Light Mode) */
 .logo-swap { height: auto; }
-.light-logo { display: block; }
+.light-logo { display: block; margin:0 auto !important; }
 .dark-logo { display: none; }
 
 /* Dark Mode State */
