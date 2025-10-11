@@ -1,0 +1,512 @@
+/* --- Dark Mode Overrides --- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color:#113f52 !important;  
+        --primary-color: #ffffff !important;
+        --section-border: #106386 !important;
+        --secondary-color: #009bdb !important;
+        --focus-color: #e4f4fa !important;
+        --text-color: #ffffff !important;
+        --notes-color: #aaaaaa !important;
+        --error-color: #dc3545 !important;
+        --button-text: #113f52 !important;
+        --secondary-button-bgnd: rgba(255,255,255,0.1) !important;
+        --secondary-button-bgnd-hover: #106386 !important;
+        --modal-overlay: rgba(0,0,0,0.7) !important;
+        --drop-shadow-color: rgba(0,0,0,0.2) !important;
+    }
+    
+    .title { color: var(--secondary-color) !important; }
+    button { background-color: var(--secondary-color) !important; color:var(--primary-color) !important; }
+    .light-logo { display: none !important; }
+    .dark-logo { display: block !important; }
+
+/* General Body and Container Styling */
+body {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+}
+
+h1, h2, h3, h4, h5, h6, button {
+    color: var(--primary-color) !important;
+}
+
+p, ul, ol, input, .penalties-list {
+    color: var(--text-color) !important;
+}
+
+.title {
+    color: var(--text-color) !important;
+}
+
+input::placeholder {
+    color:var(--notes-color) !important;
+}
+
+input:focus::placeholder {
+    color:var(--primary-color) !important;
+}
+
+input:focus {
+    background-color: var(--focus-color) !important;
+    border-color: var(--focus-color) !important;
+    outline: var(--primary-color) !important;
+}
+
+button {
+    background-color: var(--primary-color) !important;
+    color: var(--button-text) !important;
+    border-color: var(--primary-color) !important;
+}
+
+button:hover {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+.app-container {
+    background-color: var(--background-color) !important;
+}
+
+/* Settings Form */
+
+#settings-form input {
+    color:var(--primary-color) !important;
+}
+
+.settings-grid label {
+    color: var(--primary-color) !important;
+}
+
+/* Team Selection */
+
+/* --- Custom Dropdown Styles --- */
+.team-options-list {
+    border-color: var(--primary-color) !important;
+    background-color: var(--background-color) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.team-options-list li {
+    color: var(--primary-color) !important;
+    background:white !important;
+}
+
+.team-options-list li:hover,
+.team-options-list li.highlighted {
+    background-color: var(--focus-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* End Team Selection */
+
+.settings-grid .settings-notes {
+    color: var(--notes-color) !important;
+}
+
+.settings-grid #half-duration, .settings-grid #play-clock-duration, .settings-grid #timeouts-per-half {
+    background-color: var(--focus-color) !important;
+    border-color: var(--focus-color) !important;
+}
+
+#coin-toss-btn {
+    color: var(--primary-color) !important;
+    background-color:var(--background-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+#coin-toss-btn:hover {
+    color:var(--button-text) !important;
+    background-color: var(--secondary-color) !important;
+    border-color:var(--secondary-color) !important;
+}
+
+#current-game-id {
+    color:var(--primary-color) !important;
+}
+
+#game-id-text {
+    color: var(--primary-color) !important;
+}
+
+#current-game-id .share-notes {
+    color: var(--notes-color) !important;
+}
+
+/* Common Form and Button Styles */
+input[type="text"], input[type="number"], input[type="date"] {
+    border-color: var(--notes-color) !important;
+}
+
+/* LOBBY-SPECIFIC STYLES */
+
+#start-new-game-btn {
+    background:var(--primary-color) !important;
+    color:var(--button-text) !important;
+}
+
+#start-new-game-btn:hover {
+    background:var(--secondary-color) !important;
+}
+
+.error-message {
+    color: var(--error-color) !important;
+}
+
+.role-selection-wrapper label {
+    border-color: var(--primary-color) !important;
+    background-color:var(--background-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.role-selection-wrapper input[type="radio"]:checked + label {
+    background-color: var(--primary-color) !important;
+    color: var(--button-text) !important;
+}
+
+.role-selection-wrapper label:hover {
+    background-color: var(--focus-color) !important;
+}
+
+/* END LOBBY-SPECIFIC STYLES */
+
+/* Header and Game Clocks Section */
+.game-info {
+    color: var(--primary-color) !important;
+}
+
+.clock-display {
+    border-color: #ddd !important;
+}
+
+.clock-time {
+    color: var(--primary-color) !important;
+}
+
+.clock-label {
+    color: var(--text-color) !important;
+}
+
+.reset-btn {
+    color: var(--text-color) !important;
+    background-color:var(--background-color) !important;
+    border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+.reset-btn:hover {
+    color: var(--text-color) !important;
+    background-color:var(--secondary-button-bgnd) !important;
+    border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+/* Main Controls Section (Grid-based layout) */
+.down-buttons-section-wrapper {
+    border-color: #ddd !important;
+}
+
+.down-label {
+    color: var(--text-color) !important;
+}
+
+.down-buttons button {
+    background-color:var(--secondary-button-bgnd) !important;
+    color:var(--text-color) !important;
+    border-color: var(--secondary-button-bgnd) !important;
+}
+
+.down-buttons button:hover {
+    background-color:var(--secondary-button-bgnd-hover) !important;
+}
+
+.down-buttons button.active {
+    background-color: var(--primary-color) !important;
+    color:var(--button-text) !important;
+}
+
+.team-score {
+    border-color: 1px solid #ddd !important;
+}
+
+.score {
+    color: var(--primary-color) !important;
+}
+
+.adjust-btn {
+    color:var(--secondary-color) !important;
+}
+
+.adjust-btn:hover {
+    background-color: var(--focus-color) !important;
+}
+
+.score-buttons button {
+    background-color: var(--secondary-button-bgnd) !important;
+    color: var(--text-color) !important;
+}
+
+.score-buttons button:hover {
+    background-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+.timeout-buttons-section-wrapper {
+    border-color: #ddd !important;
+}
+
+.use-timeout-btn {
+    background-color: var(--primary-color) !important;
+    color:var(--button-text) !important;
+}
+
+.use-timeout-btn:hover {
+    background-color: var(--secondary-color) !important;
+}
+
+
+/* Log and End Game Section */
+
+li {
+    background-color: var(--secondary-button-bgnd) !important;
+    border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+/* Styles for the undo and end game buttons */
+.undo-btn {
+    color: var(--primary-color) !important;
+    background-color:var(--background-color) !important;
+    border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+.undo-btn:hover {
+    color: var(--text-color) !important;
+    background-color:var(--secondary-button-bgnd) !important;
+    border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+/* New: Styles for the pop-up modal overlay */
+#score-popup {
+    background-color: var(--modal-overlay) !important;
+}
+
+.popup-content {
+    background-color: var(--background-color) !important;
+    box-shadow: 0 4px 15px var(--drop-shadow-color) !important;
+}
+
+/* New styles for the game summary screen */
+.summary-team {
+    border-color: var(--focus-color) !important;
+    background-color:var(--focus-color) !important;
+}
+
+.summary-team-name {
+    color: var(--primary-color) !important;
+}
+
+.summary-score {
+    color: var(--primary-color) !important;
+}
+
+#download-summary-btn {
+    background:var(--background-color) !important;
+    border-color:var(--primary-color) !important;
+    color:var(--primary-color) !important;  
+}
+
+#download-summary-btn:hover {
+    background:var(--secondary-color) !important;
+    border-color:var(--secondary-color) !important;
+    color:var(--button-text) !important;  
+}
+
+/* Update the main button style for horizontal icon alignment */
+.download-icon {
+    fill: currentColor !important; 
+}
+
+/* Two-minute warning animation */
+@keyframes flash-warning {
+    0%   { background-color: #dc3545 !important; color: var(--button-text) !important; }
+    50%  { background-color: #c82333 !important; color: var(--button-text) !important; }
+    100% { background-color: #dc3545 !important; color: var(--button-text) !important; }
+}
+
+.warning .clock-time, .warning .title {
+    color: var(--button-text) !important;
+}
+
+.disabled {
+    border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+.share-link-btn {
+    color:var(--primary-color) !important;
+    background-color:var(--background-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.share-link-btn:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color:var(--background-color) !important;
+}
+
+#share-feedback {
+    color: var(--primary-color) !important;
+}
+
+/* Version number styling */
+.version {
+    color: var(--notes-color) !important;
+}
+
+/* Penalties */
+
+/* --- NEW Styles for Penalty Search List (Grid Layout) --- */
+
+#penalty-lookup-btn {
+    color: var(--primary-color) !important;
+    background-color: var(--background-color) !important;
+}
+
+#penalty-lookup-btn:hover {
+    color: var(--secondary-color) !important;
+}
+
+.search-input {
+    border-color: var(--notes-color) !important;
+    color:var(--text-color) !important;
+}
+
+.search-input:focus {
+    background-color:var(--background-color) !important;
+}
+
+.search-input::placeholder {
+    color:var(--notes-color) !important;
+}
+
+/* Base grid layout for header and items (4 columns) */
+.penalty-header-row, .penalty-item-grid {
+    border-bottom-color: var(--focus-color) !important; 
+}
+
+/* Header Row Styling */
+.penalty-header-row {
+    background-color: var(--secondary-button-bgnd) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Penalty Item Styling */
+.penalty-item-grid {
+    background-color: white !important;
+    color: var(--text-color) !important;
+}
+
+.penalty-item-grid:nth-child(even) {
+    background-color: var(--background-color) !important; /* Zebra stripping */
+}
+
+/* Header Column Styles */
+.penalty-header-row .col-name {
+    color:var(--primary-color) !important;
+}
+
+.penalty-header-row .col-yards {
+    color:var(--primary-color) !important;
+}
+
+.penalty-header-row .col-enforced {
+    color:var(--primary-color) !important;
+}
+
+.penalty-header-row .col-description {
+    color:var(--primary-color) !important;
+}
+
+.penalty-header-row .col-effect {
+    color:var(--primary-color) !important;
+}
+
+/* Column Specific Styles */
+.col-name {
+    color:var(--text-color) !important;
+}
+
+.col-yards {
+    color:var(--text-color) !important;
+}
+
+.col-enforced {
+    color:var(--text-color) !important;
+}
+
+.col-description {
+    color:var(--text-color) !important;
+}
+
+/* Effect column containing both text and the tick */
+.col-effect {
+    color:var(--text-color) !important;
+}
+
+/* --- New Modal/Overlay Styles for Penalty Lookup --- */
+
+.modal-overlay, .modal {
+    background-color: var(--background-color) !important; /* Dark overlay */
+}
+
+.penalty-finder-container {
+    background-color: var(--background-color) !important;
+}
+
+.info-modal-content, .share-modal-content {
+    background-color: var(--background-color) !important;
+}
+
+.info-modal-content h3 {
+    color:var(--secondary-color) !important;
+}
+
+.penalty-finder-container .title, .info-modal-content .title {
+    color: var(--primary-color) !important;
+}
+
+#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn {
+    background-color: var(--primary-color) !important; 
+    color: var(--button-text) !important;
+}
+
+#close-penalty-modal-btn:hover, #close-info-modal-btn:hover {
+    background-color: var(--secondary-color) !important;
+}
+
+#close-penalty-modal-btn svg, #close-info-modal-btn svg, #close-share-modal-btn svg {
+    stroke: currentColor !important; 
+}
+/* Fixed Footer */
+
+.fixed-footer-links {
+    border-color: #dedede !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 20px -2px var(--drop-shadow-color) !important;    
+}
+
+.fixed-footer-links button {
+    background-color: var(--background-color) !important;
+    color:var(--primary-color) !important;
+}
+
+.fixed-footer-links button:hover {
+    color:var(--secondary-color) !important;
+    background-color:var(--focus-color) !important;
+}
+
+#penalty-lookup-btn:hover {
+    color:var(--secondary-color) !important;
+    background-color:var(--focus-color) !important;
+}
+
+.fixed-footer-links button .button-icon {
+    stroke: currentColor !important;
+}
+}
