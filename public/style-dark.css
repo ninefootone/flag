@@ -20,7 +20,6 @@
     }
     
     .title { color: var(--secondary-color) !important; }
-    button { background-color: var(--secondary-color) !important; color:var(--primary-color) !important; }
     .light-logo { display: none !important; }
     .dark-logo { display: block !important; margin:0 auto !important; }
 
@@ -65,7 +64,7 @@ button {
 button:hover {
     background-color: var(--secondary-color) !important;
     border-color: var(--secondary-color) !important;
-    color: var(--button-text-hover) !important;
+    color: white !important;
 }
 
 .app-container {
@@ -342,7 +341,7 @@ li {
 #download-summary-btn:hover {
     background:var(--secondary-color) !important;
     border-color:var(--secondary-color) !important;
-    color:var(--text-color) !important;  
+    color:var(--button-text-hover) !important;  
 }
 
 /* Update the main button style for horizontal icon alignment */
@@ -358,7 +357,7 @@ li {
 }
 
 .warning .clock-time, .warning .title {
-    color: var(--button-text) !important;
+    color: var(--text-color) !important;
 }
 
 .disabled {
