@@ -10,6 +10,7 @@
         --notes-color: #aaaaaa !important;
         --error-color: #dc3545 !important;
         --button-text: #113f52 !important;
+        --button-text-hover: #113f52 !important;
         --secondary-button-bgnd: rgba(255,255,255,0.1) !important;
         --secondary-button-bgnd-hover: #106386 !important;
         --subtle-border-color:rgba(255,255,255,0.25) !important;
@@ -64,6 +65,7 @@ button {
 button:hover {
     background-color: var(--secondary-color) !important;
     border-color: var(--secondary-color) !important;
+    color: var(--button-text-hover) !important;
 }
 
 .app-container {
@@ -157,6 +159,10 @@ input[type="text"], input[type="number"], input[type="date"] {
     border-color: var(--subtle-border-color) !important;
 }
 
+.player-input-grid input {
+    color:var(--background-color) !important;
+}
+
 /* LOBBY-SPECIFIC STYLES */
 
 #start-new-game-btn {
@@ -196,7 +202,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 }
 
 .clock-display {
-    border-color: #ddd !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 .clock-time {
@@ -221,7 +227,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 
 /* Main Controls Section (Grid-based layout) */
 .down-buttons-section-wrapper {
-    border-color: #ddd !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 .down-label {
@@ -244,7 +250,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 }
 
 .team-score {
-    border-color: 1px solid #ddd !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 .score {
@@ -253,6 +259,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 
 .adjust-btn {
     color:var(--secondary-color) !important;
+    background:none !important;
 }
 
 .adjust-btn:hover {
@@ -269,7 +276,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 }
 
 .timeout-buttons-section-wrapper {
-    border-color: #ddd !important;
+    border-color: var(--subtle-border-color) !important;
 }
 
 .use-timeout-btn {
@@ -314,8 +321,8 @@ li {
 
 /* New styles for the game summary screen */
 .summary-team {
-    border-color: var(--focus-color) !important;
-    background-color:var(--focus-color) !important;
+    border-color: var(--subtle-border-color) !important;
+    background-color:var(--background-color) !important;
 }
 
 .summary-team-name {
@@ -329,7 +336,7 @@ li {
 #download-summary-btn {
     background:var(--background-color) !important;
     border-color:var(--primary-color) !important;
-    color:var(--primary-color) !important;  
+    color:var(--text-color) !important;  
 }
 
 #download-summary-btn:hover {
@@ -423,7 +430,7 @@ li {
 }
 
 .penalty-item-grid:nth-child(even) {
-    background-color: var(--background-color) !important; /* Zebra stripping */
+    background-color: var(--secondary-button-bgnd) !important; /* Zebra stripping */
 }
 
 /* Header Column Styles */
@@ -522,7 +529,7 @@ li {
 }
 
 #penalty-lookup-btn:hover {
-    color:var(--secondary-color) !important;
+    color:var(--text-color) !important;
     background-color:var(--secondary-button-bgnd) !important;
 }
 
