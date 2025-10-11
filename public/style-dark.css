@@ -10,7 +10,7 @@
         --notes-color: #aaaaaa !important;
         --error-color: #dc3545 !important;
         --button-text: #113f52 !important;
-        --button-text-hover: #113f52 !important;
+        --button-text-hover: #ffffff !important;
         --secondary-button-bgnd: rgba(255,255,255,0.1) !important;
         --secondary-button-bgnd-hover: #106386 !important;
         --subtle-border-color:rgba(255,255,255,0.25) !important;
@@ -342,7 +342,7 @@ li {
 #download-summary-btn:hover {
     background:var(--secondary-color) !important;
     border-color:var(--secondary-color) !important;
-    color:var(--button-text) !important;  
+    color:var(--text-color) !important;  
 }
 
 /* Update the main button style for horizontal icon alignment */
@@ -425,12 +425,12 @@ li {
 
 /* Penalty Item Styling */
 .penalty-item-grid {
-    background-color: white !important;
+    background-color: var(--secondary-button-bgnd) !important;
     color: var(--text-color) !important;
 }
 
 .penalty-item-grid:nth-child(even) {
-    background-color: var(--secondary-button-bgnd) !important; /* Zebra stripping */
+    background-color: var(--background-color) !important; /* Zebra stripping */
 }
 
 /* Header Column Styles */
