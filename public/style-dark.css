@@ -73,6 +73,12 @@ button:hover {
 /* Settings Form */
 
 #settings-form input {
+    color:var(--text-color) !important;
+    background-color: var(--background-color) !important;
+}
+
+#settings-form input:focus {
+    background-color:var(--focus-color) !important;
     color:var(--background-color) !important;
 }
 
@@ -84,31 +90,32 @@ button:hover {
 
 /* --- Custom Dropdown Styles --- */
 .team-options-list {
-    border-color: var(--primary-color) !important;
+    border-color: var(--subtle-border-color) !important;
     background-color: var(--background-color) !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .team-options-list li {
-    color: var(--primary-color) !important;
-    background:white !important;
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
 }
 
 .team-options-list li:hover,
 .team-options-list li.highlighted {
-    background-color: var(--focus-color) !important;
+    background-color: var(--subtle-border-color) !important;
     color: var(--primary-color) !important;
 }
 
 /* End Team Selection */
 
 .settings-grid .settings-notes {
-    color: var(--notes-color) !important;
+    color: var(--placeholder-color) !important;
 }
 
 .settings-grid #half-duration, .settings-grid #play-clock-duration, .settings-grid #timeouts-per-half {
     background-color: var(--background-color) !important;
     border-color: var(--subtle-border-color) !important;
+    color:var(--text-color) !important;
 }
 
 #coin-toss-btn {
@@ -121,6 +128,16 @@ button:hover {
     color:var(--primary-color) !important;
     background-color: var(--secondary-color) !important;
     border-color:var(--secondary-color) !important;
+}
+
+#start-game-btn {
+    background:var(--primary-color) !important;
+    color:var(--background-color) !important;
+}
+
+#start-game-btn:hover {
+    background:var(--secondary-color) !important;
+    color:var(--text-color) !important;
 }
 
 #current-game-id {
@@ -501,12 +518,12 @@ li {
 
 .fixed-footer-links button:hover {
     color:var(--secondary-color) !important;
-    background-color:var(--focus-color) !important;
+    background-color:var(--secondary-button-bgnd) !important;
 }
 
 #penalty-lookup-btn:hover {
     color:var(--secondary-color) !important;
-    background-color:var(--focus-color) !important;
+    background-color:var(--secondary-button-bgnd) !important;
 }
 
 .fixed-footer-links button .button-icon {
