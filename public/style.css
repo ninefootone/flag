@@ -299,6 +299,7 @@ button:hover {
     color: var(--primary-color);
     background:white;
     border:none;
+    border-radius: 0px !important;
 }
 
 .team-options-list li:hover,

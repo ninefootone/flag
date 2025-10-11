@@ -517,7 +517,7 @@ li {
 }
 
 .fixed-footer-links button:hover {
-    color:var(--secondary-color) !important;
+    color:var(--text-color) !important;
     background-color:var(--secondary-button-bgnd) !important;
 }
 
