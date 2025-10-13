@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-title" content="Whistle" /> 
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.1.46">
-    <link rel="stylesheet" href="/style-dark.css?v=0.1.46">
+    <link rel="stylesheet" href="/style.css?v=0.1.47">
+    <link rel="stylesheet" href="/style-dark.css?v=0.1.47">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -367,7 +367,7 @@
 
         <div id="score-popup" class="hidden">
             <div class="popup-content">
-                <h3 id="popup-header">Log Score Details</h3>
+                <h2>Log Score Details</h2>
                 <div class="player-input-grid">
                     <div>
                         <label for="qb-number">QB #</label>
@@ -392,8 +392,14 @@
                 </div>
                 <div class="popup-buttons">
                     <button id="log-score-btn" class="log-score-btn">Log Score</button>
-                    <button id="cancel-popup-btn" class="cancel-popup-btn">Cancel</button>
+                    <!-- <button id="cancel-popup-btn" class="cancel-popup-btn">Cancel</button> -->
                 </div>
+                <button id="cancel-popup-btn" class="main-btn close-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
             </div>
         </div>
 

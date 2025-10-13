@@ -310,7 +310,7 @@ li {
 
 /* New: Styles for the pop-up modal overlay */
 #score-popup {
-    background-color: var(--modal-overlay) !important;
+    background-color: var(--background-overlay) !important;
 }
 
 .popup-content {
@@ -497,7 +497,7 @@ li {
     color: var(--primary-color) !important;
 }
 
-#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn {
+#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn, #cancel-popup-btn {
     background-color: var(--primary-color) !important; 
     color: var(--button-text) !important;
 }
