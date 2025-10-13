@@ -966,6 +966,8 @@ li {
 
 .popup-content input {
     border-radius: 500px;
+    font-size:20px;
+    font-weight:bold;
 }
 
 #log-score-btn {
@@ -990,7 +992,7 @@ li {
 
 .popup-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     margin-top: 20px;
 }
 

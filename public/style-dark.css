@@ -310,12 +310,11 @@ li {
 
 /* New: Styles for the pop-up modal overlay */
 #score-popup {
-    background-color: var(--background-overlay) !important;
+    background-color: var(--background-color) !important;
 }
 
 .popup-content {
     background-color: var(--background-color) !important;
-    box-shadow: 0 4px 15px var(--drop-shadow-color) !important;
 }
 
 .popup-buttons #cancel-popup-btn {
