@@ -9,6 +9,7 @@
         --text-color: #ffffff !important;
         --notes-color: #aaaaaa !important;
         --error-color: #dc3545 !important;
+        --error-color-flash: #c82333 !important;
         --button-text: #113f52 !important;
         --button-text-hover: #ffffff !important;
         --secondary-button-bgnd: rgba(255,255,255,0.1) !important;
@@ -362,9 +363,9 @@ li {
 
 /* Two-minute warning animation */
 @keyframes flash-warning {
-    0%   { background-color: #dc3545 !important; color: var(--button-text) !important; }
-    50%  { background-color: #c82333 !important; color: var(--button-text) !important; }
-    100% { background-color: #dc3545 !important; color: var(--button-text) !important; }
+    0%   { background-color: var(--error-color) !important; color: var(--button-text-hover) !important; }
+    50%  { background-color: var(--error-color-flash) !important; color: var(--button-text-hover) !important; }
+    100% { background-color: var(--error-color) !important; color: var(--button-text-hover) !important; }
 }
 
 .warning .clock-time, .warning .title {
