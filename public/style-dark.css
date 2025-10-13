@@ -513,7 +513,7 @@ li {
     color: var(--button-text) !important;
 }
 
-#close-penalty-modal-btn:hover, #close-info-modal-btn:hover {
+#close-penalty-modal-btn:hover, #close-info-modal-btn:hover, #close-share-modal-btn:hover, #cancel-popup-btn:hover {
     background-color: var(--secondary-color) !important;
 }
 

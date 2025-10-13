@@ -4,7 +4,7 @@
   "description": "Referee. Score. Clock. Coach.",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#106486",
   "theme_color": "#106486",
   "icons": [
     {

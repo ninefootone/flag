@@ -1468,7 +1468,7 @@ li {
     z-index: 1001;
 }
 
-#close-penalty-modal-btn:hover, #close-info-modal-btn:hover {
+#close-penalty-modal-btn:hover, #close-info-modal-btn:hover, #close-share-modal-btn:hover, #cancel-popup-btn:hover {
     background-color: var(--secondary-color);
     cursor: pointer;
 }
