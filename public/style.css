@@ -954,7 +954,7 @@ li {
 
 .popup-content {
     background-color: var(--background-color);
-    padding: 20px 0 120px 0;
+    padding: 40px 20px 120px 20px;
     width: 100%;
     max-width: 740px;
     margin: 0 auto;
@@ -972,6 +972,11 @@ li {
     padding:8px 15px 12px 15px;
 }
 
+#cancel-popup-btn svg {
+    width:30px;
+    height:30px;
+}
+
 .player-input-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -985,8 +990,20 @@ li {
 
 .popup-buttons {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     margin-top: 20px;
+}
+
+.popup-buttons #cancel-popup-btn {
+    background-color:var(--background-color);
+    border-color:var(--primary-color);
+    color:var(--primary-color);
+}
+
+.popup-buttons #cancel-popup-btn:hover {
+    background-color:var(--secondary-color);
+    border-color:var(--secondary-color);
+    color:var(--background-color);
 }
 
 /* New styles for the game summary screen */

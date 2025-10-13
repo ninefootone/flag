@@ -318,6 +318,18 @@ li {
     box-shadow: 0 4px 15px var(--drop-shadow-color) !important;
 }
 
+.popup-buttons #cancel-popup-btn {
+    background-color:var(--background-color);
+    border-color:var(--primary-color);
+    color:var(--primary-color);
+}
+
+.popup-buttons #cancel-popup-btn:hover {
+    background-color:var(--secondary-color);
+    border-color:var(--secondary-color);
+    color:var(--text-color);
+}
+
 /* New styles for the game summary screen */
 .summary-team {
     border-color: var(--subtle-border-color) !important;
