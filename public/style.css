@@ -1506,6 +1506,10 @@ li {
     border-top:1px solid var(--section-border);
 }
 
+#info-modal-img {
+    text-align:left;
+}
+
 /* Fixed Footer */
 
 #fixed-footer-links-container {

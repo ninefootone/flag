@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.1.56">
-    <link rel="stylesheet" href="/style-dark.css?v=0.1.56">
+    <link rel="stylesheet" href="/style.css?v=0.1.57">
+    <link rel="stylesheet" href="/style-dark.css?v=0.1.57">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -13,7 +13,7 @@
     <link rel="manifest" href="/assets/site.webmanifest" />
     <link rel="manifest" href="/assets/manifest.webmanifest" />
     <meta name="apple-mobile-web-app-title" content="Whistle">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
     <div class="app-container">
@@ -290,8 +290,10 @@
         <div id="info-modal" class="modal">
             <div class="info-modal-content">
                 <div class="modal-body">
-                    <img src="/assets/whistle-logo-home-blue.svg" alt="Whistle" class="logo-swap light-logo logo-image">
-                    <img src="/assets/whistle-logo-home-white.svg" alt="Whistle" class="logo-swap dark-logo logo-image" style="display:none;">
+                    <div id="info-modal-img">
+                        <img src="/assets/whistle-logo-home-blue.svg" alt="Whistle" class="logo-swap light-logo logo-image">
+                        <img src="/assets/whistle-logo-home-white.svg" alt="Whistle" class="logo-swap dark-logo logo-image" style="display:none;">
+                    </div>    
                     <div id="info-modal-admin">
                         <h3>Setup</h3>
                         <p>On the game settings screen enter the location and team names. You can choose from the drop-down or type in a custom team name. These are optional. You can just click 'Start Game' for a quick start (teams will be title Team 1 and Team 2).</p>
