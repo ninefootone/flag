@@ -532,6 +532,10 @@ li {
     color: var(--secondary-color);
 }
 
+.info-link {
+    border-top:1px solid var(--subtle-border-color);
+}
+
 /* Fixed Footer */
 
 .fixed-footer-links {

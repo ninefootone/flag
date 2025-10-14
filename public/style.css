@@ -1500,6 +1500,12 @@ li {
     color: var(--secondary-color);
 }
 
+.info-link {
+    padding-top:10px;
+    margin-top:20px;
+    border-top:1px solid var(--section-border);
+}
+
 /* Fixed Footer */
 
 #fixed-footer-links-container {
