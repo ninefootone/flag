@@ -1506,8 +1506,11 @@ li {
     border-top:1px solid var(--section-border);
 }
 
-#info-modal-img {
-    text-align:left;
+#info-modal-img .light-logo { margin-left:0 !important; }
+#info-modal-img .dark-logo { margin-left:0 !important; }
+
+#info-modal-img img {
+    width:180px;
 }
 
 /* Fixed Footer */
