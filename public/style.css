@@ -1181,6 +1181,16 @@ li {
     .share-links-grid {
         /* Single column for mobile */
         grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+}
+
+/* Ensure buttons take full width on small screens */
+@media only screen and (max-width: 320px) {
+    .share-links-grid {
+        /* Single column for mobile */
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 }
 
@@ -1597,3 +1607,11 @@ li {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@media only screen and (max-width: 320px) {
+    .fixed-footer-links button .button-text {
+        display:none;
+    }
+}
+
+
