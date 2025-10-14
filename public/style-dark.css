@@ -521,6 +521,17 @@ li {
 #close-penalty-modal-btn svg, #close-info-modal-btn svg, #close-share-modal-btn svg {
     stroke: currentColor !important; 
 }
+
+/* Modal Links */
+
+#info-modal-ref a, #info-modal-scorer a, #info-modal-clock a, #info-modal-coach a {
+    color: var(--primary-color);
+}
+
+#info-modal-ref a:hover, #info-modal-scorer a:hover, #info-modal-clock a:hover, #info-modal-coach a:hover {
+    color: var(--secondary-color);
+}
+
 /* Fixed Footer */
 
 .fixed-footer-links {

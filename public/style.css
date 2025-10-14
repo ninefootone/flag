@@ -1488,6 +1488,18 @@ li {
     display: none; /* Hidden by default */
 }
 
+/* Modal Links */
+
+#info-modal-ref a, #info-modal-scorer a, #info-modal-clock a, #info-modal-coach a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+#info-modal-ref a:hover, #info-modal-scorer a:hover, #info-modal-clock a:hover, #info-modal-coach a:hover {
+    color: var(--secondary-color);
+}
+
 /* Fixed Footer */
 
 #fixed-footer-links-container {
