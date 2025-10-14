@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.61';
+    const appVersion = '0.1.62';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
