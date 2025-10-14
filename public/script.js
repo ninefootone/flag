@@ -1,10 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.58';
+    const appVersion = '0.1.59';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
         versionDisplay.textContent = `v${appVersion}`;
     }
+
+    // --- SECURITY ADDITIONS: Secure Map and Helper Functions ---
+    // This map stores the secure, unguessable tokens for each role.
+    const SECURE_ROLE_MAP = {
+        // Original Role Name : Secure Token (must be unique)
+        'clock': '4jk98d',
+        'head-referee': 'a2c6g1',
+        'scorer': 'h7y3l9',
+        'coach': '5hd74h',
+        // 'administrator' is not usually shared, but included for completeness if needed.
+        'administrator': 'b3f5z2' 
+    };
+
+    // Finds the original role name (e.g., 'coach') by searching for its secure token (e.g., '5hd74h').
+    // Falls back to the token itself if the token is not found (e.g., 'view-only').
+    const getRoleFromToken = (token) => {
+        return Object.keys(SECURE_ROLE_MAP).find(key => SECURE_ROLE_MAP[key] === token);
+    };
 
     // Automatically set the date field to the current date
     const today = new Date();
@@ -337,7 +355,9 @@ fetchAndLoadTeamNames();
 
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        userRole = urlParams.get('role') || 'administrator';
+        const urlToken = urlParams.get('role');
+        // Convert the secure token back to the friendly role name, falling back to 'administrator'
+        userRole = getRoleFromToken(urlToken) || urlToken || 'administrator';
 
         const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
         if (urlGameId && urlGameId !== 'game.html') {
@@ -605,7 +625,7 @@ fetchAndLoadTeamNames();
     startNewGameBtn.addEventListener('click', () => {
 
         const newGameId = Math.random().toString(36).substring(2, 8);
-        history.replaceState(null, '', `/game/${newGameId}?role=${userRole}`);
+        history.replaceState(null, '', `/game/${newGameId}?role=${SECURE_ROLE_MAP[userRole] || userRole}`);
 
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
@@ -620,7 +640,7 @@ fetchAndLoadTeamNames();
 
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            history.replaceState(null, '', `/game/${gameId}?role=${userRole}`);
+            history.replaceState(null, '', `/game/${gameId}?role=${SECURE_ROLE_MAP[userRole] || userRole}`);
 
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
@@ -809,6 +829,34 @@ fetchAndLoadTeamNames();
         sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
     });
 
+    // --- NEW FUNCTION: updateShareLinks ---
+    // Function to update the share links in the modal
+    const updateShareLinks = () => {
+        const shareContainer = document.querySelector('.share-links-section'); // Assumes this is the container
+        if (!shareContainer) return;
+
+        // Clear existing links
+        shareContainer.innerHTML = '';
+
+        // Add Share Buttons/Links for each role
+        const roles = ['head-referee', 'clock', 'scorer', 'coach'];
+        roles.forEach(role => {
+            // Get the secure URL using the updated getShareUrl function
+            const shareUrl = getShareUrl(role);
+            
+            // Create the link button
+            const button = document.createElement('button');
+            button.className = 'share-link-btn';
+            button.dataset.role = role;
+            // This displays the readable role name (e.g., "Coach Link")
+            button.textContent = `${role.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')} Link`;
+            button.title = shareUrl; // This shows the secure URL on hover
+
+            shareContainer.appendChild(button);
+        });
+    };
+    // ------------------------------------
+
     // Event listener for the "End Game" button with confirmation
     endGameBtn.addEventListener('click', () => {
         // Show a confirmation dialog
@@ -956,6 +1004,7 @@ fetchAndLoadTeamNames();
 
     // --- NEW SHARE MODAL LISTENERS ---
         shareLinksBtn.addEventListener('click', () => {
+            updateShareLinks(); // <-- NEW: Call to populate links with secure URLs
             shareModal.style.display = 'block'; // Show Share Modal
             infoModal.style.display = 'none'; // Hide Info Modal
             penaltyLookupModal.style.display = 'none'; // Hide Penalty Modal
@@ -994,7 +1043,7 @@ fetchAndLoadTeamNames();
         // Extracts the game ID from the current URL path.
         const gameId = window.location.pathname.split('/').pop().split('?')[0];
         // Uses window.location.origin (e.g., https://referee-app.onrender.com) for the base URL
-        return `${window.location.origin}/game/${gameId}?role=${role}`;
+        return `${window.location.origin}/game/${gameId}?role=${SECURE_ROLE_MAP[role] || role}`;
     };
 
     const copyToClipboard = (text) => {
