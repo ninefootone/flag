@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.64';
+    const appVersion = '0.1.65';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitDefenseStatBtn = document.getElementById('submit-defense-stat-btn');
     const defenseStatHomePlayerInput = document.getElementById('defense-stat-home-player');
     const defenseStatAwayPlayerInput = document.getElementById('defense-stat-away-player');
+    const summaryDefenseLog = document.getElementById('summary-defense-log');
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
@@ -411,6 +412,7 @@ fetchAndLoadTeamNames();
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
             reverseLogOrder(defenseLogList);
+            reverseLogOrder(summaryDefenseLog);
             if (fixedFooter) {
                 fixedFooter.classList.add('hidden'); 
             }
@@ -461,6 +463,7 @@ fetchAndLoadTeamNames();
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         defenseLogList.innerHTML = gameState.defenseLogHTML;
+        summaryDefenseLog.innerHTML = gameState.defenseLogHTML;
         updateDownDisplay();
         updateButtonLabels();
         team1TimeoutLabel.textContent = gameState.team1Name;
