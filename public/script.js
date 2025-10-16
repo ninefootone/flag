@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.63';
+    const appVersion = '0.1.64';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -127,7 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenseTflPlayer = document.getElementById('defense-tfl-player');
     const defenseInterceptionPlayer = document.getElementById('defense-interception-player');
     const defenseSackPlayer = document.getElementById('defense-sack-player');
-    
+    const defenseStatBtns = document.querySelectorAll('.defense-stat-btn');
+    const defenseStatModal = document.getElementById('defense-stat-modal');
+    const closeDefenseStatModalBtn = document.getElementById('close-defense-stat-modal-btn');
+    const submitDefenseStatBtn = document.getElementById('submit-defense-stat-btn');
+    const defenseStatHomePlayerInput = document.getElementById('defense-stat-home-player');
+    const defenseStatAwayPlayerInput = document.getElementById('defense-stat-away-player');
+
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
     let allTeamNames = []; // Global array to store all loaded team names
@@ -830,6 +836,63 @@ fetchAndLoadTeamNames();
             }
         });
     });
+
+    // --- Defensive Stat Actions ---
+    
+    // 1. Open Modal and Set Context
+    defenseStatBtns.forEach(button => {
+        button.addEventListener('click', () => {
+            // FIX: Store the necessary action data (team and statType)
+            // This prevents the 'undefined' log issue by providing server context.
+            currentAction = {
+                action: 'ACTION_DEFENSE_STAT',
+                team: button.dataset.team,
+                statType: button.dataset.stat // e.g., 'block', 'steal', 'intercept'
+            };
+
+            // Clear inputs and show the modal
+            defenseStatHomePlayerInput.value = '';
+            defenseStatAwayPlayerInput.value = '';
+            defenseStatModal.classList.remove('hidden');
+        });
+    });
+
+    // 2. Close Modal Handler
+    if (closeDefenseStatModalBtn) {
+        closeDefenseStatModalBtn.addEventListener('click', () => {
+            // FIX: This ensures the modal closes cleanly, preventing interference with Share/Info modals.
+            defenseStatModal.classList.add('hidden');
+            currentAction = null; // Clear context
+        });
+    }
+
+    // 3. Submit Handler
+    if (submitDefenseStatBtn) {
+        submitDefenseStatBtn.addEventListener('click', () => {
+            const homePlayer = defenseStatHomePlayerInput.value.trim();
+            const awayPlayer = defenseStatAwayPlayerInput.value.trim();
+
+            if (!homePlayer && !awayPlayer) {
+                // Do not submit if both fields are empty
+                return;
+            }
+
+            // Build the final payload using the context stored in currentAction
+            const payload = {
+                ...currentAction,
+                homePlayer: homePlayer,
+                awayPlayer: awayPlayer
+            };
+
+            sendWsMessage(payload);
+
+            // Hide modal
+            defenseStatModal.classList.add('hidden');
+            currentAction = null; // Clear context
+        });
+    }
+
+    // --- End Defensive Stat Actions ---
 
     // START OF NEW CODE: Defensive Stats Button Listeners
     if (defensiveStatsBtnHome) { 
