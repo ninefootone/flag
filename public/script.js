@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.66';
+    const appVersion = '0.1.67';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -61,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockDisplay = document.getElementById('play-clock-display');
     const scoreLogList = document.getElementById('score-log');
     const timeoutLogList = document.getElementById('timeout-log');
-    const defenseLogList = document.getElementById('defense-log-list');
     const downButtons = document.querySelectorAll('.down-btn');
     const playClockOptions = document.querySelector('.play-clock-options');
     const autoAdvanceCheckbox = document.getElementById('auto-advance-play-clock');
@@ -118,22 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoModalScorer = document.getElementById('info-modal-scorer');
     const infoModalClock = document.getElementById('info-modal-clock');
     const infoModalCoach = document.getElementById('info-modal-coach');
-    const defensiveStatsModal = document.getElementById('defensive-stats-modal');
-    const defensiveStatsBtnHome = document.getElementById('defensive-stats-btn-home');
-    const defensiveStatsBtnAway = document.getElementById('defensive-stats-btn-away');
-    const defenseTeamNameSpan = document.getElementById('defense-team-name');
-    const defenseStatsForm = document.getElementById('defense-stats-form');
-    const defenseTacklePlayer = document.getElementById('defense-tackle-player');
-    const defenseTflPlayer = document.getElementById('defense-tfl-player');
-    const defenseInterceptionPlayer = document.getElementById('defense-interception-player');
-    const defenseSackPlayer = document.getElementById('defense-sack-player');
-    const defenseStatBtns = document.querySelectorAll('.defense-stat-btn');
-    const defenseStatModal = document.getElementById('defense-stat-modal');
-    const closeDefenseStatModalBtn = document.getElementById('close-defense-stat-modal-btn');
-    const submitDefenseStatBtn = document.getElementById('submit-defense-stat-btn');
-    const defenseStatHomePlayerInput = document.getElementById('defense-stat-home-player');
-    const defenseStatAwayPlayerInput = document.getElementById('defense-stat-away-player');
-    const summaryDefenseLog = document.getElementById('summary-defense-log');
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
@@ -370,62 +353,6 @@ fetchAndLoadTeamNames();
         }
     };
 
-        // --- Defensive Stat Actions ---
-    
-    // 1. Open Modal and Set Context
-    defenseStatBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            // FIX: Store the necessary action data (team and statType)
-            // This prevents the 'undefined' log issue by providing server context.
-            currentAction = {
-                action: 'ACTION_DEFENSE_STAT',
-                team: button.dataset.team,
-                statType: button.dataset.stat // e.g., 'block', 'steal', 'intercept'
-            };
-
-            // Clear inputs and show the modal
-            defenseStatHomePlayerInput.value = '';
-            defenseStatAwayPlayerInput.value = '';
-            defenseStatModal.classList.remove('hidden');
-        });
-    });
-
-    // 2. Close Modal Handler
-    if (closeDefenseStatModalBtn) {
-        closeDefenseStatModalBtn.addEventListener('click', () => {
-            // FIX: This ensures the modal closes cleanly, preventing interference with Share/Info modals.
-            defenseStatModal.classList.add('hidden');
-            currentAction = null; // Clear context
-        });
-    }
-
-    // 3. Submit Handler
-    if (submitDefenseStatBtn) {
-        submitDefenseStatBtn.addEventListener('click', () => {
-            const homePlayer = defenseStatHomePlayerInput.value.trim();
-            const awayPlayer = defenseStatAwayPlayerInput.value.trim();
-
-            if (!homePlayer && !awayPlayer) {
-                // Do not submit if both fields are empty
-                return;
-            }
-
-            // Build the final payload using the context stored in currentAction
-            const payload = {
-                ...currentAction,
-                homePlayer: homePlayer,
-                awayPlayer: awayPlayer
-            };
-
-            sendWsMessage(payload);
-
-            // Hide modal
-            defenseStatModal.classList.add('hidden');
-            currentAction = null; // Clear context
-        });
-    }
-
-
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const urlToken = urlParams.get('role');
@@ -465,12 +392,8 @@ fetchAndLoadTeamNames();
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-            defenseLogList.innerHTML = gameState.defenseLogHTML;
-            summaryDefenseLog.innerHTML = gameState.defenseLogHTML;
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
-            reverseLogOrder(defenseLogList);
-            reverseLogOrder(summaryDefenseLog);
             if (fixedFooter) {
                 fixedFooter.classList.add('hidden'); 
             }
@@ -520,8 +443,6 @@ fetchAndLoadTeamNames();
         playClockDisplay.textContent = gameState.playTimeLeft;
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
-        defenseLogList.innerHTML = gameState.defenseLogHTML;
-        summaryDefenseLog.innerHTML = gameState.defenseLogHTML;
         updateDownDisplay();
         updateButtonLabels();
         team1TimeoutLabel.textContent = gameState.team1Name;
@@ -612,35 +533,6 @@ fetchAndLoadTeamNames();
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    // START OF DEFENSIVE CODE: Defense Modal and Action Logic
-    let currentDefenseTeam = '1'; // Tracks which team is logging stats ('1' for home, '2' for away)
-
-    function openDefenseStatsModal(team) {
-        // '1' for home (team1), '2' for away (team2)
-        currentDefenseTeam = team === 'home' ? '1' : '2'; 
-        defenseTeamNameSpan.textContent = gameState[`team${currentDefenseTeam}Name`];
-        defensiveStatsModal.classList.remove('hidden');
-    }
-
-    // Function to send the defense stats action to the server
-    function handleDefenseAction(statPayload) {
-        // Only send an action if at least one player number was entered
-        const isPayloadEmpty = Object.values(statPayload).every(val => !val);
-        if (isPayloadEmpty) {
-            return;
-        }
-
-        const actionPayload = {
-            team: currentDefenseTeam,
-            playerStats: statPayload,
-            // Add time context for logging
-            gameTimeLeft: gameState.gameTimeLeft, 
-            playTimeLeft: gameState.playTimeLeft,
-        };
-        sendAction('DEFENSE_STAT', actionPayload);
-    }
-    // END OF DEFENSIVE CODE
-
     const getNewScoreLog = (event, players = {}) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
@@ -701,22 +593,6 @@ fetchAndLoadTeamNames();
         safetyNumberInput.value = '';
         tempScoreEvent = null;
     };
-
-    // START OF DEFENSIVE CODE: Utility function for closing modals (handles all custom modals)
-    function closeModal() {
-        // Hide all known modals
-        if (scorePopup) scorePopup.classList.add('hidden');
-        if (penaltyLookupModal) penaltyLookupModal.classList.add('hidden');
-        if (infoModal) infoModal.classList.add('hidden');
-        if (shareModal) shareModal.classList.add('hidden');
-        if (defensiveStatsModal) defensiveStatsModal.classList.add('hidden');
-
-    // Clear defense modal inputs
-        if (defenseStatsForm) {
-            defenseStatsForm.reset();
-        }
-    }
-    // END OF DEFENSIVE CODE
 
     // --- Event Listeners ---
     const pathParts = window.location.pathname.split('/');
@@ -897,34 +773,6 @@ fetchAndLoadTeamNames();
             }
         });
     });
-
-    // --- End Defensive Stat Actions ---
-
-    // START OF NEW CODE: Defensive Stats Button Listeners
-    if (defensiveStatsBtnHome) { 
-        defensiveStatsBtnHome.addEventListener('click', () => openDefenseStatsModal('home')); 
-    }
-    if (defensiveStatsBtnAway) { 
-        defensiveStatsBtnAway.addEventListener('click', () => openDefenseStatsModal('away')); 
-    }
-
-    // Defense Stats Form Submission
-    if (defenseStatsForm) {
-        defenseStatsForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            
-            const statPayload = {
-                tackle: defenseTacklePlayer.value.trim(),
-                tfl: defenseTflPlayer.value.trim(),
-                interception: defenseInterceptionPlayer.value.trim(),
-                sack: defenseSackPlayer.value.trim(),
-            };
-
-            handleDefenseAction(statPayload);
-            closeModal(); // Hides modal and clears form
-        });
-    }
-    // END OF NEW CODE
 
     downButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -1153,12 +1001,6 @@ fetchAndLoadTeamNames();
             penaltyLookupModal.style.display = 'none'; 
             shareModal.style.display = 'none'; // ADDED: Hide Share Modal
         });
-
-    // START OF NEW CODE: Generic Close Modal Listener (for defensive stats modal)
-    document.querySelectorAll('.close-modal-btn').forEach(btn => {
-        btn.addEventListener('click', closeModal); // Calls the newly defined closeModal utility
-    });
-    // END OF NEW CODE
 
     // --- NEW SHARE MODAL LISTENERS ---
         shareLinksBtn.addEventListener('click', () => {
