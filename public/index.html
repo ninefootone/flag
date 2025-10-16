@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.1.62">
-    <link rel="stylesheet" href="/style-dark.css?v=0.1.62">
+    <link rel="stylesheet" href="/style.css?v=0.1.63">
+    <link rel="stylesheet" href="/style-dark.css?v=0.1.63">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -188,6 +188,12 @@
                             <span class="button-label">Safety</span>
                             <span class="button-score">(2)</span>
                         </button>
+                        <button id="defensive-stats-btn-home" class="team-action-btn" data-team="home">
+                            <svg class="button-icon" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            <span class="button-text">Defense</span>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -216,6 +222,12 @@
                         <button class="score-btn" data-team="2" data-score="2" data-label="Safety">
                             <span class="button-label">Safety</span>
                             <span class="button-score">(2)</span>
+                        </button>
+                        <button id="defensive-stats-btn-away" class="team-action-btn" data-team="away">
+                            <svg class="button-icon" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            <span class="button-text">Defense</span>
                         </button>
                     </div>
                 </div>
@@ -247,6 +259,7 @@
                     <h3 class="log-title">Score and Timeout Log</h3>
                     <ul id="score-log"></ul>
                     <ul id="timeout-log"></ul>
+                    <ul id="defense-log-list" class="log-list"></ul>
                 </div>
             </section>
 
@@ -430,6 +443,41 @@
             </div>
         </div>
 
+        <!-- START OF DEFENSIVE STATS MODAL -->
+        <div id="defensive-stats-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <button class="close-modal-btn">&times;</button>
+                <h2>Record Defensive Stats</h2>
+                <p>Team: <span id="defense-team-name" class="team-name"></span></p>
+
+                <form id="defense-stats-form">
+                
+                    <div class="input-group">
+                        <label for="defense-tackle-player">Tackle (Player #)</label>
+                        <input type="text" id="defense-tackle-player" pattern="[0-9]*" inputmode="numeric" placeholder="e.g., 25" maxlength="3">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="defense-tfl-player">Tackle for Loss (TFL) (Player #)</label>
+                        <input type="text" id="defense-tfl-player" pattern="[0-9]*" inputmode="numeric" placeholder="e.g., 99" maxlength="3">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="defense-interception-player">Interception (Player #)</label>
+                        <input type="text" id="defense-interception-player" pattern="[0-9]*" inputmode="numeric" placeholder="e.g., 42" maxlength="3">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="defense-sack-player">Sack (Player #)</label>
+                        <input type="text" id="defense-sack-player" pattern="[0-9]*" inputmode="numeric" placeholder="e.g., 55" maxlength="3">
+                    </div>
+
+                    <button type="submit" id="record-defense-btn">Record Stats</button>
+                </form>
+            </div>
+        </div>
+        <!-- END OF DEFENSIVE STATS MODAL -->
+
         <div id="game-summary" class="hidden">
             <img src="/assets/whistle-logo-home-blue.svg" alt="Whistle" class="logo-swap light-logo logo-image-summary">
             <img src="/assets/whistle-logo-home-white.svg" alt="Whistle" class="logo-swap dark-logo logo-image-summary" style="display:none;">
@@ -449,6 +497,7 @@
                     <h3 class="log-title">Score and Timeout Log</h3>
                     <ul id="summary-score-log"></ul>
                     <ul id="summary-timeout-log"></ul>
+                    <ul id="defense-log-list" class="log-list"></ul>
                 </div>
             </div>
             
