@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.65';
+    const appVersion = '0.1.66';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -370,6 +370,62 @@ fetchAndLoadTeamNames();
         }
     };
 
+        // --- Defensive Stat Actions ---
+    
+    // 1. Open Modal and Set Context
+    defenseStatBtns.forEach(button => {
+        button.addEventListener('click', () => {
+            // FIX: Store the necessary action data (team and statType)
+            // This prevents the 'undefined' log issue by providing server context.
+            currentAction = {
+                action: 'ACTION_DEFENSE_STAT',
+                team: button.dataset.team,
+                statType: button.dataset.stat // e.g., 'block', 'steal', 'intercept'
+            };
+
+            // Clear inputs and show the modal
+            defenseStatHomePlayerInput.value = '';
+            defenseStatAwayPlayerInput.value = '';
+            defenseStatModal.classList.remove('hidden');
+        });
+    });
+
+    // 2. Close Modal Handler
+    if (closeDefenseStatModalBtn) {
+        closeDefenseStatModalBtn.addEventListener('click', () => {
+            // FIX: This ensures the modal closes cleanly, preventing interference with Share/Info modals.
+            defenseStatModal.classList.add('hidden');
+            currentAction = null; // Clear context
+        });
+    }
+
+    // 3. Submit Handler
+    if (submitDefenseStatBtn) {
+        submitDefenseStatBtn.addEventListener('click', () => {
+            const homePlayer = defenseStatHomePlayerInput.value.trim();
+            const awayPlayer = defenseStatAwayPlayerInput.value.trim();
+
+            if (!homePlayer && !awayPlayer) {
+                // Do not submit if both fields are empty
+                return;
+            }
+
+            // Build the final payload using the context stored in currentAction
+            const payload = {
+                ...currentAction,
+                homePlayer: homePlayer,
+                awayPlayer: awayPlayer
+            };
+
+            sendWsMessage(payload);
+
+            // Hide modal
+            defenseStatModal.classList.add('hidden');
+            currentAction = null; // Clear context
+        });
+    }
+
+
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const urlToken = urlParams.get('role');
@@ -409,6 +465,8 @@ fetchAndLoadTeamNames();
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+            defenseLogList.innerHTML = gameState.defenseLogHTML;
+            summaryDefenseLog.innerHTML = gameState.defenseLogHTML;
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
             reverseLogOrder(defenseLogList);
@@ -839,61 +897,6 @@ fetchAndLoadTeamNames();
             }
         });
     });
-
-    // --- Defensive Stat Actions ---
-    
-    // 1. Open Modal and Set Context
-    defenseStatBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            // FIX: Store the necessary action data (team and statType)
-            // This prevents the 'undefined' log issue by providing server context.
-            currentAction = {
-                action: 'ACTION_DEFENSE_STAT',
-                team: button.dataset.team,
-                statType: button.dataset.stat // e.g., 'block', 'steal', 'intercept'
-            };
-
-            // Clear inputs and show the modal
-            defenseStatHomePlayerInput.value = '';
-            defenseStatAwayPlayerInput.value = '';
-            defenseStatModal.classList.remove('hidden');
-        });
-    });
-
-    // 2. Close Modal Handler
-    if (closeDefenseStatModalBtn) {
-        closeDefenseStatModalBtn.addEventListener('click', () => {
-            // FIX: This ensures the modal closes cleanly, preventing interference with Share/Info modals.
-            defenseStatModal.classList.add('hidden');
-            currentAction = null; // Clear context
-        });
-    }
-
-    // 3. Submit Handler
-    if (submitDefenseStatBtn) {
-        submitDefenseStatBtn.addEventListener('click', () => {
-            const homePlayer = defenseStatHomePlayerInput.value.trim();
-            const awayPlayer = defenseStatAwayPlayerInput.value.trim();
-
-            if (!homePlayer && !awayPlayer) {
-                // Do not submit if both fields are empty
-                return;
-            }
-
-            // Build the final payload using the context stored in currentAction
-            const payload = {
-                ...currentAction,
-                homePlayer: homePlayer,
-                awayPlayer: awayPlayer
-            };
-
-            sendWsMessage(payload);
-
-            // Hide modal
-            defenseStatModal.classList.add('hidden');
-            currentAction = null; // Clear context
-        });
-    }
 
     // --- End Defensive Stat Actions ---
 
