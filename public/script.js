@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.69';
+    const appVersion = '0.1.70';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -65,6 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockOptions = document.querySelector('.play-clock-options');
     const autoAdvanceCheckbox = document.getElementById('auto-advance-play-clock');
     const scoreButtons = document.querySelectorAll('.score-buttons button');
+
+    scoreButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            // DEFENSIVE CHECK: If the button has the defense class, exit immediately.
+            if (e.currentTarget.classList.contains('defence-stats-btn')) {
+                return; 
+            }
+
+            // The rest of your score logic only runs if it's NOT a defence button
+            const team = button.getAttribute('data-team');
+            showScorePopup(team);
+        });
+    });
     const useTimeoutBtns = document.querySelectorAll('.use-timeout-btn');
     const gameClockToggleBtn = document.getElementById('game-clock-toggle');
     const gameClockResetBtn = document.getElementById('game-clock-reset');
@@ -951,7 +964,7 @@ fetchAndLoadTeamNames();
         const team = (index + 1).toString(); 
     
         button.addEventListener('click', () => {
-            e.stopPropagation();
+            e.stopImmediatePropagation();
             // This is the call that references and opens the popup
             showDefencePopup(team); 
         });
