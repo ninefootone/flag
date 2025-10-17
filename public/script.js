@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.67';
+    const appVersion = '0.1.68';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -117,6 +117,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoModalScorer = document.getElementById('info-modal-scorer');
     const infoModalClock = document.getElementById('info-modal-clock');
     const infoModalCoach = document.getElementById('info-modal-coach');
+
+    const defenceButtons = document.querySelectorAll('.defence-buttons button');
+    const defenceStatButtons = document.querySelectorAll('.defence-stats-btn');
+    const defencePopup = document.getElementById('defence-popup');
+    const defencePopupHeader = document.getElementById('defence-popup-header');
+    const closeDefencePopupBtn = document.querySelector('#defence-cancel-popup-btn'); 
+    const defenceTackleInput = document.getElementById('defence-tackle');
+    const defenceTFLInput = document.getElementById('defence-tfl');
+    const defenceSackInput = document.getElementById('defence-sack');
+    const defenceIntInput = document.getElementById('defence-int');
+    const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
+    const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
+    const defenceLog = document.querySelector('.score-log #defence-log');
+    const summaryDefenceLog = document.querySelector('.summary-logs #defence-log');
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
@@ -247,6 +261,7 @@ fetchAndLoadTeamNames();
         autoAdvanceCheckbox,
         ...downButtons,
         ...scoreButtons,
+        ...defenceButtons,
         ...adjustButtons,
         ...useTimeoutBtns,
         undoBtn,
@@ -266,9 +281,9 @@ fetchAndLoadTeamNames();
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
-        'administrator': [gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...scoreButtons, ...adjustButtons, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
+        'administrator': [gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
         'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
-        'scorer': [...scoreButtons, ...adjustButtons, fixedFooter, undoBtn, infoBtn, infoModalScorer],
+        'scorer': [...scoreButtons, ...defenceButtons, ...adjustButtons, fixedFooter, undoBtn, infoBtn, infoModalScorer],
         'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, fixedFooter, infoBtn, infoModalClock],
         'coach': [fixedFooter, infoBtn, infoModalCoach]
     };
@@ -594,6 +609,107 @@ fetchAndLoadTeamNames();
         tempScoreEvent = null;
     };
 
+    let tempDefenceEvent = null; // Declare a variable to hold the temporary defence event details
+
+    const showDefencePopup = (team) => {
+        // Store the team for logging later (1 for home, 2 for away)
+        tempDefenceEvent = { team };
+    
+        // Determine the team name for the header
+        const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
+    
+        // Update the popup header text
+        defencePopupHeader.textContent = `Log Defensive Stats for ${teamName}`;
+    
+        // Show the popup
+        defencePopup.classList.remove('hidden');
+    };
+
+    const hideDefencePopup = () => {
+        // Hide the popup
+        defencePopup.classList.add('hidden');
+    
+        // Reset all input fields
+        defenceTackleInput.value = '';
+        defenceTFLInput.value = '';
+        defenceSackInput.value = '';
+        defenceIntInput.value = '';
+
+        // Clear the temporary event object
+        tempDefenceEvent = null;
+    };
+
+    /**
+    * Logs the defensive stats entered in the popup for the selected team.
+    * NOTE: Assumes 'gameState' and 'tempDefenceEvent' are globally available, 
+    * along with the input constants (defenceTackleInput, etc.)
+    */
+    const logDefenceStats = () => {
+        // Safety check for context
+        if (!tempDefenceEvent || !tempDefenceEvent.team || !gameState) {
+            console.error("Cannot log defense stats: Missing team context or gameState.");
+            return;
+        }
+
+        const team = tempDefenceEvent.team;
+        const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
+        const teamKey = `team${team}`; // e.g., 'team1' or 'team2'
+
+        // Get and clean values from inputs (coercing non-numeric/empty values to 0)
+        // NOTE: Input constants from the previous step are used here.
+        const tackles = parseInt(defenceTackleInput.value) || 0;
+        const tfl = parseInt(defenceTFLInput.value) || 0;
+        const sacks = parseInt(defenceSackInput.value) || 0;
+        const interceptions = parseInt(defenceIntInput.value) || 0;
+
+        // Check if any stats were actually entered
+        if (tackles === 0 && tfl === 0 && sacks === 0 && interceptions === 0) {
+            // If nothing was logged, just close the popup
+            hideDefencePopup();
+            return;
+        }
+    
+        // --- 1. UPDATE GAME STATE (for persistence and tracking) ---
+        // Initialize stats structure if it doesn't exist (Good practice!)
+        if (!gameState.defenceStats) gameState.defenceStats = { team1: {}, team2: {} };
+        if (!gameState.defenceStats[teamKey]) gameState.defenceStats[teamKey] = { tackles: 0, tfl: 0, sacks: 0, interceptions: 0 };
+    
+        gameState.defenceStats[teamKey].tackles += tackles;
+        gameState.defenceStats[teamKey].tfl += tfl;
+        gameState.defenceStats[teamKey].sacks += sacks;
+        gameState.defenceStats[teamKey].interceptions += interceptions;
+    
+        // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
+        const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
+        let logMessage = `Defense: ${teamName}`;
+        const stats = [];
+        if (tackles > 0) stats.push(`${tackles} TACKLE(s)`);
+        if (tfl > 0) stats.push(`${tfl} TFL`);
+        if (sacks > 0) stats.push(`${sacks} SACK(s)`);
+        if (interceptions > 0) stats.push(`${interceptions} INT`);
+    
+        // Construct the full log message
+        logMessage += ` logged: ${stats.join(', ')}`;
+    
+        const logEntryHTML = `
+            <div class="log-entry log-defence log-team-${team}">
+                <span class="log-time">${timestamp}</span>
+                <span class="log-message">${logMessage}</span>
+            </div>
+        `;
+
+        // Add the log entry to the main log and the summary log
+        if (defenceLog) defenceLog.insertAdjacentHTML('afterbegin', logEntryHTML);
+        if (summaryDefenceLog) summaryDefenceLog.insertAdjacentHTML('afterbegin', logEntryHTML);
+    
+        // --- 3. CLEAN UP ---
+        // Hide the popup and clear inputs (using the function from the previous step)
+        hideDefencePopup();
+    
+        // Optional: Call a function to save the game state to local storage, etc.
+        // saveGameState(); 
+    };
+
     // --- Event Listeners ---
     const pathParts = window.location.pathname.split('/');
     const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
@@ -828,6 +944,31 @@ fetchAndLoadTeamNames();
         sendAction('STOP_PLAY_CLOCK');
         sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
     });
+
+    // --- Defence Button Listeners ---
+    defenceButtons.forEach((button, index) => {
+        // Team '1' for the first button (Home), Team '2' for the second (Away)
+        const team = (index + 1).toString(); 
+    
+        button.addEventListener('click', () => {
+            // This is the call that references and opens the popup
+            showDefencePopup(team); 
+        });
+    });
+
+    // --- Defence Popup Close Listener ---
+    if (closeDefencePopupBtn) {
+        closeDefencePopupBtn.addEventListener('click', hideDefencePopup);
+    }
+
+    // Optionally, listen for the 'Cancel' or 'Log' button within the defence popup
+    // defenceCancelBtn.addEventListener('click', hideDefencePopup);
+    // defenceLogBtn.addEventListener('click', logDefenceStats); // You'll need to write this function next!    
+
+    // Listener for the main log button (uses logDefenceStatBtn)
+    if (logDefenceStatBtn) {
+        logDefenceStatBtn.addEventListener('click', logDefenceStats);
+    }
 
     // --- NEW FUNCTION: updateShareLinks ---
     // Function to update the share links in the modal

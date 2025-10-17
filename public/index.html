@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.1.67">
-    <link rel="stylesheet" href="/style-dark.css?v=0.1.67">
+    <link rel="stylesheet" href="/style.css?v=0.1.68">
+    <link rel="stylesheet" href="/style-dark.css?v=0.1.68">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -188,6 +188,11 @@
                             <span class="button-score">(2)</span>
                         </button>
                     </div>
+                    <div class="defence-buttons">
+                        <button class="defence-stats-btn" data-team="1">
+                            <span class="button-label">Defence</span>
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -215,6 +220,9 @@
                         <button class="score-btn" data-team="2" data-score="2" data-label="Safety">
                             <span class="button-label">Safety</span>
                             <span class="button-score">(2)</span>
+                        </button>
+                        <button class="defence-stats-btn" data-team="2">
+                            <span class="button-label">Defence</span>
                         </button>
                     </div>
                 </div>
@@ -246,6 +254,7 @@
                     <h3 class="log-title">Score and Timeout Log</h3>
                     <ul id="score-log"></ul>
                     <ul id="timeout-log"></ul>
+                    <ul id="defence-log"></ul>
                 </div>
             </section>
 
@@ -417,10 +426,42 @@
                     </div>
                 </div>
                 <div class="popup-buttons">
-                    <!-- <button id="cancel-popup-btn" class="cancel-popup-btn">Cancel</button> -->
                     <button id="log-score-btn" class="log-score-btn">Log Score</button>
                 </div>
                 <button id="cancel-popup-btn" class="main-btn close-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="defence-popup" class="hidden">
+            <div class="defence-popup-content">
+                <h2 id="defence-popup-header">Log Score Details</h2>
+                <div class="defence-input-grid">
+                    <div>
+                        <label for="defence-tackle">Tackle</label>
+                        <input type="number" id="defence-tackle" placeholder="Player #">
+                    </div>
+                    <div>
+                        <label for="defence-tfl">Tackle for Loss</label>
+                        <input type="number" id="defence-tfl" placeholder="Player #">
+                    </div>
+                    <div>
+                        <label for="defence-sack">Sack</label>
+                        <input type="number" id="defence-sack" placeholder="Player #">
+                    </div>
+                    <div>
+                        <label for="defence-int">Interception</label>
+                        <input type="number" id="defence-int" placeholder="Player #">
+                    </div>
+                </div>
+                <div class="popup-buttons">
+                    <button id="log-defence-stat-btn" class="log-defence-stat-btn">Log Defensive Stat</button>
+                </div>
+                <button id="defence-cancel-popup-btn" class="main-btn close-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -448,6 +489,7 @@
                     <h3 class="log-title">Score and Timeout Log</h3>
                     <ul id="summary-score-log"></ul>
                     <ul id="summary-timeout-log"></ul>
+                    <ul id="defence-log"></ul>
                 </div>
             </div>
             
