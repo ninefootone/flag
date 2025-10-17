@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.74';
+    const appVersion = '0.1.75';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -800,6 +800,11 @@ fetchAndLoadTeamNames();
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
         actionHistory = [];
+
+        // *** 1. Dynamic Time Calculation (Must be executed first!) ***
+        const initialMinutes = parseInt(halfDurationInput.value, 10);
+        // Calculate the time string (e.g., 12:00)
+        const initialTimeString = `${String(initialMinutes).padStart(2, '0')}:00`;
 
         const newGameState = {
             gameStarted: true,
