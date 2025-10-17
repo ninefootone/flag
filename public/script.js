@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.73';
+    const appVersion = '0.1.74';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -815,7 +815,8 @@ fetchAndLoadTeamNames();
             gameTimeLeft: parseInt(halfDurationInput.value, 10) * 60,
             playTimeLeft: parseInt(playClockDurationInput.value, 10),
             currentDown: 1,
-            scoreLogHTML: '',
+            currentQuarter: 1,
+            currentTime: initialTimeString,
             timeoutLogHTML: '',
             twoMinuteWarningIssued: false
         };
