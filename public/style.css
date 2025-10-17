@@ -895,7 +895,7 @@ li {
     border-radius: 4px;
 }
 
-#score-log li, #timeout-log li, #summary-score-log li, #summary-timeout-log li {
+#score-log li, #timeout-log li, #defence-log li, #summary-score-log li, #summary-timeout-log li, #summary-defence-log li {
     font-weight: 400;
     line-height: 1.3em;
 }

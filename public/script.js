@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.72';
+    const appVersion = '0.1.73';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -142,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenceIntInput = document.getElementById('defence-int');
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
-    const defenceLog = document.querySelector('.score-log #defence-log');
-    const summaryDefenceLog = document.querySelector('.summary-logs #defence-log');
+    const defenceLog = document.querySelector('#defence-log');
+    const summaryDefenceLog = document.querySelector('#summary-defence-log');
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
