@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.68';
+    const appVersion = '0.1.69';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -951,6 +951,7 @@ fetchAndLoadTeamNames();
         const team = (index + 1).toString(); 
     
         button.addEventListener('click', () => {
+            e.stopPropagation();
             // This is the call that references and opens the popup
             showDefencePopup(team); 
         });
