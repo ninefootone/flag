@@ -939,7 +939,7 @@ li {
 } */
 
 /* New: Styles for the pop-up modal overlay */
-#score-popup {
+#score-popup, #defence-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -952,7 +952,7 @@ li {
     z-index: 100;
 }
 
-.popup-content {
+.popup-content, .defence-popup-content {
     background-color: var(--background-color);
     padding: 40px 20px 120px 20px;
     width: 100%;
@@ -960,32 +960,32 @@ li {
     margin: 0 auto;
 }
 
-.popup-content h2 {
+.popup-content h2, .defence-popup-content h2 {
     text-align: left;
 }
 
-.popup-content input {
+.popup-content input, .defence-popup-content input {
     border-radius: 500px;
     font-size:20px;
     font-weight:bold;
 }
 
-#log-score-btn {
+#log-score-btn, #log-defence-stat-btn {
     padding:8px 15px 12px 15px;
 }
 
-#cancel-popup-btn svg {
+#cancel-popup-btn svg, #defence-cancel-popup-btn svg {
     width:30px;
     height:30px;
 }
 
-.player-input-grid {
+.player-input-grid, .defence-input-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
 
-.player-input-grid > div {
+.player-input-grid > div, .defence-input-grid > div {
     display: flex;
     flex-direction: column;
 }
@@ -996,13 +996,13 @@ li {
     margin-top: 20px;
 }
 
-.popup-buttons #cancel-popup-btn {
+.popup-buttons #cancel-popup-btn, .popup-buttons #defence-cancel-popup-btn {
     background-color:var(--background-color);
     border-color:var(--primary-color);
     color:var(--primary-color);
 }
 
-.popup-buttons #cancel-popup-btn:hover {
+.popup-buttons #cancel-popup-btn:hover, .popup-buttons #defence-cancel-popup-btn:hover {
     background-color:var(--secondary-color);
     border-color:var(--secondary-color);
     color:var(--background-color);
@@ -1462,7 +1462,7 @@ li {
     color: var(--primary-color);
 }
 
-#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn, #cancel-popup-btn {
+#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn, #cancel-popup-btn, #defence-cancel-popup-btn {
     padding: 5px;
     width: 40px;
     height: 40px;
@@ -1479,7 +1479,7 @@ li {
     z-index: 1001;
 }
 
-#close-penalty-modal-btn:hover, #close-info-modal-btn:hover, #close-share-modal-btn:hover, #cancel-popup-btn:hover {
+#close-penalty-modal-btn:hover, #close-info-modal-btn:hover, #close-share-modal-btn:hover, #cancel-popup-btn:hover, #defence-cancel-popup-btn:hover {
     background-color: var(--secondary-color);
     cursor: pointer;
 }
