@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.84';
+    const appVersion = '0.1.85';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1075,6 +1075,7 @@ fetchAndLoadTeamNames();
         // Extract the logs (they are currently in LIFO order from the game screen)
         let scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
         let timeoutLogEntries = Array.from(summaryTimeoutLog.querySelectorAll('li'));
+        let defenceLogEntries = Array.from(summaryDefenceLog.querySelectorAll('li'));
 
         // --- 1. Format the data into a text string ---
         let summaryText = `WHISTLE GAME SUMMARY\n`;
@@ -1087,6 +1088,32 @@ fetchAndLoadTeamNames();
         summaryText += `${team1Name || 'Home Team'}: ${team1Score || 0}\n`;
         summaryText += `${team2Name || 'Away Team'}: ${team2Score || 0}\n\n`;
     
+        // --- 1.5. DEFENSIVE STATS TOTALS ---
+        if (gameState.defenceStats) {
+            summaryText += `DEFENSIVE STATS (TOTALS)\n`;
+            summaryText += `----------------------------------------------------\n`;
+            
+            const teams = ['team1', 'team2'];
+
+            teams.forEach(teamKey => {
+                const teamName = teamKey === 'team1' ? gameState.team1Name : gameState.team2Name;
+                const stats = gameState.defenceStats[teamKey];
+                
+                if (stats && Object.values(stats).some(value => value > 0)) {
+                    summaryText += `${teamName}:\n`;
+                    // Build a single line of stats
+                    const statLine = [];
+                    if (stats.tackles > 0) statLine.push(`Tackles: ${stats.tackles}`);
+                    if (stats.tfl > 0) statLine.push(`TFLs: ${stats.tfl}`);
+                    if (stats.sacks > 0) statLine.push(`Sacks: ${stats.sacks}`);
+                    if (stats.interceptions > 0) statLine.push(`INTs: ${stats.interceptions}`);
+
+                    summaryText += `  ${statLine.join(' | ')}\n`;
+                }
+            });
+            summaryText += `\n`;
+        }
+
         // --- 2. Score Log ---
         // Use the length of the extracted DOM elements for the count.
         summaryText += `SCORING LOG (${scoreLogEntries.length} events)\n`;
@@ -1113,7 +1140,19 @@ fetchAndLoadTeamNames();
             summaryText += `No timeouts used.\n`;
         }
 
-        // --- 4. Create and trigger download ---
+        // --- 4. Defensive Log ---
+        summaryText += `\nDEFENSIVE LOG (${defenceLogEntries.length} events)\n`;
+        summaryText += `----------------------------------------------------\n`;
+        if (defenceLogEntries.length > 0) {
+            defenceLogEntries.forEach(li => {
+                // Extract the clean text content
+                summaryText += `${li.textContent}\n`;
+            });
+        } else {
+            summaryText += `No defensive plays recorded.\n`;
+        }
+
+        // --- 5. Create and trigger download ---
         const team1Short = team1Name ? team1Name.replace(/\s/g, '_') : 'Home';
         const team2Short = team2Name ? team2Name.replace(/\s/g, '_') : 'Away';
         const filename = `${formattedDate}_${team1Short}_vs_${team2Short}_Summary.txt`;
