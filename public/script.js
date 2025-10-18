@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.93';
+    const appVersion = '0.1.94';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -426,21 +426,21 @@ fetchAndLoadTeamNames();
             if (gameState.scoreLogHTML && gameState.scoreLogHTML.trim().length > 0) {
                 summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             } else {
-                summaryScoreLog.innerHTML = '<li class="log-placeholder">No scores recorded yet.</li>';
+                summaryScoreLog.innerHTML = '<li class="log-placeholder">No scores logged.</li>';
             }
 
             // Timeout Log
             if (gameState.timeoutLogHTML && gameState.timeoutLogHTML.trim().length > 0) {
                 summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
             } else {
-                summaryTimeoutLog.innerHTML = '<li class="log-placeholder">No timeouts taken yet.</li>';
+                summaryTimeoutLog.innerHTML = '<li class="log-placeholder">No timeouts logged.</li>';
             }
 
             // Defence Log
             if (gameState.defenceLogHTML && gameState.defenceLogHTML.trim().length > 0) {
                 summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
             } else {
-                summaryDefenceLog.innerHTML = '<li class="log-placeholder">No defensive stats recorded yet.</li>';
+                summaryDefenceLog.innerHTML = '<li class="log-placeholder">No defensive stats logged.</li>';
             }
 
             // --- END SUMMARY LOG PLACEHOLDER LOGIC ---
@@ -621,6 +621,11 @@ fetchAndLoadTeamNames();
     const getNewScoreLog = (event, players = {}) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+        
+        // 🚀 NEW: Determine the current half and create the full timestamp
+        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
+        const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
+        
         let playerDetails = [];
         if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
         if (players.wr) { playerDetails.push(`WR #${players.wr}`); }
@@ -628,14 +633,19 @@ fetchAndLoadTeamNames();
         if (players.int) { playerDetails.push(`INT #${players.int}`); }
         if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
         const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
-        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
+        const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
         return newLogEntry + gameState.scoreLogHTML;
     };
 
     const getNewTimeoutLog = (event) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        const newLogEntry = `<li>[${formatTime(elapsedTime)}] ${teamName} called a timeout.</li>`;
+
+        // 🚀 NEW: Determine the current half and create the full timestamp
+        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
+        const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
+
+        const newLogEntry = `<li>${fullTimestamp} ${teamName} called a timeout.</li>`;
         return newLogEntry + gameState.timeoutLogHTML;
     };
 
@@ -749,8 +759,12 @@ fetchAndLoadTeamNames();
         gameState.defenceStats[teamKey].interceptions += interceptions;
 
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
-        // const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+
+        // 🚀 NEW: Determine the current half and create the full timestamp
+        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half'; 
+        const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
+
         let logMessage = `${teamName}`;
         const stats = [];
         // Added logic for pluralization
@@ -762,7 +776,7 @@ fetchAndLoadTeamNames();
         // Construct the full log message
         logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look
 
-        const logEntryHTML = `<li class="log-entry log-defence log-team-${team}">[${formatTime(elapsedTime)}] ${logMessage}</li>`;
+        const logEntryHTML = `<li class="log-entry log-defence log-team-${team}">${fullTimestamp} ${logMessage}</li>`;
 
         // CRITICAL FIX: Save the new log entry to the game state string
         gameState.defenceLogHTML = logEntryHTML + gameState.defenceLogHTML;
@@ -876,8 +890,7 @@ fetchAndLoadTeamNames();
             gameTimeLeft: parseInt(halfDurationInput.value, 10) * 60,
             playTimeLeft: parseInt(playClockDurationInput.value, 10),
             currentDown: 1,
-            currentQuarter: 1,
-            currentTime: initialTimeString,
+            currentHalf: 1,
             timeoutLogHTML: '',
             defenceLogHTML: '',
             twoMinuteWarningIssued: false
@@ -989,15 +1002,31 @@ fetchAndLoadTeamNames();
         // 1. Generate the 'End of Half' log entry
         const endOfHalfLogEntry = getNewEndOfHalfLog();
     
-        // 2. Prepend the new entry to the existing log HTML 
-        //    (The game log is newest-first on the game interface, so we prepend/add to the start)
+        // 2. Prepend the new entry to the existing log HTML
         const newScoreLogHTML = endOfHalfLogEntry + gameState.scoreLogHTML;
 
-        // 3. Send the reset state PLUS the updated score log
+        // --- NEW HALF ADVANCEMENT LOGIC ---
+        let nextHalf = gameState.currentHalf;
+        let gameIsEnded = false;
+
+        if (gameState.currentHalf === 1) {
+            // End of 1st Half -> Start 2nd Half
+            nextHalf = 2;
+        } else if (gameState.currentHalf === 2) {
+            // End of 2nd Half -> End Game
+            gameIsEnded = true;
+        }
+        // --- END NEW HALF ADVANCEMENT LOGIC ---
+
+        // 3. Send the reset state PLUS the updated half/end game state
         sendAction('UPDATE_STATE', {
             gameTimeLeft: gameState.halfDuration, // Resets the clock to the start time
             timeoutsUsed: { '1': 0, '2': 0 },     // Resets timeouts
             twoMinuteWarningIssued: false,
+        
+            // 🚀 NEW: Update the game status
+            currentHalf: nextHalf,
+            gameEnded: gameIsEnded, 
         
             // Include the new log content
             scoreLogHTML: newScoreLogHTML 
@@ -1187,7 +1216,7 @@ fetchAndLoadTeamNames();
                 summaryText += `${li.textContent.trim()}\n`;
             });
         } else {
-            summaryText += `No defensive plays recorded.\n`;
+            summaryText += `No defensive stats recorded.\n`;
         }
 
         // --- 5. Create and trigger download ---
