@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.96';
+    const appVersion = '0.1.97';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1000,36 +1000,29 @@ fetchAndLoadTeamNames();
         gameClockDisplay.parentElement.classList.remove('warning');
         twoMinuteWarningIssuedLocally = false;
     
-        // --- 1. LOG ENTRY GENERATION based on currentHalf ---
-        
-        // Determine the text for the log entry
-        const logEndText = (gameState.currentHalf === 1) ? 'HALF' : 'GAME';
-        
-        // Determine the half text for the log entry (e.g., "1st Half")
-        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
-        
-        // Use the clock time (which is 0:00 when the button is clicked at the end of the period)
-        const timeRemaining = formatTime(gameState.gameTimeLeft); 
-
-        // Construct the log entry. We replace the call to getNewEndOfHalfLog() here.
-        const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${halfText} [${timeRemaining}] --- END OF ${logEndText} ---</li>`;
-    
-        // 2. Prepend the new entry to the existing log HTML
-        const newScoreLogHTML = endOfPeriodLogEntry + gameState.scoreLogHTML;
-
-        // --- HALF ADVANCEMENT LOGIC ---
+        // --- LOGIC VARIABLES ---
         let nextHalf = gameState.currentHalf;
         let gameIsEnded = false;
+        let finalLogEntry = '';
+        
+        // --- 1. HALF ADVANCEMENT & LOG GENERATION ---
+        
+        // Common variables for log construction
+        const timeRemaining = formatTime(gameState.gameTimeLeft); 
+        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
 
         if (gameState.currentHalf === 1) {
-            // End of 1st Half -> Start 2nd Half
+            // End of 1st Half -> Start 2nd Half (No confirmation needed)
             nextHalf = 2;
+            finalLogEntry = `<li class="log-entry log-period-end">${halfText} [${timeRemaining}] --- END OF HALF ---</li>`;
+        
         } else if (gameState.currentHalf === 2) {
             // End of 2nd Half -> End Game. Add confirmation.
             const confirmation = confirm("The 2nd Half has ended. Are you sure you want to finalize the score and end the game?");
             
             if (confirmation) {
                 gameIsEnded = true;
+                finalLogEntry = `<li class="log-entry log-period-end">${halfText} [${timeRemaining}] --- END OF GAME ---</li>`; // Log message is 'END OF GAME'
             } else {
                 // User clicked Cancel: Exit the function to prevent state update.
                 return; 
@@ -1037,7 +1030,12 @@ fetchAndLoadTeamNames();
         }
         // --- END HALF ADVANCEMENT LOGIC ---
 
-        // 3. Send the reset state PLUS the updated half/end game state
+        // 2. CRITICAL FIX: Update the local log content immediately
+        // This ensures the local updateUI() triggered by gameEnded: true has the correct log.
+        const newScoreLogHTML = finalLogEntry + gameState.scoreLogHTML;
+        gameState.scoreLogHTML = newScoreLogHTML;
+
+        // 3. Send the updated state
         sendAction('UPDATE_STATE', {
             gameTimeLeft: gameState.halfDuration, 
             timeoutsUsed: { '1': 0, '2': 0 },     
@@ -1047,9 +1045,12 @@ fetchAndLoadTeamNames();
             currentHalf: nextHalf,
             gameEnded: gameIsEnded, 
         
-            // Include the new log content
+            // Send the updated log content out for other clients
             scoreLogHTML: newScoreLogHTML 
         });
+        
+        // Force the local UI to refresh immediately with the new gameEnded/scoreLogHTML
+        updateUI();
     });
 
     playClockToggleBtn.addEventListener('click', () => {
