@@ -374,7 +374,7 @@ button:hover {
 
 /* Common Form and Button Styles */
 #settings-form, #game-interface {
-    padding: 10px 10px 120px 10px;
+    padding: 10px 10px 10px 10px;
     width:720px;
 }
 
@@ -978,6 +978,14 @@ h4.log-title {
 
 .popup-content h2, .defence-popup-content h2 {
     text-align: left;
+}
+
+#score-popup h2 {
+    margin-bottom:0px;
+}
+
+.score-popup-notes {
+    margin-top:5px;
 }
 
 .popup-content input, .defence-popup-content input {

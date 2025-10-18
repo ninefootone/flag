@@ -159,7 +159,7 @@ input[type="text"], input[type="number"], input[type="date"] {
     border-color: var(--subtle-border-color) !important;
 }
 
-.player-input-grid input {
+.player-input-grid input, .defence-input-grid input {
     color:var(--background-color) !important;
 }
 

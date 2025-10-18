@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.1.91">
-    <link rel="stylesheet" href="/style-dark.css?v=0.1.91">
+    <link rel="stylesheet" href="/style.css?v=0.1.92">
+    <link rel="stylesheet" href="/style-dark.css?v=0.1.92">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -190,7 +190,7 @@
                     </div>
                     <div class="defence-buttons">
                         <button class="defence-stats-btn" data-team="1">
-                            <span class="button-label">Defence</span>
+                            <span class="button-label">+ Defensive Stat</span>
                         </button>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
                     </div>
                     <div class="defence-buttons">
                         <button class="defence-stats-btn" data-team="2">
-                            <span class="button-label">Defence</span>
+                            <span class="button-label">+ Defensive Stat</span>
                         </button>
                     </div>
                 </div>
@@ -407,26 +407,27 @@
         <div id="score-popup" class="hidden">
             <div class="popup-content">
                 <h2 id="popup-header">Log Score Details</h2>
+                <p class="score-popup-notes">Just click Log Score to quickly add a score or enter player number(s) below.</p>
                 <div class="player-input-grid">
                     <div>
                         <label for="qb-number">QB #</label>
-                        <input type="number" id="qb-number" placeholder="Optional">
+                        <input type="number" id="qb-number" placeholder="Player #">
                     </div>
                     <div>
                         <label for="wr-number">WR #</label>
-                        <input type="number" id="wr-number" placeholder="Optional">
+                        <input type="number" id="wr-number" placeholder="Player #">
                     </div>
                     <div>
                         <label for="rb-number">RB #</label>
-                        <input type="number" id="rb-number" placeholder="Optional">
+                        <input type="number" id="rb-number" placeholder="Player #">
                     </div>
                     <div>
                         <label for="int-number">INT #</label>
-                        <input type="number" id="int-number" placeholder="Optional">
+                        <input type="number" id="int-number" placeholder="Player #">
                     </div>
                     <div>
                         <label for="safety-number">Safety #</label>
-                        <input type="number" id="safety-number" placeholder="Optional">
+                        <input type="number" id="safety-number" placeholder="Player #">
                     </div>
                 </div>
                 <div class="popup-buttons">
