@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.89';
+    const appVersion = '0.1.90';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -739,12 +739,7 @@ fetchAndLoadTeamNames();
         // Construct the full log message
         logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look
 
-        const logEntryHTML = `
-            <li class="log-entry log-defence log-team-${team}">
-                <span class="log-time">[${formatTime(elapsedTime)}]</span>
-                <span class="log-message">${logMessage}</span>
-            </li>
-        `;
+        const logEntryHTML = `<li class="log-entry log-defence log-team-${team}">[${formatTime(elapsedTime)}] ${logMessage}</li>`;
 
         // CRITICAL FIX: Save the new log entry to the game state string
         gameState.defenceLogHTML = logEntryHTML + gameState.defenceLogHTML;
@@ -1165,8 +1160,8 @@ fetchAndLoadTeamNames();
         summaryText += `----------------------------------------------------\n`;
         if (defenceLogEntries.length > 0) {
             defenceLogEntries.forEach(li => {
-                // Extract the clean text content
-                const cleanText = li.textContent.replace(/\s+/g, ' ').trim();
+                // The single-line HTML structure ensures this simple trim works perfectly.
+                summaryText += `${li.textContent.trim()}\n`;
             });
         } else {
             summaryText += `No defensive plays recorded.\n`;
