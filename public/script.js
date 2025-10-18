@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.79';
+    const appVersion = '0.1.80';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -827,6 +827,7 @@ fetchAndLoadTeamNames();
             currentQuarter: 1,
             currentTime: initialTimeString,
             timeoutLogHTML: '',
+            defenceLogHTML: '',
             twoMinuteWarningIssued: false
         };
         sendAction('UPDATE_STATE', newGameState);
