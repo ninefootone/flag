@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.80';
+    const appVersion = '0.1.81';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -669,10 +669,9 @@ fetchAndLoadTeamNames();
 
         const team = tempDefenceEvent.team;
         const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
-        const teamKey = `team${team}`; // e.g., 'team1' or 'team2'
+        const teamKey = `team${team}`;
 
         // Get and clean values from inputs (coercing non-numeric/empty values to 0)
-        // NOTE: Input constants from the previous step are used here.
         const tackles = parseInt(defenceTackleInput.value) || 0;
         const tfl = parseInt(defenceTFLInput.value) || 0;
         const sacks = parseInt(defenceSackInput.value) || 0;
@@ -684,30 +683,31 @@ fetchAndLoadTeamNames();
             hideDefencePopup();
             return;
         }
-    
+
         // --- 1. UPDATE GAME STATE (for persistence and tracking) ---
-        // Initialize stats structure if it doesn't exist (Good practice!)
+        // Initialize stats structure if it doesn't exist 
         if (!gameState.defenceStats) gameState.defenceStats = { team1: {}, team2: {} };
         if (!gameState.defenceStats[teamKey]) gameState.defenceStats[teamKey] = { tackles: 0, tfl: 0, sacks: 0, interceptions: 0 };
-    
+
         gameState.defenceStats[teamKey].tackles += tackles;
         gameState.defenceStats[teamKey].tfl += tfl;
         gameState.defenceStats[teamKey].sacks += sacks;
         gameState.defenceStats[teamKey].interceptions += interceptions;
-    
+
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
-        const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
+        // const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
         let logMessage = `Defence: ${teamName}`;
         const stats = [];
-        if (tackles > 0) stats.push(`${tackles} TACKLE`);
-        if (tfl > 0) stats.push(`${tfl} TFL`);
-        if (sacks > 0) stats.push(`${sacks} SACK`);
-        if (interceptions > 0) stats.push(`${interceptions} INT`);
-    
+        // Added logic for pluralization
+        if (tackles > 0) stats.push(`${tackles} TACKLE${tackles > 1 ? 'S' : ''}`); 
+        if (tfl > 0) stats.push(`${tfl} TFL${tfl > 1 ? 'S' : ''}`);
+        if (sacks > 0) stats.push(`${sacks} SACK${sacks > 1 ? 'S' : ''}`);
+        if (interceptions > 0) stats.push(`${interceptions} INT${interceptions > 1 ? 'S' : ''}`);
+
         // Construct the full log message
-        logMessage += ` #${stats.join(', ')}`;
-    
+        logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look
+
         const logEntryHTML = `
             <li class="log-entry log-defence log-team-${team}">
                 <span class="log-time">[${formatTime(elapsedTime)}]</span>
@@ -715,16 +715,19 @@ fetchAndLoadTeamNames();
             </li>
         `;
 
-        // Add the log entry to the main log and the summary log
+        // CRITICAL FIX: Save the new log entry to the game state string
+        gameState.defenceLogHTML = logEntryHTML + gameState.defenceLogHTML;
+
+        // Add the log entry to the main log and the summary log (Local DOM Update)
         if (defenceLogList) defenceLogList.insertAdjacentHTML('afterbegin', logEntryHTML);
         if (summaryDefenceLog) summaryDefenceLog.insertAdjacentHTML('afterbegin', logEntryHTML);
-    
-        // --- 3. CLEAN UP ---
-        // Hide the popup and clear inputs (using the function from the previous step)
+
+        // --- 3. CLEAN UP & SYNC ---
+        // Hide the popup and clear inputs
         hideDefencePopup();
-    
-        // Optional: Call a function to save the game state to local storage, etc.
-        // saveGameState(); 
+
+        // CRITICAL FIX: Send the updated state to the server/other clients
+        sendGameStateUpdate(); 
     };
 
     // --- Event Listeners ---
