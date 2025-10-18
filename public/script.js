@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.85';
+    const appVersion = '0.1.86';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -708,10 +708,10 @@ fetchAndLoadTeamNames();
         let logMessage = `Defence: ${teamName}`;
         const stats = [];
         // Added logic for pluralization
-        if (tackles > 0) stats.push(`${tackles} TACKLE${tackles > 1 ? 'S' : ''}`); 
-        if (tfl > 0) stats.push(`${tfl} TFL${tfl > 1 ? 'S' : ''}`);
-        if (sacks > 0) stats.push(`${sacks} SACK${sacks > 1 ? 'S' : ''}`);
-        if (interceptions > 0) stats.push(`${interceptions} INT${interceptions > 1 ? 'S' : ''}`);
+        if (tackles > 0) stats.push(`#${tackles} TACKLE`); 
+        if (tfl > 0) stats.push(`#${tfl} TFL`);
+        if (sacks > 0) stats.push(`#${sacks} SACK`);
+        if (interceptions > 0) stats.push(`#${interceptions} INT`);
 
         // Construct the full log message
         logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look
@@ -1121,7 +1121,7 @@ fetchAndLoadTeamNames();
         if (scoreLogEntries.length > 0) {
             scoreLogEntries.forEach(li => {
                 // Extract the clean text content, which is already formatted: [Time] Team X scored...
-                summaryText += `${li.textContent}\n`;
+                summaryText += `${li.textContent.trim()}\n`;
             });
         } else {
             summaryText += `No scoring plays recorded.\n`;
@@ -1134,7 +1134,7 @@ fetchAndLoadTeamNames();
         if (timeoutLogEntries.length > 0) {
             timeoutLogEntries.forEach(li => {
                 // Extract the clean text content, which is already formatted: [Time] Team X called a timeout.
-                summaryText += `${li.textContent}\n`;
+                summaryText += `${li.textContent.trim()}\n`;
             });
         } else {
             summaryText += `No timeouts used.\n`;
@@ -1146,7 +1146,7 @@ fetchAndLoadTeamNames();
         if (defenceLogEntries.length > 0) {
             defenceLogEntries.forEach(li => {
                 // Extract the clean text content
-                summaryText += `${li.textContent}\n`;
+                summaryText += `${li.textContent.trim()}\n`;
             });
         } else {
             summaryText += `No defensive plays recorded.\n`;
