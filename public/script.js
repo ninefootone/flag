@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.95';
+    const appVersion = '0.1.96';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1000,14 +1000,24 @@ fetchAndLoadTeamNames();
         gameClockDisplay.parentElement.classList.remove('warning');
         twoMinuteWarningIssuedLocally = false;
     
-        // 1. Generate the 'End of Half' log entry
-        // NOTE: This assumes getNewEndOfHalfLog handles the half number correctly
-        const endOfHalfLogEntry = getNewEndOfHalfLog();
+        // --- 1. LOG ENTRY GENERATION based on currentHalf ---
+        
+        // Determine the text for the log entry
+        const logEndText = (gameState.currentHalf === 1) ? 'HALF' : 'GAME';
+        
+        // Determine the half text for the log entry (e.g., "1st Half")
+        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
+        
+        // Use the clock time (which is 0:00 when the button is clicked at the end of the period)
+        const timeRemaining = formatTime(gameState.gameTimeLeft); 
+
+        // Construct the log entry. We replace the call to getNewEndOfHalfLog() here.
+        const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${halfText} [${timeRemaining}] --- END OF ${logEndText} ---</li>`;
     
         // 2. Prepend the new entry to the existing log HTML
-        const newScoreLogHTML = endOfHalfLogEntry + gameState.scoreLogHTML;
+        const newScoreLogHTML = endOfPeriodLogEntry + gameState.scoreLogHTML;
 
-        // --- NEW HALF ADVANCEMENT LOGIC WITH CONFIRMATION ---
+        // --- HALF ADVANCEMENT LOGIC ---
         let nextHalf = gameState.currentHalf;
         let gameIsEnded = false;
 
@@ -1020,18 +1030,17 @@ fetchAndLoadTeamNames();
             
             if (confirmation) {
                 gameIsEnded = true;
-                // nextHalf remains 2 (or any final value) as the game is now over
             } else {
-                // User clicked Cancel: Do not update state, just stop the clocks and exit
+                // User clicked Cancel: Exit the function to prevent state update.
                 return; 
             }
         }
-        // --- END NEW HALF ADVANCEMENT LOGIC ---
+        // --- END HALF ADVANCEMENT LOGIC ---
 
         // 3. Send the reset state PLUS the updated half/end game state
         sendAction('UPDATE_STATE', {
-            gameTimeLeft: gameState.halfDuration, // Resets the clock to the start time
-            timeoutsUsed: { '1': 0, '2': 0 },     // Resets timeouts
+            gameTimeLeft: gameState.halfDuration, 
+            timeoutsUsed: { '1': 0, '2': 0 },     
             twoMinuteWarningIssued: false,
         
             // Update the game status
