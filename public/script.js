@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.97';
+    const appVersion = '0.1.98';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1000,56 +1000,51 @@ fetchAndLoadTeamNames();
         gameClockDisplay.parentElement.classList.remove('warning');
         twoMinuteWarningIssuedLocally = false;
     
-        // --- LOGIC VARIABLES ---
-        let nextHalf = gameState.currentHalf;
-        let gameIsEnded = false;
-        let finalLogEntry = '';
+        // --- 1. DETERMINE NEXT PERIOD AND LOG ENTRY ---
         
-        // --- 1. HALF ADVANCEMENT & LOG GENERATION ---
+        // The game will now always advance to the next period (Half 2, OT 1, OT 2, etc.)
+        const nextHalfValue = gameState.currentHalf + 1;
+        let periodName = '';
         
-        // Common variables for log construction
-        const timeRemaining = formatTime(gameState.gameTimeLeft); 
-        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
-
         if (gameState.currentHalf === 1) {
-            // End of 1st Half -> Start 2nd Half (No confirmation needed)
-            nextHalf = 2;
-            finalLogEntry = `<li class="log-entry log-period-end">${halfText} [${timeRemaining}] --- END OF HALF ---</li>`;
-        
+            // Advancing from 1st Half -> 2nd Half
+            periodName = 'END OF 1ST HALF';
         } else if (gameState.currentHalf === 2) {
-            // End of 2nd Half -> End Game. Add confirmation.
-            const confirmation = confirm("The 2nd Half has ended. Are you sure you want to finalize the score and end the game?");
-            
-            if (confirmation) {
-                gameIsEnded = true;
-                finalLogEntry = `<li class="log-entry log-period-end">${halfText} [${timeRemaining}] --- END OF GAME ---</li>`; // Log message is 'END OF GAME'
-            } else {
-                // User clicked Cancel: Exit the function to prevent state update.
-                return; 
-            }
+            // Advancing from 2nd Half (Regulation) -> Overtime 1
+            periodName = 'END OF REGULATION';
+        } else if (gameState.currentHalf >= 3) {
+            // Advancing from Overtime X -> Overtime X+1
+            // Overtime 1 starts at half 3 (3 - 2 = 1)
+            const currentOT = gameState.currentHalf - 2;
+            periodName = `END OF OVERTIME ${currentOT}`;
+        } else {
+            periodName = 'PERIOD BREAK'; // Default safety fallback
         }
-        // --- END HALF ADVANCEMENT LOGIC ---
 
-        // 2. CRITICAL FIX: Update the local log content immediately
-        // This ensures the local updateUI() triggered by gameEnded: true has the correct log.
-        const newScoreLogHTML = finalLogEntry + gameState.scoreLogHTML;
-        gameState.scoreLogHTML = newScoreLogHTML;
+        // Construct the log entry
+        const timeRemaining = formatTime(gameState.gameTimeLeft); 
+        const nextPeriodText = (nextHalfValue === 2) ? '2ND HALF' : `OVERTIME ${nextHalfValue - 2}`;
+        const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${periodName} [${timeRemaining}] --- STARTING ${nextPeriodText} ---</li>`;
+    
+        // 2. Prepend the new entry to the existing log HTML and update local state
+        const newScoreLogHTML = endOfPeriodLogEntry + gameState.scoreLogHTML;
+        gameState.scoreLogHTML = newScoreLogHTML; 
 
         // 3. Send the updated state
         sendAction('UPDATE_STATE', {
-            gameTimeLeft: gameState.halfDuration, 
-            timeoutsUsed: { '1': 0, '2': 0 },     
+            gameTimeLeft: gameState.halfDuration, // Resets the clock to the start time
+            timeoutsUsed: { '1': 0, '2': 0 },     // Resets timeouts
             twoMinuteWarningIssued: false,
         
             // Update the game status
-            currentHalf: nextHalf,
-            gameEnded: gameIsEnded, 
+            currentHalf: nextHalfValue, // Advances the period number
+            gameEnded: false, // Always false here, game must be ended via End Game button
         
-            // Send the updated log content out for other clients
+            // Send the updated log content
             scoreLogHTML: newScoreLogHTML 
         });
         
-        // Force the local UI to refresh immediately with the new gameEnded/scoreLogHTML
+        // Force the local UI to refresh immediately (e.g., half display change)
         updateUI();
     });
 
