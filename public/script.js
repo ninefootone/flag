@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.83';
+    const appVersion = '0.1.84';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -421,7 +421,7 @@ fetchAndLoadTeamNames();
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-            summaryDefenceLog.innerHTML = gameState.DefenceLogHTML;
+            summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
             if (fixedFooter) {
@@ -729,6 +729,10 @@ fetchAndLoadTeamNames();
         // --- 3. CLEAN UP & SYNC ---
         // Hide the popup and clear inputs
         hideDefencePopup();
+
+        // FINAL CRITICAL FIX: Use the actual function to save/sync the game state
+        // This sends the full updated gameState object to the server/sync mechanism
+        sendAction('UPDATE_STATE', gameState);
 
         // CRITICAL FIX: Send the updated state to the server/other clients
         updateUI(); 
