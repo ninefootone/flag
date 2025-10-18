@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.78';
+    const appVersion = '0.1.79';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryTeam2Score = document.getElementById('summary-team2-score');
     const summaryScoreLog = document.getElementById('summary-score-log');
     const summaryTimeoutLog = document.getElementById('summary-timeout-log');
+    const summaryDefenceLog = document.getElementById('summary-defence-log');
     const startNewGameFromSummaryBtn = document.getElementById('start-new-game-from-summary-btn');
     const downloadSummaryBtn = document.getElementById('download-summary-btn'); 
     const gameIdDisplay = document.getElementById('current-game-id');
@@ -143,8 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenceIntInput = document.getElementById('defence-int');
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
-    const defenceLog = document.querySelector('#defence-log');
-    const summaryDefenceLog = document.querySelector('#summary-defence-log');
+    // const defenceLog = document.querySelector('#defence-log');
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
@@ -716,7 +716,7 @@ fetchAndLoadTeamNames();
         `;
 
         // Add the log entry to the main log and the summary log
-        if (defenceLog) defenceLog.insertAdjacentHTML('afterbegin', logEntryHTML);
+        if (defenceLogList) defenceLogList.insertAdjacentHTML('afterbegin', logEntryHTML);
         if (summaryDefenceLog) summaryDefenceLog.insertAdjacentHTML('afterbegin', logEntryHTML);
     
         // --- 3. CLEAN UP ---
