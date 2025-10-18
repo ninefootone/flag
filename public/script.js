@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.81';
+    const appVersion = '0.1.82';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -727,7 +727,7 @@ fetchAndLoadTeamNames();
         hideDefencePopup();
 
         // CRITICAL FIX: Send the updated state to the server/other clients
-        sendGameStateUpdate(); 
+        updateUI(); 
     };
 
     // --- Event Listeners ---
