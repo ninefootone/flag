@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.82';
+    const appVersion = '0.1.83';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -492,6 +492,14 @@ fetchAndLoadTeamNames();
             twoMinuteWarningIssuedLocally = true;
         }
 
+        // Update the Defence Log (Add this block)
+        if (defenceLogList) {
+            defenceLogList.innerHTML = gameState.defenceLogHTML;
+        }
+        if (summaryDefenceLog) {
+            summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
+        }
+
     };
 
     // New/Updated function to format date for display (e.g., "27 September 2025")
@@ -717,10 +725,6 @@ fetchAndLoadTeamNames();
 
         // CRITICAL FIX: Save the new log entry to the game state string
         gameState.defenceLogHTML = logEntryHTML + gameState.defenceLogHTML;
-
-        // Add the log entry to the main log and the summary log (Local DOM Update)
-        if (defenceLogList) defenceLogList.insertAdjacentHTML('afterbegin', logEntryHTML);
-        if (summaryDefenceLog) summaryDefenceLog.insertAdjacentHTML('afterbegin', logEntryHTML);
 
         // --- 3. CLEAN UP & SYNC ---
         // Hide the popup and clear inputs
