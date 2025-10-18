@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.77';
+    const appVersion = '0.1.78';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -61,14 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const playClockDisplay = document.getElementById('play-clock-display');
     const scoreLogList = document.getElementById('score-log');
     const timeoutLogList = document.getElementById('timeout-log');
+    const defenceLogList = document.getElementById('defence-log');
     const downButtons = document.querySelectorAll('.down-btn');
     const playClockOptions = document.querySelector('.play-clock-options');
     const autoAdvanceCheckbox = document.getElementById('auto-advance-play-clock');
     const scoreButtons = document.querySelectorAll('.score-buttons button');
-
+    
     scoreButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            // DEFENSIVE CHECK: If the button has the defense class, exit immediately.
+            // DEFENSIVE CHECK: If the button has the defence class, exit immediately.
             if (e.currentTarget.classList.contains('defence-stats-btn')) {
                 return; 
             }
@@ -420,6 +421,7 @@ fetchAndLoadTeamNames();
             summaryTeam2Score.textContent = gameState.scores.team2;
             summaryScoreLog.innerHTML = gameState.scoreLogHTML;
             summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+            summaryDefenceLog.innerHTML = gameState.DefenceLogHTML;
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
             if (fixedFooter) {
@@ -471,6 +473,7 @@ fetchAndLoadTeamNames();
         playClockDisplay.textContent = gameState.playTimeLeft;
         scoreLogList.innerHTML = gameState.scoreLogHTML;
         timeoutLogList.innerHTML = gameState.timeoutLogHTML;
+        defenceLogList.innerHTML = gameState.defenceLogHTML;
         updateDownDisplay();
         updateButtonLabels();
         team1TimeoutLabel.textContent = gameState.team1Name;
@@ -660,7 +663,7 @@ fetchAndLoadTeamNames();
     const logDefenceStats = () => {
         // Safety check for context
         if (!tempDefenceEvent || !tempDefenceEvent.team || !gameState) {
-            console.error("Cannot log defense stats: Missing team context or gameState.");
+            console.error("Cannot log defensive stats: Missing team context or gameState.");
             return;
         }
 
@@ -695,7 +698,7 @@ fetchAndLoadTeamNames();
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
         const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        let logMessage = `Defense: ${teamName}`;
+        let logMessage = `Defence: ${teamName}`;
         const stats = [];
         if (tackles > 0) stats.push(`${tackles} TACKLE`);
         if (tfl > 0) stats.push(`${tfl} TFL`);
