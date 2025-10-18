@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.86';
+    const appVersion = '0.1.87';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1090,8 +1090,6 @@ fetchAndLoadTeamNames();
     
         // --- 1.5. DEFENSIVE STATS TOTALS ---
         if (gameState.defenceStats) {
-            summaryText += `DEFENSIVE STATS (TOTALS)\n`;
-            summaryText += `----------------------------------------------------\n`;
             
             const teams = ['team1', 'team2'];
 
@@ -1111,7 +1109,6 @@ fetchAndLoadTeamNames();
                     summaryText += `  ${statLine.join(' | ')}\n`;
                 }
             });
-            summaryText += `\n`;
         }
 
         // --- 2. Score Log ---
@@ -1146,7 +1143,7 @@ fetchAndLoadTeamNames();
         if (defenceLogEntries.length > 0) {
             defenceLogEntries.forEach(li => {
                 // Extract the clean text content
-                summaryText += `${li.textContent.trim()}\n`;
+                const cleanText = li.textContent.replace(/\s+/g, ' ').trim();
             });
         } else {
             summaryText += `No defensive plays recorded.\n`;

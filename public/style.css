@@ -900,6 +900,10 @@ li {
     line-height: 1.3em;
 }
 
+.log-title {
+    text-align: center;
+}
+
 /* Styles for the undo and end game buttons */
 .action-buttons {
     display: flex;
