@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.87';
+    const appVersion = '0.1.89';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -471,9 +471,32 @@ fetchAndLoadTeamNames();
         team2TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['2'];
         gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
         playClockDisplay.textContent = gameState.playTimeLeft;
-        scoreLogList.innerHTML = gameState.scoreLogHTML;
-        timeoutLogList.innerHTML = gameState.timeoutLogHTML;
-        defenceLogList.innerHTML = gameState.defenceLogHTML;
+
+        // === START LOG PLACEHOLDER LOGIC ===
+
+        // Score Log
+        if (gameState.scoreLogHTML && gameState.scoreLogHTML.trim().length > 0) {
+            scoreLogList.innerHTML = gameState.scoreLogHTML;
+        } else {
+            scoreLogList.innerHTML = '<li class="log-placeholder">No scores recorded yet.</li>';
+        }
+
+        // Timeout Log
+        if (gameState.timeoutLogHTML && gameState.timeoutLogHTML.trim().length > 0) {
+            timeoutLogList.innerHTML = gameState.timeoutLogHTML;
+        } else {
+            timeoutLogList.innerHTML = '<li class="log-placeholder">No timeouts taken yet.</li>';
+        }
+
+        // Defence Log
+        if (gameState.defenceLogHTML && gameState.defenceLogHTML.trim().length > 0) {
+            defenceLogList.innerHTML = gameState.defenceLogHTML;
+        } else {
+            defenceLogList.innerHTML = '<li class="log-placeholder">No defensive stats recorded yet.</li>';
+        }
+
+        // === END LOG PLACEHOLDER LOGIC ===
+
         updateDownDisplay();
         updateButtonLabels();
         team1TimeoutLabel.textContent = gameState.team1Name;
@@ -493,12 +516,12 @@ fetchAndLoadTeamNames();
         }
 
         // Update the Defence Log (Add this block)
-        if (defenceLogList) {
-            defenceLogList.innerHTML = gameState.defenceLogHTML;
-        }
-        if (summaryDefenceLog) {
-            summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
-        }
+        // if (defenceLogList) {
+        //     defenceLogList.innerHTML = gameState.defenceLogHTML;
+        // }
+        // if (summaryDefenceLog) {
+        //     summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
+        // }
 
     };
 

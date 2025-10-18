@@ -887,12 +887,16 @@ ul {
     padding: 0;
 }
 
+.log-container ul {
+    margin-top:5px;
+}
+
 li {
-    background-color: var(--secondary-button-bgnd);
-    border: 1px solid var(--secondary-button-bgnd-hover);
+    /* background-color: var(--secondary-button-bgnd); */
+    border-bottom: 1px solid var(--secondary-button-bgnd-hover);
     padding: 8px;
     margin-bottom: 5px;
-    border-radius: 4px;
+    border-radius: 0px;
 }
 
 #score-log li, #timeout-log li, #defence-log li, #summary-score-log li, #summary-timeout-log li, #summary-defence-log li {
@@ -901,7 +905,11 @@ li {
 }
 
 .log-title {
-    text-align: center;
+    text-align: left;
+}
+
+h4.log-title {
+    margin-bottom:0px;
 }
 
 /* Styles for the undo and end game buttons */
