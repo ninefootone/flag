@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.75';
+    const appVersion = '0.1.76';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -696,19 +696,19 @@ fetchAndLoadTeamNames();
         const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
         let logMessage = `Defense: ${teamName}`;
         const stats = [];
-        if (tackles > 0) stats.push(`${tackles} TACKLE(s)`);
+        if (tackles > 0) stats.push(`${tackles} TACKLE`);
         if (tfl > 0) stats.push(`${tfl} TFL`);
-        if (sacks > 0) stats.push(`${sacks} SACK(s)`);
+        if (sacks > 0) stats.push(`${sacks} SACK`);
         if (interceptions > 0) stats.push(`${interceptions} INT`);
     
         // Construct the full log message
-        logMessage += ` logged: ${stats.join(', ')}`;
+        logMessage += ` #${stats.join(', ')}`;
     
         const logEntryHTML = `
-            <div class="log-entry log-defence log-team-${team}">
-                <span class="log-time">${timestamp}</span>
+            <li class="log-entry log-defence log-team-${team}">
+                <span class="log-time">[${formatTime(elapsedTime)}]</span>
                 <span class="log-message">${logMessage}</span>
-            </div>
+            </li>
         `;
 
         // Add the log entry to the main log and the summary log
