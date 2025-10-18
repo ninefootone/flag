@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.94';
+    const appVersion = '0.1.95';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -658,7 +658,8 @@ fetchAndLoadTeamNames();
         const elapsedTime = gameState.halfDuration; 
     
         // Creates a distinctive log entry (using formatTime which is already available)
-        const newLogEntry = `<li class="end-of-half-log">[${formatTime(elapsedTime)}] --- END OF HALF ---</li>`;
+        // const newLogEntry = `<li class="end-of-half-log">[${formatTime(elapsedTime)}] --- END OF HALF ---</li>`;
+        const newLogEntry = `<li class="end-of-half-log">--- END OF HALF ---</li>`;
         return newLogEntry;
     };
 
@@ -1000,12 +1001,13 @@ fetchAndLoadTeamNames();
         twoMinuteWarningIssuedLocally = false;
     
         // 1. Generate the 'End of Half' log entry
+        // NOTE: This assumes getNewEndOfHalfLog handles the half number correctly
         const endOfHalfLogEntry = getNewEndOfHalfLog();
     
         // 2. Prepend the new entry to the existing log HTML
         const newScoreLogHTML = endOfHalfLogEntry + gameState.scoreLogHTML;
 
-        // --- NEW HALF ADVANCEMENT LOGIC ---
+        // --- NEW HALF ADVANCEMENT LOGIC WITH CONFIRMATION ---
         let nextHalf = gameState.currentHalf;
         let gameIsEnded = false;
 
@@ -1013,8 +1015,16 @@ fetchAndLoadTeamNames();
             // End of 1st Half -> Start 2nd Half
             nextHalf = 2;
         } else if (gameState.currentHalf === 2) {
-            // End of 2nd Half -> End Game
-            gameIsEnded = true;
+            // End of 2nd Half -> End Game. Add confirmation.
+            const confirmation = confirm("The 2nd Half has ended. Are you sure you want to finalize the score and end the game?");
+            
+            if (confirmation) {
+                gameIsEnded = true;
+                // nextHalf remains 2 (or any final value) as the game is now over
+            } else {
+                // User clicked Cancel: Do not update state, just stop the clocks and exit
+                return; 
+            }
         }
         // --- END NEW HALF ADVANCEMENT LOGIC ---
 
@@ -1024,7 +1034,7 @@ fetchAndLoadTeamNames();
             timeoutsUsed: { '1': 0, '2': 0 },     // Resets timeouts
             twoMinuteWarningIssued: false,
         
-            // 🚀 NEW: Update the game status
+            // Update the game status
             currentHalf: nextHalf,
             gameEnded: gameIsEnded, 
         
