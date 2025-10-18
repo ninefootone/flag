@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.92';
+    const appVersion = '0.1.93';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -419,9 +419,32 @@ fetchAndLoadTeamNames();
             summaryTeam2Name.textContent = gameState.team2Name;
             summaryTeam1Score.textContent = gameState.scores.team1;
             summaryTeam2Score.textContent = gameState.scores.team2;
-            summaryScoreLog.innerHTML = gameState.scoreLogHTML;
-            summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-            summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
+
+            // --- START SUMMARY LOG PLACEHOLDER LOGIC ---
+
+            // Score Log
+            if (gameState.scoreLogHTML && gameState.scoreLogHTML.trim().length > 0) {
+                summaryScoreLog.innerHTML = gameState.scoreLogHTML;
+            } else {
+                summaryScoreLog.innerHTML = '<li class="log-placeholder">No scores recorded yet.</li>';
+            }
+
+            // Timeout Log
+            if (gameState.timeoutLogHTML && gameState.timeoutLogHTML.trim().length > 0) {
+                summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+            } else {
+                summaryTimeoutLog.innerHTML = '<li class="log-placeholder">No timeouts taken yet.</li>';
+            }
+
+            // Defence Log
+            if (gameState.defenceLogHTML && gameState.defenceLogHTML.trim().length > 0) {
+                summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
+            } else {
+                summaryDefenceLog.innerHTML = '<li class="log-placeholder">No defensive stats recorded yet.</li>';
+            }
+
+            // --- END SUMMARY LOG PLACEHOLDER LOGIC ---
+
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
             if (fixedFooter) {
@@ -478,21 +501,21 @@ fetchAndLoadTeamNames();
         if (gameState.scoreLogHTML && gameState.scoreLogHTML.trim().length > 0) {
             scoreLogList.innerHTML = gameState.scoreLogHTML;
         } else {
-            scoreLogList.innerHTML = '<li class="log-placeholder">No scores recorded yet.</li>';
+            scoreLogList.innerHTML = '<li class="log-placeholder">No scores logged.</li>';
         }
 
         // Timeout Log
         if (gameState.timeoutLogHTML && gameState.timeoutLogHTML.trim().length > 0) {
             timeoutLogList.innerHTML = gameState.timeoutLogHTML;
         } else {
-            timeoutLogList.innerHTML = '<li class="log-placeholder">No timeouts taken yet.</li>';
+            timeoutLogList.innerHTML = '<li class="log-placeholder">No timeouts logged.</li>';
         }
 
         // Defence Log
         if (gameState.defenceLogHTML && gameState.defenceLogHTML.trim().length > 0) {
             defenceLogList.innerHTML = gameState.defenceLogHTML;
         } else {
-            defenceLogList.innerHTML = '<li class="log-placeholder">No defensive stats recorded yet.</li>';
+            defenceLogList.innerHTML = '<li class="log-placeholder">No defensive stats logged.</li>';
         }
 
         // === END LOG PLACEHOLDER LOGIC ===
