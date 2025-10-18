@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.98';
+    const appVersion = '0.1.99';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1024,7 +1024,8 @@ fetchAndLoadTeamNames();
         // Construct the log entry
         const timeRemaining = formatTime(gameState.gameTimeLeft); 
         const nextPeriodText = (nextHalfValue === 2) ? '2ND HALF' : `OVERTIME ${nextHalfValue - 2}`;
-        const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${periodName} [${timeRemaining}] --- STARTING ${nextPeriodText} ---</li>`;
+        // const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${periodName} [${timeRemaining}] --- STARTING ${nextPeriodText} ---</li>`;
+        const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${periodName} --- STARTING ${nextPeriodText}</li>`;
     
         // 2. Prepend the new entry to the existing log HTML and update local state
         const newScoreLogHTML = endOfPeriodLogEntry + gameState.scoreLogHTML;
