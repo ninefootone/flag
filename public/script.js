@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.90';
+    const appVersion = '0.1.91';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -728,7 +728,7 @@ fetchAndLoadTeamNames();
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
         // const timestamp = `Q${gameState.currentQuarter} ${gameState.currentTime}`; 
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        let logMessage = `Defence: ${teamName}`;
+        let logMessage = `${teamName}`;
         const stats = [];
         // Added logic for pluralization
         if (tackles > 0) stats.push(`#${tackles} TACKLE`); 

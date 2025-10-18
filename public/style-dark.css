@@ -292,8 +292,12 @@ input[type="text"], input[type="number"], input[type="date"] {
 /* Log and End Game Section */
 
 li {
-    background-color: var(--secondary-button-bgnd) !important;
+    /* background-color: var(--secondary-button-bgnd) !important; */
     border-color: var(--secondary-button-bgnd-hover) !important;
+}
+
+.log-placeholder {
+    color:var(--placeholder-color);
 }
 
 /* Styles for the undo and end game buttons */

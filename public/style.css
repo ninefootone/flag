@@ -891,6 +891,10 @@ ul {
     margin-top:5px;
 }
 
+.log-placeholder {
+    color:var(--notes-color);
+}
+
 li {
     /* background-color: var(--secondary-button-bgnd); */
     border-bottom: 1px solid var(--secondary-button-bgnd-hover);
