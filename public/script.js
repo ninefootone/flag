@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.1.99';
+    const appVersion = '0.2.00';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
     const playClockDisplay = document.getElementById('play-clock-display');
+    const gamePeriodDisplay = document.getElementById('game-period-display');
     const scoreLogList = document.getElementById('score-log');
     const timeoutLogList = document.getElementById('timeout-log');
     const defenceLogList = document.getElementById('defence-log');
@@ -145,6 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
+
+    const getPeriodName = (half) => {
+        if (half === 1) return '1st Half';
+        if (half === 2) return '2nd Half';
+        if (half >= 3) return `OT ${half - 2}`; // OT 1 starts at half 3 (3 - 2 = 1)
+        return 'Period'; 
+    };
 
     let reconnectAttempts = 0;
     let pingInterval = null;   // NEW: For keeping the connection alive
@@ -495,6 +503,10 @@ fetchAndLoadTeamNames();
         gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
         playClockDisplay.textContent = gameState.playTimeLeft;
 
+        if (gamePeriodDisplay) {
+            gamePeriodDisplay.textContent = getPeriodName(gameState.currentHalf);
+        }
+        
         // === START LOG PLACEHOLDER LOGIC ===
 
         // Score Log
@@ -622,8 +634,8 @@ fetchAndLoadTeamNames();
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
         
-        // 🚀 NEW: Determine the current half and create the full timestamp
-        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
+        // --- FIX: Use helper function for period name ---
+        const halfText = getPeriodName(gameState.currentHalf); 
         const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
         
         let playerDetails = [];
@@ -633,7 +645,10 @@ fetchAndLoadTeamNames();
         if (players.int) { playerDetails.push(`INT #${players.int}`); }
         if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
         const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
+        
+        // Use the new fullTimestamp
         const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
+        
         return newLogEntry + gameState.scoreLogHTML;
     };
 
@@ -641,11 +656,13 @@ fetchAndLoadTeamNames();
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
 
-        // 🚀 NEW: Determine the current half and create the full timestamp
-        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half';
+        // --- FIX: Use helper function for period name ---
+        const halfText = getPeriodName(gameState.currentHalf);
         const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
 
+        // Use the new fullTimestamp
         const newLogEntry = `<li>${fullTimestamp} ${teamName} called a timeout.</li>`;
+        
         return newLogEntry + gameState.timeoutLogHTML;
     };
 
@@ -761,9 +778,9 @@ fetchAndLoadTeamNames();
 
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
         const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-
+        
         // 🚀 NEW: Determine the current half and create the full timestamp
-        const halfText = (gameState.currentHalf === 1) ? '1st Half' : '2nd Half'; 
+        const halfText = getPeriodName(gameState.currentHalf); 
         const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
 
         let logMessage = `${teamName}`;
