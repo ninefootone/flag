@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.00';
+    const appVersion = '0.2.01';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -455,6 +455,7 @@ fetchAndLoadTeamNames();
 
             reverseLogOrder(summaryScoreLog);
             reverseLogOrder(summaryTimeoutLog);
+            reverseLogOrder(summaryDefenceLog);    
             if (fixedFooter) {
                 fixedFooter.classList.add('hidden'); 
             }
@@ -1216,7 +1217,7 @@ fetchAndLoadTeamNames();
 
         // --- 2. Score Log ---
         // Use the length of the extracted DOM elements for the count.
-        summaryText += `SCORING LOG (${scoreLogEntries.length} events)\n`;
+        summaryText += `\nSCORING LOG (${scoreLogEntries.length} events)\n`;
         summaryText += `----------------------------------------------------\n`;
         if (scoreLogEntries.length > 0) {
             scoreLogEntries.forEach(li => {
