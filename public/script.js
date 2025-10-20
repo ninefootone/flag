@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.02';
+    const appVersion = '0.2.03';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -158,6 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let pingInterval = null;   // NEW: For keeping the connection alive
     let allTeamNames = []; // Global array to store all loaded team names
 
+    let actionTimeLeft = null; // Stores the clock time (in seconds) when a score or defence action is initiated.
+    
     /**
     * Reverses the order of list items (li) in a given <ul> or <ol> element.
     */
@@ -633,7 +635,11 @@ fetchAndLoadTeamNames();
 
     const getNewScoreLog = (event, players = {}) => {
         const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+
+        // --- FIX: Use the stored time, then clear the variable ---
+        const eventTime = actionTimeLeft !== null ? actionTimeLeft : gameState.gameTimeLeft;
+        const elapsedTime = gameState.halfDuration - eventTime;
+        actionTimeLeft = null; // Clear the stored time after use
         
         // --- FIX: Use helper function for period name ---
         const halfText = getPeriodName(gameState.currentHalf); 
@@ -778,8 +784,11 @@ fetchAndLoadTeamNames();
         gameState.defenceStats[teamKey].interceptions += interceptions;
 
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
-        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
-        
+        // --- NEW: Use the stored time, then clear the variable ---
+        const eventTime = actionTimeLeft !== null ? actionTimeLeft : gameState.gameTimeLeft;
+        const elapsedTime = gameState.halfDuration - eventTime;
+        actionTimeLeft = null; // Clear the stored time after use
+
         // 🚀 NEW: Determine the current half and create the full timestamp
         const halfText = getPeriodName(gameState.currentHalf); 
         const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
@@ -929,6 +938,7 @@ fetchAndLoadTeamNames();
             const team = button.dataset.team;
             const scoreToAdd = parseInt(button.dataset.score, 10);
             const scoreLabel = button.dataset.label;
+            actionTimeLeft = gameState.gameTimeLeft;
             showScorePopup(team, scoreToAdd, scoreLabel);
         });
     });
@@ -1091,7 +1101,7 @@ fetchAndLoadTeamNames();
     
         button.addEventListener('click', (e) => {
             e.stopImmediatePropagation();
-            // This is the call that references and opens the popup
+            actionTimeLeft = gameState.gameTimeLeft;
             showDefencePopup(team); 
         });
     });

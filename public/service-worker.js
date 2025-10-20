@@ -1,13 +1,15 @@
-const CACHE_NAME = 'referee-app-cache-v0.2.02';
+const CACHE_NAME = 'referee-app-cache-v0.2.03';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
+  '/style-dark.css',
   '/script.js',
   '/penalties.js',
   '/assets/favicon-96x96.png', // Add all your critical assets
   '/assets/apple-touch-icon.png',
-  '/teams.json' // Cache the team list
+  '/teams.json', // Cache the team list
+  '/penalties.json' // Cache the penalties list
 ];
 
 // 1. Install Event: Cache all necessary assets
