@@ -1242,7 +1242,7 @@ h4.log-title {
 #qr-code-container img {
     display: flex;
     background: #ffffff;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;    
 }
 
@@ -1250,6 +1250,8 @@ h4.log-title {
     color: var(--primary-color);
     font-weight: 600;
     font-size: 0.9rem;
+    margin-top:0px;
+    text-align: center;
 }
 
 #share-notes {
