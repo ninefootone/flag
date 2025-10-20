@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.05';
+    const appVersion = '0.2.06';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeInfoModalBtn = document.getElementById('close-info-modal-btn');
     const shareModal = document.getElementById('share-modal');
     const closeShareModalBtn = document.getElementById('close-share-modal-btn');
+    const qrCodeContainer = document.getElementById('qr-code-container');
     const penaltySearchInput = document.getElementById('penalty-search');
     const infoModalAdmin = document.getElementById('info-modal-admin');
     const infoModalRef = document.getElementById('info-modal-ref');
@@ -631,6 +632,25 @@ fetchAndLoadTeamNames();
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+    // --- NEW: QR CODE GENERATION FUNCTION ---
+    const generateQRCode = (url) => {
+        if (!qrCodeContainer) return;
+
+        // 1. Clear previous content (CRITICAL: prevents multiple codes stacking up)
+        qrCodeContainer.innerHTML = '';
+        
+        // 2. Generate the QR Code
+        // 'QRCode' object is provided by the library you loaded in index.html
+        new QRCode(qrCodeContainer, {
+            text: url,
+            width: 160,       // You can adjust size
+            height: 160,      // You can adjust size
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H // Highest correction level
+        });
     };
 
     const getNewScoreLog = (event, players = {}) => {
@@ -1331,6 +1351,15 @@ fetchAndLoadTeamNames();
 
     // --- NEW SHARE MODAL LISTENERS ---
         shareLinksBtn.addEventListener('click', () => {
+            // NEW: Clear the QR code container
+            if (qrCodeContainer) {
+                qrCodeContainer.innerHTML = '';
+            }
+            // Ensure feedback is hidden too
+            if (shareFeedback) {
+                shareFeedback.classList.add('hidden');
+            }
+
             updateShareLinks(); // <-- NEW: Call to populate links with secure URLs
             shareModal.style.display = 'block'; // Show Share Modal
             infoModal.style.display = 'none'; // Hide Info Modal
@@ -1349,6 +1378,12 @@ fetchAndLoadTeamNames();
     // ADDED: Listener for Share Modal Close Button
         closeShareModalBtn.addEventListener('click', () => {
             shareModal.style.display = 'none';
+
+            // NEW: Clear the QR code container on close
+            if (qrCodeContainer) {
+                qrCodeContainer.innerHTML = '';
+            }
+
         });
     
     // Global click listener for closing modals by clicking the backdrop
@@ -1400,6 +1435,12 @@ fetchAndLoadTeamNames();
         button.addEventListener('click', (event) => {
             const role = button.dataset.role;
             const shareUrl = getShareUrl(role);
+
+            // CLEAR previous QR code and GENERATE the new one (NEW STEP)
+            if (qrCodeContainer) {
+                qrCodeContainer.innerHTML = ''; // Clear previous code
+                generateQRCode(shareUrl); 
+            }
             
             // Function to handle feedback display
             const showFeedback = (message, isError = false) => {

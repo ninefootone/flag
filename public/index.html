@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.2.05">
-    <link rel="stylesheet" href="/style-dark.css?v=0.2.05">
+    <link rel="stylesheet" href="/style.css?v=0.2.06">
+    <link rel="stylesheet" href="/style-dark.css?v=0.2.06">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -388,6 +388,10 @@
                             <button class="share-link-btn" data-role="coach">Coach/Viewer</button>
                         </div>
                     <p id="share-feedback" class="hidden">Link copied!</p>
+
+                    <div id="qr-code-container">
+                    </div>
+
                     <div id="share-notes">
                         <p>Clicking the buttons above will copy a URL to your clipboard. Simply share this with those you want to manage/view the game.</p>
                         <p><strong>Head Ref:</strong> can manage the clocks, downs and timeouts but not the score.</p>
@@ -515,8 +519,6 @@
     </div>
 
     <p class="version">v3.0.6.1</p>
-    <script src="/script.js?v=0.1.39"></script>
-    <script src="/penalties.js"></script>
 
         <div id="fixed-footer-links-container">
             <div class="fixed-footer-links">
@@ -560,6 +562,10 @@
                 </button>
             </div>
         </div>
+
+<script src="/script.js?v=0.1.39"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="/penalties.js"></script>
 
 <script>
     if ('serviceWorker' in navigator) {
