@@ -1233,6 +1233,11 @@ h4.log-title {
     color:var(--background-color);
 }
 
+#qr-code-container {
+    display:flex;
+    justify-content: center;
+}
+
 #share-feedback {
     color: var(--primary-color);
     font-weight: 600;

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.06';
+    const appVersion = '0.2.07';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -645,8 +645,8 @@ fetchAndLoadTeamNames();
         // 'QRCode' object is provided by the library you loaded in index.html
         new QRCode(qrCodeContainer, {
             text: url,
-            width: 160,       // You can adjust size
-            height: 160,      // You can adjust size
+            width: 240,       // You can adjust size
+            height: 240,      // You can adjust size
             colorDark : "#000000",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H // Highest correction level
