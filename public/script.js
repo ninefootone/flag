@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.10';
+    const appVersion = '0.2.11';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -100,6 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const logScoreBtn = document.getElementById('log-score-btn');
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
     const coinTossBtn = document.getElementById('coin-toss-btn');
+    const coinTossModal = document.getElementById('coin-toss-modal');
+    const coinAnimationArea = document.getElementById('coin-animation-area');
+    const coinTossAnimation = document.getElementById('coin-toss-animation');
+    const coinTossResultArea = document.getElementById('coin-toss-result-area');
+    const tossResultMessage = document.getElementById('toss-result-message');
+    const tossStartGameBtn = document.getElementById('toss-start-game-btn');
+    const tossRerunBtn = document.getElementById('toss-rerun-btn');
+
     // const coinTossResultDisplay = document.getElementById('coin-toss-result');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
     const summaryTeam2Name = document.getElementById('summary-team2-name');
@@ -946,12 +954,28 @@ fetchAndLoadTeamNames();
         sendAction('UPDATE_STATE', newGameState);
     });
 
-    coinTossBtn.addEventListener('click', (event) => { // CHANGED: Added (event)
-        event.preventDefault(); // NEW: Stops potential form submission
-        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
-        sendAction('UPDATE_STATE', { coinTossResult: result });
-    });
+    // --- EVENT LISTENERS FOR NEW COIN TOSS MODAL ---
+    
+    // 1. Existing Coin Toss Button: Open modal and start the flip automatically
+    if (coinTossBtn) {
+        coinTossBtn.addEventListener('click', () => {
+            // Note: If you don't have a 'hidden' class, you may use 'style.display = "block"'
+            coinTossModal.classList.remove('hidden'); 
+            startCoinFlip(); 
+        });
+    }
 
+    // 2. Rerun Button: Just close the modal and start the flip again
+    if (tossRerunBtn) {
+        tossRerunBtn.addEventListener('click', () => {
+            startCoinFlip(); // Reruns the flip animation and logic
+        });
+    }
+
+    // 3. Start Game Button: Close modal and transition to the main game
+    if (tossStartGameBtn) {
+        tossStartGameBtn.addEventListener('click', handleStartGameFromToss);
+    }
 
     scoreButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -1399,6 +1423,64 @@ fetchAndLoadTeamNames();
             shareModal.style.display = 'none';
         }
     });
+
+    // Coin Toss
+    const COIN_FLIP_DURATION = 2000; // 2 seconds for the animation to run
+
+    const startCoinFlip = () => {
+        // 1. Reset state for the flip
+        coinTossResultArea.classList.add('hidden');
+        tossStartGameBtn.classList.add('hidden');
+        tossRerunBtn.classList.add('hidden');
+        
+        // 2. Show the animation
+        coinTossAnimation.classList.remove('hidden');
+        
+        // 3. Generate the random result
+        const result = Math.random() < 0.5 ? "Heads" : "Tails";
+
+        // 4. Set a timer to wait for the "flip" animation to complete
+        setTimeout(() => {
+            // 5. Hide the animation and display the result
+            coinTossAnimation.classList.add('hidden');
+            
+            tossResultMessage.textContent = result;
+            
+            coinTossResultArea.classList.remove('hidden');
+            tossStartGameBtn.classList.remove('hidden');
+            tossRerunBtn.classList.remove('hidden');
+
+            // 6. [CRITICAL] Update the game state with the toss result
+            // You will need to define a function to update your game data (e.g., in Firestore)
+            // Example: updateGameTossResult(result);
+            console.log(`Coin Toss Result: ${result}`);
+
+        }, COIN_FLIP_DURATION);
+    };
+    
+    // --- Utility to close the modal and start the game ---
+    const handleStartGameFromToss = () => {
+        // 1. Hide the Coin Toss Modal
+        coinTossModal.classList.add('hidden');
+        
+        // 2. [CRITICAL] Call your primary function to transition to the main game
+        // If you have a function called 'startGame' or 'initiateGame' use that here.
+        // Assuming your setup involves showing the game screen and hiding the lobby:
+        
+        const gameLobby = document.getElementById('game-lobby');
+        const gameApp = document.getElementById('game-app');
+        
+        if (gameLobby && gameApp) {
+            gameLobby.classList.add('hidden'); // Hide the setup screen
+            gameApp.classList.remove('hidden'); // Show the main game interface
+        }
+        
+        // 3. (Optional but likely required) Start the clock or initial period countdown
+        // Example: startTimer(); 
+
+        // 4. (If you have it) Send a final server action to confirm game start
+        // Example: sendAction('GAME_START');
+    };
 
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {
