@@ -324,6 +324,8 @@ button:hover {
     font-weight: 900;
 }
 
+/* Coin Toss */
+
 .coin-toss-section {
     text-align: center;
     margin-top:30px;
@@ -348,6 +350,21 @@ button:hover {
 #coin-toss-result {
     font-size:24px;
     font-weight:600;
+}
+
+#coin-toss-result-area {
+    text-align: center;
+}
+
+#toss-result-message {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0 0 20px 0;    
+}
+
+.coin-toss-content {
+    width: 320px;
+    text-align: center;    
 }
 
 #start-game-btn {
@@ -1501,7 +1518,7 @@ h4.log-title {
     color: var(--primary-color);
 }
 
-#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn, #cancel-popup-btn, #defence-cancel-popup-btn {
+#close-penalty-modal-btn, #close-info-modal-btn, #close-share-modal-btn, #cancel-popup-btn, #defence-cancel-popup-btn, #close-coin-toss-modal-btn {
     padding: 5px;
     width: 40px;
     height: 40px;
