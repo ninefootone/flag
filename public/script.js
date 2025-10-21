@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.18';
+    const appVersion = '0.2.19';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -598,7 +598,7 @@ fetchAndLoadTeamNames();
         //    coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
         } else {
             // Set the initial text if no toss has occurred
-            coinTossBtn.textContent = 'Flip Coin';
+            coinTossBtn.textContent = 'Coin';
         }
 
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
