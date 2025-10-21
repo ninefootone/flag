@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.11';
+    const appVersion = '0.2.12';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -180,6 +180,64 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = listItems.length - 1; i >= 0; i--) {
             ulElement.appendChild(listItems[i]);
         }
+    };
+
+        // Coin Toss
+    const COIN_FLIP_DURATION = 2000; // 2 seconds for the animation to run
+
+    const startCoinFlip = () => {
+        // 1. Reset state for the flip
+        coinTossResultArea.classList.add('hidden');
+        tossStartGameBtn.classList.add('hidden');
+        tossRerunBtn.classList.add('hidden');
+        
+        // 2. Show the animation
+        coinTossAnimation.classList.remove('hidden');
+        
+        // 3. Generate the random result
+        const result = Math.random() < 0.5 ? "Heads" : "Tails";
+
+        // 4. Set a timer to wait for the "flip" animation to complete
+        setTimeout(() => {
+            // 5. Hide the animation and display the result
+            coinTossAnimation.classList.add('hidden');
+            
+            tossResultMessage.textContent = result;
+            
+            coinTossResultArea.classList.remove('hidden');
+            tossStartGameBtn.classList.remove('hidden');
+            tossRerunBtn.classList.remove('hidden');
+
+            // 6. [CRITICAL] Update the game state with the toss result
+            // You will need to define a function to update your game data (e.g., in Firestore)
+            // Example: updateGameTossResult(result);
+            console.log(`Coin Toss Result: ${result}`);
+
+        }, COIN_FLIP_DURATION);
+    };
+    
+    // --- Utility to close the modal and start the game ---
+    const handleStartGameFromToss = () => {
+        // 1. Hide the Coin Toss Modal
+        coinTossModal.classList.add('hidden');
+        
+        // 2. [CRITICAL] Call your primary function to transition to the main game
+        // If you have a function called 'startGame' or 'initiateGame' use that here.
+        // Assuming your setup involves showing the game screen and hiding the lobby:
+        
+        const gameLobby = document.getElementById('game-lobby');
+        const gameApp = document.getElementById('game-app');
+        
+        if (gameLobby && gameApp) {
+            gameLobby.classList.add('hidden'); // Hide the setup screen
+            gameApp.classList.remove('hidden'); // Show the main game interface
+        }
+        
+        // 3. (Optional but likely required) Start the clock or initial period countdown
+        // Example: startTimer(); 
+
+        // 4. (If you have it) Send a final server action to confirm game start
+        // Example: sendAction('GAME_START');
     };
 
 
@@ -1423,64 +1481,6 @@ fetchAndLoadTeamNames();
             shareModal.style.display = 'none';
         }
     });
-
-    // Coin Toss
-    const COIN_FLIP_DURATION = 2000; // 2 seconds for the animation to run
-
-    const startCoinFlip = () => {
-        // 1. Reset state for the flip
-        coinTossResultArea.classList.add('hidden');
-        tossStartGameBtn.classList.add('hidden');
-        tossRerunBtn.classList.add('hidden');
-        
-        // 2. Show the animation
-        coinTossAnimation.classList.remove('hidden');
-        
-        // 3. Generate the random result
-        const result = Math.random() < 0.5 ? "Heads" : "Tails";
-
-        // 4. Set a timer to wait for the "flip" animation to complete
-        setTimeout(() => {
-            // 5. Hide the animation and display the result
-            coinTossAnimation.classList.add('hidden');
-            
-            tossResultMessage.textContent = result;
-            
-            coinTossResultArea.classList.remove('hidden');
-            tossStartGameBtn.classList.remove('hidden');
-            tossRerunBtn.classList.remove('hidden');
-
-            // 6. [CRITICAL] Update the game state with the toss result
-            // You will need to define a function to update your game data (e.g., in Firestore)
-            // Example: updateGameTossResult(result);
-            console.log(`Coin Toss Result: ${result}`);
-
-        }, COIN_FLIP_DURATION);
-    };
-    
-    // --- Utility to close the modal and start the game ---
-    const handleStartGameFromToss = () => {
-        // 1. Hide the Coin Toss Modal
-        coinTossModal.classList.add('hidden');
-        
-        // 2. [CRITICAL] Call your primary function to transition to the main game
-        // If you have a function called 'startGame' or 'initiateGame' use that here.
-        // Assuming your setup involves showing the game screen and hiding the lobby:
-        
-        const gameLobby = document.getElementById('game-lobby');
-        const gameApp = document.getElementById('game-app');
-        
-        if (gameLobby && gameApp) {
-            gameLobby.classList.add('hidden'); // Hide the setup screen
-            gameApp.classList.remove('hidden'); // Show the main game interface
-        }
-        
-        // 3. (Optional but likely required) Start the clock or initial period countdown
-        // Example: startTimer(); 
-
-        // 4. (If you have it) Send a final server action to confirm game start
-        // Example: sendAction('GAME_START');
-    };
 
     // --- New Share Link Logic ---
     const getShareUrl = (role) => {
