@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.13';
+    const appVersion = '0.2.14';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tossResultMessage = document.getElementById('toss-result-message');
     const tossStartGameBtn = document.getElementById('toss-start-game-btn');
     const tossRerunBtn = document.getElementById('toss-rerun-btn');
+    const closeCoinTossModalBtn = document.getElementById('close-coin-toss-modal-btn');
 
     // const coinTossResultDisplay = document.getElementById('coin-toss-result');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
@@ -1440,6 +1441,10 @@ fetchAndLoadTeamNames();
         });
 
     // Listener for closing the modals via their close buttons ('&times;')
+        closeCoinTossModalBtn.addEventListener('click', () => {
+            coinTossModal.style.display = 'none';
+        });
+
         closePenaltyModalBtn.addEventListener('click', () => {
             penaltyLookupModal.style.display = 'none';
         });
@@ -1456,7 +1461,6 @@ fetchAndLoadTeamNames();
             if (qrCodeContainer) {
                 qrCodeContainer.innerHTML = '';
             }
-
         });
     
     // Global click listener for closing modals by clicking the backdrop
