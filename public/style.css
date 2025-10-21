@@ -331,7 +331,7 @@ button:hover {
     margin-top:30px;
 }
 
-#coin-toss-btn, #toss-rerun-btn {
+#coin-toss-btn {
     width:35%;
     font-size:24px;
     font-weight:800;
@@ -339,6 +339,12 @@ button:hover {
     background-color:var(--background-color);
     border-color: var(--primary-color);
     position: relative; 
+}
+
+#toss-rerun-btn {
+    color: var(--primary-color);
+    background-color:var(--background-color);
+    border-color: var(--primary-color);
 }
 
 #coin-toss-btn:hover, #toss-rerun-btn:hover {
