@@ -331,8 +331,8 @@ button:hover {
     margin-top:30px;
 }
 
-#coin-toss-btn {
-    width:100%;
+#coin-toss-btn, #toss-rerun-btn {
+    width:35%;
     font-size:24px;
     font-weight:800;
     color: var(--primary-color);
@@ -341,7 +341,7 @@ button:hover {
     position: relative; 
 }
 
-#coin-toss-btn:hover {
+#coin-toss-btn:hover, #toss-rerun-btn:hover {
     color:var(--button-text);
     background-color: var(--secondary-color);
     border-color:var(--secondary-color);
@@ -357,6 +357,7 @@ button:hover {
 }
 
 #toss-result-message {
+    color:var(--primary-color);
     font-size: 48px;
     font-weight: bold;
     margin: 0 0 20px 0;    
@@ -377,6 +378,12 @@ button:hover {
     display: flex;
     justify-content: center;
     gap: 10px;
+}
+
+#toss-rerun-btn {
+    background-color: var(--button-text);
+    color:var(--primary-color);
+    border-color:var(--primary-color);
 }
 
 #start-game-btn {

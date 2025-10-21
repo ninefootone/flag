@@ -120,16 +120,21 @@ button:hover {
     color:var(--text-color) !important;
 }
 
-#coin-toss-btn {
+/* Coin Toss */
+#coin-toss-btn, #toss-rerun-btn {
     color: var(--primary-color) !important;
     background-color:var(--background-color) !important;
     border-color: var(--subtle-border-color) !important;
 }
 
-#coin-toss-btn:hover {
+#coin-toss-btn:hover, #toss-rerun-btn:hover {
     color:var(--primary-color) !important;
     background-color: var(--secondary-color) !important;
     border-color:var(--secondary-color) !important;
+}
+
+#toss-result-message {
+    color:var(--primary-color) !important;
 }
 
 #start-game-btn {
