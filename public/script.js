@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.14';
+    const appVersion = '0.2.15';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1440,10 +1440,21 @@ fetchAndLoadTeamNames();
             penaltyLookupModal.style.display = 'none'; // Hide Penalty Modal
         });
 
-    // Listener for closing the modals via their close buttons ('&times;')
-        closeCoinTossModalBtn.addEventListener('click', () => {
-            coinTossModal.style.display = 'none';
-        });
+        // Listener for closing the modals via their close buttons ('&times;')
+        // --- EVENT LISTENERS FOR CLOSE BUTTON ---
+        if (closeCoinTossModalBtn) {
+            closeCoinTossModalBtn.addEventListener('click', () => {
+                // 1. Close the modal
+                coinTossModal.classList.add('hidden');
+            
+                // 2. Cleanup (Good Practice): Reset the modal to its initial state
+                //    This ensures the next time you open it, the coin flip starts fresh.
+                coinTossAnimation.classList.add('hidden'); 
+                coinTossResultArea.classList.add('hidden');
+                tossStartGameBtn.classList.add('hidden');
+                tossRerunBtn.classList.add('hidden');
+            });
+        }
 
         closePenaltyModalBtn.addEventListener('click', () => {
             penaltyLookupModal.style.display = 'none';
