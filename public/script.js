@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.12';
+    const appVersion = '0.2.13';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -221,23 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Hide the Coin Toss Modal
         coinTossModal.classList.add('hidden');
         
-        // 2. [CRITICAL] Call your primary function to transition to the main game
-        // If you have a function called 'startGame' or 'initiateGame' use that here.
-        // Assuming your setup involves showing the game screen and hiding the lobby:
-        
-        const gameLobby = document.getElementById('game-lobby');
-        const gameApp = document.getElementById('game-app');
-        
-        if (gameLobby && gameApp) {
-            gameLobby.classList.add('hidden'); // Hide the setup screen
-            gameApp.classList.remove('hidden'); // Show the main game interface
-        }
-        
-        // 3. (Optional but likely required) Start the clock or initial period countdown
-        // Example: startTimer(); 
-
-        // 4. (If you have it) Send a final server action to confirm game start
-        // Example: sendAction('GAME_START');
+        // 2. Call the function that creates the state and swaps the screen
+        initiateGameFromLobby();    
     };
 
 
@@ -964,30 +949,21 @@ fetchAndLoadTeamNames();
         }
     });
 
-    startGameBtn.addEventListener('click', (event) => {
-        event.preventDefault(); // Good practice to include this
-
+    // --- NEW REUSABLE FUNCTION ---
+    const initiateGameFromLobby = () => {
         // 1. SET DEFAULTS: If the input is empty, default to 'Team 1' / 'Team 2'
         const t1Name = team1NameInput.value.trim() || 'Team 1';
         const t2Name = team2NameInput.value.trim() || 'Team 2';
 
-        // 2. RETAIN OTHER VALIDATION (Date and Location)
-        // if (!dateField.value || !locationField.value) {
-        //     alert('Please fill in the Date and Location details.');
-        //     return;
-        // }
-
-        // if (!gameState.coinTossResult) {
-        //    alert("Please complete the coin toss before starting the game.");
-        //    return;
-        // }
+        // 2. RETAIN OTHER VALIDATION AND RESET (keep these lines if they exist)
+        // if (!dateField.value || !locationField.value) { /* ... */ }
+        // if (!gameState.coinTossResult) { /* ... */ }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
         actionHistory = [];
 
-        // *** 1. Dynamic Time Calculation (Must be executed first!) ***
+        // *** 3. Dynamic Time Calculation & State Creation ***
         const initialMinutes = parseInt(halfDurationInput.value, 10);
-        // Calculate the time string (e.g., 12:00)
         const initialTimeString = `${String(initialMinutes).padStart(2, '0')}:00`;
 
         const newGameState = {
@@ -1010,6 +986,21 @@ fetchAndLoadTeamNames();
             twoMinuteWarningIssued: false
         };
         sendAction('UPDATE_STATE', newGameState);
+    
+        // 4. TRANSITION THE SCREEN (This is why it was returning to the lobby!)
+        // Assuming your UI uses #game-lobby and #game-app
+        const gameLobby = document.getElementById('game-lobby');
+        const gameApp = document.getElementById('game-app');
+    
+        if (gameLobby && gameApp) {
+            gameLobby.classList.add('hidden'); // Hide the setup screen
+            gameApp.classList.remove('hidden'); // Show the main game interface
+        }
+    };
+
+    startGameBtn.addEventListener('click', (event) => {
+        event.preventDefault(); 
+        initiateGameFromLobby(); // Calls the reusable function
     });
 
     // --- EVENT LISTENERS FOR NEW COIN TOSS MODAL ---
