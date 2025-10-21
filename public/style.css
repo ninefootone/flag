@@ -367,6 +367,18 @@ button:hover {
     text-align: center;    
 }
 
+.toss-control-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;    
+}
+
+.coin-toss-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 #start-game-btn {
     width:100%;
     font-size:24px;
