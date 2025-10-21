@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.2.09">
-    <link rel="stylesheet" href="/style-dark.css?v=0.2.09">
+    <link rel="stylesheet" href="/style.css?v=0.2.10">
+    <link rel="stylesheet" href="/style-dark.css?v=0.2.10">
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -78,17 +78,17 @@
                 <div class="settings-grid">
                     <div class="one-third one">
                         <label for="half-duration">Half</label>
-                        <input type="number" id="half-duration" value="15" min="1">
+                        <input type="number" id="half-duration" value="15" min="1" inputmode="numeric">
                         <div class="settings-notes">minutes</div>
                     </div>
                     <div class="one-third two">
                         <label for="play-clock-duration">Play Clock</label>
-                        <input type="number" id="play-clock-duration" value="25" min="5">
+                        <input type="number" id="play-clock-duration" value="25" min="5" inputmode="numeric">
                         <div class="settings-notes">seconds</div>
                     </div>
                     <div class="one-third three">
                         <label for="timeouts-per-half">Timeouts</label>
-                        <input type="number" id="timeouts-per-half" value="2" min="0">
+                        <input type="number" id="timeouts-per-half" value="2" min="0" inputmode="numeric">
                         <div class="settings-notes">per half</div>
                     </div>
                 </div>
@@ -416,23 +416,23 @@
                 <div class="player-input-grid">
                     <div>
                         <label for="qb-number">QB #</label>
-                        <input type="number" id="qb-number" placeholder="Player #">
+                        <input type="number" id="qb-number" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="wr-number">WR #</label>
-                        <input type="number" id="wr-number" placeholder="Player #">
+                        <input type="number" id="wr-number" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="rb-number">RB #</label>
-                        <input type="number" id="rb-number" placeholder="Player #">
+                        <input type="number" id="rb-number" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="int-number">INT #</label>
-                        <input type="number" id="int-number" placeholder="Player #">
+                        <input type="number" id="int-number" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="safety-number">Safety #</label>
-                        <input type="number" id="safety-number" placeholder="Player #">
+                        <input type="number" id="safety-number" placeholder="Player #" inputmode="numeric">
                     </div>
                 </div>
                 <div class="popup-buttons">
@@ -453,19 +453,19 @@
                 <div class="defence-input-grid">
                     <div>
                         <label for="defence-tackle">Tackle</label>
-                        <input type="number" id="defence-tackle" placeholder="Player #">
+                        <input type="number" id="defence-tackle" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="defence-tfl">Tackle for Loss</label>
-                        <input type="number" id="defence-tfl" placeholder="Player #">
+                        <input type="number" id="defence-tfl" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="defence-sack">Sack</label>
-                        <input type="number" id="defence-sack" placeholder="Player #">
+                        <input type="number" id="defence-sack" placeholder="Player #" inputmode="numeric">
                     </div>
                     <div>
                         <label for="defence-int">Interception</label>
-                        <input type="number" id="defence-int" placeholder="Player #">
+                        <input type="number" id="defence-int" placeholder="Player #" inputmode="numeric">
                     </div>
                 </div>
                 <div class="popup-buttons">
