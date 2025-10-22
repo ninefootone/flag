@@ -1607,7 +1607,7 @@ h4.log-title {
 /* Fixed Footer */
 
 #fixed-footer-links-container {
-    position:sticky;
+    position:fixed;
     bottom:0;
     left:0;
     right:0;
