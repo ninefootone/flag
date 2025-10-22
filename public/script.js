@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.20';
+    const appVersion = '0.2.21';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossModal = document.getElementById('coin-toss-modal');
     const coinAnimationArea = document.getElementById('coin-animation-area');
-    const coinTossAnimation = document.getElementById('coin-toss-animation');
+    // const coinTossAnimation = document.getElementById('coin-toss-animation');
     const coinTossResultArea = document.getElementById('coin-toss-result-area');
     const tossResultMessage = document.getElementById('toss-result-message');
     const tossStartGameBtn = document.getElementById('toss-start-game-btn');
@@ -183,39 +183,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-        // Coin Toss
-    const COIN_FLIP_DURATION = 2000; // 2 seconds for the animation to run
+    // Global variable to store the Lottie animation object
+    let coinAnimation = null;
+
+    // --- Core Lottie Initialization ---
+    // This function runs once to set up the Lottie player inside the container
+    const initCoinAnimation = () => {
+        // Prevent re-initialization
+        if (coinAnimation) return; 
+
+        const coinAnimationArea = document.getElementById('coin-animation-area');
+
+        coinAnimation = lottie.loadAnimation({
+            container: coinAnimationArea, // The DOM element to render the animation in
+            renderer: 'svg', // Use 'svg' for best quality/scalability
+            loop: true, // The animation should loop during the 'flip'
+            autoplay: false, // Do NOT start playing immediately
+            path: '/assets/coin-toss.json' // <--- **CRITICAL: CHANGE THIS TO YOUR JSON FILE PATH**
+        });
+    };
+
+    // --- MODIFIED startCoinFlip() Function ---
+    const COIN_FLIP_DURATION = 2000; 
 
     const startCoinFlip = () => {
-        // 1. Reset state for the flip
+        // 1. Ensure animation is initialized
+        if (!coinAnimation) {
+            initCoinAnimation();
+        }
+    
+        // 2. Reset state for the flip
         coinTossResultArea.classList.add('hidden');
         tossStartGameBtn.classList.add('hidden');
         tossRerunBtn.classList.add('hidden');
-        
-        // 2. Show the animation
-        coinTossAnimation.classList.remove('hidden');
-        
-        // 3. Generate the random result
+        coinAnimationArea.classList.remove('hidden'); // Show the container
+
+        // 3. Start the Lottie animation
+        coinAnimation.play(); 
+
+        // 4. Generate the random result
         const result = Math.random() < 0.5 ? "Heads" : "Tails";
 
-        // 4. Set a timer to wait for the "flip" animation to complete
+        // 5. Set a timer to wait for the "flip" animation to complete
         setTimeout(() => {
-            // 5. Hide the animation and display the result
-            coinTossAnimation.classList.add('hidden');
-            
+            // 6. Stop the Lottie animation and hide the container
+            coinAnimation.stop(); 
+            coinAnimationArea.classList.add('hidden'); 
+        
+            // 7. Display the result
             tossResultMessage.textContent = result;
-            
             coinTossResultArea.classList.remove('hidden');
             tossStartGameBtn.classList.remove('hidden');
             tossRerunBtn.classList.remove('hidden');
 
-            // 6. [CRITICAL] Update the game state with the toss result
-            // You will need to define a function to update your game data (e.g., in Firestore)
-            // Example: updateGameTossResult(result);
-            console.log(`Coin Toss Result: ${result}`);
+            sendAction('UPDATE_STATE', { coinTossResult: result }); 
 
         }, COIN_FLIP_DURATION);
     };
+
+    // 8. CRITICAL: Run Initialization
+    // Call this function once, ideally at the end of your DOMContentLoaded block,
+    // or at least before the coinTossBtn event listener.
+    initCoinAnimation();
     
     // --- Utility to close the modal and start the game ---
     const handleStartGameFromToss = () => {
