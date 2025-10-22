@@ -377,9 +377,10 @@ button:hover {
 }
 
 #coin-animation-area {
-    width: 640px;
-    height: 640px;
+    width: 540px;
+    height: 540px;
     margin: 20px auto;
+    margin-left: 50px;
 }
 
 .toss-control-buttons {
@@ -403,6 +404,9 @@ button:hover {
 @media only screen and (max-width: 350px) {
     .coin-toss-buttons {
         flex-direction: column !important;
+    }
+    #coin-toss-btn {
+        width:100%;
     }
 }
 
