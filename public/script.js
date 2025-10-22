@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.22';
+    const appVersion = '0.2.23';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const coinTossBtn = document.getElementById('coin-toss-btn');
     const coinTossModal = document.getElementById('coin-toss-modal');
     const coinAnimationArea = document.getElementById('coin-animation-area');
-    // const coinTossAnimation = document.getElementById('coin-toss-animation');
+    const coinTossAnimation = document.getElementById('coin-toss-animation');
     const coinTossResultArea = document.getElementById('coin-toss-result-area');
     const tossResultMessage = document.getElementById('toss-result-message');
     const tossStartGameBtn = document.getElementById('toss-start-game-btn');

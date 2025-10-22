@@ -364,14 +364,22 @@ button:hover {
 
 #toss-result-message {
     color:var(--primary-color);
-    font-size: 48px;
+    font-size: 72px;
     font-weight: bold;
     margin: 0 0 20px 0;    
 }
 
 .coin-toss-content {
-    width: 320px;
-    text-align: center;    
+    width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers items horizontally */
+}
+
+#coin-animation-area {
+    width: 640px;
+    height: 640px;
+    margin: 20px auto;
 }
 
 .toss-control-buttons {
@@ -380,10 +388,22 @@ button:hover {
     gap: 10px;    
 }
 
+@media only screen and (max-width: 300px) {
+    .toss-control-buttons {
+        flex-direction: column !important;
+    }
+}
+
 .coin-toss-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
+}
+
+@media only screen and (max-width: 350px) {
+    .coin-toss-buttons {
+        flex-direction: column !important;
+    }
 }
 
 #toss-rerun-btn {
