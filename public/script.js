@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.24';
+    const appVersion = '0.2.25';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1470,18 +1470,25 @@ fetchAndLoadTeamNames();
         });
 
         // Listener for closing the modals via their close buttons ('&times;')
-        // --- EVENT LISTENERS FOR CLOSE BUTTON ---
         if (closeCoinTossModalBtn) {
             closeCoinTossModalBtn.addEventListener('click', () => {
-                // 1. Close the modal
+            // 1. Close the modal
                 coinTossModal.classList.add('hidden');
-            
-                // 2. Cleanup (Good Practice): Reset the modal to its initial state
-                //    This ensures the next time you open it, the coin flip starts fresh.
-                coinTossAnimation.classList.add('hidden'); 
-                coinTossResultArea.classList.add('hidden');
-                tossStartGameBtn.classList.add('hidden');
-                tossRerunBtn.classList.add('hidden');
+
+            // 2. Stop the Lottie animation and hide its container
+                if (coinAnimation) {
+                    coinAnimation.stop(); // Stops the Lottie playback
+                }
+        
+            // Hide the container itself (we no longer hide the <img> tag)
+                if (coinAnimationArea) { 
+                    coinAnimationArea.classList.add('hidden');
+                }
+        
+                // 3. Reset the rest of the UI (using robust null checks)
+                if (coinTossResultArea) coinTossResultArea.classList.add('hidden');
+                if (tossStartGameBtn) tossStartGameBtn.classList.add('hidden');
+                if (tossRerunBtn) tossRerunBtn.classList.add('hidden');
             });
         }
 
