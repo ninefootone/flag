@@ -332,13 +332,14 @@ button:hover {
 }
 
 #coin-toss-btn {
-    width:35%;
+    width:90px;
     font-size:24px;
     font-weight:800;
     color: var(--primary-color);
     background-color:var(--background-color);
-    border-color: var(--primary-color);
+    border-color: var(--background-color);
     position: relative; 
+    padding: 0 0 0 5px !important;
 }
 
 #toss-rerun-btn {
@@ -347,7 +348,13 @@ button:hover {
     border-color: var(--primary-color);
 }
 
-#coin-toss-btn:hover, #toss-rerun-btn:hover {
+#coin-toss-btn:hover {
+    color:var(--button-text);
+    background-color: var(--background-color);
+    border-color:var(--background-color);
+}
+
+#toss-rerun-btn:hover {
     color:var(--button-text);
     background-color: var(--secondary-color);
     border-color:var(--secondary-color);
@@ -419,8 +426,8 @@ button:hover {
 /* Styling for the new GIF inside the button */
 .coin-toss-gif {
     /* Set a max size for the GIF, often around 40px-50px */
-    width: 40px; 
-    height: 40px;
+    width: 60px; 
+    height: 60px;
     /* This ensures the image doesn't warp */
     object-fit: contain; 
     
