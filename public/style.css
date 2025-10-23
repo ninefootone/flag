@@ -416,6 +416,25 @@ button:hover {
     border-color:var(--primary-color);
 }
 
+/* Styling for the new GIF inside the button */
+.coin-toss-gif {
+    /* Set a max size for the GIF, often around 40px-50px */
+    width: 40px; 
+    height: 40px;
+    /* This ensures the image doesn't warp */
+    object-fit: contain; 
+    
+    /* Ensure it has space from the button text */
+    margin-right: 8px; 
+}
+
+/* Optional: Center the content if the button is using Flexbox */
+.animated-toss-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #start-game-btn {
     width:100%;
     font-size:24px;
