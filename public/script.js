@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.25';
+    const appVersion = '0.2.26';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -189,6 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Core Lottie Initialization ---
     // This function runs once to set up the Lottie player inside the container
     const initCoinAnimation = () => {
+        // ADD CRITICAL SAFETY CHECK
+        if (typeof lottie === 'undefined') {
+            console.warn("Lottie library is not yet loaded. Cannot initialize animation.");
+            return; 
+        }
+
         // Prevent re-initialization
         if (coinAnimation) return; 
 
