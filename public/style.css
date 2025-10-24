@@ -1093,9 +1093,11 @@ h4.log-title {
     font-weight:bold;
     border-radius: 8px;
     font-size: 48px;
-    font-weight: bold;
+    font-weight: 900;
     background: var(--focus-color);
     border-color: var(--focus-color);
+    color:var(--primary-color);
+    text-align: center;
 }
 
 #log-score-btn, #log-defence-stat-btn {
