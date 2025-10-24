@@ -121,10 +121,16 @@ button:hover {
 }
 
 /* Coin Toss */
-#coin-toss-btn, #toss-rerun-btn {
+#coin-toss-btn {
     color: var(--primary-color) !important;
     background-color:var(--background-color) !important;
     border: 1px solid var(--background-color) !important;
+}
+
+#toss-rerun-btn {
+    color: var(--primary-color) !important;
+    background-color:var(--background-color) !important;
+    border: 1px solid var(--primary-color) !important;
 }
 
 #coin-toss-btn:hover {
