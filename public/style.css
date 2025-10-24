@@ -443,10 +443,10 @@ button:hover {
 }
 
 #lobby-coin-animation svg {
-    width: 90px;
-    height: 90px;    
-    transform: rotate(290deg);
-    margin: -20px;
+    width: 90px !important;
+    height: 90px !important; 
+    transform: rotate(290deg) !important;
+    margin: -20px !important;
 }
 
 #start-game-btn {
@@ -1088,9 +1088,14 @@ h4.log-title {
 }
 
 .popup-content input, .defence-popup-content input {
-    border-radius: 500px;
-    font-size:20px;
+    /* border-radius: 500px; */
+    /* font-size:20px; */
     font-weight:bold;
+    border-radius: 8px;
+    font-size: 48px;
+    font-weight: bold;
+    background: var(--focus-color);
+    border-color: var(--focus-color);
 }
 
 #log-score-btn, #log-defence-stat-btn {
