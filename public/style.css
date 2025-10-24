@@ -133,6 +133,19 @@ body {
     display: flex;
     align-items: center;
     flex-direction: column;
+    height: 100vh;
+    /* Use dvh (dynamic viewport height) or vh, but 'dvh' is often best for this issue */
+    /* If dvh isn't supported, 100vh is usually the second-best option */
+    height: 100dvh; 
+    overflow: hidden; /* Prevent body scroll if content needs to be inside a scrollable div */
+}
+
+html {
+    height: 100vh;
+    /* Use dvh (dynamic viewport height) or vh, but 'dvh' is often best for this issue */
+    /* If dvh isn't supported, 100vh is usually the second-best option */
+    height: 100dvh; 
+    overflow: hidden; /* Prevent body scroll if content needs to be inside a scrollable div */    
 }
 
 h1, h2, h3, h4, h5, h6, button {
@@ -195,6 +208,11 @@ button:hover {
     /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
     display: flex;
     justify-content: center;
+    height: 100vh;
+    /* Use dvh (dynamic viewport height) or vh, but 'dvh' is often best for this issue */
+    /* If dvh isn't supported, 100vh is usually the second-best option */
+    height: 100dvh; 
+    overflow: hidden; /* Prevent body scroll if content needs to be inside a scrollable div */
 }
 
 .giants-logo {
