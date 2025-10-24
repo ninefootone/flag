@@ -552,6 +552,7 @@ input[type="number"] {
     overflow-y: auto; /* IMPORTANT: Enables vertical scrolling ONLY on this element */    
     /* Keep the padding you added earlier to lift content above the footer */
     padding-bottom: 75px;
+    justify-content: center;
 }
 
 #game-lobby h2 {
@@ -563,7 +564,8 @@ input[type="number"] {
 }
 
 .lobby-logo img {
-    max-width: 280px;
+    width: 240px;
+    max-width: 100%;
 }
 
 .main-btn {
@@ -593,7 +595,8 @@ input[type="number"] {
 
 @media (max-width: 320px) {
     #start-new-game-btn {
-        font-size:30px;
+        font-size:18px;
+        padding:10px 18px;
     }
 }
 
@@ -1170,7 +1173,7 @@ h4.log-title {
 #game-summary {
     padding: 20px;
     text-align: center;
-    width:480px;
+    max-width:480px;
 }
 
 .logo-image-summary {
@@ -1705,17 +1708,16 @@ h4.log-title {
     right:0;
     width: 100%;
     padding-bottom: env(safe-area-inset-bottom);
-    padding-top: 12px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
     display:none;
     justify-content: center;
     z-index: 9999;
     box-sizing:border-box;
-    /* background-color:var(--background-color); */
-    /* border-top:1px solid var(--secondary-button-bgnd-hover); */
-    /* padding: 0px 12px 20px 12px; */
-    /* box-shadow: 0 -4px 10px -2px var(--drop-shadow-color); */
+    border-top: 1px solid var(--secondary-button-bgnd-hover);
+    background-color: var(--background-color);
+    box-shadow: 0 0 20px -2px var(--drop-shadow-color);
 }
 
 #fixed-footer-links-container.visible {
@@ -1735,10 +1737,10 @@ h4.log-title {
     justify-content: space-between;
     max-width:740px;
     width:100%;
-    border: 1px solid #dedede;
-    border-radius: 500px;
-    background: #ffffff;
-    box-shadow: 0 0 20px -2px var(--drop-shadow-color);    
+    /* border-top: 1px solid #dedede; */
+    /* border-radius: 500px; */
+    /* background: #ffffff; */
+    /* box-shadow: 0 0 20px -2px var(--drop-shadow-color); */
 }
 
 .fixed-footer-links button {
@@ -1752,7 +1754,7 @@ h4.log-title {
     color:var(--primary-color);
     border:none;
     padding:8px 8px;
-    border-radius: 500px !important;
+    border-radius: 8px !important;
 }
 
 .fixed-footer-links button:hover {
