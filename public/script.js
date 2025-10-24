@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.30';
+    const appVersion = '0.2.31';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -28,6 +28,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
+
+    // Global variable to store the Lottie animation object
+    let coinAnimation = null;
+
+    // --- DOM ELEMENT REFERENCES ---// --- Core Lottie Initialization ---
+    // This function runs once to set up the Lottie player inside the container
+    const initCoinAnimation = () => {
+        // ADD CRITICAL SAFETY CHECK
+        if (typeof lottie === 'undefined') {
+            console.warn("Lottie library is not yet loaded. Cannot initialize animation.");
+            return; 
+        }
+
+        // Prevent re-initialization
+        if (coinAnimation) return; 
+
+        const coinAnimationArea = document.getElementById('coin-animation-area');
+
+        coinAnimation = lottie.loadAnimation({
+            container: coinAnimationArea, // The DOM element to render the animation in
+            renderer: 'svg', // Use 'svg' for best quality/scalability
+            loop: true, // The animation should loop during the 'flip'
+            autoplay: false, // Do NOT start playing immediately
+            path: '/assets/coin-toss.json' // <--- **CRITICAL: CHANGE THIS TO YOUR JSON FILE PATH**
+        });
+    };
+    
+    const startCoinFlip = () => {
+        // 1. Ensure animation is initialized
+        if (!coinAnimation) {
+            initCoinAnimation();
+        }
+    
+        // 2. Reset state for the flip
+        coinTossResultArea.classList.add('hidden');
+        tossStartGameBtn.classList.add('hidden');
+        tossRerunBtn.classList.add('hidden');
+        coinAnimationArea.classList.remove('hidden'); // Show the container
+
+        // 3. Start the Lottie animation
+        coinAnimation.play(); 
+
+        // 4. Generate the random result
+        const result = Math.random() < 0.5 ? "Heads" : "Tails";
+
+        // 5. Set a timer to wait for the "flip" animation to complete
+        setTimeout(() => {
+            // 6. Stop the Lottie animation and hide the container
+            coinAnimation.stop(); 
+            coinAnimationArea.classList.add('hidden'); 
+        
+            // 7. Display the result
+            tossResultMessage.textContent = result;
+            coinTossResultArea.classList.remove('hidden');
+            tossStartGameBtn.classList.remove('hidden');
+            tossRerunBtn.classList.remove('hidden');
+
+            sendAction('UPDATE_STATE', { coinTossResult: result }); 
+
+        }, COIN_FLIP_DURATION);
+    };
+
+    // Global variable for the lobby animation object
+    let lobbyCoinAnimation = null;
+
+    const initLobbyCoinAnimation = () => {
+        // Safety check for the Lottie library, just like we did before
+        if (typeof lottie === 'undefined' || lobbyCoinAnimation) return;
+
+        if (lobbyCoinAnimationContainer) {
+            lobbyCoinAnimation = lottie.loadAnimation({
+                container: lobbyCoinAnimationContainer,
+                renderer: 'svg',
+                loop: true, // It should loop continuously
+                autoplay: true, // It should start playing immediately
+                path: '/assets/coin-toss-flat.json' // <--- **CRITICAL: SET YOUR LOBBY JSON FILE PATH HERE**
+            });
+        }
+    };
+
+    // --- Utility to close the modal and start the game ---
+    const handleStartGameFromToss = () => {
+        // 1. Hide the Coin Toss Modal
+        coinTossModal.classList.add('hidden');
+        
+        // 2. Call the function that creates the state and swaps the screen
+        initiateGameFromLobby();    
+    };
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -187,102 +275,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Global variable to store the Lottie animation object
-    let coinAnimation = null;
-
-    // --- Core Lottie Initialization ---
-    // This function runs once to set up the Lottie player inside the container
-    const initCoinAnimation = () => {
-        // ADD CRITICAL SAFETY CHECK
-        if (typeof lottie === 'undefined') {
-            console.warn("Lottie library is not yet loaded. Cannot initialize animation.");
-            return; 
-        }
-
-        // Prevent re-initialization
-        if (coinAnimation) return; 
-
-        const coinAnimationArea = document.getElementById('coin-animation-area');
-
-        coinAnimation = lottie.loadAnimation({
-            container: coinAnimationArea, // The DOM element to render the animation in
-            renderer: 'svg', // Use 'svg' for best quality/scalability
-            loop: true, // The animation should loop during the 'flip'
-            autoplay: false, // Do NOT start playing immediately
-            path: '/assets/coin-toss.json' // <--- **CRITICAL: CHANGE THIS TO YOUR JSON FILE PATH**
-        });
-    };
-
     // --- MODIFIED startCoinFlip() Function ---
     const COIN_FLIP_DURATION = 2000; 
-
-    const startCoinFlip = () => {
-        // 1. Ensure animation is initialized
-        if (!coinAnimation) {
-            initCoinAnimation();
-        }
-    
-        // 2. Reset state for the flip
-        coinTossResultArea.classList.add('hidden');
-        tossStartGameBtn.classList.add('hidden');
-        tossRerunBtn.classList.add('hidden');
-        coinAnimationArea.classList.remove('hidden'); // Show the container
-
-        // 3. Start the Lottie animation
-        coinAnimation.play(); 
-
-        // 4. Generate the random result
-        const result = Math.random() < 0.5 ? "Heads" : "Tails";
-
-        // 5. Set a timer to wait for the "flip" animation to complete
-        setTimeout(() => {
-            // 6. Stop the Lottie animation and hide the container
-            coinAnimation.stop(); 
-            coinAnimationArea.classList.add('hidden'); 
-        
-            // 7. Display the result
-            tossResultMessage.textContent = result;
-            coinTossResultArea.classList.remove('hidden');
-            tossStartGameBtn.classList.remove('hidden');
-            tossRerunBtn.classList.remove('hidden');
-
-            sendAction('UPDATE_STATE', { coinTossResult: result }); 
-
-        }, COIN_FLIP_DURATION);
-    };
 
     // 8. CRITICAL: Run Initialization
     // Call this function once, ideally at the end of your DOMContentLoaded block,
     // or at least before the coinTossBtn event listener.
     // initCoinAnimation();
-    
-    // --- Utility to close the modal and start the game ---
-    const handleStartGameFromToss = () => {
-        // 1. Hide the Coin Toss Modal
-        coinTossModal.classList.add('hidden');
-        
-        // 2. Call the function that creates the state and swaps the screen
-        initiateGameFromLobby();    
-    };
-
-    // Global variable for the lobby animation object
-    let lobbyCoinAnimation = null;
-
-    const initLobbyCoinAnimation = () => {
-        // Safety check for the Lottie library, just like we did before
-        if (typeof lottie === 'undefined' || lobbyCoinAnimation) return;
-
-        if (lobbyCoinAnimationContainer) {
-            lobbyCoinAnimation = lottie.loadAnimation({
-                container: lobbyCoinAnimationContainer,
-                renderer: 'svg',
-                loop: true, // It should loop continuously
-                autoplay: true, // It should start playing immediately
-                path: '/assets/coin-toss-flat.json' // <--- **CRITICAL: SET YOUR LOBBY JSON FILE PATH HERE**
-            });
-        }
-    };
-
 
 // --- Dropdown Logic ---
 
