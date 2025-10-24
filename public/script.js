@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.29';
+    const appVersion = '0.2.30';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -108,6 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const tossStartGameBtn = document.getElementById('toss-start-game-btn');
     const tossRerunBtn = document.getElementById('toss-rerun-btn');
     const closeCoinTossModalBtn = document.getElementById('close-coin-toss-modal-btn');
+    const lobbyCoinAnimationContainer = document.getElementById('lobby-coin-animation');
+
+    initCoinAnimation(); 
+    initLobbyCoinAnimation();
 
     // const coinTossResultDisplay = document.getElementById('coin-toss-result');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
@@ -250,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. CRITICAL: Run Initialization
     // Call this function once, ideally at the end of your DOMContentLoaded block,
     // or at least before the coinTossBtn event listener.
-    initCoinAnimation();
+    // initCoinAnimation();
     
     // --- Utility to close the modal and start the game ---
     const handleStartGameFromToss = () => {
@@ -259,6 +263,24 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 2. Call the function that creates the state and swaps the screen
         initiateGameFromLobby();    
+    };
+
+    // Global variable for the lobby animation object
+    let lobbyCoinAnimation = null;
+
+    const initLobbyCoinAnimation = () => {
+        // Safety check for the Lottie library, just like we did before
+        if (typeof lottie === 'undefined' || lobbyCoinAnimation) return;
+
+        if (lobbyCoinAnimationContainer) {
+            lobbyCoinAnimation = lottie.loadAnimation({
+                container: lobbyCoinAnimationContainer,
+                renderer: 'svg',
+                loop: true, // It should loop continuously
+                autoplay: true, // It should start playing immediately
+                path: '/assets/coin-toss-flat.json' // <--- **CRITICAL: SET YOUR LOBBY JSON FILE PATH HERE**
+            });
+        }
     };
 
 

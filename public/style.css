@@ -337,7 +337,7 @@ button:hover {
     font-weight:800;
     color: var(--primary-color);
     background-color:var(--background-color);
-    border-color: var(--background-color);
+    border: 1px solid var(--background-color);
     position: relative; 
     padding: 0 0 0 5px !important;
 }
@@ -351,7 +351,7 @@ button:hover {
 #coin-toss-btn:hover {
     color:var(--button-text);
     background-color: var(--background-color);
-    border-color:var(--background-color);
+    border:1px solid var(--background-color);
 }
 
 #toss-rerun-btn:hover {
