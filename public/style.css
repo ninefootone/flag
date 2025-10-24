@@ -488,8 +488,8 @@ button:hover {
 
 /* Common Form and Button Styles */
 #settings-form, #game-interface {
-    padding: 10px 10px 10px 10px;
-    width:720px;
+    padding: 10px 12px 10px 12px;
+    max-width:720px;
 }
 
 .hidden {
