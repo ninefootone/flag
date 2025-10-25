@@ -414,7 +414,7 @@ li {
 }
 
 /* Version number styling */
-.version {
+.version, .version-notes {
     color: var(--notes-color) !important;
 }
 
