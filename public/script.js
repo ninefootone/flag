@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.50';
+    const appVersion = '0.2.51';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -886,6 +886,15 @@ fetchAndLoadTeamNames();
             return;
         }
 
+        // 🚀 NEW: Save the current state for undo functionality (must be first)
+        // We use JSON.parse(JSON.stringify()) to create a deep copy of the object,
+        // ensuring the history record isn't changed by subsequent actions.
+        actionHistory.push({
+            type: 'defence',
+            defenceStats: JSON.parse(JSON.stringify(gameState.defenceStats || {team1: {}, team2: {}})), 
+            defenceLogHTML: defenceLogList.innerHTML 
+        });
+
         const team = tempDefenceEvent.team;
         const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
         const teamKey = `team${team}`;
@@ -1455,7 +1464,12 @@ fetchAndLoadTeamNames();
                     timeoutsUsed: lastAction.timeoutsUsed,
                     timeoutLogHTML: lastAction.timeoutLogHTML
                 });
-            }
+            } else if (lastAction.type === 'defence') { 
+            sendAction('UPDATE_STATE', {
+                defenceStats: lastAction.defenceStats,
+                defenceLogHTML: lastAction.defenceLogHTML
+            });
+            }   
         } else {
             alert("No actions to undo.");
         }
