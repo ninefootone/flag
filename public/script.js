@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.49';
+    const appVersion = '0.2.50';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -245,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenceTFLInput = document.getElementById('defence-tfl');
     const defenceSackInput = document.getElementById('defence-sack');
     const defenceIntInput = document.getElementById('defence-int');
+    const defencePBUInput = document.getElementById('defence-pbu');
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
@@ -867,6 +868,7 @@ fetchAndLoadTeamNames();
         defenceTFLInput.value = '';
         defenceSackInput.value = '';
         defenceIntInput.value = '';
+        defencePBUInput.value = '';
 
         // Clear the temporary event object
         tempDefenceEvent = null;
@@ -893,9 +895,10 @@ fetchAndLoadTeamNames();
         const tfl = parseInt(defenceTFLInput.value) || 0;
         const sacks = parseInt(defenceSackInput.value) || 0;
         const interceptions = parseInt(defenceIntInput.value) || 0;
+        const passbreakups = parseInt(defencePBUInput.value) || 0;
 
         // Check if any stats were actually entered
-        if (tackles === 0 && tfl === 0 && sacks === 0 && interceptions === 0) {
+        if (tackles === 0 && tfl === 0 && sacks === 0 && interceptions === 0 && passbreakups === 0) {
             // If nothing was logged, just close the popup
             hideDefencePopup();
             return;
@@ -904,12 +907,13 @@ fetchAndLoadTeamNames();
         // --- 1. UPDATE GAME STATE (for persistence and tracking) ---
         // Initialize stats structure if it doesn't exist 
         if (!gameState.defenceStats) gameState.defenceStats = { team1: {}, team2: {} };
-        if (!gameState.defenceStats[teamKey]) gameState.defenceStats[teamKey] = { tackles: 0, tfl: 0, sacks: 0, interceptions: 0 };
+        if (!gameState.defenceStats[teamKey]) gameState.defenceStats[teamKey] = { tackles: 0, tfl: 0, sacks: 0, interceptions: 0, passbreakups: 0 };
 
         gameState.defenceStats[teamKey].tackles += tackles;
         gameState.defenceStats[teamKey].tfl += tfl;
         gameState.defenceStats[teamKey].sacks += sacks;
         gameState.defenceStats[teamKey].interceptions += interceptions;
+        gameState.defenceStats[teamKey].passbreakups += passbreakups;
 
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
         // --- NEW: Use the stored time, then clear the variable ---
@@ -928,6 +932,7 @@ fetchAndLoadTeamNames();
         if (tfl > 0) stats.push(`#${tfl} TFL`);
         if (sacks > 0) stats.push(`#${sacks} SACK`);
         if (interceptions > 0) stats.push(`#${interceptions} INT`);
+        if (passbreakups > 0) stats.push(`#${passbreakups} PBU`);
 
         // Construct the full log message
         logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look

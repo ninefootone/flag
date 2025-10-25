@@ -488,7 +488,7 @@ button:hover {
 
 /* Common Form and Button Styles */
 #settings-form, #game-interface {
-    padding: 10px 12px 10px 12px;
+    padding: 10px 12px 100px 12px;
     max-width:720px;
 }
 
@@ -549,9 +549,9 @@ input[type="number"] {
     background-size: 50%;
     gap:30px;
     flex-grow: 1; /* Allows this element to take up all remaining vertical space */
-    overflow-y: auto; /* IMPORTANT: Enables vertical scrolling ONLY on this element */    
+    /* overflow-y: auto; */ /* IMPORTANT: Enables vertical scrolling ONLY on this element */    
     /* Keep the padding you added earlier to lift content above the footer */
-    padding-bottom: 75px;
+    padding-bottom: 0px;
     justify-content: center;
 }
 
@@ -674,7 +674,7 @@ input[type="number"] {
     flex-grow: 1; /* Allows this element to take up all remaining vertical space */
     overflow-y: auto; /* IMPORTANT: Enables vertical scrolling ONLY on this element */
     /* Keep the padding you added earlier to lift content above the footer */
-    padding-bottom: 75px;    
+    padding-bottom: 100px;    
 }
 
 /* Header and Game Clocks Section */
@@ -1119,7 +1119,7 @@ h4.log-title {
     /* font-size:20px; */
     font-weight:bold;
     border-radius: 8px;
-    font-size: 48px;
+    font-size: 30px;
     font-weight: 900;
     background: var(--focus-color);
     border-color: var(--focus-color);
