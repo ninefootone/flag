@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.53';
+    const appVersion = '0.2.54';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -531,14 +531,19 @@ fetchAndLoadTeamNames();
                 endGameBtn.classList.remove('hidden');
             }
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.add('hidden');
-            gameInterface.classList.add('hidden');
-            gameSummary.classList.remove('hidden');
-            summaryTeam1Name.textContent = gameState.team1Name;
-            summaryTeam2Name.textContent = gameState.team2Name;
-            summaryTeam1Score.textContent = gameState.scores.team1;
-            summaryTeam2Score.textContent = gameState.scores.team2;
+            setTimeout(() => {  
+                gameLobby.classList.add('hidden');
+                settingsForm.classList.add('hidden');
+                gameInterface.classList.add('hidden');
+                gameSummary.classList.remove('hidden');
+                summaryTeam1Name.textContent = gameState.team1Name;
+                summaryTeam2Name.textContent = gameState.team2Name;
+                summaryTeam1Score.textContent = gameState.scores.team1;
+                summaryTeam2Score.textContent = gameState.scores.team2;
+                summaryScoreLog.innerHTML = gameState.scoreLogHTML;
+                summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
+                summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
+            }, 0);
 
             // --- START SUMMARY LOG PLACEHOLDER LOGIC ---
 
