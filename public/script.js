@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.54';
+    const appVersion = '0.2.55';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -531,6 +531,17 @@ fetchAndLoadTeamNames();
                 endGameBtn.classList.remove('hidden');
             }
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
+
+            // Destroy the Coin Flip Modal animation
+            if (typeof coinAnimation !== 'undefined' && coinAnimation && coinAnimation.destroy) {
+                coinAnimation.destroy();
+            }
+
+            // Destroy the Lobby screen animation (if it was active)
+            if (typeof lobbyCoinAnimation !== 'undefined' && lobbyCoinAnimation && lobbyCoinAnimation.destroy) {
+                lobbyCoinAnimation.destroy();
+            }
+
             setTimeout(() => {  
                 gameLobby.classList.add('hidden');
                 settingsForm.classList.add('hidden');

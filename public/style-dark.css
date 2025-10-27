@@ -562,7 +562,7 @@ li {
 .fixed-footer-links {
     border-color: var(--subtle-border-color) !important;
     background: var(--background-color) !important;
-    box-shadow: 0 0 20px -2px var(--drop-shadow-color) !important;    
+    /* box-shadow: 0 0 20px -2px var(--drop-shadow-color) !important; */
 }
 
 .fixed-footer-links button {
