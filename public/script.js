@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.62';
+    const appVersion = '0.2.63';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1154,16 +1154,37 @@ fetchAndLoadTeamNames();
         hideScorePopup();
     });
 
+    // adjustButtons.forEach(button => {
+    //     button.addEventListener('click', () => {
+    //         const team = button.dataset.team;
+    //         const adjustment = button.dataset.adjust;
+    //         const newScores = { ...gameState.scores };
+    //         if (team === '1') {
+    //             newScores.team1 += (adjustment === '+' ? 1 : -1);
+    //         } else {
+    //             newScores.team2 += (adjustment === '+' ? 1 : -1);
+    //         }
+    //         sendAction('UPDATE_STATE', { scores: newScores });
+    //     });
+    // });
+
     adjustButtons.forEach(button => {
         button.addEventListener('click', () => {
             const team = button.dataset.team;
             const adjustment = button.dataset.adjust;
             const newScores = { ...gameState.scores };
+            
+            // Determine if we are adding (+1) or subtracting (-1)
+            const scoreChange = (adjustment === '+' ? 1 : -1);
+
             if (team === '1') {
-                newScores.team1 += (adjustment === '+' ? 1 : -1);
+                // CRITICAL FIX: Use Math.max(0, ...) to prevent the score from going below 0.
+                newScores.team1 = Math.max(0, newScores.team1 + scoreChange);
             } else {
-                newScores.team2 += (adjustment === '+' ? 1 : -1);
+                // CRITICAL FIX: Use Math.max(0, ...) to prevent the score from going below 0.
+                newScores.team2 = Math.max(0, newScores.team2 + scoreChange);
             }
+            
             sendAction('UPDATE_STATE', { scores: newScores });
         });
     });
