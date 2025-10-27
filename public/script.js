@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.60';
+    const appVersion = '0.2.61';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -481,7 +481,7 @@ fetchAndLoadTeamNames();
                 
                 setTimeout(() => {
                     connectWebSocket(gameIdFromUrl);
-                    updateUI();
+                    // updateUI();
                 }, 150); // 150ms delay gives Safari time to stabilize
             } else {
                 console.error("Maximum reconnect attempts reached. Please refresh.");
