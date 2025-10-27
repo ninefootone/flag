@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.2.59">
-    <link rel="stylesheet" href="/style-dark.css?v=0.2.59">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.2.59" />
+    <link rel="stylesheet" href="/style.css?v=0.2.60">
+    <link rel="stylesheet" href="/style-dark.css?v=0.2.60">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.2.60" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -29,6 +29,13 @@
                 <h2>Coach.</h2>
             </div> -->
             <button id="start-new-game-btn">New Game</button>
+            <h3 class="feedback-link">
+                <a href="https://thinkable-taleggio-7b0.notion.site/2972da6bdc3b8057bcddc1fb56a26be4?pvs=105" target="_blank">Tell us what you think...</a>
+            </h3>
+            <div>
+                <p class="version-notes">Refresh the page to ensure you have the latest version.</p>
+                <p class="version">v3.0.6.1</p>
+            </div>
             <div class="join-game-section">
                 <hr>
                 <h2>Or join an existing game:</h2>
@@ -78,29 +85,30 @@
                 <div class="settings-grid">
                     <div class="one-third one">
                         <label for="half-duration">Half</label>
-                        <input type="number" id="half-duration" value="15" min="1">
+                        <input type="number" id="half-duration" value="15" min="1" inputmode="numeric">
                         <div class="settings-notes">minutes</div>
                     </div>
                     <div class="one-third two">
                         <label for="play-clock-duration">Play Clock</label>
-                        <input type="number" id="play-clock-duration" value="25" min="5">
+                        <input type="number" id="play-clock-duration" value="25" min="5" inputmode="numeric">
                         <div class="settings-notes">seconds</div>
                     </div>
                     <div class="one-third three">
                         <label for="timeouts-per-half">Timeouts</label>
-                        <input type="number" id="timeouts-per-half" value="2" min="0">
+                        <input type="number" id="timeouts-per-half" value="2" min="0" inputmode="numeric">
                         <div class="settings-notes">per half</div>
                     </div>
                 </div>
 
                 <div class="coin-toss-section">
                     <div class="coin-toss-buttons">
-                        <button type="button" id="coin-toss-btn">Flip Coin</button>
+                        <button type="button" id="coin-toss-btn" class="secondary-button animated-toss-btn">
+                            <div id="lobby-coin-animation" class="coin-toss-gif-container"></div>
+                        </button>
+                        <button type="button" id="start-game-btn">Start Game</button>
                     </div>
                     <!-- <p id="coin-toss-result"></p> -->
                 </div>
-
-                <button type="button" id="start-game-btn">Start Game</button>
 
                 <div id="current-game-id" class="hidden">
                     <strong>Game ID:</strong> <span id="game-id-text"></span>
@@ -110,6 +118,36 @@
 
         </div>
 
+        <div id="coin-toss-modal" class="modal hidden">
+            <div class="modal-content coin-toss-content">
+                <!-- <h2>Coin Toss</h2> -->
+        
+                <div id="coin-animation-area" class="coin-animation-area">
+                </div>
+                
+                <div id="coin-toss-result-area" class="coin-toss-result-area hidden">
+                    <!-- <p class="result-text-label">Toss Result:</p> -->
+                    <p id="toss-result-message" class="toss-result-message">---</p>
+                </div>
+
+                <div class="button-row toss-control-buttons">
+                    <button id="toss-rerun-btn" class="secondary-button hidden">Redo Toss</button>
+
+                    <button id="toss-start-game-btn" class="primary-button hidden">
+                        <span class="button-text">Start Game</span>
+                    </button>
+            
+                </div>
+        
+                    <button id="close-coin-toss-modal-btn" class="main-btn close-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+            </div>
+        </div>
+        
         <div id="game-interface" class="hidden">
             <header>
                 <h1 class="game-info">
@@ -316,13 +354,14 @@
                         <p><strong>Play Clock:</strong> With 'Auto Advance' selected, starting the play clock will advance the downs.</p>
                         <p><strong>Downs:</strong> The down can be manually advanced by clicking the numbers.</p>
                         <p><strong>Scoring:</strong> Click the buttons to add specific scores or use + and - to manually alter the score. When clicking a button you'll be able to enter the players numbers to fill out the score log.</p>
-                        <p><strong>Timeouts:</strong> Click the yellow circles to take a timeout. This will automatically pause the game clock.</p>
+                        <p><strong>Defensive Stats:</strong> Click the button to add a player number in the right field to log a defensive stat.</p>
+                        <p><strong>Timeouts:</strong> Click the blue circles to take a timeout. This will automatically pause the game clock.</p>
                         <h3>Other actions</h3>
                         <p><strong>Undo:</strong> This button will undo a timeout or score.</p>
                         <p><strong>Penalties:</strong> This will bring up a searchable list of penalties with description, yards lost etc.</p>
                         <p><strong>End Game:</strong> You'll get a confirmation pop-up just in case!</p>
                         <h3>Share</h3>
-                        <p>You can share a link with a head ref, scorer, clock manager and coach.</p>
+                        <p>You can share a link, via a QR code, with a head ref, scorer, clock manager and coach.</p>
                         <p><strong>Head Ref:</strong> can manage the clocks, downs and timeouts but not the score.</p>
                         <p><strong>Scorer:</strong> can only manage the scores.</p>
                         <p><strong>Clock:</strong> can manage game clocks and downs.</p>
@@ -334,7 +373,7 @@
                         <p><strong>Game Clock:</strong> Start and stop as needed. Resetting will reset the number of timeouts for the second half.</p>
                         <p><strong>Play Clock:</strong> With 'Auto Advance' selected, starting the play clock will advance the downs.</p>
                         <p><strong>Downs:</strong> The down can be manually advanced by clicking the numbers.</p>
-                        <p><strong>Timeouts:</strong> Click the yellow circles to take a timeout. This will automatically pause the game clock.</p>
+                        <p><strong>Timeouts:</strong> Click the blue circles to take a timeout. This will automatically pause the game clock.</p>
                         <h3>Other actions</h3>
                         <p><strong>Undo:</strong> This button will undo a timeout if clicked in error.</p>
                         <p><strong>Penalties:</strong> This will bring up a searchable list of penalties with description, yards lost etc.</p>
@@ -346,6 +385,7 @@
                         <p>As a scorer you can manage the scores everything else is read only.</p>
                         <h3>Game Play</h3>
                         <p><strong>Scoring:</strong> Click the buttons to add specific scores or use + and - to manually alter the score. When clicking a button you'll be able to enter the players numbers to fill out the score log.</p>
+                        <p><strong>Defensive Stats:</strong> Click the button to add a player number in the right field to log a defensive stat.</p>
                         <h3>Other actions</h3>
                         <p><strong>Undo:</strong> This button will undo a score added in error.</p>
                         <p><strong>Penalties:</strong> This will bring up a searchable list of penalties with description, yards lost etc.</p>
@@ -415,24 +455,24 @@
                 <p class="score-popup-notes">Just click 'Log Score' to quickly add a score or enter player number(s) for a full log.</p>
                 <div class="player-input-grid">
                     <div>
-                        <label for="qb-number">QB #</label>
-                        <input type="number" id="qb-number" placeholder="Player #">
+                        <!-- <label for="qb-number">QB #</label> -->
+                        <input type="number" id="qb-number" placeholder="QB#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="wr-number">WR #</label>
-                        <input type="number" id="wr-number" placeholder="Player #">
+                        <!-- <label for="wr-number">WR #</label> -->
+                        <input type="number" id="wr-number" placeholder="WR#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="rb-number">RB #</label>
-                        <input type="number" id="rb-number" placeholder="Player #">
+                        <!-- <label for="rb-number">RB #</label> -->
+                        <input type="number" id="rb-number" placeholder="RB#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="int-number">INT #</label>
-                        <input type="number" id="int-number" placeholder="Player #">
+                        <!-- <label for="int-number">INT #</label> -->
+                        <input type="number" id="int-number" placeholder="INT#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="safety-number">Safety #</label>
-                        <input type="number" id="safety-number" placeholder="Player #">
+                        <!-- <label for="safety-number">Safety #</label> -->
+                        <input type="number" id="safety-number" placeholder="Safety#" inputmode="numeric">
                     </div>
                 </div>
                 <div class="popup-buttons">
@@ -450,23 +490,28 @@
         <div id="defence-popup" class="hidden">
             <div class="defence-popup-content">
                 <h2 id="defence-popup-header">Log Score Details</h2>
+                <p class="score-popup-notes">Enter player number to log a defensive play.</p>
                 <div class="defence-input-grid">
                     <div>
-                        <label for="defence-tackle">Tackle</label>
-                        <input type="number" id="defence-tackle" placeholder="Player #">
+                        <!-- <label for="defence-tackle">Tackle</label> -->
+                        <input type="number" id="defence-tackle" placeholder="Tackle#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="defence-tfl">Tackle for Loss</label>
-                        <input type="number" id="defence-tfl" placeholder="Player #">
+                        <!-- <label for="defence-tfl">Tackle for Loss</label> -->
+                        <input type="number" id="defence-tfl" placeholder="TFL#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="defence-sack">Sack</label>
-                        <input type="number" id="defence-sack" placeholder="Player #">
+                        <!-- <label for="defence-sack">Sack</label> -->
+                        <input type="number" id="defence-sack" placeholder="Sack#" inputmode="numeric">
                     </div>
                     <div>
-                        <label for="defence-int">Interception</label>
-                        <input type="number" id="defence-int" placeholder="Player #">
+                        <!-- <label for="defence-int">Interception</label> -->
+                        <input type="number" id="defence-int" placeholder="Int#" inputmode="numeric">
                     </div>
+                    <div>
+                        <!-- <label for="defence-pbu">Pass Breakup</label> -->
+                        <input type="number" id="defence-pbu" placeholder="PBU#" inputmode="numeric">
+                    </div>                    
                 </div>
                 <div class="popup-buttons">
                     <button id="log-defence-stat-btn" class="log-defence-stat-btn">Log Defensive Stat</button>
@@ -519,8 +564,6 @@
         </div>
     </div>
 
-    <p class="version">v3.0.6.1</p>
-
         <div id="fixed-footer-links-container">
             <div class="fixed-footer-links">
                 <button id="undo-btn">
@@ -564,7 +607,9 @@
             </div>
         </div>
 
-<script src="/script.js?v=0.2.59"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="/script.js?v=0.2.60"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/penalties.js"></script>
 
