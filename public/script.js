@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.55';
+    const appVersion = '0.2.56';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -28,94 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
     document.getElementById('date-field').value = formattedDate;
-
-    // Global variable to store the Lottie animation object
-    let coinAnimation = null;
-
-    // --- DOM ELEMENT REFERENCES ---// --- Core Lottie Initialization ---
-    // This function runs once to set up the Lottie player inside the container
-    const initCoinAnimation = () => {
-        // ADD CRITICAL SAFETY CHECK
-        if (typeof lottie === 'undefined') {
-            console.warn("Lottie library is not yet loaded. Cannot initialize animation.");
-            return; 
-        }
-
-        // Prevent re-initialization
-        if (coinAnimation) return; 
-
-        const coinAnimationArea = document.getElementById('coin-animation-area');
-
-        coinAnimation = lottie.loadAnimation({
-            container: coinAnimationArea, // The DOM element to render the animation in
-            renderer: 'svg', // Use 'svg' for best quality/scalability
-            loop: true, // The animation should loop during the 'flip'
-            autoplay: false, // Do NOT start playing immediately
-            path: '/assets/coin-toss.json' // <--- **CRITICAL: CHANGE THIS TO YOUR JSON FILE PATH**
-        });
-    };
-    
-    const startCoinFlip = () => {
-        // 1. Ensure animation is initialized
-        if (!coinAnimation) {
-            initCoinAnimation();
-        }
-    
-        // 2. Reset state for the flip
-        coinTossResultArea.classList.add('hidden');
-        tossStartGameBtn.classList.add('hidden');
-        tossRerunBtn.classList.add('hidden');
-        coinAnimationArea.classList.remove('hidden'); // Show the container
-
-        // 3. Start the Lottie animation
-        coinAnimation.play(); 
-
-        // 4. Generate the random result
-        const result = Math.random() < 0.5 ? "Heads" : "Tails";
-
-        // 5. Set a timer to wait for the "flip" animation to complete
-        setTimeout(() => {
-            // 6. Stop the Lottie animation and hide the container
-            coinAnimation.stop(); 
-            coinAnimationArea.classList.add('hidden'); 
-        
-            // 7. Display the result
-            tossResultMessage.textContent = result;
-            coinTossResultArea.classList.remove('hidden');
-            tossStartGameBtn.classList.remove('hidden');
-            tossRerunBtn.classList.remove('hidden');
-
-            sendAction('UPDATE_STATE', { coinTossResult: result }); 
-
-        }, COIN_FLIP_DURATION);
-    };
-
-    // Global variable for the lobby animation object
-    let lobbyCoinAnimation = null;
-
-    const initLobbyCoinAnimation = () => {
-        // Safety check for the Lottie library, just like we did before
-        if (typeof lottie === 'undefined' || lobbyCoinAnimation) return;
-
-        if (lobbyCoinAnimationContainer) {
-            lobbyCoinAnimation = lottie.loadAnimation({
-                container: lobbyCoinAnimationContainer,
-                renderer: 'svg',
-                loop: true, // It should loop continuously
-                autoplay: true, // It should start playing immediately
-                path: '/assets/coin-toss-flat.json' // <--- **CRITICAL: SET YOUR LOBBY JSON FILE PATH HERE**
-            });
-        }
-    };
-
-    // --- Utility to close the modal and start the game ---
-    const handleStartGameFromToss = () => {
-        // 1. Hide the Coin Toss Modal
-        coinTossModal.classList.add('hidden');
-        
-        // 2. Call the function that creates the state and swaps the screen
-        initiateGameFromLobby();    
-    };
 
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -188,19 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logScoreBtn = document.getElementById('log-score-btn');
     const cancelPopupBtn = document.getElementById('cancel-popup-btn');
     const coinTossBtn = document.getElementById('coin-toss-btn');
-    const coinTossModal = document.getElementById('coin-toss-modal');
-    const coinAnimationArea = document.getElementById('coin-animation-area');
-    const coinTossAnimation = document.getElementById('coin-toss-animation');
-    const coinTossResultArea = document.getElementById('coin-toss-result-area');
-    const tossResultMessage = document.getElementById('toss-result-message');
-    const tossStartGameBtn = document.getElementById('toss-start-game-btn');
-    const tossRerunBtn = document.getElementById('toss-rerun-btn');
-    const closeCoinTossModalBtn = document.getElementById('close-coin-toss-modal-btn');
-    const lobbyCoinAnimationContainer = document.getElementById('lobby-coin-animation');
-
-    initCoinAnimation(); 
-    initLobbyCoinAnimation();
-
     // const coinTossResultDisplay = document.getElementById('coin-toss-result');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
     const summaryTeam2Name = document.getElementById('summary-team2-name');
@@ -245,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenceTFLInput = document.getElementById('defence-tfl');
     const defenceSackInput = document.getElementById('defence-sack');
     const defenceIntInput = document.getElementById('defence-int');
-    const defencePBUInput = document.getElementById('defence-pbu');
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
@@ -276,13 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- MODIFIED startCoinFlip() Function ---
-    const COIN_FLIP_DURATION = 2000; 
-
-    // 8. CRITICAL: Run Initialization
-    // Call this function once, ideally at the end of your DOMContentLoaded block,
-    // or at least before the coinTossBtn event listener.
-    // initCoinAnimation();
 
 // --- Dropdown Logic ---
 
@@ -531,30 +422,14 @@ fetchAndLoadTeamNames();
                 endGameBtn.classList.remove('hidden');
             }
         } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
-
-            // Destroy the Coin Flip Modal animation
-            if (typeof coinAnimation !== 'undefined' && coinAnimation && coinAnimation.destroy) {
-                coinAnimation.destroy();
-            }
-
-            // Destroy the Lobby screen animation (if it was active)
-            if (typeof lobbyCoinAnimation !== 'undefined' && lobbyCoinAnimation && lobbyCoinAnimation.destroy) {
-                lobbyCoinAnimation.destroy();
-            }
-
-            setTimeout(() => {  
-                gameLobby.classList.add('hidden');
-                settingsForm.classList.add('hidden');
-                gameInterface.classList.add('hidden');
-                gameSummary.classList.remove('hidden');
-                summaryTeam1Name.textContent = gameState.team1Name;
-                summaryTeam2Name.textContent = gameState.team2Name;
-                summaryTeam1Score.textContent = gameState.scores.team1;
-                summaryTeam2Score.textContent = gameState.scores.team2;
-                summaryScoreLog.innerHTML = gameState.scoreLogHTML;
-                summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-                summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
-            }, 0);
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.add('hidden');
+            gameInterface.classList.add('hidden');
+            gameSummary.classList.remove('hidden');
+            summaryTeam1Name.textContent = gameState.team1Name;
+            summaryTeam2Name.textContent = gameState.team2Name;
+            summaryTeam1Score.textContent = gameState.scores.team1;
+            summaryTeam2Score.textContent = gameState.scores.team2;
 
             // --- START SUMMARY LOG PLACEHOLDER LOGIC ---
 
@@ -666,13 +541,13 @@ fetchAndLoadTeamNames();
         team1TimeoutLabel.textContent = gameState.team1Name;
         team2TimeoutLabel.textContent = gameState.team2Name;
 
-        // if (gameState.coinTossResult) {
-        //     coinTossBtn.textContent = `${gameState.coinTossResult}`;
-        //     coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
-        // } else {
+        if (gameState.coinTossResult) {
+            coinTossBtn.textContent = `${gameState.coinTossResult}`;
+        //    coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
+        } else {
             // Set the initial text if no toss has occurred
-        //     coinTossBtn.textContent = 'Coin';
-        // }
+            coinTossBtn.textContent = 'Flip Coin';
+        }
 
         if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
             gameClockDisplay.parentElement.classList.add('warning');
@@ -884,7 +759,6 @@ fetchAndLoadTeamNames();
         defenceTFLInput.value = '';
         defenceSackInput.value = '';
         defenceIntInput.value = '';
-        defencePBUInput.value = '';
 
         // Clear the temporary event object
         tempDefenceEvent = null;
@@ -902,15 +776,6 @@ fetchAndLoadTeamNames();
             return;
         }
 
-        // 🚀 NEW: Save the current state for undo functionality (must be first)
-        // We use JSON.parse(JSON.stringify()) to create a deep copy of the object,
-        // ensuring the history record isn't changed by subsequent actions.
-        actionHistory.push({
-            type: 'defence',
-            defenceStats: JSON.parse(JSON.stringify(gameState.defenceStats || {team1: {}, team2: {}})), 
-            defenceLogHTML: defenceLogList.innerHTML 
-        });
-
         const team = tempDefenceEvent.team;
         const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
         const teamKey = `team${team}`;
@@ -920,10 +785,9 @@ fetchAndLoadTeamNames();
         const tfl = parseInt(defenceTFLInput.value) || 0;
         const sacks = parseInt(defenceSackInput.value) || 0;
         const interceptions = parseInt(defenceIntInput.value) || 0;
-        const passbreakups = parseInt(defencePBUInput.value) || 0;
 
         // Check if any stats were actually entered
-        if (tackles === 0 && tfl === 0 && sacks === 0 && interceptions === 0 && passbreakups === 0) {
+        if (tackles === 0 && tfl === 0 && sacks === 0 && interceptions === 0) {
             // If nothing was logged, just close the popup
             hideDefencePopup();
             return;
@@ -932,13 +796,12 @@ fetchAndLoadTeamNames();
         // --- 1. UPDATE GAME STATE (for persistence and tracking) ---
         // Initialize stats structure if it doesn't exist 
         if (!gameState.defenceStats) gameState.defenceStats = { team1: {}, team2: {} };
-        if (!gameState.defenceStats[teamKey]) gameState.defenceStats[teamKey] = { tackles: 0, tfl: 0, sacks: 0, interceptions: 0, passbreakups: 0 };
+        if (!gameState.defenceStats[teamKey]) gameState.defenceStats[teamKey] = { tackles: 0, tfl: 0, sacks: 0, interceptions: 0 };
 
         gameState.defenceStats[teamKey].tackles += tackles;
         gameState.defenceStats[teamKey].tfl += tfl;
         gameState.defenceStats[teamKey].sacks += sacks;
         gameState.defenceStats[teamKey].interceptions += interceptions;
-        gameState.defenceStats[teamKey].passbreakups += passbreakups;
 
         // --- 2. CREATE LOG ENTRY (using defenceLog & summaryDefenceLog) ---
         // --- NEW: Use the stored time, then clear the variable ---
@@ -957,7 +820,6 @@ fetchAndLoadTeamNames();
         if (tfl > 0) stats.push(`#${tfl} TFL`);
         if (sacks > 0) stats.push(`#${sacks} SACK`);
         if (interceptions > 0) stats.push(`#${interceptions} INT`);
-        if (passbreakups > 0) stats.push(`#${passbreakups} PBU`);
 
         // Construct the full log message
         logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look
@@ -1036,21 +898,30 @@ fetchAndLoadTeamNames();
         }
     });
 
-    // --- NEW REUSABLE FUNCTION ---
-    const initiateGameFromLobby = () => {
+    startGameBtn.addEventListener('click', (event) => {
+        event.preventDefault(); // Good practice to include this
+
         // 1. SET DEFAULTS: If the input is empty, default to 'Team 1' / 'Team 2'
         const t1Name = team1NameInput.value.trim() || 'Team 1';
         const t2Name = team2NameInput.value.trim() || 'Team 2';
 
-        // 2. RETAIN OTHER VALIDATION AND RESET (keep these lines if they exist)
-        // if (!dateField.value || !locationField.value) { /* ... */ }
-        // if (!gameState.coinTossResult) { /* ... */ }
+        // 2. RETAIN OTHER VALIDATION (Date and Location)
+        // if (!dateField.value || !locationField.value) {
+        //     alert('Please fill in the Date and Location details.');
+        //     return;
+        // }
+
+        // if (!gameState.coinTossResult) {
+        //    alert("Please complete the coin toss before starting the game.");
+        //    return;
+        // }
         twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
         actionHistory = [];
 
-        // *** 3. Dynamic Time Calculation & State Creation ***
+        // *** 1. Dynamic Time Calculation (Must be executed first!) ***
         const initialMinutes = parseInt(halfDurationInput.value, 10);
+        // Calculate the time string (e.g., 12:00)
         const initialTimeString = `${String(initialMinutes).padStart(2, '0')}:00`;
 
         const newGameState = {
@@ -1073,45 +944,14 @@ fetchAndLoadTeamNames();
             twoMinuteWarningIssued: false
         };
         sendAction('UPDATE_STATE', newGameState);
-    
-        // 4. TRANSITION THE SCREEN (This is why it was returning to the lobby!)
-        // Assuming your UI uses #game-lobby and #game-app
-        const gameLobby = document.getElementById('game-lobby');
-        const gameApp = document.getElementById('game-app');
-    
-        if (gameLobby && gameApp) {
-            gameLobby.classList.add('hidden'); // Hide the setup screen
-            gameApp.classList.remove('hidden'); // Show the main game interface
-        }
-    };
-
-    startGameBtn.addEventListener('click', (event) => {
-        event.preventDefault(); 
-        initiateGameFromLobby(); // Calls the reusable function
     });
 
-    // --- EVENT LISTENERS FOR NEW COIN TOSS MODAL ---
-    
-    // 1. Existing Coin Toss Button: Open modal and start the flip automatically
-    if (coinTossBtn) {
-        coinTossBtn.addEventListener('click', () => {
-            // Note: If you don't have a 'hidden' class, you may use 'style.display = "block"'
-            coinTossModal.classList.remove('hidden'); 
-            startCoinFlip(); 
-        });
-    }
+    coinTossBtn.addEventListener('click', (event) => { // CHANGED: Added (event)
+        event.preventDefault(); // NEW: Stops potential form submission
+        const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+        sendAction('UPDATE_STATE', { coinTossResult: result });
+    });
 
-    // 2. Rerun Button: Just close the modal and start the flip again
-    if (tossRerunBtn) {
-        tossRerunBtn.addEventListener('click', () => {
-            startCoinFlip(); // Reruns the flip animation and logic
-        });
-    }
-
-    // 3. Start Game Button: Close modal and transition to the main game
-    if (tossStartGameBtn) {
-        tossStartGameBtn.addEventListener('click', handleStartGameFromToss);
-    }
 
     scoreButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -1480,12 +1320,7 @@ fetchAndLoadTeamNames();
                     timeoutsUsed: lastAction.timeoutsUsed,
                     timeoutLogHTML: lastAction.timeoutLogHTML
                 });
-            } else if (lastAction.type === 'defence') { 
-            sendAction('UPDATE_STATE', {
-                defenceStats: lastAction.defenceStats,
-                defenceLogHTML: lastAction.defenceLogHTML
-            });
-            }   
+            }
         } else {
             alert("No actions to undo.");
         }
@@ -1531,29 +1366,7 @@ fetchAndLoadTeamNames();
             penaltyLookupModal.style.display = 'none'; // Hide Penalty Modal
         });
 
-        // Listener for closing the modals via their close buttons ('&times;')
-        if (closeCoinTossModalBtn) {
-            closeCoinTossModalBtn.addEventListener('click', () => {
-            // 1. Close the modal
-                coinTossModal.classList.add('hidden');
-
-            // 2. Stop the Lottie animation and hide its container
-                if (coinAnimation) {
-                    coinAnimation.stop(); // Stops the Lottie playback
-                }
-        
-            // Hide the container itself (we no longer hide the <img> tag)
-                if (coinAnimationArea) { 
-                    coinAnimationArea.classList.add('hidden');
-                }
-        
-                // 3. Reset the rest of the UI (using robust null checks)
-                if (coinTossResultArea) coinTossResultArea.classList.add('hidden');
-                if (tossStartGameBtn) tossStartGameBtn.classList.add('hidden');
-                if (tossRerunBtn) tossRerunBtn.classList.add('hidden');
-            });
-        }
-
+    // Listener for closing the modals via their close buttons ('&times;')
         closePenaltyModalBtn.addEventListener('click', () => {
             penaltyLookupModal.style.display = 'none';
         });
@@ -1570,6 +1383,7 @@ fetchAndLoadTeamNames();
             if (qrCodeContainer) {
                 qrCodeContainer.innerHTML = '';
             }
+
         });
     
     // Global click listener for closing modals by clicking the backdrop
