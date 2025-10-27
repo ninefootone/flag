@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.56';
+    const appVersion = '0.2.57';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1170,14 +1170,19 @@ fetchAndLoadTeamNames();
 
     // Event listener for the "End Game" button with confirmation
     endGameBtn.addEventListener('click', () => {
-        // Show a confirmation dialog
-        const confirmed = confirm('Are you sure you want to end the game? This action cannot be undone.');
-        
-        // Only proceed if the user clicked OK
-        if (confirmed) {
-            sendAction('END_GAME');
-        }
-        // If the user clicks Cancel, the action is ignored.
+        // 🛑 CRITICAL FIX: Defer the entire logic to prevent UI thread lockup on resume.
+        // This allows the browser to stabilize its internal state before opening the 
+        // blocking 'confirm' dialog and triggering the final END_GAME action.
+        setTimeout(() => {
+            // Show a confirmation dialog
+            const confirmed = confirm('Are you sure you want to end the game? This action cannot be undone.');
+            
+            // Only proceed if the user clicked OK
+            if (confirmed) {
+                sendAction('END_GAME');
+            }
+            // If the user clicks Cancel, the action is ignored.
+        }, 100); // Use 100ms for a robust delay on system resume.
     });
 
 /**
