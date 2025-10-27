@@ -488,9 +488,15 @@ button:hover {
 }
 
 /* Common Form and Button Styles */
-#settings-form, #game-interface {
+#settings-form {
     padding: 10px 12px 100px 12px;
     max-width:480px;
+    width:100%;
+}
+
+#game-interface {
+    padding: 10px 12px 100px 12px;
+    max-width:720px;
     width:100%;
 }
 
