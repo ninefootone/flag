@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.61';
+    const appVersion = '0.2.62';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -1468,6 +1468,7 @@ fetchAndLoadTeamNames();
 
     startNewGameFromSummaryBtn.addEventListener('click', () => {
         history.pushState(null, '', '/');
+        window.location.reload(true);
         gameLobby.classList.remove('hidden');
         gameSummary.classList.add('hidden');
     });
