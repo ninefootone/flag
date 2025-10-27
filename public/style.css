@@ -490,7 +490,8 @@ button:hover {
 /* Common Form and Button Styles */
 #settings-form, #game-interface {
     padding: 10px 12px 100px 12px;
-    max-width:720px;
+    max-width:480px;
+    width:100%;
 }
 
 .hidden {
@@ -554,6 +555,7 @@ input[type="number"] {
     /* Keep the padding you added earlier to lift content above the footer */
     padding-bottom: 0px;
     justify-content: center;
+    width:100%;
 }
 
 #game-lobby h2 {
@@ -1175,6 +1177,7 @@ h4.log-title {
     padding: 20px;
     text-align: center;
     max-width:480px;
+    width:100%;
 }
 
 .logo-image-summary {
