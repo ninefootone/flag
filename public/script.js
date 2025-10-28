@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.67';
+    const appVersion = '0.2.68';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -765,27 +765,32 @@ fetchAndLoadTeamNames();
 
         // --- TWO-MINUTE WARNING CHECK (Visual and Audio) ---
         const twoMinuteWarningTime = 120; // 2 minutes in seconds
+        // Define if the clock is currently running (not paused and not in a timeout)
+        const isClockRunning = gameState.isPaused === false && gameState.isTimeout === false;
 
-        // Check if the clock time is exactly 2:00 (120 seconds)
-        if (gameState.gameTimeLeft === twoMinuteWarningTime) {
-            // Add visual warning class
+        // 1. VISUAL WARNING:
+        // The warning state is active if the time is 2:00 or less (and greater than 0)
+        const isWarningTime = gameState.gameTimeLeft <= twoMinuteWarningTime && gameState.gameTimeLeft > 0;
+        
+        // The visual pulse/red color should be shown ONLY if it's warning time AND the clock is currently running
+        if (isWarningTime && isClockRunning) {
+            // APPLY: Visual warning pulses red when time is 2:00 or less AND the clock is running.
             gameClockDisplay.parentElement.classList.add('warning');
-
-            // Play sound ONLY if the clock is running and the sound hasn't played at this time yet
-            if (gameState.isPaused === false && gameState.isTimeout === false && lastWarningTime !== twoMinuteWarningTime) {
-                // Ensure the clock is running, not paused/timeout
-                playTwoMinuteWarning();
-                lastWarningTime = twoMinuteWarningTime; // Store the time it played
-            }
         } else {
-            // If the time is not 120, remove the visual warning class
+            // REMOVE: Visual warning stops if the clock is stopped, time is 0:00, or time is > 2:00.
             gameClockDisplay.parentElement.classList.remove('warning');
-            
-            // Reset the tracker so the warning can play again if the time passes 120 
-            // (e.g., after an undo action or at the end of the next half).
-            if (gameState.gameTimeLeft !== twoMinuteWarningTime) {
-                 lastWarningTime = null;
+        }
+
+        // 2. AUDIO TRIGGER: (Fires only once at 120 seconds, when the clock is running)
+        if (gameState.gameTimeLeft === twoMinuteWarningTime && isClockRunning) {
+            // Play sound ONLY if it hasn't played for this specific 120-second moment yet
+            if (lastWarningTime !== twoMinuteWarningTime) {
+                playTwoMinuteWarning(); // Audio function
+                lastWarningTime = twoMinuteWarningTime; // Lock the warning state
             }
+        } else if (gameState.gameTimeLeft > twoMinuteWarningTime || gameState.gameTimeLeft === 0) {
+            // Reset the tracker when the time passes the warning threshold (start of half or end of half)
+            lastWarningTime = null;
         }
 
         // Update the Defence Log (Add this block)
