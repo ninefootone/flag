@@ -1,5 +1,33 @@
+/**
+ * Clamps a numeric input's value between a minimum and maximum limit in real-time.
+ * @param {HTMLInputElement} inputElement The input element to validate.
+ * @param {number} min The minimum allowed value.
+ * @param {number} max The maximum allowed value.
+ */
+const clampInput = (inputElement, min, max) => {
+    let value = parseInt(inputElement.value);
+
+    // If the input is empty or NaN after parsing, default it to the minimum value (e.g., 0 or 1).
+    if (isNaN(value)) {
+        inputElement.value = min;
+        return;
+    }
+
+    // Ensure the value does not go below the minimum
+    if (value < min) {
+        inputElement.value = min;
+    } 
+    // Ensure the value does not go above the maximum
+    else if (value > max) {
+        inputElement.value = max;
+    }
+    
+    // This cleans up leading zeros (e.g., changes '05' to '5')
+    inputElement.value = parseInt(inputElement.value).toString();
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.65';
+    const appVersion = '0.2.66';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -375,6 +403,29 @@ const setupTeamDropdown = (inputElement, optionsListElement) => {
         }, 150);
     });
 };
+
+// Limit input numbers
+
+if (halfDurationInput) {
+    halfDurationInput.addEventListener('input', () => {
+        // Half Duration: Min 1, Max 60
+        clampInput(halfDurationInput, 1, 60); 
+    });
+}
+
+if (playClockDurationInput) {
+    playClockDurationInput.addEventListener('input', () => {
+        // Play Clock Duration: Min 0, Max 60
+        clampInput(playClockDurationInput, 0, 60); 
+    });
+}
+
+if (timeoutsPerHalfInput) {
+    timeoutsPerHalfInput.addEventListener('input', () => {
+        // Timeouts per Half: Min 0, Max 9
+        clampInput(timeoutsPerHalfInput, 0, 9); 
+    });
+}
 
 // Setup both Home and Away team dropdowns
 setupTeamDropdown(team1NameInput, team1OptionsList);
