@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.69';
+    const appVersion = '0.2.70';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -277,44 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
-
-    // Audio Elements
-    const silentAudio = document.getElementById('silentAudio');
-    const twoMinuteWarningAudio = document.getElementById('twoMinuteWarningAudio');
-
-    let audioUnlocked = false;
-    let lastWarningTime = null; // Tracks the last time the warning was issued
-    
-    // Function to unlock audio on the first user interaction
-    const initializeAudioContext = () => {
-        if (silentAudio && !audioUnlocked) {
-            // Play and immediately pause the silent track
-            silentAudio.play().then(() => {
-                silentAudio.pause();
-                silentAudio.currentTime = 0; // Reset for next use
-                audioUnlocked = true;
-                console.log("Audio Context Unlocked.");
-            }).catch(error => {
-                // Handle cases where even a blank play fails (e.g., policy change)
-                console.error("Failed to unlock audio context:", error);
-            });
-        
-            // Remove the event listener once the context is initialized
-            document.removeEventListener('click', initializeAudioContext);
-            document.removeEventListener('touchstart', initializeAudioContext);
-        }
-    };
-
-    // Attach the unlock function to the first user click/touch (anywhere on the document)
-    document.addEventListener('click', initializeAudioContext, { once: true });
-    document.addEventListener('touchstart', initializeAudioContext, { once: true });
-
-    // Function to play the warning sound
-    const playTwoMinuteWarning = () => {
-        if (twoMinuteWarningAudio && audioUnlocked) {
-            twoMinuteWarningAudio.play().catch(e => console.error("Error playing warning sound:", e));
-        }
-    };
 
     const getPeriodName = (half) => {
         if (half === 1) return '1st Half';
@@ -763,39 +725,9 @@ fetchAndLoadTeamNames();
         //     coinTossBtn.textContent = 'Coin';
         // }
 
-        // --- TWO-MINUTE WARNING CHECK (Visual and Audio) ---
-        const twoMinuteWarningTime = 120; // 2 minutes in seconds
-        
-        // Define if the clock is currently running (not paused and not in a timeout)
-        const isClockRunning = gameState.isPaused === false && gameState.isTimeout === false;
-
-        // VISUAL PULSE LOGIC: Pulse starts at 2:00 and stops when the ref hits stop (isPaused = true).
-        if (gameState.gameTimeLeft <= twoMinuteWarningTime && gameState.gameTimeLeft > 0) {
-            // The warning period is active (2:00 down to 0:01)
-
-            if (isClockRunning) {
-                // Pulse ON: Time is <= 2:00 AND the clock is running.
-                gameClockDisplay.parentElement.classList.add('warning');
-            } else {
-                // Pulse OFF: Time is <= 2:00 BUT the clock is stopped.
-                gameClockDisplay.parentElement.classList.remove('warning');
-            }
-        } else {
-            // Pulse OFF: Time is > 2:00 or Time is 0:00 (end of half).
-            gameClockDisplay.parentElement.classList.remove('warning');
-        }
-
-
-        // AUDIO TRIGGER LOGIC: Plays exactly once when hitting 2:00.
-        if (gameState.gameTimeLeft === twoMinuteWarningTime && isClockRunning) {
-            // Check if the sound hasn't played for this specific 120-second moment yet
-            if (lastWarningTime !== twoMinuteWarningTime) {
-                playTwoMinuteWarning(); // Audio function
-                lastWarningTime = twoMinuteWarningTime; // Lock the warning state
-            }
-        } else if (gameState.gameTimeLeft !== twoMinuteWarningTime) {
-            // Reset the lock when the time is no longer 120 (allows replay in the next half or after an undo)
-            lastWarningTime = null;
+        if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
+            gameClockDisplay.parentElement.classList.add('warning');
+            twoMinuteWarningIssuedLocally = true;
         }
 
         // Update the Defence Log (Add this block)
