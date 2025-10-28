@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.68';
+    const appVersion = '0.2.69';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -765,31 +765,36 @@ fetchAndLoadTeamNames();
 
         // --- TWO-MINUTE WARNING CHECK (Visual and Audio) ---
         const twoMinuteWarningTime = 120; // 2 minutes in seconds
+        
         // Define if the clock is currently running (not paused and not in a timeout)
         const isClockRunning = gameState.isPaused === false && gameState.isTimeout === false;
 
-        // 1. VISUAL WARNING:
-        // The warning state is active if the time is 2:00 or less (and greater than 0)
-        const isWarningTime = gameState.gameTimeLeft <= twoMinuteWarningTime && gameState.gameTimeLeft > 0;
-        
-        // The visual pulse/red color should be shown ONLY if it's warning time AND the clock is currently running
-        if (isWarningTime && isClockRunning) {
-            // APPLY: Visual warning pulses red when time is 2:00 or less AND the clock is running.
-            gameClockDisplay.parentElement.classList.add('warning');
+        // VISUAL PULSE LOGIC: Pulse starts at 2:00 and stops when the ref hits stop (isPaused = true).
+        if (gameState.gameTimeLeft <= twoMinuteWarningTime && gameState.gameTimeLeft > 0) {
+            // The warning period is active (2:00 down to 0:01)
+
+            if (isClockRunning) {
+                // Pulse ON: Time is <= 2:00 AND the clock is running.
+                gameClockDisplay.parentElement.classList.add('warning');
+            } else {
+                // Pulse OFF: Time is <= 2:00 BUT the clock is stopped.
+                gameClockDisplay.parentElement.classList.remove('warning');
+            }
         } else {
-            // REMOVE: Visual warning stops if the clock is stopped, time is 0:00, or time is > 2:00.
+            // Pulse OFF: Time is > 2:00 or Time is 0:00 (end of half).
             gameClockDisplay.parentElement.classList.remove('warning');
         }
 
-        // 2. AUDIO TRIGGER: (Fires only once at 120 seconds, when the clock is running)
+
+        // AUDIO TRIGGER LOGIC: Plays exactly once when hitting 2:00.
         if (gameState.gameTimeLeft === twoMinuteWarningTime && isClockRunning) {
-            // Play sound ONLY if it hasn't played for this specific 120-second moment yet
+            // Check if the sound hasn't played for this specific 120-second moment yet
             if (lastWarningTime !== twoMinuteWarningTime) {
                 playTwoMinuteWarning(); // Audio function
                 lastWarningTime = twoMinuteWarningTime; // Lock the warning state
             }
-        } else if (gameState.gameTimeLeft > twoMinuteWarningTime || gameState.gameTimeLeft === 0) {
-            // Reset the tracker when the time passes the warning threshold (start of half or end of half)
+        } else if (gameState.gameTimeLeft !== twoMinuteWarningTime) {
+            // Reset the lock when the time is no longer 120 (allows replay in the next half or after an undo)
             lastWarningTime = null;
         }
 
