@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.66';
+    const appVersion = '0.2.67';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -277,6 +277,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const logDefenceStatBtn = document.getElementById('log-defence-stat-btn');
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
+
+    // Audio Elements
+    const silentAudio = document.getElementById('silentAudio');
+    const twoMinuteWarningAudio = document.getElementById('twoMinuteWarningAudio');
+
+    let audioUnlocked = false;
+    let lastWarningTime = null; // Tracks the last time the warning was issued
+    
+    // Function to unlock audio on the first user interaction
+    const initializeAudioContext = () => {
+        if (silentAudio && !audioUnlocked) {
+            // Play and immediately pause the silent track
+            silentAudio.play().then(() => {
+                silentAudio.pause();
+                silentAudio.currentTime = 0; // Reset for next use
+                audioUnlocked = true;
+                console.log("Audio Context Unlocked.");
+            }).catch(error => {
+                // Handle cases where even a blank play fails (e.g., policy change)
+                console.error("Failed to unlock audio context:", error);
+            });
+        
+            // Remove the event listener once the context is initialized
+            document.removeEventListener('click', initializeAudioContext);
+            document.removeEventListener('touchstart', initializeAudioContext);
+        }
+    };
+
+    // Attach the unlock function to the first user click/touch (anywhere on the document)
+    document.addEventListener('click', initializeAudioContext, { once: true });
+    document.addEventListener('touchstart', initializeAudioContext, { once: true });
+
+    // Function to play the warning sound
+    const playTwoMinuteWarning = () => {
+        if (twoMinuteWarningAudio && audioUnlocked) {
+            twoMinuteWarningAudio.play().catch(e => console.error("Error playing warning sound:", e));
+        }
+    };
 
     const getPeriodName = (half) => {
         if (half === 1) return '1st Half';
@@ -725,9 +763,29 @@ fetchAndLoadTeamNames();
         //     coinTossBtn.textContent = 'Coin';
         // }
 
-        if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
+        // --- TWO-MINUTE WARNING CHECK (Visual and Audio) ---
+        const twoMinuteWarningTime = 120; // 2 minutes in seconds
+
+        // Check if the clock time is exactly 2:00 (120 seconds)
+        if (gameState.gameTimeLeft === twoMinuteWarningTime) {
+            // Add visual warning class
             gameClockDisplay.parentElement.classList.add('warning');
-            twoMinuteWarningIssuedLocally = true;
+
+            // Play sound ONLY if the clock is running and the sound hasn't played at this time yet
+            if (gameState.isPaused === false && gameState.isTimeout === false && lastWarningTime !== twoMinuteWarningTime) {
+                // Ensure the clock is running, not paused/timeout
+                playTwoMinuteWarning();
+                lastWarningTime = twoMinuteWarningTime; // Store the time it played
+            }
+        } else {
+            // If the time is not 120, remove the visual warning class
+            gameClockDisplay.parentElement.classList.remove('warning');
+            
+            // Reset the tracker so the warning can play again if the time passes 120 
+            // (e.g., after an undo action or at the end of the next half).
+            if (gameState.gameTimeLeft !== twoMinuteWarningTime) {
+                 lastWarningTime = null;
+            }
         }
 
         // Update the Defence Log (Add this block)
