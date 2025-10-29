@@ -1,4 +1,4 @@
-const teamsDataVersion = '0.2.78'; 
+const teamsDataVersion = '0.2.79'; 
 
 // Set up an empty array to hold the team data.
 window.TEAM_LIST = []; 
@@ -41,8 +41,13 @@ const loadTeamData = () => {
             });
             
             // Skip empty rows
-            if (team[headers[0]]) {
-                team['Final Logo Path'] = team['Team Logo'] || DEFAULT_LOGO_PATH;
+            // Check for both existence and non-empty string before setting the path
+            if (team[headers[0]]) { // Ensures it's not a completely blank row
+                const logoPath = team['Team Logo'] && team['Team Logo'].trim() !== '' 
+                    ? team['Team Logo'] 
+                    : DEFAULT_LOGO_PATH;
+        
+                team['Final Logo Path'] = logoPath;
                 data.push(team);
             }
         }
