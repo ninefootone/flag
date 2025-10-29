@@ -324,6 +324,26 @@ button:hover {
     color: var(--primary-color);
 }
 
+/* --- Team Autocomplete Suggestions with Logo --- */
+
+.team-options-list li {
+    /* Use Flexbox to align the logo and text side-by-side */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the logo and the text */
+}
+
+.team-logo-suggestion {
+    /* Fixed size for the logo */
+    width: 30px;
+    height: 30px;
+    object-fit: contain; /* Ensures the logo fits without distortion */
+    border-radius: 4px; /* Optional: adds a slight corner rounding */
+    /* Add a small white border for visibility against dark backgrounds */
+    border: 1px solid var(--border-color);
+    padding: 2px;
+}
+
 /* End Team Selection */
 
 .settings-grid .settings-notes {

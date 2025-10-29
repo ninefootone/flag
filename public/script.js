@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.71';
+    const appVersion = '0.2.72';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -311,6 +311,116 @@ document.addEventListener('DOMContentLoaded', () => {
     // Call this function once, ideally at the end of your DOMContentLoaded block,
     // or at least before the coinTossBtn event listener.
     // initCoinAnimation();
+
+    // --- NEW TEAM LIST INTEGRATION LOGIC ---
+
+    // A map to quickly look up team data (especially the logo path) by team name.
+    const TEAM_DATA_MAP = new Map();
+
+    /**
+     * Loads team data and populates the global TEAM_DATA_MAP.
+     * This runs after the promise from teams.js resolves.
+    */
+    const initializeTeamData = () => {
+        // Check if the loader function from teams.js exists
+        if (typeof window.loadTeamData === 'function') {
+            window.loadTeamData()
+                .then(() => {
+                    // Populate the map for quick lookup
+                    window.TEAM_LIST.forEach(team => {
+                        // Key: 'Team Name', Value: The entire team object (including logo path)
+                        TEAM_DATA_MAP.set(team['Team Name'], team);
+                    });
+                    console.log(`Autocomplete initialized with ${TEAM_DATA_MAP.size} teams.`);
+                })
+                .catch(error => {
+                    console.error("Initialization error: Could not load team data.", error);
+                });
+        } else {
+            console.error("Initialization error: teams.js or loadTeamData function not found. Check index.html script order.");
+        }
+    };
+
+    // --- AUTOCORRECT / AUTOSUGGESTION LOGIC ---
+
+    /**
+     * Filters the team list and displays suggestions in the <ul> element, including the logo.
+     * @param {HTMLInputElement} inputElement The text input field.
+     * @param {HTMLUListElement} optionsList The suggestion list element.
+    */
+    const updateTeamSuggestions = (inputElement, optionsList) => {
+        const filterText = inputElement.value.toLowerCase().trim();
+        optionsList.innerHTML = '';
+    
+        if (filterText.length === 0) {
+            optionsList.classList.add('hidden');
+            return;
+        }
+
+        // Convert Map keys (Team Names) to an array and filter them
+        const filteredNames = Array.from(TEAM_DATA_MAP.keys()).filter(name => 
+            name.toLowerCase().includes(filterText)
+        ).slice(0, 10); // Limit to 10 suggestions
+
+        if (filteredNames.length > 0) {
+            filteredNames.forEach(teamName => {
+                const teamData = TEAM_DATA_MAP.get(teamName);
+            
+                if (teamData) {
+                    const li = document.createElement('li');
+                
+                    // 1. Add the Logo Image
+                    const img = document.createElement('img');
+                    img.src = teamData['Final Logo Path'];
+                    img.alt = `${teamName} Logo`;
+                    img.classList.add('team-logo-suggestion');
+                    li.appendChild(img);
+
+                    // 2. Add the Team Name Text
+                    const span = document.createElement('span');
+                    span.textContent = teamName;
+                    li.appendChild(span);
+                
+                    // Set the click handler to select the team
+                    li.addEventListener('click', () => {
+                        inputElement.value = teamName;
+                        optionsList.classList.add('hidden');
+                    });
+                
+                    optionsList.appendChild(li);
+                }
+            });
+            optionsList.classList.remove('hidden');
+        } else {
+            optionsList.classList.add('hidden');
+        }
+    };
+
+    // --- EVENT LISTENERS FOR AUTOSUGGEST ---
+
+    // 1. Use 'input' event for real-time filtering as the user types
+    team1NameInput.addEventListener('input', () => {
+        updateTeamSuggestions(team1NameInput, team1OptionsList);
+    });
+
+    team2NameInput.addEventListener('input', () => {
+        updateTeamSuggestions(team2NameInput, team2OptionsList);
+    });
+
+    // 2. Hide suggestions when focus leaves the input
+    document.addEventListener('click', (event) => {
+        if (!team1NameInput.contains(event.target) && !team1OptionsList.contains(event.target)) {
+            team1OptionsList.classList.add('hidden');
+        }
+        if (!team2NameInput.contains(event.target) && !team2OptionsList.contains(event.target)) {
+            team2OptionsList.classList.add('hidden');
+        }
+    });
+
+    // Run the data loader to begin fetching the team list when the script starts
+    initializeTeamData();
+
+    // --- END NEW TEAM LIST INTEGRATION LOGIC ---
 
 // --- Dropdown Logic ---
 
