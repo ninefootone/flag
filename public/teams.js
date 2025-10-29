@@ -1,7 +1,7 @@
-const teamsDataVersion = '0.2.77'; 
+const teamsDataVersion = '0.2.78'; 
 
 // Set up an empty array to hold the team data.
-const TEAM_LIST = []; 
+window.TEAM_LIST = []; 
 
 // *** NEW WORKING URL: CSV Export Format ***
 // This format is highly reliable and bypasses the gviz API issues.
