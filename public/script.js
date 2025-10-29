@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.80';
+    const appVersion = '0.2.81';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -372,6 +372,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 1. Add the Logo Image
                     const img = document.createElement('img');
                     img.src = teamData['Final Logo Path'];
+                    
+                    // *** ADD THIS ONERROR HANDLER ***
+                    img.onerror = function() {
+                        // If the image fails to load (due to 404, bad URL, etc.):
+    
+                        // 1. Prevent an infinite loop if the fallback itself somehow fails
+                        this.onerror = null; 
+    
+                        // 2. Set the source to the known good default logo path.
+                        // The constant is declared globally in teams.js, so it's accessible via window.
+                        this.src = window.DEFAULT_LOGO_PATH;
+                    };
+                    // *******************************
+                    
                     img.alt = `${teamName} Logo`;
                     img.classList.add('team-logo-suggestion');
                     li.appendChild(img);

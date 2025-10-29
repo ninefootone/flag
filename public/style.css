@@ -308,16 +308,6 @@ button:hover {
     display: none;
 }
 
-.team-options-list li {
-    padding: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    color: var(--primary-color);
-    background:white;
-    border:none;
-    border-radius: 0px !important;
-}
-
 .team-options-list li:hover,
 .team-options-list li.highlighted {
     background-color: var(--focus-color);
@@ -327,21 +317,28 @@ button:hover {
 /* --- Team Autocomplete Suggestions with Logo --- */
 
 .team-options-list li {
-    /* Use Flexbox to align the logo and text side-by-side */
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Space between the logo and the text */
+    /* --- NEW FLEXBOX LAYOUT FOR LOGO + TEXT --- */
+    display: flex;         /* Use Flexbox to align image and text */
+    align-items: center;   /* Vertically center the logo and text */
+    gap: 10px;             /* Space between logo and text */
+    text-align: left;      /* Align text to the left for better reading */
+    /* --- END NEW LAYOUT --- */
+
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--primary-color);
+    background:white;
+    border:none;
+    border-radius: 0px !important;
 }
 
-.team-logo-suggestion {
-    /* Fixed size for the logo */
-    width: 30px;
-    height: 30px;
-    object-fit: contain; /* Ensures the logo fits without distortion */
-    border-radius: 4px; /* Optional: adds a slight corner rounding */
-    /* Add a small white border for visibility against dark backgrounds */
-    border: 1px solid var(--border-color);
-    padding: 2px;
+/* Add this NEW rule to size the image */
+.team-options-list li .team-logo-suggestion {
+    width: 28px;           /* Set a small, fixed width */
+    height: 28px;          /* Set a small, fixed height */
+    object-fit: contain;   /* Ensures the image doesn't stretch */
+    flex-shrink: 0;        /* Prevents the image from collapsing */
 }
 
 /* End Team Selection */
