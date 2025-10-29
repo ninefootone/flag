@@ -3,15 +3,11 @@
 const TEAM_LIST = []; 
 
 // Add a version variable here
-const teamsDataVersion = '0.2.75'; 
+const teamsDataVersion = '0.2.76'; 
 console.log(`Team Data Loader - Version: ${teamsDataVersion}`);
 
-// IMPORTANT: REPLACE THIS URL with your actual Google Sheet's published JSON URL.
-// 1. In your Google Sheet, go to File > Share > Publish to web.
-// 2. Select the sheet tab you want, and choose 'JSON' format.
-// 3. Copy the URL and append '?tqx=out:json' to the end.
-// const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy4lkQeSqjCi7OY_vGstrVQDX-uSpOZcaWHW_IYmOLDcLqwPs7lBlvSfLTw40WLwPf1clfSF6zJkvA/pub?gid=1701665579&single=true&output=csv';
-const GOOGLE_SHEET_URL = 'https://spreadsheets.google.com/tq?tqx=out:json&key=1JgjKMKkXzdmFOX5p92mDyWHhHwqNQAQjA-XNbhDX3cc&gid=1701665579';
+// This URL is structured to route the Google Sheet request through a CORS proxy service.
+const GOOGLE_SHEET_URL = 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vQy4lkQeSqjCi7OY_vGstrVQDX-uSpOZcaWHW_IYmOLDcLqwPs7lBlvSfLTw40WLwPf1clfSF6zJkvA/gviz/tq%3Ftqx%3Dout%3Ajson%26gid%3D1701665579';
 
 // Path for the placeholder image to be used if a logo is missing or data fails to load.
 const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
