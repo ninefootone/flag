@@ -3,7 +3,7 @@
 const TEAM_LIST = []; 
 
 // Add a version variable here
-const teamsDataVersion = '0.2.74'; 
+const teamsDataVersion = '0.2.75'; 
 console.log(`Team Data Loader - Version: ${teamsDataVersion}`);
 
 // IMPORTANT: REPLACE THIS URL with your actual Google Sheet's published JSON URL.
@@ -11,7 +11,7 @@ console.log(`Team Data Loader - Version: ${teamsDataVersion}`);
 // 2. Select the sheet tab you want, and choose 'JSON' format.
 // 3. Copy the URL and append '?tqx=out:json' to the end.
 // const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy4lkQeSqjCi7OY_vGstrVQDX-uSpOZcaWHW_IYmOLDcLqwPs7lBlvSfLTw40WLwPf1clfSF6zJkvA/pub?gid=1701665579&single=true&output=csv';
-const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy4lkQeSqjCi7OY_vGstrVQDX-uSpOZcaWHW_IYmOLDcLqwPs7lBlvSfLTw40WLwPf1clfSF6zJkvA/gviz/tq?tqx=out:json&gid=1701665579';
+const GOOGLE_SHEET_URL = 'https://spreadsheets.google.com/tq?tqx=out:json&key=1JgjKMKkXzdmFOX5p92mDyWHhHwqNQAQjA-XNbhDX3cc&gid=1701665579';
 
 // Path for the placeholder image to be used if a logo is missing or data fails to load.
 const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';

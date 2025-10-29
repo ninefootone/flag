@@ -27,7 +27,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.74';
+    const appVersion = '0.2.75';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
