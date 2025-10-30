@@ -1,3 +1,6 @@
+const appVersion = '0.2.90';
+console.log(`Referee App - Version: ${appVersion}`);
+
 /**
  * Clamps a numeric input's value between a minimum and maximum limit in real-time.
  * @param {HTMLInputElement} inputElement The input element to validate.
@@ -29,10 +32,20 @@ const clampInput = (inputElement, min, max) => {
 // --- CRITICAL FIX: Explicitly assign to window for global access ---
 window.TEAM_DATA_MAP = new Map();
 window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp'; 
-// Note: You can now remove 'window.' from the onerror handler, 
-// OR just leave it as it now correctly points to the window object.
-// We will use the non-window version below for simplicity.
 
+// --- CRITICAL: Global Game State Initialization ---
+window.gameState = {
+    // ESSENTIALS for Logo Lookup and Display Logic
+    team1Name: 'Team 1',
+    team2Name: 'Team 2',
+    scores: { team1: 0, team2: 0 },
+    gameStarted: false, 
+    timeoutsUsed: { '1': 0, '2': 0 },
+    currentDown: 1,
+    currentHalf: 1,
+    timeoutLogHTML: '',
+    defenceLogHTML: '',
+};
     /**
      * Loads team data and populates the global TEAM_DATA_MAP.
     */
@@ -178,8 +191,6 @@ const renderSummaryLogos = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.89';
-    console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
         versionDisplay.textContent = `v${appVersion}`;
@@ -1211,7 +1222,7 @@ if (timeoutsPerHalfInput) {
         const initialMinutes = parseInt(halfDurationInput.value, 10);
         const initialTimeString = `${String(initialMinutes).padStart(2, '0')}:00`;
 
-        const newGameState = {
+        window.gameState = {
             gameStarted: true,
             date: dateField.value || 'N/A',
             location: locationField.value,
@@ -1230,7 +1241,9 @@ if (timeoutsPerHalfInput) {
             defenceLogHTML: '',
             twoMinuteWarningIssued: false
         };
-        sendAction('UPDATE_STATE', newGameState);
+        
+        // Use the global gameState object when sending the action
+        sendAction('UPDATE_STATE', window.gameState);
     
         // 4. TRANSITION THE SCREEN (This is why it was returning to the lobby!)
         // Assuming your UI uses #game-lobby and #game-app
