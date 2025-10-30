@@ -82,7 +82,7 @@ window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
         // Convert Map keys (Team Names) to an array and filter them
         const filteredNames = Array.from(TEAM_DATA_MAP.keys()).filter(name => 
             name.toLowerCase().includes(filterText)
-        ).slice(0, 10); // Limit to 10 suggestions
+        ).slice(0, 20); // Limit to 20 suggestions
 
         if (filteredNames.length > 0) {
             filteredNames.forEach(teamName => {
@@ -133,7 +133,7 @@ window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
     };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.86';
+    const appVersion = '0.2.87';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -371,6 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initLobbyCoinAnimation();
 
     // const coinTossResultDisplay = document.getElementById('coin-toss-result');
+    const summaryTeam1Logo = document.getElementById('summary-team1-logo');
+    const summaryTeam2Logo = document.getElementById('summary-team2-logo');
     const summaryTeam1Name = document.getElementById('summary-team1-name');
     const summaryTeam2Name = document.getElementById('summary-team2-name');
     const summaryTeam1Score = document.getElementById('summary-team1-score');
@@ -631,6 +633,23 @@ if (timeoutsPerHalfInput) {
                 settingsForm.classList.add('hidden');
                 gameInterface.classList.add('hidden');
                 gameSummary.classList.remove('hidden');
+
+                // Team 1 Logo Lookup
+                const team1Data = window.TEAM_DATA_MAP.get(gameState.team1Name);
+                const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+                
+                // Team 2 Logo Lookup
+                const team2Data = window.TEAM_DATA_MAP.get(gameState.team2Name);
+                const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+                
+                // Inject the Image tag into the summary logo element
+                if (summaryTeam1Logo) {
+                    summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${gameState.team1Name} Logo" class="summary-logo">`;
+                }
+                if (summaryTeam2Logo) {
+                    summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${gameState.team2Name} Logo" class="summary-logo">`;
+                }
+
                 summaryTeam1Name.textContent = gameState.team1Name;
                 summaryTeam2Name.textContent = gameState.team2Name;
                 summaryTeam1Score.textContent = gameState.scores.team1;

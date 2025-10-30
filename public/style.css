@@ -302,6 +302,7 @@ button:hover {
     overflow-y: auto;
     z-index: 10; /* Ensure it appears over other elements */
     text-align: center;
+    border-radius: 8px;
 }
 
 .team-options-list.hidden {
@@ -1212,6 +1213,21 @@ h4.log-title {
 .logo-image-summary {
     width:180px;
     margin-bottom:20px;
+}
+
+/* Styling for the summary logos */
+.summary-logo {
+    width: 40px; /* Adjust size as needed */
+    height: 40px; 
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+/* Optional: Style the container to align name/score/logo nicely */
+.summary-team-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .summary-scoreboard {
