@@ -1,4 +1,4 @@
-const appVersion = '0.2.90';
+const appVersion = '0.2.91';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -146,48 +146,41 @@ window.gameState = {
         }
     };
 
-    /**
- * Renders the logos on the summary screen using data from gameState.
- * Should only be called after TEAM_DATA_MAP is confirmed loaded.
+/**
+ * Renders the logos on the summary screen.
+ * Designed to be called both immediately (via setTimeout) and asynchronously (via data loader).
  */
 const renderSummaryLogos = () => {
-    // Check if we are even on the summary screen before attempting to render
-    const gameSummary = document.getElementById('game-summary');
-    if (!gameSummary || gameSummary.classList.contains('hidden')) {
-        return; // Don't run if the summary screen is hidden
+    // 1. Guard against running if the data isn't even partially loaded
+    if (typeof window.gameState === 'undefined' || !window.gameState.team1Name) {
+        return;
     }
 
-    // Get the summary elements (These are already defined as const summaryTeamXLogo inside DOMContentLoaded)
-    // We access them via document.getElementById here, as they are not globally defined.
+    // 2. Fetch elements and data locally (no reliance on external const definitions)
     const summaryTeam1Logo = document.getElementById('summary-team1-logo');
     const summaryTeam2Logo = document.getElementById('summary-team2-logo');
+    
+    // 3. Clean the names for robust lookup
+    const team1NameClean = window.gameState.team1Name.trim();
+    const team2NameClean = window.gameState.team2Name.trim();
 
-    // Assume gameState is available globally or passed in (it should be global for this app design)
-    if (typeof gameState === 'undefined' || !gameState.team1Name) {
-        return; // No game data to display
-    }
-
-    // Trim the team name for the lookup
-    const team1NameClean = gameState.team1Name.trim();
-    const team2NameClean = gameState.team2Name.trim();
-
-    // Team 1 Logo Lookup
+    // 4. Look up paths using the global data map
     const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
     const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
     
-    // Team 2 Logo Lookup
     const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
     const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
     
-    // Inject the Image tag
+    // 5. Inject the Image tag
     if (summaryTeam1Logo) {
-        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${gameState.team1Name} Logo" class="summary-logo">`;
+        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${team1NameClean} Logo" class="summary-logo">`;
     }
     if (summaryTeam2Logo) {
-        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${gameState.team2Name} Logo" class="summary-logo">`;
+        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${team2NameClean} Logo" class="summary-logo">`;
     }
 
-    console.log(`Summary Renderer: Logos re-rendered for ${team1NameClean} and ${team2NameClean}.`);
+    // Optional debug line:
+    // console.log(`Summary Logos Rendered: ${team1NameClean} vs ${team2NameClean} (Source: ${window.TEAM_DATA_MAP.size > 0 ? 'Map' : 'Fallback'})`);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
