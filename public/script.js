@@ -133,7 +133,7 @@ window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
     };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.85';
+    const appVersion = '0.2.86';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -446,98 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- MODIFIED startCoinFlip() Function ---
     const COIN_FLIP_DURATION = 2000; 
 
-// --- Dropdown Logic ---
-
-const fetchAndLoadTeamNames = async () => {
-    try {
-        // Fetch data from your JSON file
-        const response = await fetch('/teams.json'); 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        if (Array.isArray(data)) {
-            // Store the list globally and sort it for a better user experience
-            allTeamNames = data.sort((a, b) => a.localeCompare(b)); 
-            console.log(`Successfully loaded ${allTeamNames.length} team names.`);
-        } else {
-            console.error("teams.json content is not an array.");
-        }
-    } catch (error) {
-        console.error("Could not load team names:", error);
-    }
-};
-
-// Function to filter and render the options list
-const filterAndRenderOptions = (inputElement, optionsListElement) => {
-    const filterText = inputElement.value.toLowerCase();
-    optionsListElement.innerHTML = ''; // Clear current list
-    
-    // Filter the global array based on the input text
-    const filteredTeams = allTeamNames.filter(team => 
-        team.toLowerCase().includes(filterText)
-    );
-    
-    if (filteredTeams.length > 0 && filterText.length > 0) {
-        // Show filtered results if the user is typing
-        filteredTeams.forEach(teamName => {
-            const li = document.createElement('li');
-            li.textContent = teamName;
-            
-            // Add a click handler to select the team
-            li.addEventListener('click', (event) => {
-                event.preventDefault(); // Stop any default form behavior
-                inputElement.value = teamName; // Set the input value
-                optionsListElement.classList.add('hidden'); // Hide the list
-                inputElement.focus(); // Keep focus after selection
-            });
-            optionsListElement.appendChild(li);
-        });
-        optionsListElement.classList.remove('hidden'); // Show the list
-    } else if (filterText.length === 0) {
-        // If the input is empty (e.g., on focus), show *all* teams (Standard dropdown behavior)
-        allTeamNames.forEach(teamName => {
-            const li = document.createElement('li');
-            li.textContent = teamName;
-            li.addEventListener('click', (event) => {
-                event.preventDefault(); 
-                inputElement.value = teamName;
-                optionsListElement.classList.add('hidden'); 
-                inputElement.focus();
-            });
-            optionsListElement.appendChild(li);
-        });
-         optionsListElement.classList.remove('hidden');
-    } else {
-        // Hide if no results and they are typing
-        optionsListElement.classList.add('hidden'); 
-    }
-};
-
-// Function to attach all event listeners to a pair of input/list
-const setupTeamDropdown = (inputElement, optionsListElement) => {
-    
-    // 1. Input event: Filter as the user types
-    inputElement.addEventListener('input', () => {
-        filterAndRenderOptions(inputElement, optionsListElement);
-    });
-
-    // 2. Focus event: Show all options if input is empty (like clicking a standard dropdown)
-    inputElement.addEventListener('focus', () => {
-        if (optionsListElement.classList.contains('hidden')) {
-            filterAndRenderOptions(inputElement, optionsListElement); 
-        }
-    });
-
-    // 3. Blur event: Hide the list when focus is lost
-    inputElement.addEventListener('blur', () => {
-        // Use a short timeout to allow the 'click' event on a list item to register before hiding
-        setTimeout(() => {
-            optionsListElement.classList.add('hidden');
-        }, 150);
-    });
-};
-
 // Limit input numbers
 
 if (halfDurationInput) {
@@ -560,15 +468,6 @@ if (timeoutsPerHalfInput) {
         clampInput(timeoutsPerHalfInput, 0, 9); 
     });
 }
-
-// Setup both Home and Away team dropdowns
-setupTeamDropdown(team1NameInput, team1OptionsList);
-setupTeamDropdown(team2NameInput, team2OptionsList);
-
-// Call the fetch function at the end of DOMContentLoaded
-fetchAndLoadTeamNames(); 
-
-    // End Team List Functions
 
     // Collect all control elements into a single array for easy management
     const allControls = [
