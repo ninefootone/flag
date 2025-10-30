@@ -29,7 +29,7 @@ const clampInput = (inputElement, min, max) => {
 const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.82';
+    const appVersion = '0.2.83';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -314,34 +314,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // or at least before the coinTossBtn event listener.
     // initCoinAnimation();
 
-    // --- NEW TEAM LIST INTEGRATION LOGIC ---
-
-    // A map to quickly look up team data (especially the logo path) by team name.
-    const TEAM_DATA_MAP = new Map();
+    
+    // A map to quickly look up team data by team name.
+// Ensure this is defined globally in script.js
+const TEAM_DATA_MAP = new Map(); 
+// Ensure this is defined globally in script.js (if you moved it there in the last step)
+const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp'; 
 
     /**
      * Loads team data and populates the global TEAM_DATA_MAP.
-     * This runs after the promise from teams.js resolves.
     */
     const initializeTeamData = () => {
-        // Check if the loader function from teams.js exists
+        // 1. Check for the loader function first
         if (typeof window.loadTeamData === 'function') {
             window.loadTeamData()
-                .then(() => {
-                    // Populate the map for quick lookup
-                    window.TEAM_LIST.forEach(team => {
-                        // Key: 'Team Name', Value: The entire team object (including logo path)
-                        TEAM_DATA_MAP.set(team['Team Name'], team);
-                    });
-                    console.log(`Autocomplete initialized with ${TEAM_DATA_MAP.size} teams.`);
+                .then(loadedList => {
+                    // IMPORTANT: Use the result of the promise (loadedList) 
+                    // instead of relying on the global window.TEAM_LIST
+                    if (Array.isArray(loadedList) && loadedList.length > 0) {
+                        TEAM_DATA_MAP.clear(); // Clear old data if any
+                        loadedList.forEach(team => {
+                            // Key: 'Team Name', Value: The entire team object
+                            // Ensure 'Team Name' column header is correct in the sheet!
+                            TEAM_DATA_MAP.set(team['Team Name'], team); 
+                        });
+                        console.log(`✅ Autocomplete initialized with ${TEAM_DATA_MAP.size} teams.`);
+                    } else {
+                         console.error("Initialization error: Loaded team list is empty or invalid.");
+                    }
                 })
                 .catch(error => {
-                    console.error("Initialization error: Could not load team data.", error);
+                    console.error("❌ Initialization error: Could not load team data.", error);
                 });
         } else {
-            console.error("Initialization error: teams.js or loadTeamData function not found. Check index.html script order.");
+            console.error("❌ Initialization error: teams.js or loadTeamData function not found. Check index.html script order.");
         }
     };
+
+    // Ensure this function is called at the end of the script:
+    // initializeTeamData();
 
     // --- AUTOCORRECT / AUTOSUGGESTION LOGIC ---
 
