@@ -1,4 +1,4 @@
-const appVersion = '0.2.92';
+const appVersion = '0.2.93';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -192,8 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameLobby = document.getElementById('game-lobby');
     const gameInterface = document.getElementById('game-interface');
     const gameSummary = document.getElementById('game-summary');
-    // ----------------------------------------
-
+    const gameApp = document.getElementById('game-app'); // ADD this one for completeness
 
     // --- INSERT THE SCREEN RESTORATION LOGIC ---
     if (window.gameState.gameStarted) {
@@ -1265,8 +1264,6 @@ if (timeoutsPerHalfInput) {
     
         // 4. TRANSITION THE SCREEN (This is why it was returning to the lobby!)
         // Assuming your UI uses #game-lobby and #game-app
-        gameLobby = document.getElementById('game-lobby');
-        gameApp = document.getElementById('game-app');
     
         if (gameLobby && gameApp) {
             gameLobby.classList.add('hidden'); // Hide the setup screen
