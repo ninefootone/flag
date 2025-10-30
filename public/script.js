@@ -178,7 +178,7 @@ const renderSummaryLogos = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.88';
+    const appVersion = '0.2.89';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -678,16 +678,32 @@ if (timeoutsPerHalfInput) {
                 settingsForm.classList.add('hidden');
                 gameInterface.classList.add('hidden');
                 gameSummary.classList.remove('hidden');
-
-                // --- REMOVE ALL LOGO LOOKUP/INJECTION CODE FROM HERE ---
-                // The code below has been deleted:
-                // const team1Data = window.TEAM_DATA_MAP.get(gameState.team1Name);
-                // ... all logo path lookups and the two 'if (summaryTeam1Logo)' blocks
                 
-                // --- CALL THE DEDICATED RENDER FUNCTION ---
-                // This function is now responsible for the initial render AND the re-render after a refresh.
-                renderSummaryLogos();
-                // ------------------------------------------
+                // --- RESTORE LOGO LOOKUP AND INJECTION ---
+                
+                // Re-fetch the elements here to ensure they are not null (robustness)
+                const summaryTeam1Logo = document.getElementById('summary-team1-logo');
+                const summaryTeam2Logo = document.getElementById('summary-team2-logo');
+
+                // Clean the name before lookup (Fixes previous issues)
+                const team1NameClean = gameState.team1Name.trim();
+                const team2NameClean = gameState.team2Name.trim();
+
+                // Look up paths
+                const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
+                const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+                const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
+                const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+                
+                // Inject the Image tag
+                if (summaryTeam1Logo) {
+                    summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${gameState.team1Name} Logo" class="summary-logo">`;
+                }
+                if (summaryTeam2Logo) {
+                    summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${gameState.team2Name} Logo" class="summary-logo">`;
+                }
+                
+                // --- END RESTORE ---
 
                 summaryTeam1Name.textContent = gameState.team1Name;
                 summaryTeam2Name.textContent = gameState.team2Name;
