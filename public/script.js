@@ -26,10 +26,15 @@ const clampInput = (inputElement, min, max) => {
     inputElement.value = parseInt(inputElement.value).toString();
 };
 
-const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
+// --- CRITICAL FIX: Explicitly assign to window for global access ---
+window.TEAM_DATA_MAP = new Map();
+window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp'; 
+// Note: You can now remove 'window.' from the onerror handler, 
+// OR just leave it as it now correctly points to the window object.
+// We will use the non-window version below for simplicity.
 
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.83';
+    const appVersion = '0.2.84';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -314,13 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // or at least before the coinTossBtn event listener.
     // initCoinAnimation();
 
-    
-    // A map to quickly look up team data by team name.
-// Ensure this is defined globally in script.js
-const TEAM_DATA_MAP = new Map(); 
-// Ensure this is defined globally in script.js (if you moved it there in the last step)
-const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp'; 
-
     /**
      * Loads team data and populates the global TEAM_DATA_MAP.
     */
@@ -350,9 +348,6 @@ const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
             console.error("❌ Initialization error: teams.js or loadTeamData function not found. Check index.html script order.");
         }
     };
-
-    // Ensure this function is called at the end of the script:
-    // initializeTeamData();
 
     // --- AUTOCORRECT / AUTOSUGGESTION LOGIC ---
 
