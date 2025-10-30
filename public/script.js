@@ -26,8 +26,10 @@ const clampInput = (inputElement, min, max) => {
     inputElement.value = parseInt(inputElement.value).toString();
 };
 
+const DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
+
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.81';
+    const appVersion = '0.2.82';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
