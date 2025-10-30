@@ -1220,7 +1220,7 @@ h4.log-title {
     width: 40px; /* Adjust size as needed */
     height: 40px; 
     object-fit: contain;
-    margin-right: 10px;
+    margin-right: 0px;
 }
 
 /* Optional: Style the container to align name/score/logo nicely */

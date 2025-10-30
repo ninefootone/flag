@@ -51,6 +51,7 @@ window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
                             TEAM_DATA_MAP.set(team['Team Name'], team); 
                         });
                         console.log(`✅ Autocomplete initialized with ${TEAM_DATA_MAP.size} teams.`);
+                        renderSummaryLogos();
                     } else {
                          console.error("Initialization error: Loaded team list is empty or invalid.");
                     }
@@ -132,8 +133,52 @@ window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp';
         }
     };
 
+    /**
+ * Renders the logos on the summary screen using data from gameState.
+ * Should only be called after TEAM_DATA_MAP is confirmed loaded.
+ */
+const renderSummaryLogos = () => {
+    // Check if we are even on the summary screen before attempting to render
+    const gameSummary = document.getElementById('game-summary');
+    if (!gameSummary || gameSummary.classList.contains('hidden')) {
+        return; // Don't run if the summary screen is hidden
+    }
+
+    // Get the summary elements (These are already defined as const summaryTeamXLogo inside DOMContentLoaded)
+    // We access them via document.getElementById here, as they are not globally defined.
+    const summaryTeam1Logo = document.getElementById('summary-team1-logo');
+    const summaryTeam2Logo = document.getElementById('summary-team2-logo');
+
+    // Assume gameState is available globally or passed in (it should be global for this app design)
+    if (typeof gameState === 'undefined' || !gameState.team1Name) {
+        return; // No game data to display
+    }
+
+    // Trim the team name for the lookup
+    const team1NameClean = gameState.team1Name.trim();
+    const team2NameClean = gameState.team2Name.trim();
+
+    // Team 1 Logo Lookup
+    const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
+    const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+    
+    // Team 2 Logo Lookup
+    const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
+    const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+    
+    // Inject the Image tag
+    if (summaryTeam1Logo) {
+        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${gameState.team1Name} Logo" class="summary-logo">`;
+    }
+    if (summaryTeam2Logo) {
+        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${gameState.team2Name} Logo" class="summary-logo">`;
+    }
+
+    console.log(`Summary Renderer: Logos re-rendered for ${team1NameClean} and ${team2NameClean}.`);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    const appVersion = '0.2.87';
+    const appVersion = '0.2.88';
     console.log(`Referee App - Version: ${appVersion}`);
     const versionDisplay = document.querySelector('.version');
     if (versionDisplay) {
@@ -634,21 +679,15 @@ if (timeoutsPerHalfInput) {
                 gameInterface.classList.add('hidden');
                 gameSummary.classList.remove('hidden');
 
-                // Team 1 Logo Lookup
-                const team1Data = window.TEAM_DATA_MAP.get(gameState.team1Name);
-                const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+                // --- REMOVE ALL LOGO LOOKUP/INJECTION CODE FROM HERE ---
+                // The code below has been deleted:
+                // const team1Data = window.TEAM_DATA_MAP.get(gameState.team1Name);
+                // ... all logo path lookups and the two 'if (summaryTeam1Logo)' blocks
                 
-                // Team 2 Logo Lookup
-                const team2Data = window.TEAM_DATA_MAP.get(gameState.team2Name);
-                const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
-                
-                // Inject the Image tag into the summary logo element
-                if (summaryTeam1Logo) {
-                    summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${gameState.team1Name} Logo" class="summary-logo">`;
-                }
-                if (summaryTeam2Logo) {
-                    summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${gameState.team2Name} Logo" class="summary-logo">`;
-                }
+                // --- CALL THE DEDICATED RENDER FUNCTION ---
+                // This function is now responsible for the initial render AND the re-render after a refresh.
+                renderSummaryLogos();
+                // ------------------------------------------
 
                 summaryTeam1Name.textContent = gameState.team1Name;
                 summaryTeam2Name.textContent = gameState.team2Name;
