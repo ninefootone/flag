@@ -1,4 +1,4 @@
-const appVersion = '0.2.93';
+const appVersion = '0.2.94';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -173,10 +173,16 @@ const renderSummaryLogos = () => {
     
     // 5. Inject the Image tag
     if (summaryTeam1Logo) {
-        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${team1NameClean} Logo" class="summary-logo">`;
+        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
+                                         alt="${team1NameClean} Logo" 
+                                         class="summary-logo"
+                                         onerror="this.onerror=null; this.src='${window.DEFAULT_LOGO_PATH}';">`;
     }
     if (summaryTeam2Logo) {
-        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${team2NameClean} Logo" class="summary-logo">`;
+        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" 
+                                         alt="${team2NameClean} Logo" 
+                                         class="summary-logo"
+                                         onerror="this.onerror=null; this.src='${window.DEFAULT_LOGO_PATH}';">`;
     }
 
     // Optional debug line:
