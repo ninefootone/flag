@@ -1,4 +1,4 @@
-const appVersion = '0.2.94';
+const appVersion = '0.2.95';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -30,8 +30,7 @@ const clampInput = (inputElement, min, max) => {
 };
 
 // --- CRITICAL FIX: Explicitly assign to window for global access ---
-window.TEAM_DATA_MAP = new Map();
-window.DEFAULT_LOGO_PATH = '/assets/logos/whistle-team-fallback.webp'; 
+window.TEAM_DATA_MAP = new Map(); 
 
 // --- CRITICAL: Global Game State Initialization ---
 window.gameState = {
