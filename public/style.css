@@ -769,7 +769,7 @@ header {
 
 @media (max-width: 480px) {
     .clock-time {
-        font-size:54px;
+        font-size:60px;
     }
 }
 
@@ -790,14 +790,14 @@ header {
 @media (max-width: 480px) {
     .clock-controls, .play-clock-controls {
         flex-direction: row;
-        gap:0px;
+        gap:10px;
     }
 }
 
 .clock-controls button, .play-clock-controls button {
-    font-size: 16px;
+    font-size: 18px;
     font-weight:600;
-    padding: 2px 20px 5px 20px;
+    padding: 4px 20px 7px 20px;
 }
 
 .reset-btn {
