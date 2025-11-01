@@ -1,4 +1,4 @@
-const appVersion = '0.3.00';
+const appVersion = '0.3.01';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -172,10 +172,11 @@ const renderSummaryLogos = () => {
     const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
     const team2LogoPath = team2Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
     
-    
-    // 5. Inject the Image tag using innerHTML with the simple onerror attribute
-    // Note: The onerror attribute relies on window.DEFAULT_LOGO_PATH being defined globally.
-    const onerrorScript = `this.onerror=null; this.src='${DEFAULT_LOGO_FALLBACK}';`;
+    // 5. Inject the Image tag using innerHTML with the simple onerror attribute.
+    // By passing the path directly as a string, we bypass any scope issues 
+    // the browser has when resolving 'window.DEFAULT_LOGO_PATH'.
+    const fallbackPath = window.DEFAULT_LOGO_PATH;
+    const onerrorScript = `this.onerror=null; this.src='${fallbackPath}';`;
     
     if (summaryTeam1Logo) {
         summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
