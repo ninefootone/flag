@@ -742,7 +742,7 @@ header {
     align-items:center;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 360px) {
     .game-clocks-section, .play-clock-section {
         width: 100%;
     }
@@ -785,6 +785,13 @@ header {
     flex-direction: row;
     justify-content: center;
     gap:10px;
+}
+
+@media (max-width: 480px) {
+    .clock-controls, .play-clock-controls {
+        flex-direction: column;
+        gap:0px;
+    }
 }
 
 .clock-controls button, .play-clock-controls button {
