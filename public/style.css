@@ -789,7 +789,7 @@ header {
 
 @media (max-width: 480px) {
     .clock-controls, .play-clock-controls {
-        flex-direction: column;
+        flex-direction: row;
         gap:0px;
     }
 }
