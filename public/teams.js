@@ -1,4 +1,4 @@
-const teamsDataVersion = '0.3.01'; 
+const teamsDataVersion = '0.3.02'; 
 
 // Use 'window' to explicitly declare TEAM_LIST as a global variable.
 window.TEAM_LIST = []; 
@@ -7,7 +7,7 @@ window.TEAM_LIST = [];
 const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQy4lkQeSqjCi7OY_vGstrVQDX-uSpOZcaWHW_IYmOLDcLqwPs7lBlvSfLTw40WLwPf1clfSF6zJkvA/pub?output=csv&gid=1701665579';
 
 // Path for the placeholder image to be used if a logo is missing or data fails to load.
-const DEFAULT_LOGO_FALLBACK = '/assets/logos/whistle-team-fallback.webp';
+const DEFAULT_LOGO_FALLBACK = 'https://www.whistle-app.co.uk/assets/logos/whistle-team-fallback.webp';
 window.DEFAULT_LOGO_PATH = DEFAULT_LOGO_FALLBACK;
 
 /**
