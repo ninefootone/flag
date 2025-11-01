@@ -1,4 +1,4 @@
-const appVersion = '0.2.99';
+const appVersion = '0.3.00';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -175,7 +175,7 @@ const renderSummaryLogos = () => {
     
     // 5. Inject the Image tag using innerHTML with the simple onerror attribute
     // Note: The onerror attribute relies on window.DEFAULT_LOGO_PATH being defined globally.
-    const onerrorScript = `this.onerror=null; this.src='${window.DEFAULT_LOGO_PATH}';`;
+    const onerrorScript = `this.onerror=null; this.src='${DEFAULT_LOGO_FALLBACK}';`;
     
     if (summaryTeam1Logo) {
         summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
