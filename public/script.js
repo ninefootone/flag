@@ -1,4 +1,4 @@
-const appVersion = '0.2.95';
+const appVersion = '0.2.96';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -45,10 +45,11 @@ window.gameState = {
     timeoutLogHTML: '',
     defenceLogHTML: '',
 };
-    /**
-     * Loads team data and populates the global TEAM_DATA_MAP.
-    */
-    const initializeTeamData = () => {
+    
+/**
+ * Loads team data and populates the global TEAM_DATA_MAP.
+*/
+const initializeTeamData = () => {
         // 1. Check for the loader function first
         if (typeof window.loadTeamData === 'function') {
             window.loadTeamData()
@@ -143,7 +144,19 @@ window.gameState = {
         } else {
             optionsList.classList.add('hidden');
         }
-    };
+};
+
+/**
+ * Global image error handler: swaps the broken image source to the default fallback path.
+ * @param {HTMLImageElement} imgElement The image element that failed to load.
+ */
+window.handleImageError = (imgElement) => {
+    // Prevents an infinite loop if the fallback image itself is missing.
+    imgElement.onerror = null; 
+    
+    // Sets the source to the global default path.
+    imgElement.src = window.DEFAULT_LOGO_PATH; 
+};
 
 /**
  * Renders the logos on the summary screen.
@@ -170,20 +183,20 @@ const renderSummaryLogos = () => {
     const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
     const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
     
-    // 5. Inject the Image tag
+    // Inject the Image tag
     if (summaryTeam1Logo) {
         summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
                                          alt="${team1NameClean} Logo" 
                                          class="summary-logo"
-                                         onerror="this.onerror=null; this.src='${window.DEFAULT_LOGO_PATH}';">`;
+                                         onerror="window.handleImageError(this);">`; // <--- KEY CHANGE
     }
     if (summaryTeam2Logo) {
         summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" 
                                          alt="${team2NameClean} Logo" 
                                          class="summary-logo"
-                                         onerror="this.onerror=null; this.src='${window.DEFAULT_LOGO_PATH}';">`;
+                                         onerror="window.handleImageError(this);">`; // <--- KEY CHANGE
     }
-
+    
     // Optional debug line:
     // console.log(`Summary Logos Rendered: ${team1NameClean} vs ${team2NameClean} (Source: ${window.TEAM_DATA_MAP.size > 0 ? 'Map' : 'Fallback'})`);
 };
