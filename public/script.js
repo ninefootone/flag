@@ -1,4 +1,4 @@
-const appVersion = '0.3.05';
+const appVersion = '0.3.06';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -190,6 +190,18 @@ const renderSummaryLogos = () => {
                                          alt="${team2NameClean} Logo" 
                                          class="summary-logo"
                                          onerror="this.onerror=null; this.src='${fallbackPathValue}';">`;
+    }
+};
+
+/**
+ * Triggers short haptic (vibration) feedback if the browser supports the Vibration API.
+ * @param {number} duration The duration of the vibration in milliseconds (default is 50ms).
+ */
+const triggerHapticFeedback = (duration = 50) => {
+    // Check if the browser environment supports the Vibration API
+    if ('vibrate' in navigator) {
+        // Vibrate for the specified duration (50ms is a quick tap)
+        navigator.vibrate(duration);
     }
 };
 
@@ -1412,6 +1424,7 @@ if (timeoutsPerHalfInput) {
     });
 
     gameClockToggleBtn.addEventListener('click', () => {
+        triggerHapticFeedback(60); // A slightly longer tap for confirmation    
         if (gameState.gameClockRunning) {
             sendAction('STOP_GAME_CLOCK');
             gameClockDisplay.parentElement.classList.remove('warning');
