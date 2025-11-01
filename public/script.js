@@ -1,4 +1,4 @@
-const appVersion = '0.2.96';
+const appVersion = '0.2.97';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -147,20 +147,8 @@ const initializeTeamData = () => {
 };
 
 /**
- * Global image error handler: swaps the broken image source to the default fallback path.
- * @param {HTMLImageElement} imgElement The image element that failed to load.
- */
-window.handleImageError = (imgElement) => {
-    // Prevents an infinite loop if the fallback image itself is missing.
-    imgElement.onerror = null; 
-    
-    // Sets the source to the global default path.
-    imgElement.src = window.DEFAULT_LOGO_PATH; 
-};
-
-/**
- * Renders the logos on the summary screen.
- * Designed to be called both immediately (via setTimeout) and asynchronously (via data loader).
+ * Renders the logos on the summary screen using pure DOM manipulation
+ * to guarantee the onerror handler works for external (broken) image links.
  */
 const renderSummaryLogos = () => {
     // 1. Guard against running if the data isn't even partially loaded
@@ -168,7 +156,7 @@ const renderSummaryLogos = () => {
         return;
     }
 
-    // 2. Fetch elements and data locally (no reliance on external const definitions)
+    // 2. Fetch elements and data locally
     const summaryTeam1Logo = document.getElementById('summary-team1-logo');
     const summaryTeam2Logo = document.getElementById('summary-team2-logo');
     
@@ -176,29 +164,43 @@ const renderSummaryLogos = () => {
     const team1NameClean = window.gameState.team1Name.trim();
     const team2NameClean = window.gameState.team2Name.trim();
 
-    // 4. Look up paths using the global data map
+    // 4. Look up paths (using the robust logical OR)
     const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
-    const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+    const team1LogoPath = team1Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
     
     const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
-    const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
+    const team2LogoPath = team2Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
     
-    // Inject the Image tag
-    if (summaryTeam1Logo) {
-        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
-                                         alt="${team1NameClean} Logo" 
-                                         class="summary-logo"
-                                         onerror="window.handleImageError(this);">`; // <--- KEY CHANGE
-    }
-    if (summaryTeam2Logo) {
-        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" 
-                                         alt="${team2NameClean} Logo" 
-                                         class="summary-logo"
-                                         onerror="window.handleImageError(this);">`; // <--- KEY CHANGE
-    }
-    
-    // Optional debug line:
-    // console.log(`Summary Logos Rendered: ${team1NameClean} vs ${team2NameClean} (Source: ${window.TEAM_DATA_MAP.size > 0 ? 'Map' : 'Fallback'})`);
+    // --- Helper function to create and inject the element safely ---
+    const injectLogoElement = (targetElement, logoPath, teamName) => {
+        if (!targetElement) return;
+
+        // Clear previous content
+        targetElement.innerHTML = ''; 
+
+        // 1. Create Image Element
+        const img = document.createElement('img');
+        img.alt = `${teamName} Logo`;
+        img.className = 'summary-logo';
+
+        // 2. ATTACH THE ERROR HANDLER BEFORE SETTING THE SOURCE
+        img.onerror = function() {
+            // Use this check to prevent an infinite loop if the fallback is also broken
+            if (this.src !== window.DEFAULT_LOGO_PATH) {
+                this.src = window.DEFAULT_LOGO_PATH;
+            }
+        };
+
+        // 3. Set the source (this triggers the load and the onerror handler if the URL is broken)
+        img.src = logoPath;
+
+        // 4. Append to the DOM
+        targetElement.appendChild(img);
+    };
+
+    // 5. Run the injection for both teams
+    injectLogoElement(summaryTeam1Logo, team1LogoPath, team1NameClean);
+    injectLogoElement(summaryTeam2Logo, team2LogoPath, team2NameClean);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
