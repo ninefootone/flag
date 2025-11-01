@@ -1,4 +1,4 @@
-const appVersion = '0.3.04';
+const appVersion = '0.3.05';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -147,8 +147,9 @@ const initializeTeamData = () => {
 };
 
 /**
- * Renders the logos on the summary screen using simple innerHTML
- * with the robust inline onerror attribute, mirroring the logic that works in the dropdown.
+ * Renders the logos on the summary screen.
+ * Uses innerHTML with direct fallback path injection for reliability, 
+ * matching the reliable logic context elsewhere in the app.
  */
 const renderSummaryLogos = () => {
     // 1. Guard against running if the data isn't even partially loaded
@@ -164,31 +165,31 @@ const renderSummaryLogos = () => {
     const team1NameClean = window.gameState.team1Name.trim();
     const team2NameClean = window.gameState.team2Name.trim();
 
-    // 4. Look up paths (using the robust logical OR to handle missing/empty data)
+    // 4. Look up paths (using robust OR to handle missing/empty data)
+    // This part is already correct and handles missing paths from the data sheet.
     const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
-    // Use optional chaining (?.) and OR (||) to force fallback if path is empty/missing
     const team1LogoPath = team1Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
     
     const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
     const team2LogoPath = team2Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
     
-    // 5. Inject the Image tag using innerHTML with the simple onerror attribute.
-    // By passing the path directly as a string, we bypass any scope issues 
-    // the browser has when resolving 'window.DEFAULT_LOGO_PATH'.
-    const fallbackPath = window.DEFAULT_LOGO_PATH;
-    const onerrorScript = `this.onerror=null; this.src='${fallbackPath}';`;
+    
+    // 5. CRITICAL INJECTION FIX: Pass the literal string value of the fallback path.
+    // By fetching the value first, we guarantee the exact path string is embedded 
+    // in the onerror attribute, which bypasses scope issues.
+    const fallbackPathValue = window.DEFAULT_LOGO_PATH; 
     
     if (summaryTeam1Logo) {
         summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
                                          alt="${team1NameClean} Logo" 
                                          class="summary-logo"
-                                         onerror="${onerrorScript}">`;
+                                         onerror="this.onerror=null; this.src='${fallbackPathValue}';">`;
     }
     if (summaryTeam2Logo) {
         summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" 
                                          alt="${team2NameClean} Logo" 
                                          class="summary-logo"
-                                         onerror="${onerrorScript}">`;
+                                         onerror="this.onerror=null; this.src='${fallbackPathValue}';">`;
     }
 };
 
