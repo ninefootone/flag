@@ -160,7 +160,7 @@ p, ul, ol, input, .penalties-list {
 }
 
 .title {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text-color);
     margin:0;
@@ -708,12 +708,14 @@ input[type="number"] {
 header {
     text-align: center;
     margin-bottom: 0px;
+    display: none;
 }
 
 .game-info {
     font-size: 1.1rem;
     color: var(--primary-color);;
     margin-bottom: 10px;
+    margin-top: 0px;
     font-weight:600;
 }
 
@@ -755,7 +757,7 @@ header {
 }
 
 .clock-display .title {
-    margin-bottom:10px;
+    margin-bottom:0px;
 }
 
 .clock-time {
@@ -763,6 +765,12 @@ header {
     font-weight: 900;
     line-height:1em;
     color: var(--primary-color);
+}
+
+@media (max-width: 480px) {
+    .clock-time {
+        font-size:48px;
+    }
 }
 
 .clock-label {
@@ -780,9 +788,9 @@ header {
 }
 
 .clock-controls button, .play-clock-controls button {
-    font-size: 18px;
+    font-size: 16px;
     font-weight:600;
-    padding: 4px 20px 8px 20px;
+    padding: 2px 20px 5px 20px;
 }
 
 .reset-btn {
@@ -909,7 +917,7 @@ header {
 }
 
 .score {
-    font-size: 60px;
+    font-size: 48px;
     font-weight: 900;
     color: var(--primary-color);;
     line-height: 1;
@@ -952,7 +960,7 @@ header {
     justify-content: center;
     height: auto;
     width: 48%;
-    padding: 10px 5px;
+    padding: 6px 5px 8px 6px;
     background-color: var(--secondary-button-bgnd);
     color: var(--text-color);
     border: none;
@@ -1073,6 +1081,10 @@ li {
 
 h4.log-title {
     margin-bottom:0px;
+}
+
+button.defence-stats-btn {
+    padding:6px 15px 8px 15px;
 }
 
 /* Styles for the undo and end game buttons */
