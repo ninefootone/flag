@@ -513,7 +513,7 @@ button:hover {
 }
 
 #game-interface {
-    padding: 10px 12px 100px 12px;
+    padding: 0px 12px 100px 12px;
     max-width:720px;
     width:100%;
 }
@@ -742,7 +742,7 @@ header {
     align-items:center;
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
     .game-clocks-section, .play-clock-section {
         width: 100%;
     }
@@ -753,7 +753,7 @@ header {
     width: 100%;
     padding: 15px 10px 20px 10px;
     border-radius: 8px;
-    margin: 10px;
+    margin: 0 10px 10px 10px;
 }
 
 .clock-display .title {
@@ -769,7 +769,7 @@ header {
 
 @media (max-width: 480px) {
     .clock-time {
-        font-size:48px;
+        font-size:54px;
     }
 }
 
