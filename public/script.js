@@ -1,4 +1,4 @@
-const appVersion = '0.3.21';
+const appVersion = '0.3.22';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -389,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
 
     // Element references
-    window.appContainer = document.querySelector('.app-container');
     const settingsForm = document.getElementById('settings-form');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
     const joinGameBtn = document.getElementById('join-game-btn');
@@ -1903,29 +1902,33 @@ if (timeoutsPerHalfInput) {
         downloadSummaryBtn.addEventListener('click', downloadGameSummary);
     }
 
-});
+    // --- FINAL ROBUST SCROLL HANDLER (Inside DOMContentLoaded) ---
 
-// --- FINAL FIX: TARGETING THE SCROLLING CONTAINER ---
-// Reference the globally defined element (window.appContainer)
-if (window.appContainer) {
-    // Attach the reliable onscroll handler directly to the container that is scrolling.
-    window.appContainer.onscroll = function() {
-        const gameClocksSection = document.querySelector('.game-clocks-section');
+// 1. Get the scrolling element and the target clock element
+// Use temporary const variables to ensure local scope and prevent conflicts
+const scrollingContainer = document.querySelector('.app-container');
+const stickyTarget = document.querySelector('.game-clocks-section');
+
+if (scrollingContainer) {
+    // 2. Attach the listener directly to the container that scrolls
+    scrollingContainer.addEventListener('scroll', function() {
         const scrollThreshold = 100;
         
-        // Measure the scroll position of the appContainer itself
-        const currentScrollPosition = window.appContainer.scrollTop; 
+        // 3. Measure the scroll position of the container itself
+        const currentScrollPosition = scrollingContainer.scrollTop; 
 
-        if (gameClocksSection) { 
+        if (stickyTarget) { 
             if (currentScrollPosition > scrollThreshold) { 
-                gameClocksSection.classList.add('sticky-clock-active');
-                // You should see this message now!
-                console.log('Class added! Scroll Top:', currentScrollPosition); 
+                stickyTarget.classList.add('sticky-clock-active');
+                console.log('Class added! SCROLL SUCCESS. Scroll Top:', currentScrollPosition); 
             } else {
-                gameClocksSection.classList.remove('sticky-clock-active');
-                console.log('Class removed! Scroll Top:', currentScrollPosition);
+                stickyTarget.classList.remove('sticky-clock-active');
+                console.log('Class removed. Scroll Top:', currentScrollPosition);
             }
         }
-    };
+    });
 }
 // --- END SCROLL HANDLER ---
+
+});
+
