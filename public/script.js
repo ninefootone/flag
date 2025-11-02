@@ -1,4 +1,4 @@
-const appVersion = '0.3.13';
+const appVersion = '0.3.14';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -421,6 +421,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoAdvanceCheckbox = document.getElementById('auto-advance-play-clock');
     const scoreButtons = document.querySelectorAll('.score-buttons button');
     
+    // *** DIAGNOSTIC STEP ***
+    console.log('Clock Section Found:', gameClocksSection); // Check your console!
+    // ***********************
+    
+    window.addEventListener('scroll', () => {
+        const scrollThreshold = 100; 
+        
+        if (gameClocksSection) {
+            if (window.scrollY > scrollThreshold) { 
+                gameClocksSection.classList.add('sticky-clock-active');
+                // *** DIAGNOSTIC STEP ***
+                console.log('Class added!');
+                // ***********************
+            } else {
+                gameClocksSection.classList.remove('sticky-clock-active');
+                // *** DIAGNOSTIC STEP ***
+                console.log('Class removed!');
+                // ***********************
+            }
+        }
+    });
+
     scoreButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             // DEFENSIVE CHECK: If the button has the defence class, exit immediately.
@@ -1902,18 +1924,5 @@ if (timeoutsPerHalfInput) {
     if (downloadSummaryBtn) {
         downloadSummaryBtn.addEventListener('click', downloadGameSummary);
     }
-
-    // --- ADD SCROLL LISTENER FOR STICKY CLOCK ---
-    window.addEventListener('scroll', () => {
-        // We activate the sticky style after scrolling 100 pixels down
-        const scrollThreshold = 100; 
-
-        if (window.scrollY > scrollThreshold && gameClocksSection) { 
-            gameClocksSection.classList.add('sticky-clock-active');
-        } else if (gameClocksSection) {
-            gameClocksSection.classList.remove('sticky-clock-active');
-        }
-    });
-    // --- END SCROLL LISTENER ---
 
 });
