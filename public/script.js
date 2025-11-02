@@ -1,4 +1,4 @@
-const appVersion = '0.3.20';
+const appVersion = '0.3.21';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
 
     // Element references
-    const appContainer = document.querySelector('.app-container');
+    window.appContainer = document.querySelector('.app-container');
     const settingsForm = document.getElementById('settings-form');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
     const joinGameBtn = document.getElementById('join-game-btn');
@@ -1905,20 +1905,21 @@ if (timeoutsPerHalfInput) {
 
 });
 
-// --- FINAL FIX: ATTACHING onscroll DIRECTLY TO THE CONTAINER ---
-
-// Check if the container element exists before assigning the handler
-if (appContainer) {
-    appContainer.onscroll = function() {
+// --- FINAL FIX: TARGETING THE SCROLLING CONTAINER ---
+// Reference the globally defined element (window.appContainer)
+if (window.appContainer) {
+    // Attach the reliable onscroll handler directly to the container that is scrolling.
+    window.appContainer.onscroll = function() {
         const gameClocksSection = document.querySelector('.game-clocks-section');
         const scrollThreshold = 100;
         
         // Measure the scroll position of the appContainer itself
-        const currentScrollPosition = appContainer.scrollTop; 
+        const currentScrollPosition = window.appContainer.scrollTop; 
 
         if (gameClocksSection) { 
             if (currentScrollPosition > scrollThreshold) { 
                 gameClocksSection.classList.add('sticky-clock-active');
+                // You should see this message now!
                 console.log('Class added! Scroll Top:', currentScrollPosition); 
             } else {
                 gameClocksSection.classList.remove('sticky-clock-active');
