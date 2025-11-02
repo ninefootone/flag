@@ -1,4 +1,4 @@
-const appVersion = '0.3.17';
+const appVersion = '0.3.18';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1904,43 +1904,29 @@ if (timeoutsPerHalfInput) {
 
 });
 
-// --- FINAL ROBUST SCROLL HANDLER (Attached to document.body) ---
-document.addEventListener('scroll', function() {
-    // 1. Re-query the DOM every time to avoid scope/timing issues
-    const gameClocksSection = document.querySelector('.game-clocks-section');
-    
-    // 2. Set the scroll threshold
-    const scrollThreshold = 100;
-    
-    // 3. Check for the scroll position (document.documentElement.scrollTop is best practice)
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-    // 4. Test logic
-    if (gameClocksSection) { 
-        if (scrollTop > scrollThreshold) { 
-            gameClocksSection.classList.add('sticky-clock-active');
-            // Re-inserting the debug code to confirm success!
-            console.log('Class added - Scroll Handler Fired!'); 
-        } else {
-            gameClocksSection.classList.remove('sticky-clock-active');
-            // Re-inserting the debug code
-            console.log('Class removed.');
-        }
-    }
-}, true); // The 'true' flag ensures this runs during the capturing phase
-
-// Fallback listener for older/non-standard browsers
+// --- FINAL FIX: MEASURING THE CORRECT SCROLL ELEMENT ---
 window.onscroll = function() {
-    // Ensure this fallback still queries the element
+    // 1. Get the element and define the threshold.
     const gameClocksSection = document.querySelector('.game-clocks-section');
     const scrollThreshold = 100;
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     
+    // 2. Measure the scroll position.
+    // document.documentElement.scrollTop works for the <html> element (if it's scrolling).
+    // document.body.scrollTop works for the <body> element.
+    // If the scroll is happening on an inner container (like your .app-container), 
+    // these values often remain 0, which is why the code keeps logging 'class removed'.
+    // However, if the event is attached to the window, this is the best measurement we have:
+    const currentScrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+    
+    // Check if the scroll has passed the threshold
     if (gameClocksSection) {
-        if (scrollTop > scrollThreshold) {
+        if (currentScrollPosition > scrollThreshold) { 
             gameClocksSection.classList.add('sticky-clock-active');
+            // Check the console again—you should now see this fire!
+            console.log('Class added! Scroll Top:', currentScrollPosition); 
         } else {
             gameClocksSection.classList.remove('sticky-clock-active');
+            console.log('Class removed! Scroll Top:', currentScrollPosition);
         }
     }
 };
