@@ -1,4 +1,4 @@
-const appVersion = '0.3.18';
+const appVersion = '0.3.19';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1904,30 +1904,28 @@ if (timeoutsPerHalfInput) {
 
 });
 
-// --- FINAL FIX: MEASURING THE CORRECT SCROLL ELEMENT ---
-window.onscroll = function() {
-    // 1. Get the element and define the threshold.
-    const gameClocksSection = document.querySelector('.game-clocks-section');
-    const scrollThreshold = 100;
-    
-    // 2. Measure the scroll position.
-    // document.documentElement.scrollTop works for the <html> element (if it's scrolling).
-    // document.body.scrollTop works for the <body> element.
-    // If the scroll is happening on an inner container (like your .app-container), 
-    // these values often remain 0, which is why the code keeps logging 'class removed'.
-    // However, if the event is attached to the window, this is the best measurement we have:
-    const currentScrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
-    
-    // Check if the scroll has passed the threshold
-    if (gameClocksSection) {
-        if (currentScrollPosition > scrollThreshold) { 
-            gameClocksSection.classList.add('sticky-clock-active');
-            // Check the console again—you should now see this fire!
-            console.log('Class added! Scroll Top:', currentScrollPosition); 
-        } else {
-            gameClocksSection.classList.remove('sticky-clock-active');
-            console.log('Class removed! Scroll Top:', currentScrollPosition);
+// --- FINAL FIX: TARGETING THE SCROLLING CONTAINER ---
+const appContainer = document.querySelector('.app-container');
+
+if (appContainer) {
+    // Attach the event listener directly to the container that is scrolling.
+    appContainer.addEventListener('scroll', () => {
+        // We query the elements here for maximum robustness
+        const gameClocksSection = document.querySelector('.game-clocks-section');
+        const scrollThreshold = 100;
+        
+        // Measure the scroll position of the appContainer itself
+        const currentScrollPosition = appContainer.scrollTop; 
+
+        if (gameClocksSection) { 
+            if (currentScrollPosition > scrollThreshold) { 
+                gameClocksSection.classList.add('sticky-clock-active');
+                console.log('Class added! App Container Scroll Top:', currentScrollPosition); 
+            } else {
+                gameClocksSection.classList.remove('sticky-clock-active');
+                console.log('Class removed! App Container Scroll Top:', currentScrollPosition);
+            }
         }
-    }
-};
+    });
+}
 // --- END SCROLL HANDLER ---
