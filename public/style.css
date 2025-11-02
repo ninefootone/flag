@@ -825,7 +825,7 @@ header {
 
 /* 2. Sticky state positioning and appearance */
 .game-clocks-section.sticky-clock-active {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;

@@ -1,4 +1,4 @@
-const appVersion = '0.3.22';
+const appVersion = '0.3.23';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1902,29 +1902,29 @@ if (timeoutsPerHalfInput) {
         downloadSummaryBtn.addEventListener('click', downloadGameSummary);
     }
 
-    // --- FINAL ROBUST SCROLL HANDLER (Inside DOMContentLoaded) ---
+// --- FINAL CORRECT SCROLL HANDLER (Inside DOMContentLoaded) ---
 
-// 1. Get the scrolling element and the target clock element
-// Use temporary const variables to ensure local scope and prevent conflicts
-const scrollingContainer = document.querySelector('.app-container');
+// 1. Get the correct scrolling element and the target clock element
+// The scroll handler must be attached to the element with 'overflow-y: auto', which is #game-interface.
+const scrollingElement = document.querySelector('#game-interface');
 const stickyTarget = document.querySelector('.game-clocks-section');
 
-if (scrollingContainer) {
-    // 2. Attach the listener directly to the container that scrolls
-    scrollingContainer.addEventListener('scroll', function() {
+if (scrollingElement && stickyTarget) {
+    // 2. Attach the listener directly to the #game-interface element
+    scrollingElement.addEventListener('scroll', function() {
         const scrollThreshold = 100;
         
-        // 3. Measure the scroll position of the container itself
-        const currentScrollPosition = scrollingContainer.scrollTop; 
+        // 3. Measure the scroll position using the element's own scrollTop property
+        const currentScrollPosition = scrollingElement.scrollTop; 
 
-        if (stickyTarget) { 
-            if (currentScrollPosition > scrollThreshold) { 
-                stickyTarget.classList.add('sticky-clock-active');
-                console.log('Class added! SCROLL SUCCESS. Scroll Top:', currentScrollPosition); 
-            } else {
-                stickyTarget.classList.remove('sticky-clock-active');
-                console.log('Class removed. Scroll Top:', currentScrollPosition);
-            }
+        if (currentScrollPosition > scrollThreshold) { 
+            stickyTarget.classList.add('sticky-clock-active');
+            // This MUST appear when scrolling down now!
+            console.log('CLASS ADDED! SUCCESS. Scroll Top:', currentScrollPosition); 
+        } else {
+            stickyTarget.classList.remove('sticky-clock-active');
+            // This should appear when scrolling near the top
+            console.log('Class removed. Scroll Top:', currentScrollPosition);
         }
     });
 }
