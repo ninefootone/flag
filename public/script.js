@@ -1,4 +1,4 @@
-const appVersion = '0.3.16';
+const appVersion = '0.3.17';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1904,20 +1904,44 @@ if (timeoutsPerHalfInput) {
 
 });
 
-// --- NEW ROBUST SCROLL HANDLER (Global Scope) ---
-window.onscroll = function() {
-    // 1. Get the element inside the scroll handler for max robustness
+// --- FINAL ROBUST SCROLL HANDLER (Attached to document.body) ---
+document.addEventListener('scroll', function() {
+    // 1. Re-query the DOM every time to avoid scope/timing issues
     const gameClocksSection = document.querySelector('.game-clocks-section');
+    
+    // 2. Set the scroll threshold
     const scrollThreshold = 100;
     
-    // 2. Add or remove the class
-    if (window.scrollY > scrollThreshold && gameClocksSection) { 
-        gameClocksSection.classList.add('sticky-clock-active');
-    } else if (gameClocksSection) {
-        gameClocksSection.classList.remove('sticky-clock-active');
+    // 3. Check for the scroll position (document.documentElement.scrollTop is best practice)
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+    // 4. Test logic
+    if (gameClocksSection) { 
+        if (scrollTop > scrollThreshold) { 
+            gameClocksSection.classList.add('sticky-clock-active');
+            // Re-inserting the debug code to confirm success!
+            console.log('Class added - Scroll Handler Fired!'); 
+        } else {
+            gameClocksSection.classList.remove('sticky-clock-active');
+            // Re-inserting the debug code
+            console.log('Class removed.');
+        }
     }
+}, true); // The 'true' flag ensures this runs during the capturing phase
+
+// Fallback listener for older/non-standard browsers
+window.onscroll = function() {
+    // Ensure this fallback still queries the element
+    const gameClocksSection = document.querySelector('.game-clocks-section');
+    const scrollThreshold = 100;
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     
-    // Optional: Use this to confirm the function is firing.
-    // console.log('Scroll event fired.'); 
+    if (gameClocksSection) {
+        if (scrollTop > scrollThreshold) {
+            gameClocksSection.classList.add('sticky-clock-active');
+        } else {
+            gameClocksSection.classList.remove('sticky-clock-active');
+        }
+    }
 };
 // --- END SCROLL HANDLER ---
