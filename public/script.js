@@ -1,4 +1,4 @@
-const appVersion = '0.3.15';
+const appVersion = '0.3.16';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1904,22 +1904,20 @@ if (timeoutsPerHalfInput) {
 
 });
 
-// --- ADD SCROLL LISTENER FOR STICKY CLOCK ---
-// This is outside DOMContentLoaded, which allows the window scroll event to register properly.
-window.addEventListener('scroll', () => {
-    // We query the DOM here inside the listener to ensure we always have the element,
-    // regardless of where it was originally defined.
+// --- NEW ROBUST SCROLL HANDLER (Global Scope) ---
+window.onscroll = function() {
+    // 1. Get the element inside the scroll handler for max robustness
     const gameClocksSection = document.querySelector('.game-clocks-section');
-
-    if (gameClocksSection) { 
-        const scrollThreshold = 100; 
-        
-        if (window.scrollY > scrollThreshold) { 
-            gameClocksSection.classList.add('sticky-clock-active');
-            // If you still have console.log here, you should now see "Class added!"
-        } else {
-            gameClocksSection.classList.remove('sticky-clock-active');
-        }
+    const scrollThreshold = 100;
+    
+    // 2. Add or remove the class
+    if (window.scrollY > scrollThreshold && gameClocksSection) { 
+        gameClocksSection.classList.add('sticky-clock-active');
+    } else if (gameClocksSection) {
+        gameClocksSection.classList.remove('sticky-clock-active');
     }
-});
-// --- END SCROLL LISTENER ---
+    
+    // Optional: Use this to confirm the function is firing.
+    // console.log('Scroll event fired.'); 
+};
+// --- END SCROLL HANDLER ---
