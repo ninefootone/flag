@@ -812,6 +812,69 @@ header {
     border:1px solid var(--secondary-button-bgnd-hover);
 }
 
+/* -------------------------------------------------------------------------------------------------- */
+/* STICKY GAME CLOCK STYLES */
+/* -------------------------------------------------------------------------------------------------- */
+
+/* 1. Base styles and transitions for a smooth effect */
+.game-clocks-section {
+    /* Apply transition to all properties that change to ensure a smooth transition */
+    transition: all 0.3s ease-in-out; 
+    /* The transform/transition is subtle and applies to all changes */
+}
+
+/* 2. Sticky state positioning and appearance */
+.game-clocks-section.sticky-clock-active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensure it's on top of other content */
+    background-color: var(--background-color); /* Match background color */
+    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.15); /* Subtle shadow for lift */
+    padding: 8px 16px; /* Reduced vertical padding */
+    
+    /* Center on wider screens (assuming a max-width parent) */
+    max-width: 740px; 
+    margin: 0 auto;
+}
+
+/* 3. Re-layout: Clock and Pause/Resume button side-by-side (Horizontally) */
+/* This targets the immediate children of the clock section to make them flex containers.
+   You may need to inspect your HTML and adjust the selectors (e.g., .game-clocks-section.sticky-clock-active .timer-controls) 
+   to ensure the correct parent of your clock and button elements gets 'display: flex'. 
+*/
+.game-clocks-section.sticky-clock-active > div { 
+    display: flex;
+    justify-content: space-between; /* Spreads out contents */
+    align-items: center;
+}
+
+/* 4. Hide the Reset Button */
+.game-clocks-section.sticky-clock-active #resetGameBtn {
+    display: none; 
+}
+
+/* 5. Shrink the Clock Display */
+.game-clocks-section.sticky-clock-active #timer-display {
+    font-size: 28px; /* Significantly smaller font */
+    line-height: 1; /* Tighter spacing */
+    padding: 0; 
+    margin-right: 16px; /* Space from the button */
+}
+
+/* 6. Shrink the Play/Pause Button */
+.game-clocks-section.sticky-clock-active #pauseResumeBtn {
+    /* Make the button smaller */
+    padding: 8px 12px;
+    height: 40px; /* Smaller height */
+    font-size: 16px;
+}
+.game-clocks-section.sticky-clock-active #pauseResumeBtn svg {
+    width: 18px;
+    height: 18px;
+}
+
 /* Main Controls Section (Grid-based layout) */
 .main-controls {
     display: flex;

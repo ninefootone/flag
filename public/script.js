@@ -1,4 +1,4 @@
-const appVersion = '0.3.12';
+const appVersion = '0.3.13';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -410,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
+    const gameClocksSection = document.querySelector('.game-clocks-section');
     const playClockDisplay = document.getElementById('play-clock-display');
     const gamePeriodDisplay = document.getElementById('game-period-display');
     const scoreLogList = document.getElementById('score-log');
@@ -1901,5 +1902,18 @@ if (timeoutsPerHalfInput) {
     if (downloadSummaryBtn) {
         downloadSummaryBtn.addEventListener('click', downloadGameSummary);
     }
+
+    // --- ADD SCROLL LISTENER FOR STICKY CLOCK ---
+    window.addEventListener('scroll', () => {
+        // We activate the sticky style after scrolling 100 pixels down
+        const scrollThreshold = 100; 
+
+        if (window.scrollY > scrollThreshold && gameClocksSection) { 
+            gameClocksSection.classList.add('sticky-clock-active');
+        } else if (gameClocksSection) {
+            gameClocksSection.classList.remove('sticky-clock-active');
+        }
+    });
+    // --- END SCROLL LISTENER ---
 
 });
