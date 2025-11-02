@@ -825,7 +825,7 @@ header {
 
 /* 2. Sticky state positioning and appearance */
 .game-clocks-section.sticky-clock-active {
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -835,7 +835,7 @@ header {
     padding: 8px 16px; /* Reduced vertical padding */
     
     /* Center on wider screens (assuming a max-width parent) */
-    max-width: 740px; 
+    width: 100vw; 
     margin: 0 auto;
 }
 
@@ -850,14 +850,19 @@ header {
     align-items: center;
 }
 
+.game-clocks-section.sticky-clock-active .clock-display {
+    border:none;
+    padding:0px;
+}
+
 /* 4. Hide the Reset Button */
-.game-clocks-section.sticky-clock-active #resetGameBtn {
+.game-clocks-section.sticky-clock-active .title, .game-clocks-section.sticky-clock-active .reset-btn {
     display: none; 
 }
 
 /* 5. Shrink the Clock Display */
-.game-clocks-section.sticky-clock-active #timer-display {
-    font-size: 28px; /* Significantly smaller font */
+.game-clocks-section.sticky-clock-active .clock-time {
+    font-size: 48px; /* Significantly smaller font */
     line-height: 1; /* Tighter spacing */
     padding: 0; 
     margin-right: 16px; /* Space from the button */
