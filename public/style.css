@@ -832,7 +832,7 @@ header {
     z-index: 1000; /* Ensure it's on top of other content */
     background-color: var(--background-color); /* Match background color */
     box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.15); /* Subtle shadow for lift */
-    padding: 8px 0px; /* Reduced vertical padding */
+    padding: 0px; /* Reduced vertical padding */
     
     /* Center on wider screens (assuming a max-width parent) */
     width: 100vw; 
@@ -852,8 +852,10 @@ header {
 
 .game-clocks-section.sticky-clock-active .clock-display {
     border:none;
-    padding:10px 0px 2px 0px;
-    width:auto;
+    padding:10px 0px 10px 0px;
+    width: 100%;
+    justify-content: center;
+    margin: 0px;
 }
 
 /* 4. Hide the Reset Button */
@@ -870,16 +872,13 @@ header {
 }
 
 /* 6. Shrink the Play/Pause Button */
-.game-clocks-section.sticky-clock-active #pauseResumeBtn {
-    /* Make the button smaller */
-    padding: 8px 12px;
-    height: 40px; /* Smaller height */
-    font-size: 16px;
+.game-clocks-section.sticky-clock-active .start-stop-btn {
+    font-size: 18px;
 }
-.game-clocks-section.sticky-clock-active #pauseResumeBtn svg {
+/* .game-clocks-section.sticky-clock-active .start-stop-btn svg {
     width: 18px;
     height: 18px;
-}
+} */
 
 /* Main Controls Section (Grid-based layout) */
 .main-controls {
