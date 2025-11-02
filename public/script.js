@@ -1,4 +1,4 @@
-const appVersion = '0.3.14';
+const appVersion = '0.3.15';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -410,7 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
     const gameClockDisplay = document.getElementById('game-clock-display');
-    const gameClocksSection = document.querySelector('.game-clocks-section');
     const playClockDisplay = document.getElementById('play-clock-display');
     const gamePeriodDisplay = document.getElementById('game-period-display');
     const scoreLogList = document.getElementById('score-log');
@@ -421,28 +420,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoAdvanceCheckbox = document.getElementById('auto-advance-play-clock');
     const scoreButtons = document.querySelectorAll('.score-buttons button');
     
-    // *** DIAGNOSTIC STEP ***
-    console.log('Clock Section Found:', gameClocksSection); // Check your console!
-    // ***********************
-    
-    window.addEventListener('scroll', () => {
-        const scrollThreshold = 100; 
-        
-        if (gameClocksSection) {
-            if (window.scrollY > scrollThreshold) { 
-                gameClocksSection.classList.add('sticky-clock-active');
-                // *** DIAGNOSTIC STEP ***
-                console.log('Class added!');
-                // ***********************
-            } else {
-                gameClocksSection.classList.remove('sticky-clock-active');
-                // *** DIAGNOSTIC STEP ***
-                console.log('Class removed!');
-                // ***********************
-            }
-        }
-    });
-
     scoreButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             // DEFENSIVE CHECK: If the button has the defence class, exit immediately.
@@ -1926,3 +1903,23 @@ if (timeoutsPerHalfInput) {
     }
 
 });
+
+// --- ADD SCROLL LISTENER FOR STICKY CLOCK ---
+// This is outside DOMContentLoaded, which allows the window scroll event to register properly.
+window.addEventListener('scroll', () => {
+    // We query the DOM here inside the listener to ensure we always have the element,
+    // regardless of where it was originally defined.
+    const gameClocksSection = document.querySelector('.game-clocks-section');
+
+    if (gameClocksSection) { 
+        const scrollThreshold = 100; 
+        
+        if (window.scrollY > scrollThreshold) { 
+            gameClocksSection.classList.add('sticky-clock-active');
+            // If you still have console.log here, you should now see "Class added!"
+        } else {
+            gameClocksSection.classList.remove('sticky-clock-active');
+        }
+    }
+});
+// --- END SCROLL LISTENER ---
