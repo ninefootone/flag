@@ -1,4 +1,4 @@
-const appVersion = '0.3.19';
+const appVersion = '0.3.20';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -389,6 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
 
     // Element references
+    const appContainer = document.querySelector('.app-container');
     const settingsForm = document.getElementById('settings-form');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
     const joinGameBtn = document.getElementById('join-game-btn');
@@ -1904,13 +1905,11 @@ if (timeoutsPerHalfInput) {
 
 });
 
-// --- FINAL FIX: TARGETING THE SCROLLING CONTAINER ---
-const appContainer = document.querySelector('.app-container');
+// --- FINAL FIX: ATTACHING onscroll DIRECTLY TO THE CONTAINER ---
 
+// Check if the container element exists before assigning the handler
 if (appContainer) {
-    // Attach the event listener directly to the container that is scrolling.
-    appContainer.addEventListener('scroll', () => {
-        // We query the elements here for maximum robustness
+    appContainer.onscroll = function() {
         const gameClocksSection = document.querySelector('.game-clocks-section');
         const scrollThreshold = 100;
         
@@ -1920,12 +1919,12 @@ if (appContainer) {
         if (gameClocksSection) { 
             if (currentScrollPosition > scrollThreshold) { 
                 gameClocksSection.classList.add('sticky-clock-active');
-                console.log('Class added! App Container Scroll Top:', currentScrollPosition); 
+                console.log('Class added! Scroll Top:', currentScrollPosition); 
             } else {
                 gameClocksSection.classList.remove('sticky-clock-active');
-                console.log('Class removed! App Container Scroll Top:', currentScrollPosition);
+                console.log('Class removed! Scroll Top:', currentScrollPosition);
             }
         }
-    });
+    };
 }
 // --- END SCROLL HANDLER ---
