@@ -877,9 +877,18 @@ header {
 /* 6. Shrink the Play/Pause Button */
 .game-clocks-section.sticky-clock-active .start-stop-btn {
     font-size: 18px;
+    border-color: #ffffff;
     background-color:#ffffff;
     color:#106386;
+    margin-top:4px;
 }
+
+.game-clocks-section.sticky-clock-active .start-stop-btn:hover {
+    border-color:#009bdb;
+    background-color:#009bdb;
+    color:#ffffff;
+}
+
 /* .game-clocks-section.sticky-clock-active .start-stop-btn svg {
     width: 18px;
     height: 18px;
