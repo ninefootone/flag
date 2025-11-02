@@ -856,6 +856,8 @@ header {
     width: 100%;
     justify-content: center;
     margin: 0px;
+    border-radius: 0px;
+    background-color: var(--primary-color);
 }
 
 /* 4. Hide the Reset Button */
@@ -869,11 +871,14 @@ header {
     line-height: 1; /* Tighter spacing */
     padding: 0; 
     margin-right: 16px; /* Space from the button */
+    color:var(--background-color);
 }
 
 /* 6. Shrink the Play/Pause Button */
 .game-clocks-section.sticky-clock-active .start-stop-btn {
     font-size: 18px;
+    background-color:#ffffff;
+    color:#106386;
 }
 /* .game-clocks-section.sticky-clock-active .start-stop-btn svg {
     width: 18px;

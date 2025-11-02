@@ -242,6 +242,16 @@ input[type="text"], input[type="number"], input[type="date"] {
     border-color: var(--secondary-button-bgnd-hover) !important;
 }
 
+/* -------------------------------------------------------------------------------------------------- */
+/* STICKY GAME CLOCK STYLES */
+/* -------------------------------------------------------------------------------------------------- */
+
+
+.game-clocks-section.sticky-clock-active .clock-display {
+    background-color: var(--section-border) !important;
+}
+
+
 /* Main Controls Section (Grid-based layout) */
 .down-buttons-section-wrapper {
     border-color: var(--subtle-border-color) !important;
