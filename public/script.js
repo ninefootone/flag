@@ -1,4 +1,4 @@
-const appVersion = '0.3.30';
+const appVersion = '0.3.33';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1007,7 +1007,8 @@ if (timeoutsPerHalfInput) {
         const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
         
         // Use the new fullTimestamp
-        const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
+        // const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
+        const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} ${playerString}.</li>`;
         
         return newLogEntry + gameState.scoreLogHTML;
     };
@@ -1902,29 +1903,26 @@ if (timeoutsPerHalfInput) {
         downloadSummaryBtn.addEventListener('click', downloadGameSummary);
     }
 
-// --- FINAL CORRECT SCROLL HANDLER (Inside DOMContentLoaded) ---
 
-// 1. Get the correct scrolling element and the target clock element
-// The scroll handler must be attached to the element with 'overflow-y: auto', which is #game-interface.
-const scrollingElement = document.querySelector('#game-interface');
+// --- FINAL FIX: LISTENING TO THE WINDOW/DOCUMENT SCROLL ---
+// 1. Get the target clock element only
 const stickyTarget = document.querySelector('.game-clocks-section');
 
-if (scrollingElement && stickyTarget) {
-    // 2. Attach the listener directly to the #game-interface element
-    scrollingElement.addEventListener('scroll', function() {
+// 2. Attach the listener to the global window object
+if (stickyTarget) {
+    window.addEventListener('scroll', function() {
         const scrollThreshold = 100;
         
-        // 3. Measure the scroll position using the element's own scrollTop property
-        const currentScrollPosition = scrollingElement.scrollTop; 
+        // 3. Measure the scroll position from the window (scrollY is most reliable)
+        const currentScrollPosition = window.scrollY; 
 
         if (currentScrollPosition > scrollThreshold) { 
             stickyTarget.classList.add('sticky-clock-active');
-            // This MUST appear when scrolling down now!
-            console.log('CLASS ADDED! SUCCESS. Scroll Top:', currentScrollPosition); 
+            // Console log removed for final version, but left for visibility:
+            // console.log('CLASS ADDED! SUCCESS. Scroll Top:', currentScrollPosition); 
         } else {
             stickyTarget.classList.remove('sticky-clock-active');
-            // This should appear when scrolling near the top
-            console.log('Class removed. Scroll Top:', currentScrollPosition);
+            // console.log('Class removed. Scroll Top:', currentScrollPosition);
         }
     });
 }
