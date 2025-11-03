@@ -22,60 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------
 
 
-    // --- Existing Penalty Lookup Logic ---
+    // --- Existing Penalty Lookup Logic (Modified) ---
     const penaltiesListContainer = document.getElementById('penalties-list');
     const noResultsMessage = document.getElementById('no-results');
     let penaltiesData = []; // Store the fetched data
 
-
-    // 🚨 NEW: Google Sheet Configuration and CSV Parser 🚨
-    // PASTE YOUR GOOGLE SHEET CSV EXPORT URL HERE (File -> Share -> Publish to web -> Link -> CSV)
-    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLx1lsciNI7CiAUoLH-8g7DxgsZZhrLuq-SYUcTW-vIXTegPRT6UHF4FAoRKOGqug0nSa3FjU7zfzG/pub?gid=962305796&output=csv';
-
-    /**
-     * Helper function to parse CSV text into an array of objects.
-     */
-    const parseCSV = (csvText) => {
-        const lines = csvText.split('\n');
-        if (lines.length === 0) return [];
-
-        const headers = lines[0].replace(/"/g, '').replace(/\r/g, '').split(',');
-        const data = [];
-
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-
-            const values = line.split(','); 
-            const rowData = {};
-
-            headers.forEach((header, index) => {
-                const cleanHeader = header.trim();
-                let value = (values[index] || '').replace(/"/g, '').replace(/\r/g, '').trim();
-                
-                // Convert numeric strings to numbers for fields like 'yards'
-                if (cleanHeader === 'yards' && !isNaN(value) && value !== '') {
-                    value = Number(value);
-                }
-                
-                rowData[cleanHeader] = value;
-            });
-
-            data.push(rowData);
-        }
-        return data;
-    };
-    // ----------------------------------------------------
-
-
     /**
      * Helper to get the descriptive effect string based on the booleans.
+     * Updated to return '-' when no specific effect applies.
      */
     const getPenaltyEffect = (penalty) => {
-        if (penalty.automaticFirstDown && String(penalty.automaticFirstDown).toLowerCase() === 'true') return "Automatic 1st Down";
-        if (penalty.lossOfDown && String(penalty.lossOfDown).toLowerCase() === 'true') return "Loss of Down";
-        if (penalty.lossOfTimeout && String(penalty.lossOfTimeout).toLowerCase() === 'true') return "Loss of Timeout";
-        return "-";
+        if (penalty.automaticFirstDown) return "Automatic 1st Down";
+        if (penalty.lossOfDown) return "Loss of Down";
+        if (penalty.lossOfTimeout) return "Loss of Timeout";
+        return "-"; // Changed from "None"
     }
 
     /**
@@ -111,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="col-name penalty-name">${penalty.name}</div>
                 <div class="col-description penalty-description">${penalty.description || '-'}</div>
                 <div class="col-yards penalty-yards">${penalty.yards}</div>
-                <div class="col-enforced penalty-enforced">${penalty.enforcedFrom || '-'}</div>
+                <div class="col-enforced penalty-enforced">${penalty.enforcedFrom}</div>
                 <div class="col-effect penalty-effect">
                     ${effectText}
                 </div>
@@ -127,48 +87,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const query = searchInput.value.toLowerCase().trim();
 
         const filteredList = penaltiesData.filter(penalty => {
-            // Ensure fields exist before trying to call .toLowerCase()
-            const name = penalty.name ? penalty.name.toLowerCase() : '';
-            const description = penalty.description ? penalty.description.toLowerCase() : '';
-            const enforcedFrom = penalty.enforcedFrom ? penalty.enforcedFrom.toLowerCase() : '';
-            const keywords = penalty.keywords ? penalty.keywords.toLowerCase() : '';
-
             // Search across all relevant text fields and keywords
             return (
-                name.includes(query) ||
-                description.includes(query) ||
+                penalty.name.toLowerCase().includes(query) ||
+                (penalty.description && penalty.description.toLowerCase().includes(query)) || // ADDED description search
                 String(penalty.yards).toLowerCase().includes(query) ||
-                enforcedFrom.includes(query) ||
+                penalty.enforcedFrom.toLowerCase().includes(query) ||
                 getPenaltyEffect(penalty).toLowerCase().includes(query) ||
-                keywords.includes(query)
+                penalty.keywords.toLowerCase().includes(query)
             );
         });
 
         renderPenaltiesList(filteredList);
     };
 
-
     /**
-     * 🚨 REPLACED: Loads penalty data from the Google Sheet (CSV).
+     * Loads penalty data from the JSON file.
      */
     const loadPenalties = async () => {
         try {
-            console.log("Loading Penalties: Fetching data from Google Sheet...");
-            const response = await fetch(GOOGLE_SHEET_URL);
-            
+            const response = await fetch('/penalties.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
-            const csvText = await response.text();
-            penaltiesData = parseCSV(csvText); // Use the new CSV parser
-            
+            penaltiesData = await response.json();
             renderPenaltiesList(penaltiesData); // Render on load
-            console.log(`Loading Penalties: Successfully loaded ${penaltiesData.length} entries.`);
-            
         } catch (error) {
             console.error("Could not load penalty data:", error);
-            penaltiesListContainer.innerHTML = '<p class="error-message">Error loading penalty data. Check your Google Sheet URL and publish settings.</p>';
+            penaltiesListContainer.innerHTML = '<p class="error-message">Error loading penalty data. Check `penalties.json`.</p>';
         }
     };
 

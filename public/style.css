@@ -858,6 +858,7 @@ header {
     margin: 0px;
     border-radius: 0px;
     background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
 }
 
 /* 4. Hide the Reset Button */
