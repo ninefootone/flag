@@ -854,7 +854,7 @@ header {
 
 .game-clocks-section.sticky-clock-active .clock-display {
     border:none;
-    padding:10px 0px 10px 0px;
+    padding:15px 0px 15px 0px;
     width: 100%;
     justify-content: center;
     margin: 0px;
