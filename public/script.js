@@ -1,4 +1,4 @@
-const appVersion = '0.3.49';
+const appVersion = '0.3.50';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -400,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startGameBtn = document.getElementById('start-game-btn');
     const dateField = document.getElementById('date-field');
     const locationField = document.getElementById('location-field');
+    const settingsGrid = document.querySelectorAll('.settings-grid');
     const halfDurationInput = document.getElementById('half-duration');
     const playClockDurationInput = document.getElementById('play-clock-duration');
     const timeoutsPerHalfInput = document.getElementById('timeouts-per-half');
@@ -573,6 +574,7 @@ if (timeoutsPerHalfInput) {
 
     // Collect all control elements into a single array for easy management
     const allControls = [
+        ...settingsGrid,
         halfDurationInput,
         playClockDurationInput,
         timeoutsPerHalfInput,
@@ -610,7 +612,7 @@ if (timeoutsPerHalfInput) {
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
-        'administrator': [halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...timeoutButtonsSection, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
+        'administrator': [...settingsGrid, halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...timeoutButtonsSection, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
         'head-referee': [timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...timeoutButtonsSection, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
         'scorer': [...clockContainer, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...downButtonsSection, ...timeoutButtonsSection, fixedFooter, undoBtn, infoBtn, infoModalScorer],
         'clock': [...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...timeoutButtonsSection, fixedFooter, infoBtn, infoModalClock],
