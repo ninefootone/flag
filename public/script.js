@@ -1,4 +1,4 @@
-const appVersion = '0.3.37';
+const appVersion = '0.3.38';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -392,14 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Element references
     const settingsForm = document.getElementById('settings-form');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
-    // New: Event listener for the Stats Tracker View button
     const statsViewBtn = document.getElementById('statsViewBtn');
-        if (statsViewBtn) {
-            statsViewBtn.addEventListener('click', () => {
-                // Redirects to the home page URL with the role set to 'stats'
-                window.location.href = window.location.origin + window.location.pathname + '?role=stats';
-            });
-        }
     const joinGameBtn = document.getElementById('join-game-btn');
     const gameIdInput = document.getElementById('game-id-input');
     const joinErrorMessage = document.getElementById('join-error-message');
@@ -1265,6 +1258,24 @@ if (timeoutsPerHalfInput) {
         document.getElementById('game-id-text').textContent = newGameId;
         gameIdDisplay.classList.remove('hidden');
 
+        connectWebSocket(newGameId);
+    });
+
+    // Event listener for the Stats Tracker View button
+    statsViewBtn.addEventListener('click', () => {
+        const newGameId = Math.random().toString(36).substring(2, 8);
+    
+        // Route the user to the new Game ID with the explicit stats role
+        history.replaceState(null, '', `/game/${newGameId}?role=stats`);
+
+        // Transition UI: Hide the lobby and show the settings form
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.remove('hidden');
+
+        document.getElementById('game-id-text').textContent = newGameId;
+        gameIdDisplay.classList.remove('hidden');
+
+        // Connect WebSocket
         connectWebSocket(newGameId);
     });
 
