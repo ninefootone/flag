@@ -1,4 +1,4 @@
-const appVersion = '0.3.47';
+const appVersion = '0.3.48';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const team2ScoreDisplay = document.getElementById('team2-score-display');
     const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
     const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
-    const clockContainer = document.querySelector('.clock-container');
+    const clockContainer = document.querySelectorAll('.clock-container');
     const gameClockDisplay = document.getElementById('game-clock-display');
     const playClockDisplay = document.getElementById('play-clock-display');
     const gamePeriodDisplay = document.getElementById('game-period-display');
