@@ -1,4 +1,4 @@
-const appVersion = '0.3.34';
+const appVersion = '0.3.35';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1904,28 +1904,50 @@ if (timeoutsPerHalfInput) {
     }
 
 
-// --- FINAL FIX: LISTENING TO THE WINDOW/DOCUMENT SCROLL ---
-// 1. Get the target clock element only
+// --- REVERTED SCROLL HANDLER: TARGETING THE SCROLLING CONTAINER ---
+// 1. Get the scrolling element and the target clock element
+const scrollingElement = document.querySelector('#game-interface');
 const stickyTarget = document.querySelector('.game-clocks-section');
 
-// 2. Attach the listener to the global window object
-if (stickyTarget) {
-    window.addEventListener('scroll', function() {
+// 2. Attach the listener directly to the #game-interface element
+if (scrollingElement && stickyTarget) {
+    scrollingElement.addEventListener('scroll', function() {
         const scrollThreshold = 100;
         
-        // 3. Measure the scroll position from the window (scrollY is most reliable)
-        const currentScrollPosition = window.scrollY; 
+        // 3. Measure the scroll position of the container itself
+        const currentScrollPosition = scrollingElement.scrollTop; 
 
         if (currentScrollPosition > scrollThreshold) { 
             stickyTarget.classList.add('sticky-clock-active');
-            // Console log removed for final version, but left for visibility:
-            // console.log('CLASS ADDED! SUCCESS. Scroll Top:', currentScrollPosition); 
         } else {
             stickyTarget.classList.remove('sticky-clock-active');
-            // console.log('Class removed. Scroll Top:', currentScrollPosition);
         }
     });
 }
+// --- END SCROLL HANDLER ---
+
+// --- FINAL FIX: LISTENING TO THE WINDOW/DOCUMENT SCROLL ---
+// 1. Get the target clock element only
+// const stickyTarget = document.querySelector('.game-clocks-section');
+
+// 2. Attach the listener to the global window object
+// if (stickyTarget) {
+    // window.addEventListener('scroll', function() {
+        // const scrollThreshold = 100;
+        
+        // 3. Measure the scroll position from the window (scrollY is most reliable)
+        // const currentScrollPosition = window.scrollY; 
+
+        // if (currentScrollPosition > scrollThreshold) { 
+           //  stickyTarget.classList.add('sticky-clock-active');
+            // Console log removed for final version, but left for visibility:
+            // console.log('CLASS ADDED! SUCCESS. Scroll Top:', currentScrollPosition); 
+        // } else {
+           // stickyTarget.classList.remove('sticky-clock-active');
+            // console.log('Class removed. Scroll Top:', currentScrollPosition);
+        // }
+    // });
+// }
 // --- END SCROLL HANDLER ---
 
 });
