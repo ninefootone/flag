@@ -1,4 +1,4 @@
-const appVersion = '0.3.38';
+const appVersion = '0.3.39';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1245,6 +1245,7 @@ if (timeoutsPerHalfInput) {
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.add('hidden');
+        updateUI();
     }
 
     startNewGameBtn.addEventListener('click', () => {
