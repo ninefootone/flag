@@ -1,4 +1,4 @@
-const appVersion = '0.3.40';
+const appVersion = '0.3.41';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -283,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'head-referee': 'a2c6g1',
         'scorer': 'h7y3l9',
         'coach': '5hd74h',
+        'stats': null,
         // 'administrator' is not usually shared, but included for completeness if needed.
         'administrator': 'b3f5z2' 
     };
@@ -391,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Element references
     const settingsForm = document.getElementById('settings-form');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
+    const startStatsViewBtn = document.getElementById('startStatsViewBtn');
     const joinGameBtn = document.getElementById('join-game-btn');
     const gameIdInput = document.getElementById('game-id-input');
     const joinErrorMessage = document.getElementById('join-error-message');
@@ -1228,6 +1230,26 @@ if (timeoutsPerHalfInput) {
         gameIdDisplay.classList.remove('hidden');
 
         connectWebSocket(newGameId);
+    });
+
+    startStatsViewBtn.addEventListener('click', () => {
+        // Generates a new game ID
+        const newGameId = Math.random().toString(36).substring(2, 8);
+    
+        // CRITICAL: Sets the URL with the non-secure 'stats' role
+        history.replaceState(null, '', `/game/${newGameId}?role=stats`);
+
+        // UI Transition
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.remove('hidden');
+
+        document.getElementById('game-id-text').textContent = newGameId;
+        gameIdDisplay.classList.remove('hidden');
+
+        // Connects to WebSocket for data sharing
+        connectWebSocket(newGameId);
+    
+        updateUI(); 
     });
 
     joinGameBtn.addEventListener('click', () => {
