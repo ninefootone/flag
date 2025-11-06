@@ -1,4 +1,4 @@
-const appVersion = '0.3.36';
+const appVersion = '0.3.37';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -283,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'head-referee': 'a2c6g1',
         'scorer': 'h7y3l9',
         'coach': '5hd74h',
+        'stats': null, // This role is not secure, so use null
         // 'administrator' is not usually shared, but included for completeness if needed.
         'administrator': 'b3f5z2' 
     };
@@ -391,6 +392,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Element references
     const settingsForm = document.getElementById('settings-form');
     const startNewGameBtn = document.getElementById('start-new-game-btn');
+    // New: Event listener for the Stats Tracker View button
+    const statsViewBtn = document.getElementById('statsViewBtn');
+        if (statsViewBtn) {
+            statsViewBtn.addEventListener('click', () => {
+                // Redirects to the home page URL with the role set to 'stats'
+                window.location.href = window.location.origin + window.location.pathname + '?role=stats';
+            });
+        }
     const joinGameBtn = document.getElementById('join-game-btn');
     const gameIdInput = document.getElementById('game-id-input');
     const joinErrorMessage = document.getElementById('join-error-message');
@@ -568,6 +577,10 @@ if (timeoutsPerHalfInput) {
 
     // Collect all control elements into a single array for easy management
     const allControls = [
+        halfDurationInput,
+        playClockDurationInput,
+        timeoutsPerHalfInput,
+        coinTossBtn,
         gameClockToggleBtn,
         gameClockResetBtn,
         playClockOptions,
@@ -596,11 +609,12 @@ if (timeoutsPerHalfInput) {
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
-        'administrator': [gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
+        'administrator': [halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
         'head-referee': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
         'scorer': [...scoreButtons, ...defenceButtons, ...adjustButtons, fixedFooter, undoBtn, infoBtn, infoModalScorer],
         'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, fixedFooter, infoBtn, infoModalClock],
-        'coach': [fixedFooter, infoBtn, infoModalCoach]
+        'coach': [fixedFooter, infoBtn, infoModalCoach],
+        'stats': [...scoreButtons, ...defenceButtons, fixedFooter, infoBtn, penaltyLookupBtn, shareLinksBtn, shareLinksSection]
     };
 
     let userRole = 'administrator';
@@ -685,10 +699,34 @@ if (timeoutsPerHalfInput) {
 
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const urlToken = urlParams.get('role');
-        // Convert the secure token back to the friendly role name, falling back to 'administrator'
-        userRole = getRoleFromToken(urlToken) || urlToken || 'administrator';
+        const urlToken = urlParams.get('token'); // Check for secure token first
+        const explicitRole = urlParams.get('role'); // Check for explicit role (like 'stats')
 
+        let userRole = 'lobby'; // Default role
+
+        // 1. Prioritize Token Check
+        if (urlToken) {
+            userRole = getRoleFromToken(urlToken) || 'lobby';
+        } 
+        
+        // 2. Check for Explicit Role (Overrides token if present, but we prioritize explicit over lobby)
+        // This handles our non-secure 'stats' role.
+        else if (explicitRole && SECURE_ROLE_MAP.hasOwnProperty(explicitRole)) {
+            userRole = explicitRole;
+        }
+
+        // Global flag: Expose the final role determination and the stats flag
+        window.userRole = userRole; // Ensure userRole is global if other functions rely on it
+        window.IS_STATS_VIEW = userRole === 'stats'; // <-- NEW GLOBAL FLAG
+
+        // Apply the role class to the body for CSS/Permission hiding
+        if (userRole !== 'lobby') {
+            document.body.classList.add(`role-${userRole}`);
+        } else {
+            document.body.classList.add('role-lobby');
+        }
+
+        // Display Game ID logic (unmodified)
         const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
         if (urlGameId && urlGameId !== 'game.html') {
             gameIdDisplay.classList.remove('hidden');
@@ -1579,6 +1617,19 @@ if (timeoutsPerHalfInput) {
 /**
     * Gathers game data from gameState, formats it into a text file, and triggers a download.
     */
+
+    /**
+     * Removes the time stamp from the beginning of a log entry string if in Stats View.
+     * Assumes time stamp is formatted as [MM:SS] or similar bracketed time.
+     */
+    const stripTimeIfStatsView = (logText) => {
+        if (window.IS_STATS_VIEW) {
+            // RegEx removes the leading time stamp (e.g., [03:45]) and any following whitespace.
+            return logText.replace(/^\[.*?\]\s*/, '');
+        }
+        return logText;
+    };
+
     const downloadGameSummary = () => {
         // Retrieve Game ID from the URL
         const pathParts = window.location.pathname.split('/');
@@ -1648,7 +1699,8 @@ if (timeoutsPerHalfInput) {
         if (scoreLogEntries.length > 0) {
             scoreLogEntries.forEach(li => {
                 // Extract the clean text content, which is already formatted: [Time] Team X scored...
-                summaryText += `${li.textContent.trim()}\n`;
+                const entryText = stripTimeIfStatsView(li.textContent.trim()); // <-- NEW CODE
+                summaryText += `${entryText}\n`; // <-- NEW CODE
             });
         } else {
             summaryText += `No scoring plays recorded.\n`;
@@ -1661,7 +1713,8 @@ if (timeoutsPerHalfInput) {
         if (timeoutLogEntries.length > 0) {
             timeoutLogEntries.forEach(li => {
                 // Extract the clean text content, which is already formatted: [Time] Team X called a timeout.
-                summaryText += `${li.textContent.trim()}\n`;
+                const entryText = stripTimeIfStatsView(li.textContent.trim()); // <-- NEW CODE
+                summaryText += `${entryText}\n`; // <-- NEW CODE
             });
         } else {
             summaryText += `No timeouts used.\n`;
@@ -1673,7 +1726,8 @@ if (timeoutsPerHalfInput) {
         if (defenceLogEntries.length > 0) {
             defenceLogEntries.forEach(li => {
                 // The single-line HTML structure ensures this simple trim works perfectly.
-                summaryText += `${li.textContent.trim()}\n`;
+                const entryText = stripTimeIfStatsView(li.textContent.trim()); // <-- NEW CODE
+                summaryText += `${entryText}\n`; // <-- NEW CODE
             });
         } else {
             summaryText += `No defensive stats recorded.\n`;
