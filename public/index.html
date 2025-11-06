@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.3.50">
-    <link rel="stylesheet" href="/style-dark.css?v=0.3.50">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.3.50" />
+    <link rel="stylesheet" href="/style.css?v=0.3.51">
+    <link rel="stylesheet" href="/style-dark.css?v=0.3.51">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.3.51" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -30,7 +30,7 @@
             </div> -->
             <button id="start-new-game-btn">New Game</button>
 
-            <button id="startStatsViewBtn" class="primary-button lobby-button">Stats Tracker View</button>
+            <button id="startStatsViewBtn" class="primary-button lobby-button">Whistle Stats</button>
             
             <h3 class="feedback-link">
                 <a href="https://thinkable-taleggio-7b0.notion.site/2972da6bdc3b8057bcddc1fb56a26be4?pvs=105" target="_blank">Tell us what you think...</a>
@@ -299,12 +299,18 @@
             <section class="score-log">
                 <div class="log-container">
                     <h3 class="log-title">Game Log</h3>
-                    <h4 class="log-title">Scores</h4>
-                    <ul id="score-log"></ul>
-                    <h4 class="log-title">Defence</h4>
-                    <ul id="defence-log"></ul>
-                    <h4 class="log-title">Timeouts</h4>
-                    <ul id="timeout-log"></ul>
+                    <span class="score-log-container">
+                        <h4 class="log-title">Scores</h4>
+                        <ul id="score-log"></ul>
+                    </span>
+                    <span class="defence-log-container">
+                        <h4 class="log-title">Defence</h4>
+                        <ul id="defence-log"></ul>
+                    </span>
+                    <span class="timeout-log-container">
+                        <h4 class="log-title">Timeouts</h4>
+                        <ul id="timeout-log"></ul>
+                    </span>
                     <h4 class="game-info">
                         <span id="game-date"></span><span id="game-location"></span>
                     </h4>
@@ -566,12 +572,18 @@
             <div class="summary-logs">
                 <div class="log-container">
                     <h3 class="log-title">Game Log</h3>
-                    <h4 class="log-title">Scores</h4>
-                    <ul id="summary-score-log"></ul>
-                    <h4 class="log-title">Defence</h4>
-                    <ul id="summary-defence-log"></ul>
-                    <h4 class="log-title">Timeouts</h4>
-                    <ul id="summary-timeout-log"></ul>
+                    <span class="score-log-container">
+                        <h4 class="log-title">Scores</h4>
+                        <ul id="summary-score-log"></ul>
+                    </span>
+                    <span class="defence-log-container">
+                        <h4 class="log-title">Defence</h4>
+                        <ul id="summary-defence-log"></ul>
+                    </span>
+                    <span class="timeout-log-container">
+                        <h4 class="log-title">Timeouts</h4>
+                        <ul id="summary-timeout-log"></ul>
+                    </span>
                 </div>
             </div>
             
@@ -623,8 +635,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.3.50"></script>
-<script src="/script.js?v=0.3.50"></script>
+<script src="/teams.js?v=0.3.51"></script>
+<script src="/script.js?v=0.3.51"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/penalties.js"></script>
 

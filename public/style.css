@@ -603,7 +603,7 @@ input[type="number"] {
     margin-top: 20px;
 }
 
-#start-new-game-btn, #startStatsViewBtn {
+#start-new-game-btn {
     padding:0;
     text-align:center;
     font-weight:800;
@@ -616,13 +616,39 @@ input[type="number"] {
     padding:14px 24px;
 }
 
-#start-new-game-btn:hover, #startStatsViewBtn:hover {
+#start-new-game-btn:hover {
     background:var(--secondary-color);
 }
 
 @media (max-width: 320px) {
-    #start-new-game-btn, #startStatsViewBtn {
+    #start-new-game-btn {
         font-size:18px;
+        padding:10px 18px;
+    }
+}
+
+#startStatsViewBtn {
+    padding:0;
+    text-align:center;
+    font-weight:600;
+    font-size:18px;
+    background:var(--background-color);
+    border:1px solid var(--primary-color);
+    border-radius: 500px !important;
+    margin:0 auto;
+    color:var(--primary-color);
+    padding:14px 24px;
+}
+
+#startStatsViewBtn:hover {
+    background:var(--secondary-color);
+    border:1px solid var(--secondary-color);
+    color:var(--background-color);
+}
+
+@media (max-width: 320px) {
+    #startStatsViewBtn {
+        font-size:14px;
         padding:10px 18px;
     }
 }
@@ -1470,7 +1496,7 @@ button.defence-stats-btn {
 }
 
 /* 3. Hide sections that don't need to be visible */
-.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled, .share-links-section.disabled, #start-new-game-from-summary-btn.disabled, #info-btn.disabled, #undo-btn.disabled, #penalty-lookup-btn.disabled, #end-game-btn.disabled, #share-links-btn.disabled, #fixed-footer-links-container.disabled, #info-modal-admin.disabled, #info-modal-ref.disabled, #info-modal-scorer.disabled, #info-modal-clock.disabled, #info-modal-coach.disabled, .defence-stats-btn.disabled, .timeout-buttons-section.disabled, .clock-container.disabled, .down-buttons-section.disabled, .settings-grid.disabled
+.clock-btn.disabled, .score-btn.disabled, .undo-btn.disabled, .end-game-btn.disabled, .adjust-btn.disabled, .play-clock-options.disabled, .share-links-section.disabled, #start-new-game-from-summary-btn.disabled, #info-btn.disabled, #undo-btn.disabled, #penalty-lookup-btn.disabled, #end-game-btn.disabled, #share-links-btn.disabled, #fixed-footer-links-container.disabled, #info-modal-admin.disabled, #info-modal-ref.disabled, #info-modal-scorer.disabled, #info-modal-clock.disabled, #info-modal-coach.disabled, .defence-stats-btn.disabled, .timeout-buttons-section.disabled, .clock-container.disabled, .down-buttons-section.disabled, .settings-grid.disabled, .timeout-log-container.disabled
  {
     display: none !important;
 }

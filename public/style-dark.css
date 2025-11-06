@@ -192,6 +192,18 @@ input[type="text"], input[type="number"], input[type="date"] {
     color:var(--text-color) !important;
 }
 
+#startStatsViewBtn {
+    background:var(--background-color) !important;
+    color:var(--text-color) !important;
+    border:1px solid var(--text-color) !important;
+}
+
+#startStatsViewBtn:hover {
+    background:var(--secondary-color) !important;
+    border:1px solid var(--secondary-color) !important;
+    color:var(--text-color) !important;
+}
+
 .error-message {
     color: var(--error-color) !important;
 }
