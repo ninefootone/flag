@@ -1,4 +1,4 @@
-const appVersion = '0.3.43';
+const appVersion = '0.3.44';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -434,6 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showScorePopup(team);
         });
     });
+    const timeoutButtonsSection = document.querySelectorAll('.timeout-buttons-section');    
     const useTimeoutBtns = document.querySelectorAll('.use-timeout-btn');
     const gameClockToggleBtn = document.getElementById('game-clock-toggle');
     const gameClockResetBtn = document.getElementById('game-clock-reset');
@@ -586,6 +587,7 @@ if (timeoutsPerHalfInput) {
         ...scoreButtons,
         ...defenceButtons,
         ...adjustButtons,
+        timeoutButtonsSection,
         ...useTimeoutBtns,
         undoBtn,
         endGameBtn,
@@ -604,11 +606,11 @@ if (timeoutsPerHalfInput) {
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
-        'administrator': [halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, timeoutLogList, summaryTimeoutLog, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
-        'head-referee': [timeoutLogList, summaryTimeoutLog, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
-        'scorer': [...scoreButtons, ...defenceButtons, ...adjustButtons, fixedFooter, undoBtn, infoBtn, infoModalScorer],
-        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, fixedFooter, infoBtn, infoModalClock],
-        'coach': [fixedFooter, infoBtn, infoModalCoach],
+        'administrator': [halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, timeoutLogList, summaryTimeoutLog, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, timeoutButtonsSection, ...useTimeoutBtns, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
+        'head-referee': [timeoutLogList, summaryTimeoutLog, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, timeoutButtonsSection, ...useTimeoutBtns, fixedFooter, endGameBtn, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
+        'scorer': [...scoreButtons, ...defenceButtons, ...adjustButtons, timeoutButtonsSection, fixedFooter, undoBtn, infoBtn, infoModalScorer],
+        'clock': [gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtons, timeoutButtonsSection, fixedFooter, infoBtn, infoModalClock],
+        'coach': [timeoutButtonsSection, fixedFooter, infoBtn, infoModalCoach],
         'stats': []
     };
 
