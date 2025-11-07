@@ -1,4 +1,4 @@
-const appVersion = '0.3.54';
+const appVersion = '0.3.55';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -580,7 +580,6 @@ if (timeoutsPerHalfInput) {
         halfDurationInput,
         playClockDurationInput,
         timeoutsPerHalfInput,
-        ...coinTossSection,
         coinTossBtn,
         timeoutLogList,
         summaryTimeoutLog,
@@ -616,7 +615,7 @@ if (timeoutsPerHalfInput) {
 
     // Map roles to the specific controls they can use
     const rolePermissions = {
-        'administrator': [...settingsGrid, halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, ...coinTossSection, timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...timeoutButtonsSection, ...useTimeoutBtns, ...timeoutLogContainer, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
+        'administrator': [...settingsGrid, halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, coinTossBtn, timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...timeoutButtonsSection, ...useTimeoutBtns, ...timeoutLogContainer, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
         'head-referee': [timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...timeoutButtonsSection, ...useTimeoutBtns, fixedFooter, endGameBtn, ...timeoutLogContainer, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
         'scorer': [...clockContainer, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...downButtonsSection, ...timeoutButtonsSection, fixedFooter, ...timeoutLogContainer, undoBtn, infoBtn, infoModalScorer],
         'clock': [...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...timeoutButtonsSection, ...timeoutLogContainer, fixedFooter, infoBtn, infoModalClock],
@@ -1214,6 +1213,7 @@ if (timeoutsPerHalfInput) {
     const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
 
     if (gameIdFromUrl) {
+        updateUI();
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
 
@@ -1227,7 +1227,6 @@ if (timeoutsPerHalfInput) {
             setTimeout(() => {
                 // 3. Connect the WebSocket and update UI AFTER the pause
                 connectWebSocket(gameIdFromUrl);
-                updateUI();
             }, 150);
         }
 
