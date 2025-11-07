@@ -1472,7 +1472,7 @@ button.defence-stats-btn {
 /* 1. Ensure the element is visible (overrides any problematic 'display: none' or 'visibility: hidden') */
 .disabled {
     /* If another rule is hiding it, these will force it to show: */
-    display: block !important; /* or block/flex, depending on the button's original display */
+    display: inline-block !important; /* or block/flex, depending on the button's original display */
     visibility: visible !important;
 }
 

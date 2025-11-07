@@ -1,4 +1,4 @@
-const appVersion = '0.3.55';
+const appVersion = '0.3.56';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
