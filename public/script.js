@@ -1,4 +1,4 @@
-const appVersion = '0.3.60';
+const appVersion = '0.3.61';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1649,8 +1649,14 @@ if (timeoutsPerHalfInput) {
      */
     const stripTimeIfStatsView = (logText) => {
         if (window.userRole === 'stats') { // Check if the current user role is stats
-            // RegEx removes the leading time stamp (e.g., [03:45]) and any following whitespace.
-            return logText.replace(/^\[.*?\]\s*/, '');
+            
+            // 🚨 CRITICAL FIX: Removed the start-of-string anchor (^) for resiliency.
+            // This pattern finds the first instance of anything inside brackets, 
+            // plus any subsequent whitespace, and replaces it with nothing.
+            const strippedText = logText.replace(/\[.*?\]\s*/, '');
+            
+            // Ensures any potential leading/trailing whitespace is cleaned up completely.
+            return strippedText.trim(); 
         }
         return logText;
     };
