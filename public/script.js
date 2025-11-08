@@ -1,4 +1,4 @@
-const appVersion = '0.3.67';
+const appVersion = '0.3.68';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1856,37 +1856,37 @@ if (timeoutsPerHalfInput) {
         summaryText += `${team2Name || 'Away Team'}: ${team2Score || 0}\n\n`;
     
         // --- 1.5. DEFENSIVE STATS TOTALS ---
-        if (gameState.defenceStats) {
+        // if (gameState.defenceStats) {
             
-            const teams = ['team1', 'team2'];
-            let hasDefenceStats = false; // Flag to check if we should print the header
+        //    const teams = ['team1', 'team2'];
+        //    let hasDefenceStats = false; // Flag to check if we should print the header
 
-            let defenceSummaryText = "";
+        //    let defenceSummaryText = "";
 
-            teams.forEach(teamKey => {
-                const teamName = teamKey === 'team1' ? gameState.team1Name : gameState.team2Name;
-                const stats = gameState.defenceStats[teamKey];
+        //    teams.forEach(teamKey => {
+        //        const teamName = teamKey === 'team1' ? gameState.team1Name : gameState.team2Name;
+        //        const stats = gameState.defenceStats[teamKey];
                 
-                if (stats && Object.values(stats).some(value => value > 0)) {
-                    hasDefenceStats = true;
-                    defenceSummaryText += `${teamName}:\n`;
-                    // Build a single line of stats
-                    const statLine = [];
-                    if (stats.tackles > 0) statLine.push(`Tackles: ${stats.tackles}`);
-                    if (stats.tfl > 0) statLine.push(`TFLs: ${stats.tfl}`);
-                    if (stats.sacks > 0) statLine.push(`Sacks: ${stats.sacks}`);
-                    if (stats.interceptions > 0) statLine.push(`INTs: ${stats.interceptions}`);
+        //        if (stats && Object.values(stats).some(value => value > 0)) {
+        //            hasDefenceStats = true;
+        //            defenceSummaryText += `${teamName}:\n`;
+        //            // Build a single line of stats
+        //            const statLine = [];
+        //            if (stats.tackles > 0) statLine.push(`Tackles: ${stats.tackles}`);
+        //            if (stats.tfl > 0) statLine.push(`TFLs: ${stats.tfl}`);
+        //            if (stats.sacks > 0) statLine.push(`Sacks: ${stats.sacks}`);
+        //            if (stats.interceptions > 0) statLine.push(`INTs: ${stats.interceptions}`);
 
-                    defenceSummaryText += `  ${statLine.join(' | ')}\n`;
-                }
-            });
+        //            defenceSummaryText += `  ${statLine.join(' | ')}\n`;
+        //        }
+        //    });
 
-            if (hasDefenceStats) {
-                 summaryText += `\nDEFENSIVE STATS TOTALS\n`;
-                 summaryText += `----------------------------------------------------\n`;
-                 summaryText += defenceSummaryText + `\n`;
-            }
-        }
+        //    if (hasDefenceStats) {
+        //         summaryText += `\nDEFENSIVE STATS TOTALS\n`;
+        //         summaryText += `----------------------------------------------------\n`;
+        //         summaryText += defenceSummaryText + `\n`;
+        //    }
+        // }
         // --- END DEFENSIVE STATS TOTALS ---
 
         // 🚨 NEW: AGGREGATED PLAYER STATS SECTION 🚨
