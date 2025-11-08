@@ -1,4 +1,4 @@
-const appVersion = '0.3.65';
+const appVersion = '0.3.66';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1708,15 +1708,15 @@ if (timeoutsPerHalfInput) {
             // 1a. Determine team based on "Team X scored" pattern
             const teamMatch = text.match(/Team\s*(\d+)\s*scored/i);
             if (!teamMatch) return;
-            const teamKey = 'team' + teamMatch[1]; // e.g., 'team1' or 'team2'
+            const teamKey = 'team' + teamMatch[1]; 
 
             // 1b. Identify the scoring play type
+            // Captures: Touchdown, PAT, 2PT
             const scoreTypeMatch = text.match(/scored\s*(a)?\s*(Touchdown|PAT|2PT)/i);
             if (!scoreTypeMatch) return;
-            const scoreType = scoreTypeMatch[2]; // e.g., 'Touchdown', 'PAT', '2PT'
+            const scoreType = scoreTypeMatch[2]; 
 
-            // 1c. Pattern: Touchdown/2PT Pass (e.g., ... (QB #3, RB #14))
-            // This regex is now more robust against leading/trailing spaces and special characters (like the trailing dot)
+            // 1c. Pattern: Passing Play (e.g., ... (QB #3, RB #14)) - QB and Receiver present
             const passMatch = text.match(/\((QB\s*#\d+),\s*(WR|RB|TE|REC)\s*#\d+\)/i);
             
             if (passMatch) {
@@ -1725,17 +1725,32 @@ if (timeoutsPerHalfInput) {
                 if (!receiverMatch) return;
                 const receiverEntry = receiverMatch[0];
 
+                // ** FIX 1: Correctly label PAT/2PT passes/receptions **
                 if (scoreType === 'Touchdown') {
                     updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
                     updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions');
-                } else if (scoreType === '2PT' || scoreType === 'PAT') {
-                    // Assuming PATs/2PTs are also passing plays for QB/Receiver credit
-                    updateStat(teamKey, 'offence', qbEntry, 'Pass Attempts');
-                    updateStat(teamKey, 'offence', receiverEntry, 'Receptions');
+                } else if (scoreType === '2PT') {
+                    updateStat(teamKey, 'offence', qbEntry, '2PT Passes');
+                    updateStat(teamKey, 'offence', receiverEntry, '2PT Receptions');
+                } else if (scoreType === 'PAT') {
+                    updateStat(teamKey, 'offence', qbEntry, 'PAT Passes');
+                    updateStat(teamKey, 'offence', receiverEntry, 'PAT Receptions');
                 }
             } 
-            // NOTE: If you have rushing TDs, you'll need another regex pattern here.
+            
+            // 1d. Pattern: Rushing Play (No QB, just RB/WR/etc. player is listed as the scorer)
+            // Currently, your logs don't show rushing plays (they all show QB/WR), 
+            // but if the future log pattern is "scored a Touchdown (RB #14)", you would add:
+            // else if (text.match(/\((RB|WR|TE|REC)\s*#\d+\)/i) && !passMatch) {
+            //     const rusherMatch = text.match(/(RB|WR|TE|REC)\s*#\d+/i);
+            //     if (rusherMatch) {
+            //         const rusherEntry = rusherMatch[0];
+            //         updateStat(teamKey, 'offence', rusherEntry, 'Rushing TDs');
+            //     }
+            // }
+
         });
+        // --- END PARSE SCORING LOG (Offence) ---
 
         // --- 2. PARSE DEFENSIVE LOG (Defence) ---
         defenceLog.forEach(entry => {
@@ -1856,13 +1871,17 @@ if (timeoutsPerHalfInput) {
         if (gameState.defenceStats) {
             
             const teams = ['team1', 'team2'];
+            let hasDefenceStats = false; // Flag to check if we should print the header
+
+            let defenceSummaryText = "";
 
             teams.forEach(teamKey => {
                 const teamName = teamKey === 'team1' ? gameState.team1Name : gameState.team2Name;
                 const stats = gameState.defenceStats[teamKey];
                 
                 if (stats && Object.values(stats).some(value => value > 0)) {
-                    summaryText += `${teamName}:\n`;
+                    hasDefenceStats = true;
+                    defenceSummaryText += `${teamName}:\n`;
                     // Build a single line of stats
                     const statLine = [];
                     if (stats.tackles > 0) statLine.push(`Tackles: ${stats.tackles}`);
@@ -1870,10 +1889,17 @@ if (timeoutsPerHalfInput) {
                     if (stats.sacks > 0) statLine.push(`Sacks: ${stats.sacks}`);
                     if (stats.interceptions > 0) statLine.push(`INTs: ${stats.interceptions}`);
 
-                    summaryText += `  ${statLine.join(' | ')}\n`;
+                    defenceSummaryText += `  ${statLine.join(' | ')}\n`;
                 }
             });
+
+            if (hasDefenceStats) {
+                 summaryText += `\nDEFENSIVE STATS TOTALS\n`;
+                 summaryText += `----------------------------------------------------\n`;
+                 summaryText += defenceSummaryText + `\n`;
+            }
         }
+        // --- END DEFENSIVE STATS TOTALS ---
 
         // 🚨 NEW: AGGREGATED PLAYER STATS SECTION 🚨
         if (window.playerStats) {
