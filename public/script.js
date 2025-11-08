@@ -1,4 +1,4 @@
-const appVersion = '0.3.64';
+const appVersion = '0.3.65';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1698,7 +1698,6 @@ if (timeoutsPerHalfInput) {
             if (!aggregatedStats[team][category][player]) {
                 aggregatedStats[team][category][player] = {};
             }
-            // Increment the count for the specific stat
             aggregatedStats[team][category][player][stat] = (aggregatedStats[team][category][player][stat] || 0) + count;
         };
 
@@ -1706,43 +1705,52 @@ if (timeoutsPerHalfInput) {
         scoreLog.forEach(entry => {
             const text = entry.textContent;
             
-            // Determine team based on "Team X scored" pattern
-            const teamMatch = text.match(/Team\s*(1|2)\s*scored/i);
+            // 1a. Determine team based on "Team X scored" pattern
+            const teamMatch = text.match(/Team\s*(\d+)\s*scored/i);
             if (!teamMatch) return;
             const teamKey = 'team' + teamMatch[1]; // e.g., 'team1' or 'team2'
 
-            // Pattern: Touchdown Pass (e.g., ... (QB #1, WR #2))
+            // 1b. Identify the scoring play type
+            const scoreTypeMatch = text.match(/scored\s*(a)?\s*(Touchdown|PAT|2PT)/i);
+            if (!scoreTypeMatch) return;
+            const scoreType = scoreTypeMatch[2]; // e.g., 'Touchdown', 'PAT', '2PT'
+
+            // 1c. Pattern: Touchdown/2PT Pass (e.g., ... (QB #3, RB #14))
+            // This regex is now more robust against leading/trailing spaces and special characters (like the trailing dot)
             const passMatch = text.match(/\((QB\s*#\d+),\s*(WR|RB|TE|REC)\s*#\d+\)/i);
+            
             if (passMatch) {
-                // The regex captures the full player role/number string (e.g., 'QB #1')
-                const [_, qbEntry, recType] = passMatch; 
+                const [_, qbEntry] = passMatch; 
                 const receiverMatch = text.match(/(WR|RB|TE|REC)\s*#\d+/i);
                 if (!receiverMatch) return;
                 const receiverEntry = receiverMatch[0];
 
-                // Tally QB Touchdown Passes
-                updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
-                
-                // Tally Receiver Touchdown Receptions
-                updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions');
+                if (scoreType === 'Touchdown') {
+                    updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
+                    updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions');
+                } else if (scoreType === '2PT' || scoreType === 'PAT') {
+                    // Assuming PATs/2PTs are also passing plays for QB/Receiver credit
+                    updateStat(teamKey, 'offence', qbEntry, 'Pass Attempts');
+                    updateStat(teamKey, 'offence', receiverEntry, 'Receptions');
+                }
             } 
-            // Add other offensive stat parsing patterns here if you have them (e.g., rushing TDs, 1-point conversions).
+            // NOTE: If you have rushing TDs, you'll need another regex pattern here.
         });
 
         // --- 2. PARSE DEFENSIVE LOG (Defence) ---
         defenceLog.forEach(entry => {
             const text = entry.textContent;
 
-            // Pattern: Player Stat (e.g., Team 1: #2 PBU)
-            // CRITICAL: This uses the COLON format "Team X:"
-            const defMatch = text.match(/Team\s*(1|2):\s*(#\d+)\s*(PBU|Tackle|TFL|Sack|INT)/i);
+            // 2a. Pattern: Defensive Stat (e.g., 1st Half [1:05] Sheffield Giants (14U): #7 TACKLE)
+            // It searches for Team X: #Y STAT anywhere in the string.
+            const defMatch = text.match(/(Team\s*(\d+).*?):\s*(#\d+)\s*(PBU|TACKLE|TFL|Sack|INT)/i);
+            
             if (defMatch) {
-                const teamNum = defMatch[1];
-                const player = defMatch[2]; // e.g., "#2"
-                const stat = defMatch[3]; // e.g., "PBU"
+                // Determine team from the full team name/ID match (Group 1)
+                const teamNum = defMatch[2]; 
+                const player = defMatch[3];  // e.g., "#7"
+                const stat = defMatch[4];  // e.g., "TACKLE"
                 
-                // Defensive stats are recorded against the OPPONENT's offense, so the aggregation is for the team that DID the action.
-                // Since the log entry says "Team X: #2 PBU", we tally the stat for Team X.
                 const teamKey = 'team' + teamNum;
 
                 // Tally Defensive Stats (PBU, Tackle, TFL, Sack, INT)
