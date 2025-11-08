@@ -1,4 +1,4 @@
-const appVersion = '0.3.63';
+const appVersion = '0.3.64';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -802,6 +802,24 @@ if (timeoutsPerHalfInput) {
                 summaryScoreLog.innerHTML = gameState.scoreLogHTML;
                 summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
                 summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
+
+                // 1. Extract the logs from the DOM elements that were just populated
+                const scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
+                const defenceLogEntries = Array.from(summaryDefenceLog.querySelectorAll('li'));
+            
+                // 2. Aggregate the stats and store globally for rendering/download
+                window.playerStats = aggregatePlayerStats(scoreLogEntries, defenceLogEntries);
+                
+                // 🚨 NEW: RENDER AGGREGATED STATS TO SCREEN 🚨
+                if (window.playerStats) {
+                    // Update team names in the headers (assuming you defined these in Step 3 HTML)
+                    document.getElementById('team1-stats-header').textContent = gameState.team1Name;
+                    document.getElementById('team2-stats-header').textContent = gameState.team2Name;
+
+                    renderPlayerStats(window.playerStats.team1, 'team1');
+                    renderPlayerStats(window.playerStats.team2, 'team2');
+                }
+
             }, 0);
 
             // --- START SUMMARY LOG PLACEHOLDER LOGIC ---
@@ -1665,6 +1683,124 @@ if (timeoutsPerHalfInput) {
         }
         return logText;
     };
+
+    /**
+     * Parses the score and defense logs to aggregate player-specific statistics.
+     * @returns {object} An object containing aggregated stats for team1 and team2.
+     */
+    const aggregatePlayerStats = (scoreLog, defenceLog) => {
+        const aggregatedStats = {
+            team1: { offence: {}, defence: {} },
+            team2: { offence: {}, defence: {} }
+        };
+
+        const updateStat = (team, category, player, stat, count = 1) => {
+            if (!aggregatedStats[team][category][player]) {
+                aggregatedStats[team][category][player] = {};
+            }
+            // Increment the count for the specific stat
+            aggregatedStats[team][category][player][stat] = (aggregatedStats[team][category][player][stat] || 0) + count;
+        };
+
+        // --- 1. PARSE SCORING LOG (Offence) ---
+        scoreLog.forEach(entry => {
+            const text = entry.textContent;
+            
+            // Determine team based on "Team X scored" pattern
+            const teamMatch = text.match(/Team\s*(1|2)\s*scored/i);
+            if (!teamMatch) return;
+            const teamKey = 'team' + teamMatch[1]; // e.g., 'team1' or 'team2'
+
+            // Pattern: Touchdown Pass (e.g., ... (QB #1, WR #2))
+            const passMatch = text.match(/\((QB\s*#\d+),\s*(WR|RB|TE|REC)\s*#\d+\)/i);
+            if (passMatch) {
+                // The regex captures the full player role/number string (e.g., 'QB #1')
+                const [_, qbEntry, recType] = passMatch; 
+                const receiverMatch = text.match(/(WR|RB|TE|REC)\s*#\d+/i);
+                if (!receiverMatch) return;
+                const receiverEntry = receiverMatch[0];
+
+                // Tally QB Touchdown Passes
+                updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
+                
+                // Tally Receiver Touchdown Receptions
+                updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions');
+            } 
+            // Add other offensive stat parsing patterns here if you have them (e.g., rushing TDs, 1-point conversions).
+        });
+
+        // --- 2. PARSE DEFENSIVE LOG (Defence) ---
+        defenceLog.forEach(entry => {
+            const text = entry.textContent;
+
+            // Pattern: Player Stat (e.g., Team 1: #2 PBU)
+            // CRITICAL: This uses the COLON format "Team X:"
+            const defMatch = text.match(/Team\s*(1|2):\s*(#\d+)\s*(PBU|Tackle|TFL|Sack|INT)/i);
+            if (defMatch) {
+                const teamNum = defMatch[1];
+                const player = defMatch[2]; // e.g., "#2"
+                const stat = defMatch[3]; // e.g., "PBU"
+                
+                // Defensive stats are recorded against the OPPONENT's offense, so the aggregation is for the team that DID the action.
+                // Since the log entry says "Team X: #2 PBU", we tally the stat for Team X.
+                const teamKey = 'team' + teamNum;
+
+                // Tally Defensive Stats (PBU, Tackle, TFL, Sack, INT)
+                updateStat(teamKey, 'defence', player, stat);
+            }
+        });
+
+        return aggregatedStats;
+    };
+
+    /**
+     * Renders the aggregated player stats into the respective summary containers.
+     * @param {object} stats - The aggregated stats for one team (e.g., playerStats.team1).
+     * @param {string} teamKey - The key for the team ('team1' or 'team2').
+     */
+    const renderPlayerStats = (stats, teamKey) => {
+        // 1. Get the containers
+        const offenceContainer = document.getElementById(`${teamKey}-offence-stats`);
+        const defenceContainer = document.getElementById(`${teamKey}-defence-stats`);
+        
+        if (!offenceContainer || !defenceContainer) {
+            console.error(`Rendering failed: Could not find stats containers for ${teamKey}.`);
+            return;
+        }
+
+        // Helper to format stats into a string: "TD Passes: 3 | TD Receptions: 2"
+        const formatPlayerStats = (playerStats) => {
+            return Object.entries(playerStats)
+                .map(([stat, count]) => `${stat}: ${count}`)
+                .join(' | ');
+        };
+
+        // --- Render Offence ---
+        let offenceHTML = '<h4>Offence</h4><ul class="stats-list">';
+        const offencePlayers = Object.keys(stats.offence).sort();
+        if (offencePlayers.length > 0) {
+            offencePlayers.forEach(player => {
+                offenceHTML += `<li>${player}: ${formatPlayerStats(stats.offence[player])}</li>`;
+            });
+        } else {
+            offenceHTML += '<li>No offensive player stats recorded.</li>';
+        }
+        offenceHTML += '</ul>';
+        offenceContainer.innerHTML = offenceHTML;
+
+        // --- Render Defence ---
+        let defenceHTML = '<h4>Defence</h4><ul class="stats-list">';
+        const defencePlayers = Object.keys(stats.defence).sort();
+        if (defencePlayers.length > 0) {
+            defencePlayers.forEach(player => {
+                defenceHTML += `<li>${player}: ${formatPlayerStats(stats.defence[player])}</li>`;
+            });
+        } else {
+            defenceHTML += '<li>No defensive player stats recorded.</li>';
+        }
+        defenceHTML += '</ul>';
+        defenceContainer.innerHTML = defenceHTML;
+    };
     
     /**
     * Gathers game data from gameState, formats it into a text file, and triggers a download.
@@ -1730,6 +1866,45 @@ if (timeoutsPerHalfInput) {
                 }
             });
         }
+
+        // 🚨 NEW: AGGREGATED PLAYER STATS SECTION 🚨
+        if (window.playerStats) {
+            summaryText += `\nAGGREGATED PLAYER STATS\n`;
+            summaryText += `====================================================\n`;
+
+            ['team1', 'team2'].forEach(teamKey => {
+                const teamName = teamKey === 'team1' ? team1Name : team2Name;
+                const stats = window.playerStats[teamKey];
+                
+                summaryText += `\n--- ${teamName} ---\n`;
+
+                const renderDownloadStats = (category, categoryName) => {
+                    // Helper to build the download text for a category (Offence/Defence)
+                    summaryText += `  ${categoryName}:\n`;
+                    
+                    // Sort players by number/name
+                    const players = Object.keys(stats[category]).sort(); 
+
+                    if (players.length > 0) {
+                        players.forEach(player => {
+                            // Format the stats line: "TD Passes: 3 | TD Receptions: 2"
+                            const statLine = Object.entries(stats[category][player])
+                                .map(([stat, count]) => `${stat}: ${count}`)
+                                .join(' | ');
+                            summaryText += `  ${player}: ${statLine}\n`;
+                        });
+                    } else {
+                        summaryText += `  No ${categoryName.toLowerCase()} player stats recorded.\n`;
+                    }
+                };
+
+                // Render both Offence and Defence categories
+                renderDownloadStats('offence', 'Offence');
+                renderDownloadStats('defence', 'Defence');
+            });
+            summaryText += `\n`; // Add extra line break before next log section
+        }
+        // --- END AGGREGATED PLAYER STATS ---
 
         // --- 2. Score Log ---
         // Use the length of the extracted DOM elements for the count.

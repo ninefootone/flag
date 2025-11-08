@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.3.63">
-    <link rel="stylesheet" href="/style-dark.css?v=0.3.63">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.3.63" />
+    <link rel="stylesheet" href="/style.css?v=0.3.64">
+    <link rel="stylesheet" href="/style-dark.css?v=0.3.64">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.3.64" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -32,7 +32,7 @@
 
             <span class="whistle-stats-lobby-container">
                 <button id="startStatsViewBtn" class="primary-button lobby-button">Whistle Stats</button>
-                <p class="whistle-stats-notes">Track scoring and defensive stats even if the ref isn't using Whistle.</p>
+                <p class="whistle-stats-notes">Track game stats even if the ref isn't using Whistle.</p>
             </span>
 
             <h3 class="feedback-link">
@@ -589,6 +589,22 @@
                     </span>
                 </div>
             </div>
+
+            <div id="summary-player-stats-container" class="player-stats-container">
+                <h2 class="section-heading">Aggregated Player Stats</h2>
+    
+                <div id="summary-team1-stats" class="team-stats-box">
+                    <h3 id="team1-stats-header">Team 1</h3>
+                        <div id="team1-offence-stats"></div>
+                        <div id="team1-defence-stats"></div>
+                </div>
+    
+                <div id="summary-team2-stats" class="team-stats-box">
+                    <h3 id="team2-stats-header">Team 2</h3>
+                        <div id="team2-offence-stats"></div>
+                        <div id="team2-defence-stats"></div>
+                </div>
+            </div>
             
         </div>
     </div>
@@ -638,8 +654,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.3.63"></script>
-<script src="/script.js?v=0.3.63"></script>
+<script src="/teams.js?v=0.3.64"></script>
+<script src="/script.js?v=0.3.64"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="/penalties.js"></script>
 
