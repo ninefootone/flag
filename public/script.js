@@ -1,4 +1,4 @@
-const appVersion = '0.3.68';
+const appVersion = '0.3.69';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1703,40 +1703,44 @@ if (timeoutsPerHalfInput) {
 
         // --- 1. PARSE SCORING LOG (Offence) ---
         scoreLog.forEach(entry => {
-            // Get the entire text, cleaned of leading/trailing space
             const text = entry.textContent.trim();
             
-            // Regex to ignore all prefix text (Half, Time, Team Name) and only look at the core action
             const coreActionMatch = text.match(/scored\s*(a)?\s*(Touchdown|PAT|2PT)\s*(.*)/i);
             if (!coreActionMatch) return;
             
-            // The score type (Touchdown, PAT, 2PT)
             const scoreType = coreActionMatch[2]; 
-            // The rest of the string, containing player info (e.g., "(QB #1, WR #24).")
             const playerInfo = coreActionMatch[3]; 
 
-            // Determine team from the full text (must be done before stripping text)
             const teamMatch = text.match(/Team\s*(\d+)/i);
             if (!teamMatch) return;
             const teamKey = 'team' + teamMatch[1]; 
 
-            // Pattern: Passing Play (e.g., ... (QB #3, RB #14)) - QB and Receiver present
-            // Finds two player roles/numbers inside parentheses
+            // Pattern: Passing Play (e.g., ... (QB #1, WR #24))
             const passMatch = playerInfo.match(/\((QB\s*#\d+),\s*([A-Z]*\s*#\d+)\)/i);
             
             if (passMatch) {
                 const [_, qbEntry, receiverEntry] = passMatch; 
                 
-                // Correctly label PAT/2PT/TD passes/receptions
+                // 🚨 NEW LOGIC: Determine the correct label for the receiver/runner
+                let receiverStatLabel;
+                if (receiverEntry.startsWith('RB')) {
+                    // Use 'Carries' if the player role is RB
+                    receiverStatLabel = (scoreType === 'PAT') ? 'PAT Carries' : (scoreType === '2PT') ? '2PT Carries' : 'TD Carries';
+                } else {
+                    // Use 'Receptions' for all other positions (WR, TE, REC)
+                    receiverStatLabel = (scoreType === 'PAT') ? 'PAT Receptions' : (scoreType === '2PT') ? '2PT Receptions' : 'TD Receptions';
+                }
+                
+                // Correctly label TD passes/receptions
                 if (scoreType === 'Touchdown') {
                     updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
-                    updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions');
+                    updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions'); // Keeps 'TD Receptions' general for TD scoring
                 } else if (scoreType === '2PT') {
                     updateStat(teamKey, 'offence', qbEntry, '2PT Passes');
-                    updateStat(teamKey, 'offence', receiverEntry, '2PT Receptions');
+                    updateStat(teamKey, 'offence', receiverEntry, receiverStatLabel);
                 } else if (scoreType === 'PAT') {
                     updateStat(teamKey, 'offence', qbEntry, 'PAT Passes');
-                    updateStat(teamKey, 'offence', receiverEntry, 'PAT Receptions');
+                    updateStat(teamKey, 'offence', receiverEntry, receiverStatLabel);
                 }
             } 
         });
@@ -1744,19 +1748,16 @@ if (timeoutsPerHalfInput) {
         // --- 2. PARSE DEFENSIVE LOG (Defence) ---
         defenceLog.forEach(entry => {
             const text = entry.textContent.trim();
-
-            // Pattern: Finds Team X, then Player #Y, then Stat Type (PBU, TACKLE, etc.)
-            // Ignores all text before the team name and ignores the colon/parentheses around team name.
+            
             const defMatch = text.match(/Team\s*(\d+).*?(#\d+)\s*(PBU|TACKLE|TFL|Sack|INT)/i);
             
             if (defMatch) {
-                const teamNum = defMatch[1]; // Team number (1 or 2)
-                const player = defMatch[2];  // Player number (e.g., "#7")
-                const stat = defMatch[3];  // Stat type (e.g., "TACKLE")
+                const teamNum = defMatch[1]; 
+                const player = defMatch[2];  
+                const stat = defMatch[3];  
                 
                 const teamKey = 'team' + teamNum;
 
-                // Tally Defensive Stats
                 updateStat(teamKey, 'defence', player, stat);
             }
         });
