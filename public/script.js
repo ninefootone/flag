@@ -1,4 +1,4 @@
-const appVersion = '0.3.56';
+const appVersion = '0.3.57';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -705,9 +705,30 @@ if (timeoutsPerHalfInput) {
 
     const updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const urlToken = urlParams.get('role');
-        // Convert the secure token back to the friendly role name, falling back to 'administrator'
-        userRole = getRoleFromToken(urlToken) || urlToken || 'administrator';
+        const urlRoleParam = urlParams.get('role');
+
+        let determinedRole = 'administrator';
+
+        if (urlRoleParam) {
+            // 1. Try to find a role by token (existing logic)
+            const roleFromToken = getRoleFromToken(urlRoleParam);
+            
+            // 2. Check for token success OR check for explicit non-token role (e.g., 'stats')
+            if (roleFromToken) {
+                determinedRole = roleFromToken;
+            } else if (SECURE_ROLE_MAP.hasOwnProperty(urlRoleParam)) {
+                determinedRole = urlRoleParam;
+            }
+        }
+        
+        // Apply the determined role
+        userRole = determinedRole;
+
+        // 1. Clear any existing role classes
+        document.body.className = document.body.className.replace(/\brole-[a-z-]+\b/g, '');
+
+        // 2. Apply the new role class (e.g., 'role-stats')
+        document.body.classList.add(`role-${userRole}`);
 
         const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
         if (urlGameId && urlGameId !== 'game.html') {
@@ -1251,7 +1272,6 @@ if (timeoutsPerHalfInput) {
     });
 
     startStatsViewBtn.addEventListener('click', () => {
-        // Generates a new game ID
         const newGameId = Math.random().toString(36).substring(2, 8);
     
         // CRITICAL: Sets the URL with the non-secure 'stats' role
@@ -1267,6 +1287,14 @@ if (timeoutsPerHalfInput) {
         // Connects to WebSocket for data sharing
         connectWebSocket(newGameId);
     
+        // 1. Set global variables
+        window.userRole = 'stats'; 
+    
+        // 2. Apply the class to the body
+        document.body.className = document.body.className.replace(/\brole-[a-z-]+\b/g, ''); // Clear existing roles
+        document.body.classList.add(`role-stats`); 
+
+        // 3. Manually trigger the full UI update and permission check
         updateUI(); 
     });
 
