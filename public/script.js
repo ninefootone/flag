@@ -1,4 +1,4 @@
-const appVersion = '0.3.59';
+const appVersion = '0.3.60';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1643,7 +1643,19 @@ if (timeoutsPerHalfInput) {
         }, 100); // Use 100ms for a robust delay on system resume.
     });
 
-/**
+    /**
+     * Removes the time stamp from the beginning of a log entry string if the user role is 'stats'.
+     * Assumes time stamp is formatted as [MM:SS] or similar bracketed time.
+     */
+    const stripTimeIfStatsView = (logText) => {
+        if (window.userRole === 'stats') { // Check if the current user role is stats
+            // RegEx removes the leading time stamp (e.g., [03:45]) and any following whitespace.
+            return logText.replace(/^\[.*?\]\s*/, '');
+        }
+        return logText;
+    };
+    
+    /**
     * Gathers game data from gameState, formats it into a text file, and triggers a download.
     */
     const downloadGameSummary = () => {
@@ -1715,7 +1727,8 @@ if (timeoutsPerHalfInput) {
         if (scoreLogEntries.length > 0) {
             scoreLogEntries.forEach(li => {
                 // Extract the clean text content, which is already formatted: [Time] Team X scored...
-                summaryText += `${li.textContent.trim()}\n`;
+                const entryText = stripTimeIfStatsView(li.textContent.trim());
+                summaryText += `${entryText}\n`;
             });
         } else {
             summaryText += `No scoring plays recorded.\n`;
@@ -1728,7 +1741,8 @@ if (timeoutsPerHalfInput) {
         if (timeoutLogEntries.length > 0) {
             timeoutLogEntries.forEach(li => {
                 // Extract the clean text content, which is already formatted: [Time] Team X called a timeout.
-                summaryText += `${li.textContent.trim()}\n`;
+                const entryText = stripTimeIfStatsView(li.textContent.trim());
+                summaryText += `${entryText}\n`;
             });
         } else {
             summaryText += `No timeouts used.\n`;
@@ -1740,7 +1754,8 @@ if (timeoutsPerHalfInput) {
         if (defenceLogEntries.length > 0) {
             defenceLogEntries.forEach(li => {
                 // The single-line HTML structure ensures this simple trim works perfectly.
-                summaryText += `${li.textContent.trim()}\n`;
+                const entryText = stripTimeIfStatsView(li.textContent.trim());
+                summaryText += `${entryText}\n`;
             });
         } else {
             summaryText += `No defensive stats recorded.\n`;
