@@ -1,4 +1,4 @@
-const appVersion = '0.3.66';
+const appVersion = '0.3.67';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1686,7 +1686,7 @@ if (timeoutsPerHalfInput) {
 
     /**
      * Parses the score and defense logs to aggregate player-specific statistics.
-     * @returns {object} An object containing aggregated stats for team1 and team2.
+     * Uses highly resilient regex patterns to handle various log formatting and extra text.
      */
     const aggregatePlayerStats = (scoreLog, defenceLog) => {
         const aggregatedStats = {
@@ -1703,29 +1703,31 @@ if (timeoutsPerHalfInput) {
 
         // --- 1. PARSE SCORING LOG (Offence) ---
         scoreLog.forEach(entry => {
-            const text = entry.textContent;
+            // Get the entire text, cleaned of leading/trailing space
+            const text = entry.textContent.trim();
             
-            // 1a. Determine team based on "Team X scored" pattern
-            const teamMatch = text.match(/Team\s*(\d+)\s*scored/i);
+            // Regex to ignore all prefix text (Half, Time, Team Name) and only look at the core action
+            const coreActionMatch = text.match(/scored\s*(a)?\s*(Touchdown|PAT|2PT)\s*(.*)/i);
+            if (!coreActionMatch) return;
+            
+            // The score type (Touchdown, PAT, 2PT)
+            const scoreType = coreActionMatch[2]; 
+            // The rest of the string, containing player info (e.g., "(QB #1, WR #24).")
+            const playerInfo = coreActionMatch[3]; 
+
+            // Determine team from the full text (must be done before stripping text)
+            const teamMatch = text.match(/Team\s*(\d+)/i);
             if (!teamMatch) return;
             const teamKey = 'team' + teamMatch[1]; 
 
-            // 1b. Identify the scoring play type
-            // Captures: Touchdown, PAT, 2PT
-            const scoreTypeMatch = text.match(/scored\s*(a)?\s*(Touchdown|PAT|2PT)/i);
-            if (!scoreTypeMatch) return;
-            const scoreType = scoreTypeMatch[2]; 
-
-            // 1c. Pattern: Passing Play (e.g., ... (QB #3, RB #14)) - QB and Receiver present
-            const passMatch = text.match(/\((QB\s*#\d+),\s*(WR|RB|TE|REC)\s*#\d+\)/i);
+            // Pattern: Passing Play (e.g., ... (QB #3, RB #14)) - QB and Receiver present
+            // Finds two player roles/numbers inside parentheses
+            const passMatch = playerInfo.match(/\((QB\s*#\d+),\s*([A-Z]*\s*#\d+)\)/i);
             
             if (passMatch) {
-                const [_, qbEntry] = passMatch; 
-                const receiverMatch = text.match(/(WR|RB|TE|REC)\s*#\d+/i);
-                if (!receiverMatch) return;
-                const receiverEntry = receiverMatch[0];
-
-                // ** FIX 1: Correctly label PAT/2PT passes/receptions **
+                const [_, qbEntry, receiverEntry] = passMatch; 
+                
+                // Correctly label PAT/2PT/TD passes/receptions
                 if (scoreType === 'Touchdown') {
                     updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
                     updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions');
@@ -1737,38 +1739,24 @@ if (timeoutsPerHalfInput) {
                     updateStat(teamKey, 'offence', receiverEntry, 'PAT Receptions');
                 }
             } 
-            
-            // 1d. Pattern: Rushing Play (No QB, just RB/WR/etc. player is listed as the scorer)
-            // Currently, your logs don't show rushing plays (they all show QB/WR), 
-            // but if the future log pattern is "scored a Touchdown (RB #14)", you would add:
-            // else if (text.match(/\((RB|WR|TE|REC)\s*#\d+\)/i) && !passMatch) {
-            //     const rusherMatch = text.match(/(RB|WR|TE|REC)\s*#\d+/i);
-            //     if (rusherMatch) {
-            //         const rusherEntry = rusherMatch[0];
-            //         updateStat(teamKey, 'offence', rusherEntry, 'Rushing TDs');
-            //     }
-            // }
-
         });
-        // --- END PARSE SCORING LOG (Offence) ---
 
         // --- 2. PARSE DEFENSIVE LOG (Defence) ---
         defenceLog.forEach(entry => {
-            const text = entry.textContent;
+            const text = entry.textContent.trim();
 
-            // 2a. Pattern: Defensive Stat (e.g., 1st Half [1:05] Sheffield Giants (14U): #7 TACKLE)
-            // It searches for Team X: #Y STAT anywhere in the string.
-            const defMatch = text.match(/(Team\s*(\d+).*?):\s*(#\d+)\s*(PBU|TACKLE|TFL|Sack|INT)/i);
+            // Pattern: Finds Team X, then Player #Y, then Stat Type (PBU, TACKLE, etc.)
+            // Ignores all text before the team name and ignores the colon/parentheses around team name.
+            const defMatch = text.match(/Team\s*(\d+).*?(#\d+)\s*(PBU|TACKLE|TFL|Sack|INT)/i);
             
             if (defMatch) {
-                // Determine team from the full team name/ID match (Group 1)
-                const teamNum = defMatch[2]; 
-                const player = defMatch[3];  // e.g., "#7"
-                const stat = defMatch[4];  // e.g., "TACKLE"
+                const teamNum = defMatch[1]; // Team number (1 or 2)
+                const player = defMatch[2];  // Player number (e.g., "#7")
+                const stat = defMatch[3];  // Stat type (e.g., "TACKLE")
                 
                 const teamKey = 'team' + teamNum;
 
-                // Tally Defensive Stats (PBU, Tackle, TFL, Sack, INT)
+                // Tally Defensive Stats
                 updateStat(teamKey, 'defence', player, stat);
             }
         });
