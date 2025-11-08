@@ -1590,7 +1590,7 @@ body.role-stats .log-time-stamp {
 }
 
 /* Version number styling */
-.version, .version-notes {
+.version, .version-notes, .whistle-stats-notes {
     display: block;
     /* position: absolute; */
     bottom: 10px;

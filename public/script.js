@@ -1,4 +1,4 @@
-const appVersion = '0.3.61';
+const appVersion = '0.3.62';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1740,18 +1740,20 @@ if (timeoutsPerHalfInput) {
             summaryText += `No scoring plays recorded.\n`;
         }
 
-        // --- 3. Timeout Log ---
-        // Use the length of the extracted DOM elements for the count.
-        summaryText += `\nTIMEOUT LOG (${timeoutLogEntries.length} events)\n`;
-        summaryText += `----------------------------------------------------\n`;
-        if (timeoutLogEntries.length > 0) {
-            timeoutLogEntries.forEach(li => {
-                // Extract the clean text content, which is already formatted: [Time] Team X called a timeout.
-                const entryText = stripTimeIfStatsView(li.textContent.trim());
-                summaryText += `${entryText}\n`;
-            });
-        } else {
-            summaryText += `No timeouts used.\n`;
+        if (window.userRole !== 'stats') {
+            // --- 3. Timeout Log ---
+            // Use the length of the extracted DOM elements for the count.
+            summaryText += `\nTIMEOUT LOG (${timeoutLogEntries.length} events)\n`;
+            summaryText += `----------------------------------------------------\n`;
+            if (timeoutLogEntries.length > 0) {
+                timeoutLogEntries.forEach(li => {
+                    // Extract the clean text content, which is already formatted: [Time] Team X called a timeout.
+                    const entryText = stripTimeIfStatsView(li.textContent.trim());
+                    summaryText += `${entryText}\n`;
+                });
+            } else {
+                summaryText += `No timeouts used.\n`;
+            }
         }
 
         // --- 4. Defensive Log ---
