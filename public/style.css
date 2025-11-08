@@ -483,6 +483,11 @@ button:hover {
     margin: -20px !important;
 }
 
+/* Ensures the coin toss button is hidden ONLY when the Stats Tracker role is active */
+body.role-stats #coin-toss-btn {
+    display: none !important;
+}
+
 #start-game-btn {
     width:100%;
     font-size:24px;
