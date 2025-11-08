@@ -1337,6 +1337,11 @@ button.defence-stats-btn {
     color:var(--background-color);
 }
 
+/* Hides the time stamp element in the logs when in Stats Tracker View */
+body.role-stats .log-time-stamp {
+    display: none !important;
+}
+
 /* New styles for the game summary screen */
 #game-summary {
     padding: 20px;

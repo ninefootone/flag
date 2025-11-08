@@ -1,4 +1,4 @@
-const appVersion = '0.3.58';
+const appVersion = '0.3.59';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1048,7 +1048,7 @@ if (timeoutsPerHalfInput) {
         
         // Use the new fullTimestamp
         // const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
-        const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} ${playerString}.</li>`;
+        const newLogEntry = `<li><span class="log-time-stamp">${fullTimestamp} </span>${teamName} scored a ${event.scoreLabel} ${playerString}.</li>`;
         
         return newLogEntry + gameState.scoreLogHTML;
     };
@@ -1211,7 +1211,7 @@ if (timeoutsPerHalfInput) {
         // Construct the full log message
         logMessage += `: ${stats.join(', ')}`; // Used colon for cleaner look
 
-        const logEntryHTML = `<li class="log-entry log-defence log-team-${team}">${fullTimestamp} ${logMessage}</li>`;
+        const logEntryHTML = `<li class="log-entry log-defence log-team-${team}"><span class="log-time-stamp">${fullTimestamp} </span>${logMessage}</li>`;
 
         // CRITICAL FIX: Save the new log entry to the game state string
         gameState.defenceLogHTML = logEntryHTML + gameState.defenceLogHTML;
