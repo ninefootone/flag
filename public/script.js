@@ -1,4 +1,4 @@
-const appVersion = '0.3.62';
+const appVersion = '0.3.63';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1286,6 +1286,11 @@ if (timeoutsPerHalfInput) {
         // Connects to WebSocket for data sharing
         connectWebSocket(newGameId);
     
+        const startGameBtn = document.getElementById('start-game-btn');
+        if (startGameBtn) {
+            startGameBtn.textContent = 'Track Game Stats'; // Change text only on Stats View entry
+        }
+
         // 1. Set global variables
         window.userRole = 'stats'; 
     
