@@ -1,4 +1,4 @@
-const appVersion = '0.3.70';
+const appVersion = '0.3.71';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1686,7 +1686,7 @@ if (timeoutsPerHalfInput) {
 
     /**
      * Parses the score and defense logs to aggregate player-specific statistics.
-     * Uses highly resilient regex patterns to handle various log formatting and extra text.
+     * Uses ultra-resilient regex patterns to handle various log formatting and extra text.
      */
     const aggregatePlayerStats = (scoreLog, defenceLog) => {
         const aggregatedStats = {
@@ -1703,50 +1703,46 @@ if (timeoutsPerHalfInput) {
 
         // --- 1. PARSE SCORING LOG (Offence) ---
         scoreLog.forEach(entry => {
-            const text = entry.textContent.trim();
+            // Replace ALL non-standard whitespace with a single standard space, and trim.
+            const text = entry.textContent.replace(/\s+/g, ' ').trim(); 
             
+            // Pattern 1: Get Score Type
             const coreActionMatch = text.match(/scored\s*(a)?\s*(Touchdown|PAT|2PT)\s*(.*)/i);
             if (!coreActionMatch) return;
             
             const scoreType = coreActionMatch[2]; 
             const playerInfo = coreActionMatch[3]; 
 
+            // Pattern 2: Get Team Number
             const teamMatch = text.match(/Team\s*(\d+)/i);
             if (!teamMatch) return;
             const teamKey = 'team' + teamMatch[1]; 
 
-            // Pattern: Passing Play (e.g., ... (QB #1, WR #24))
-            const passMatch = playerInfo.match(/\((QB\s*#\d+),\s*([A-Z]*\s*#\d+)\)/i);
+            // Pattern 3: Get Player Roles (The most critical part)
+            const passMatch = playerInfo.match(/\((QB\s*#\d+)\s*,\s*([A-Z]*\s*#\d+)\)/i);
             
             if (passMatch) {
                 const [_, qbEntry, receiverEntry] = passMatch; 
                 
-                // 🚨 NEW LOGIC: Determine the correct label for the receiver/runner
-                let receiverStatLabel;
-                if (receiverEntry.startsWith('RB')) {
-                    // Use 'Carries' if the player role is RB
-                    receiverStatLabel = (scoreType === 'PAT') ? 'PAT Carries' : (scoreType === '2PT') ? '2PT Carries' : 'TD Carries';
-                } else {
-                    // Use 'Receptions' for all other positions (WR, TE, REC)
-                    receiverStatLabel = (scoreType === 'PAT') ? 'PAT Receptions' : (scoreType === '2PT') ? '2PT Receptions' : 'TD Receptions';
-                }
+                // Determine the base receiver role for correct terminology
+                const baseReceiverRole = receiverEntry.trim().split(' ')[0]; 
+                const isRB = baseReceiverRole === 'RB';
                 
-                // Correctly label TD passes/receptions
-                // Determine the base term for the player role
-                const baseReceiverStat = receiverEntry.startsWith('RB') ? 'Carries' : 'Receptions';
-                const baseQbStat = 'Passes'; // QB stat is always a pass
+                let qbStatLabel;
+                let receiverStatLabel;
 
+                // 🚨 FIX: Use dynamic label determination for all score types 🚨
                 if (scoreType === 'Touchdown') {
                     qbStatLabel = 'TD Passes';
-                    receiverStatLabel = `TD ${baseReceiverStat}`; // e.g., 'TD Carries' or 'TD Receptions'
+                    receiverStatLabel = isRB ? 'TD Carries' : 'TD Receptions';
                 } else if (scoreType === '2PT') {
                     qbStatLabel = '2PT Passes';
-                    receiverStatLabel = `2PT ${baseReceiverStat}`;
+                    receiverStatLabel = isRB ? '2PT Carries' : '2PT Receptions';
                 } else if (scoreType === 'PAT') {
                     qbStatLabel = 'PAT Passes';
-                    receiverStatLabel = `PAT ${baseReceiverStat}`;
+                    receiverStatLabel = isRB ? 'PAT Carries' : 'PAT Receptions';
                 } else {
-                    return; // Should not happen, but safe guard
+                    return; 
                 }
 
                 // Apply the stats using the calculated labels
@@ -1757,8 +1753,10 @@ if (timeoutsPerHalfInput) {
 
         // --- 2. PARSE DEFENSIVE LOG (Defence) ---
         defenceLog.forEach(entry => {
-            const text = entry.textContent.trim();
-            
+            // Replace ALL non-standard whitespace with a single standard space, and trim.
+            const text = entry.textContent.replace(/\s+/g, ' ').trim(); 
+
+            // Finds Team X, then Player #Y, then Stat Type (PBU, TACKLE, etc.)
             const defMatch = text.match(/Team\s*(\d+).*?(#\d+)\s*(PBU|TACKLE|TFL|Sack|INT)/i);
             
             if (defMatch) {
