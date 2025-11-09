@@ -1,4 +1,4 @@
-const appVersion = '0.3.69';
+const appVersion = '0.3.70';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1732,16 +1732,26 @@ if (timeoutsPerHalfInput) {
                 }
                 
                 // Correctly label TD passes/receptions
+                // Determine the base term for the player role
+                const baseReceiverStat = receiverEntry.startsWith('RB') ? 'Carries' : 'Receptions';
+                const baseQbStat = 'Passes'; // QB stat is always a pass
+
                 if (scoreType === 'Touchdown') {
-                    updateStat(teamKey, 'offence', qbEntry, 'TD Passes');
-                    updateStat(teamKey, 'offence', receiverEntry, 'TD Receptions'); // Keeps 'TD Receptions' general for TD scoring
+                    qbStatLabel = 'TD Passes';
+                    receiverStatLabel = `TD ${baseReceiverStat}`; // e.g., 'TD Carries' or 'TD Receptions'
                 } else if (scoreType === '2PT') {
-                    updateStat(teamKey, 'offence', qbEntry, '2PT Passes');
-                    updateStat(teamKey, 'offence', receiverEntry, receiverStatLabel);
+                    qbStatLabel = '2PT Passes';
+                    receiverStatLabel = `2PT ${baseReceiverStat}`;
                 } else if (scoreType === 'PAT') {
-                    updateStat(teamKey, 'offence', qbEntry, 'PAT Passes');
-                    updateStat(teamKey, 'offence', receiverEntry, receiverStatLabel);
+                    qbStatLabel = 'PAT Passes';
+                    receiverStatLabel = `PAT ${baseReceiverStat}`;
+                } else {
+                    return; // Should not happen, but safe guard
                 }
+
+                // Apply the stats using the calculated labels
+                updateStat(teamKey, 'offence', qbEntry, qbStatLabel);
+                updateStat(teamKey, 'offence', receiverEntry, receiverStatLabel);
             } 
         });
 
