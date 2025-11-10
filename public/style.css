@@ -1456,6 +1456,27 @@ body.role-stats .log-time-stamp {
     width:240px;
 }
 
+/* Player Stats */
+
+h3.player-stats-heading {
+    text-align: left;
+}
+
+#team1-stats-header, #team2-stats-header {
+    color:var(--secondary-color);
+    text-align: left;
+    margin-bottom:10px;
+}
+
+#team1-offence-stats h4, #team1-defence-stats h4, #team2-offence-stats h4, #team2-defence-stats h4 {
+    margin-top:10px;
+    text-align: left;
+}
+
+ul.stats-list {
+    text-align: left;
+}
+
 /* Mobile-first adjustments for small screens */
 @media (max-width: 600px) {
     .clocks-section {
