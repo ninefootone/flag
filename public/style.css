@@ -1177,6 +1177,12 @@ ul {
     padding: 0;
 }
 
+.log-container {
+    padding: 20px;
+    border: 1px solid var(--section-border);
+    border-radius: 8px;
+}
+
 .log-container ul {
     margin-top:5px;
 }
@@ -1200,6 +1206,7 @@ li {
 
 .log-title {
     text-align: left;
+    margin-top:0px;
 }
 
 h4.log-title {
@@ -1344,7 +1351,7 @@ body.role-stats .log-time-stamp {
 
 /* New styles for the game summary screen */
 #game-summary {
-    padding: 20px;
+    padding: 50px 20px;
     text-align: center;
     max-width:480px;
     width:100%;
