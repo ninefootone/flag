@@ -1458,6 +1458,19 @@ body.role-stats .log-time-stamp {
 
 /* Player Stats */
 
+h5.download-button-notes {
+    font-weight: normal;
+    margin:40px 0 10px 0;
+}
+
+#download-summary-btn {
+    margin-top:20px;
+}
+
+#summary-player-stats-container {
+    display: none;
+}
+
 h3.player-stats-heading {
     text-align: left;
 }
@@ -1470,11 +1483,13 @@ h3.player-stats-heading {
 
 #team1-offence-stats h4, #team1-defence-stats h4, #team2-offence-stats h4, #team2-defence-stats h4 {
     margin-top:10px;
+    margin-bottom:0px;
     text-align: left;
 }
 
 ul.stats-list {
     text-align: left;
+    margin-top:5px;
 }
 
 /* Mobile-first adjustments for small screens */

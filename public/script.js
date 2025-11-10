@@ -1,4 +1,4 @@
-const appVersion = '0.3.72';
+const appVersion = '0.3.73';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1900,7 +1900,7 @@ if (timeoutsPerHalfInput) {
 
         // 🚨 NEW: AGGREGATED PLAYER STATS SECTION 🚨
         if (window.playerStats) {
-            summaryText += `\nAGGREGATED PLAYER STATS\n`;
+            summaryText += `\nPLAYER STATS\n`;
             summaryText += `====================================================\n`;
 
             ['team1', 'team2'].forEach(teamKey => {
