@@ -1,4 +1,4 @@
-const appVersion = '0.3.78';
+const appVersion = '0.3.79';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -691,6 +691,17 @@ if (timeoutsPerHalfInput) {
         ws.onerror = (error) => {
             console.error('WebSocket Error:', error);
         };
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                console.log('Page became visible - checking WebSocket connection...');
+                if (!ws || ws.readyState === WebSocket.CLOSED) {
+                    console.log('WebSocket closed, reconnecting...');
+                    reconnectAttempts = 0;
+                    connectWebSocket(gameIdFromUrl);
+                }
+            }
+        });
     };
 
     // --- State Management and UI Updates ---
