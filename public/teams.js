@@ -1,4 +1,4 @@
-const teamsDataVersion = '0.3.82'; 
+const teamsDataVersion = '0.3.83'; 
 
 // Use 'window' to explicitly declare TEAM_LIST as a global variable.
 window.TEAM_LIST = []; 

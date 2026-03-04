@@ -1,4 +1,4 @@
-const appVersion = '0.3.82';
+const appVersion = '0.3.83';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1275,6 +1275,9 @@ if (timeoutsPerHalfInput) {
                     setTimeout(() => {
                         connectWebSocket(gameIdFromUrl);
                     }, 1000);
+                } else if (ws.readyState === WebSocket.OPEN) {
+                    // Connection still open - just request a fresh state from server
+                    ws.send(JSON.stringify({ type: 'REQUEST_STATE' }));
                 }
             }
         });

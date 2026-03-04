@@ -135,6 +135,9 @@ wss.on('connection', (ws, request, gameId) => {
             case 'STOP_PLAY_CLOCK':
                 stopPlayClock(currentGameState, gameId);
                 break;
+            case 'REQUEST_STATE':
+                ws.send(JSON.stringify(currentGameState));
+                break;
             case 'UPDATE_STATE':
                 Object.assign(currentGameState, parsedMessage.payload);
                 if (parsedMessage.payload.gameStarted) {
