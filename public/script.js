@@ -1,4 +1,4 @@
-const appVersion = '0.3.85';
+const appVersion = '0.3.86';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -7,27 +7,6 @@ console.log(`Referee App - Version: ${appVersion}`);
  * @param {number} min The minimum allowed value.
  * @param {number} max The maximum allowed value.
  */
-/* const clampInput = (inputElement, min, max) => {
-    let value = parseInt(inputElement.value);
-
-    // If the input is empty or NaN after parsing, default it to the minimum value (e.g., 0 or 1).
-    if (isNaN(value)) {
-        inputElement.value = min;
-        return;
-    }
-
-    // Ensure the value does not go below the minimum
-    if (value < min) {
-        inputElement.value = min;
-    } 
-    // Ensure the value does not go above the maximum
-    else if (value > max) {
-        inputElement.value = max;
-    }
-    
-    // This cleans up leading zeros (e.g., changes '05' to '5')
-    inputElement.value = parseInt(inputElement.value).toString();
-}; */
 
 // --- CRITICAL FIX: Explicitly assign to window for global access ---
 window.TEAM_DATA_MAP = new Map(); 
@@ -107,21 +86,9 @@ const initializeTeamData = () => {
                 
                     // 1. Add the Logo Image
                     const img = document.createElement('img');
-                    img.src = teamData['Final Logo Path'];
-                    
-                    // *** ADD THIS ONERROR HANDLER ***
-                    img.onerror = function() {
-                        // If the image fails to load (due to 404, bad URL, etc.):
-    
-                        // 1. Prevent an infinite loop if the fallback itself somehow fails
-                        this.onerror = null; 
-    
-                        // 2. Set the source to the known good default logo path.
-                        // The constant is declared globally in teams.js, so it's accessible via window.
-                        this.src = window.DEFAULT_LOGO_PATH;
-                    };
-                    // *******************************
-                    
+                    const teamLogoData = window.TEAM_DATA_MAP.get(teamName);
+                    img.src = teamLogoData?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
+                    img.onerror = function() { this.onerror = null; this.src = window.DEFAULT_LOGO_PATH; };
                     img.alt = `${teamName} Logo`;
                     img.classList.add('team-logo-suggestion');
                     li.appendChild(img);
@@ -147,50 +114,26 @@ const initializeTeamData = () => {
 };
 
 /**
- * Renders the logos on the summary screen.
- * Uses innerHTML with direct fallback path injection for reliability, 
- * matching the reliable logic context elsewhere in the app.
+ * Renders a team logo into a container element, with fallback.
+ * @param {HTMLElement} element The container element to inject the logo into.
+ * @param {string} teamName The team name to look up.
  */
+const renderTeamLogo = (element, teamName) => {
+    if (!element) return;
+    const teamNameClean = teamName.trim();
+    const teamData = window.TEAM_DATA_MAP.get(teamNameClean);
+    const logoPath = teamData?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
+    const fallbackPath = window.DEFAULT_LOGO_PATH;
+    element.innerHTML = `<img src="${logoPath}" 
+                             alt="${teamNameClean} Logo" 
+                             class="summary-logo"
+                             onerror="this.onerror=null; this.src='${fallbackPath}';">`;
+};
+
 const renderSummaryLogos = () => {
-    // 1. Guard against running if the data isn't even partially loaded
-    if (typeof window.gameState === 'undefined' || !window.gameState.team1Name) {
-        return;
-    }
-
-    // 2. Fetch elements and data locally
-    const summaryTeam1Logo = document.getElementById('summary-team1-logo');
-    const summaryTeam2Logo = document.getElementById('summary-team2-logo');
-    
-    // 3. Clean the names for robust lookup
-    const team1NameClean = window.gameState.team1Name.trim();
-    const team2NameClean = window.gameState.team2Name.trim();
-
-    // 4. Look up paths (using robust OR to handle missing/empty data)
-    // This part is already correct and handles missing paths from the data sheet.
-    const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
-    const team1LogoPath = team1Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
-    
-    const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
-    const team2LogoPath = team2Data?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
-    
-    
-    // 5. CRITICAL INJECTION FIX: Pass the literal string value of the fallback path.
-    // By fetching the value first, we guarantee the exact path string is embedded 
-    // in the onerror attribute, which bypasses scope issues.
-    const fallbackPathValue = window.DEFAULT_LOGO_PATH; 
-    
-    if (summaryTeam1Logo) {
-        summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" 
-                                         alt="${team1NameClean} Logo" 
-                                         class="summary-logo"
-                                         onerror="this.onerror=null; this.src='${fallbackPathValue}';">`;
-    }
-    if (summaryTeam2Logo) {
-        summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" 
-                                         alt="${team2NameClean} Logo" 
-                                         class="summary-logo"
-                                         onerror="this.onerror=null; this.src='${fallbackPathValue}';">`;
-    }
+    if (typeof window.gameState === 'undefined' || !window.gameState.team1Name) return;
+    renderTeamLogo(document.getElementById('summary-team1-logo'), window.gameState.team1Name);
+    renderTeamLogo(document.getElementById('summary-team2-logo'), window.gameState.team2Name);
 };
 
 /**
@@ -778,19 +721,9 @@ if (timeoutsPerHalfInput) {
                 const team2NameClean = gameState.team2Name.trim();
 
                 // Look up paths
-                const team1Data = window.TEAM_DATA_MAP.get(team1NameClean);
-                const team1LogoPath = team1Data ? team1Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
-                const team2Data = window.TEAM_DATA_MAP.get(team2NameClean);
-                const team2LogoPath = team2Data ? team2Data['Final Logo Path'] : window.DEFAULT_LOGO_PATH;
-                
-                // Inject the Image tag
-                if (summaryTeam1Logo) {
-                    summaryTeam1Logo.innerHTML = `<img src="${team1LogoPath}" alt="${gameState.team1Name} Logo" class="summary-logo">`;
-                }
-                if (summaryTeam2Logo) {
-                    summaryTeam2Logo.innerHTML = `<img src="${team2LogoPath}" alt="${gameState.team2Name} Logo" class="summary-logo">`;
-                }
-                
+                renderTeamLogo(summaryTeam1Logo, gameState.team1Name);
+                renderTeamLogo(summaryTeam2Logo, gameState.team2Name);
+
                 // --- END RESTORE ---
 
                 summaryTeam1Name.textContent = gameState.team1Name;
