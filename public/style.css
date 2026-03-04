@@ -2034,4 +2034,8 @@ ul.stats-list {
     }
 }
 
-
+#refresh-note p {
+    text-align: center;
+    font-size:12px;
+    color:var(--notes-color);
+}
