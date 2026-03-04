@@ -1,4 +1,4 @@
-const appVersion = '0.3.81';
+const appVersion = '0.3.82';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1274,7 +1274,7 @@ if (timeoutsPerHalfInput) {
                     reconnectAttempts = 0;
                     setTimeout(() => {
                         connectWebSocket(gameIdFromUrl);
-                    }, 500);
+                    }, 1000);
                 }
             }
         });
