@@ -1,4 +1,4 @@
-const appVersion = '0.3.79';
+const appVersion = '0.3.80';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -691,17 +691,6 @@ if (timeoutsPerHalfInput) {
         ws.onerror = (error) => {
             console.error('WebSocket Error:', error);
         };
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                console.log('Page became visible - checking WebSocket connection...');
-                if (!ws || ws.readyState === WebSocket.CLOSED) {
-                    console.log('WebSocket closed, reconnecting...');
-                    reconnectAttempts = 0;
-                    connectWebSocket(gameIdFromUrl);
-                }
-            }
-        });
     };
 
     // --- State Management and UI Updates ---
@@ -1276,6 +1265,18 @@ if (timeoutsPerHalfInput) {
                 connectWebSocket(gameIdFromUrl);
             }, 150);
         }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                console.log('Page became visible - checking WebSocket connection...');
+                if (!ws || ws.readyState === WebSocket.CLOSED) {
+                    console.log('WebSocket closed, reconnecting...');
+                    reconnectAttempts = 0;
+                    connectWebSocket(gameIdFromUrl);
+                }
+            }
+        });
+
 
     } else {
         gameLobby.classList.remove('hidden');
