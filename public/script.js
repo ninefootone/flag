@@ -1,4 +1,4 @@
-const appVersion = '0.3.77';
+const appVersion = '0.3.78';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -676,13 +676,11 @@ if (timeoutsPerHalfInput) {
             
             // Reconnection logic using exponential backoff (up to 5 attempts)
             if (reconnectAttempts < 5) {
-                // Calculate delay: 1s, 2s, 4s, 8s, 15s (capped at 15s)
-                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000); 
-                
+                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000);
+                reconnectAttempts++;
                 setTimeout(() => {
                     connectWebSocket(gameIdFromUrl);
-                    // updateUI();
-                }, 150); // 150ms delay gives Safari time to stabilize
+                }, delay);
             } else {
                 console.error("Maximum reconnect attempts reached. Please refresh.");
                 // Since you cannot see the console, this is where the user would be stuck again.
