@@ -1,4 +1,4 @@
-const appVersion = '0.3.88';
+const appVersion = '0.3.89';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -754,7 +754,7 @@ if (timeoutsPerHalfInput) {
         }
 
         gameDateDisplay.textContent = formatDisplayDate(gameState.date);
-        gameLocationDisplay.textContent = gameState.location.trim() ? `, ${gameState.location.trim()}` : '';
+        gameLocationDisplay.textContent = (gameState.location || '').trim() ? `, ${(gameState.location || '').trim()}` : '';
         //gameLocationDisplay.textContent = gameState.location;
         team1NameDisplay.textContent = gameState.team1Name;
         team2NameDisplay.textContent = gameState.team2Name;
