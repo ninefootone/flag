@@ -1,4 +1,4 @@
-const appVersion = '0.3.87';
+const appVersion = '0.3.88';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -653,8 +653,8 @@ if (timeoutsPerHalfInput) {
                 const summaryTeam2Logo = document.getElementById('summary-team2-logo');
 
                 // Clean the name before lookup (Fixes previous issues)
-                const team1NameClean = gameState.team1Name.trim();
-                const team2NameClean = gameState.team2Name.trim();
+                const team1NameClean = (gameState.team1Name || '').trim();
+                const team2NameClean = (gameState.team2Name || '').trim();
 
                 // Look up paths
                 renderTeamLogo(summaryTeam1Logo, gameState.team1Name);
