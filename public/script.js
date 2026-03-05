@@ -1,4 +1,4 @@
-const appVersion = '0.3.86';
+const appVersion = '0.3.87';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -472,8 +472,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'Period'; 
     };
 
-    let reconnectAttempts = 0;
-    let pingInterval = null;   // NEW: For keeping the connection alive
     let allTeamNames = []; // Global array to store all loaded team names
 
     let actionTimeLeft = null; // Stores the clock time (in seconds) when a score or defence action is initiated.
@@ -576,74 +574,12 @@ if (timeoutsPerHalfInput) {
         });
     });
 
-    let ws = null;
-    let gameState = {};
     let tempScoreEvent = null;
     let twoMinuteWarningIssuedLocally = false;
     let actionHistory = [];
 
-    // --- WebSocket Event Handlers ---
-    const connectWebSocket = (gameId) => {
-        ws = new WebSocket(`wss://${location.host}/game/${gameId}`);
-
-        ws.onopen = () => {
-            console.log(`Connected to the WebSocket server for game ${gameId}!`);
-            reconnectAttempts = 0; // NEW: Reset counter on successful connection
-            applyRolePermissions();
-
-            if (pingInterval) clearInterval(pingInterval); // Clear any old interval
-            pingInterval = setInterval(() => {
-                if (ws && ws.readyState === WebSocket.OPEN) {
-                   // Send a lightweight, non-game-changing message (e.g., 'PING')
-                    ws.send(JSON.stringify({ type: 'HEARTBEAT' })); 
-                }
-            }, 10000); // 10 seconds
-
-        };
-
-        ws.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-            console.log('Received from server:', message);
-            Object.assign(gameState, message);
-            updateUI();
-        };
-
-        ws.onclose = () => {
-            console.log(`Disconnected from the WebSocket server for game ${gameId}. Attempting reconnect...`);
-            ws = null; // Ensure ws is nullified
-        
-            if (pingInterval) {
-                clearInterval(pingInterval);
-                pingInterval = null;
-        }
-            
-            // Reconnection logic using exponential backoff (up to 5 attempts)
-            if (reconnectAttempts < 5) {
-                const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000);
-                reconnectAttempts++;
-                setTimeout(() => {
-                    connectWebSocket(gameIdFromUrl);
-                }, delay);
-            } else {
-                console.error("Maximum reconnect attempts reached. Please refresh.");
-                // Since you cannot see the console, this is where the user would be stuck again.
-                // We rely on the role permissions lock to still be active here.
-            }
-        };
-
-        ws.onerror = (error) => {
-            console.error('WebSocket Error:', error);
-        };
-    };
-
     // --- State Management and UI Updates ---
-    const sendAction = (type, payload = {}) => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type, payload }));
-        }
-    };
-
-    const updateUI = () => {
+    const updateUI = window.updateUI = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const urlRoleParam = urlParams.get('role');
 
@@ -915,7 +851,7 @@ if (timeoutsPerHalfInput) {
     };
 
     // Function to apply role-based permissions
-    const applyRolePermissions = () => {
+    const applyRolePermissions = window.applyRolePermissions = () => {
         allControls.forEach(control => {
             if (control) {
                 control.classList.add('disabled');
@@ -931,7 +867,7 @@ if (timeoutsPerHalfInput) {
 
         // --- WebSocket Connection Lock for Settings Form (iOS Fix) ---
         const settingsIsVisible = !settingsForm.classList.contains('hidden');
-        const isConnected = ws && ws.readyState === WebSocket.OPEN;
+        const isConnected = window.ws && window.ws.readyState === WebSocket.OPEN;
 
         if (settingsIsVisible && !isConnected) {
             // Disable the buttons if we are on the settings form but not connected
@@ -1179,7 +1115,7 @@ if (timeoutsPerHalfInput) {
 
     // --- Event Listeners ---
     const pathParts = window.location.pathname.split('/');
-    const gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
+    const gameIdFromUrl = window.gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
 
     if (gameIdFromUrl) {
         updateUI();
@@ -1198,23 +1134,6 @@ if (timeoutsPerHalfInput) {
                 connectWebSocket(gameIdFromUrl);
             }, 150);
         }
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                console.log('Page became visible - checking WebSocket connection...');
-                if (!ws || ws.readyState === WebSocket.CLOSED) {
-                    console.log('WebSocket closed, reconnecting...');
-                    reconnectAttempts = 0;
-                    setTimeout(() => {
-                        connectWebSocket(gameIdFromUrl);
-                    }, 1000);
-                } else if (ws.readyState === WebSocket.OPEN) {
-                    // Connection still open - just request a fresh state from server
-                    ws.send(JSON.stringify({ type: 'REQUEST_STATE' }));
-                }
-            }
-        });
-
 
     } else {
         gameLobby.classList.remove('hidden');
