@@ -1,4 +1,4 @@
-const appVersion = '0.3.89';
+const appVersion = '0.3.90';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -118,7 +118,7 @@ const initializeTeamData = () => {
  * @param {HTMLElement} element The container element to inject the logo into.
  * @param {string} teamName The team name to look up.
  */
-const renderTeamLogo = (element, teamName) => {
+const renderTeamLogo = window.renderTeamLogo = (element, teamName) => {
     if (!element) return;
     const teamNameClean = teamName.trim();
     const teamData = window.TEAM_DATA_MAP.get(teamNameClean);
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- SECURITY ADDITIONS: Secure Map and Helper Functions ---
     // This map stores the secure, unguessable tokens for each role.
-    const SECURE_ROLE_MAP = {
+    const SECURE_ROLE_MAP = window.SECURE_ROLE_MAP = {
         // Original Role Name : Secure Token (must be unique)
         'clock': '4jk98d',
         'head-referee': 'a2c6g1',
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Finds the original role name (e.g., 'coach') by searching for its secure token (e.g., '5hd74h').
     // Falls back to the token itself if the token is not found (e.g., 'view-only').
-    const getRoleFromToken = (token) => {
+    const getRoleFromToken = window.getRoleFromToken = (token) => {
         return Object.keys(SECURE_ROLE_MAP).find(key => SECURE_ROLE_MAP[key] === token);
     };
 
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('date-field').value = formattedDate;
 
     // Global variable to store the Lottie animation object
-    let coinAnimation = null;
+    let coinAnimation = window.coinAnimation = null;
 
     // --- DOM ELEMENT REFERENCES ---// --- Core Lottie Initialization ---
     // This function runs once to set up the Lottie player inside the container
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const coinAnimationArea = document.getElementById('coin-animation-area');
 
-        coinAnimation = lottie.loadAnimation({
+        coinAnimation = window.coinAnimation = lottie.loadAnimation({
             container: coinAnimationArea, // The DOM element to render the animation in
             renderer: 'svg', // Use 'svg' for best quality/scalability
             loop: true, // The animation should loop during the 'flip'
@@ -304,14 +304,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Global variable for the lobby animation object
-    let lobbyCoinAnimation = null;
+    let lobbyCoinAnimation = window.lobbyCoinAnimation = null;
 
     const initLobbyCoinAnimation = () => {
         // Safety check for the Lottie library, just like we did before
         if (typeof lottie === 'undefined' || lobbyCoinAnimation) return;
 
         if (lobbyCoinAnimationContainer) {
-            lobbyCoinAnimation = lottie.loadAnimation({
+            lobbyCoinAnimation = window.lobbyCoinAnimation = lottie.loadAnimation({
                 container: lobbyCoinAnimationContainer,
                 renderer: 'svg',
                 loop: true, // It should loop continuously
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
 
-    const getPeriodName = (half) => {
+    const getPeriodName = window.getPeriodName = (half) => {
         if (half === 1) return '1st Half';
         if (half === 2) return '2nd Half';
         if (half >= 3) return `OT ${half - 2}`; // OT 1 starts at half 3 (3 - 2 = 1)
@@ -479,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
     * Reverses the order of list items (li) in a given <ul> or <ol> element.
     */
-    const reverseLogOrder = (ulElement) => {
+    const reverseLogOrder = window.reverseLogOrder = (ulElement) => {
         // Create an array from the live collection of children (li elements)
         const listItems = Array.from(ulElement.children);
     
@@ -516,7 +516,7 @@ if (timeoutsPerHalfInput) {
 } */
 
     // Collect all control elements into a single array for easy management
-    const allControls = [
+    const allControls = window.allControls = [
         ...settingsGrid,
         halfDurationInput,
         playClockDurationInput,
@@ -554,7 +554,7 @@ if (timeoutsPerHalfInput) {
     ];
 
     // Map roles to the specific controls they can use
-    const rolePermissions = {
+    const rolePermissions = window.rolePermissions = {
         'administrator': [...settingsGrid, halfDurationInput, playClockDurationInput, timeoutsPerHalfInput, timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockOptions, playClockToggleBtn, playClockResetBtn, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...timeoutButtonsSection, ...useTimeoutBtns, ...timeoutLogContainer, undoBtn, endGameBtn, shareLinksSection, startNewGameFromSummaryBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, fixedFooter, infoModalAdmin],
         'head-referee': [timeoutLogList, summaryTimeoutLog, ...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...timeoutButtonsSection, ...useTimeoutBtns, fixedFooter, endGameBtn, ...timeoutLogContainer, undoBtn, infoBtn, penaltyLookupBtn, shareLinksBtn, infoModalRef],
         'scorer': [...clockContainer, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...downButtonsSection, ...timeoutButtonsSection, fixedFooter, ...timeoutLogContainer, undoBtn, infoBtn, infoModalScorer],
@@ -563,267 +563,26 @@ if (timeoutsPerHalfInput) {
         'stats': [...scoreButtons, ...defenceButtons, ...adjustButtons, fixedFooter, penaltyLookupBtn, endGameBtn, startNewGameFromSummaryBtn]
     };
 
-    let userRole = 'administrator';
+    window.userRole = 'administrator';
     roleInputs.forEach(input => {
         input.addEventListener('change', (event) => {
-            userRole = event.target.value;
+            window.userRole = event.target.value;
             const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('role', userRole);
+            urlParams.set('role', window.userRole);
             // history.replaceState(null, '', `?${urlParams.toString()}`);
-            applyRolePermissions();
+            window.applyRolePermissions();
         });
     });
 
     let tempScoreEvent = null;
-    let twoMinuteWarningIssuedLocally = false;
+    window.twoMinuteWarningIssuedLocally = false;
     let actionHistory = [];
 
     // --- State Management and UI Updates ---
-    const updateUI = window.updateUI = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlRoleParam = urlParams.get('role');
-
-        let determinedRole = 'administrator';
-
-        if (urlRoleParam) {
-            // 1. Try to find a role by token (existing logic)
-            const roleFromToken = getRoleFromToken(urlRoleParam);
-            
-            // 2. Check for token success OR check for explicit non-token role (e.g., 'stats')
-            if (roleFromToken) {
-                determinedRole = roleFromToken;
-            } else if (SECURE_ROLE_MAP.hasOwnProperty(urlRoleParam)) {
-                determinedRole = urlRoleParam;
-            }
-        }
-        
-        // Apply the determined role
-        userRole = determinedRole;
-
-        // 1. Clear any existing role classes
-        document.body.className = document.body.className.replace(/\brole-[a-z-]+\b/g, '');
-
-        // 2. Apply the new role class (e.g., 'role-stats')
-        document.body.classList.add(`role-${userRole}`);
-
-        const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
-        if (urlGameId && urlGameId !== 'game.html') {
-            gameIdDisplay.classList.remove('hidden');
-            document.getElementById('game-id-text').textContent = urlGameId;
-        } else {
-            gameIdDisplay.classList.add('hidden');
-        }
-
-        if (Object.keys(gameState).length > 0 && gameState.gameStarted && !gameState.gameEnded) {
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.add('hidden');
-            gameInterface.classList.remove('hidden');
-            gameSummary.classList.add('hidden');
-            if (fixedFooter) {
-                fixedFooter.classList.add('visible'); 
-            }
-            if (undoBtn) {
-                undoBtn.classList.remove('hidden');
-            }
-            if (endGameBtn) {
-                endGameBtn.classList.remove('hidden');
-            }
-        } else if (Object.keys(gameState).length > 0 && gameState.gameEnded) {
-
-            // Destroy the Coin Flip Modal animation
-            if (typeof coinAnimation !== 'undefined' && coinAnimation && coinAnimation.destroy) {
-                coinAnimation.destroy();
-            }
-
-            // Destroy the Lobby screen animation (if it was active)
-            if (typeof lobbyCoinAnimation !== 'undefined' && lobbyCoinAnimation && lobbyCoinAnimation.destroy) {
-                lobbyCoinAnimation.destroy();
-            }
-
-            setTimeout(() => {  
-                gameLobby.classList.add('hidden');
-                settingsForm.classList.add('hidden');
-                gameInterface.classList.add('hidden');
-                gameSummary.classList.remove('hidden');
-                
-                // --- RESTORE LOGO LOOKUP AND INJECTION ---
-                
-                // Re-fetch the elements here to ensure they are not null (robustness)
-                const summaryTeam1Logo = document.getElementById('summary-team1-logo');
-                const summaryTeam2Logo = document.getElementById('summary-team2-logo');
-
-                // Clean the name before lookup (Fixes previous issues)
-                const team1NameClean = (gameState.team1Name || '').trim();
-                const team2NameClean = (gameState.team2Name || '').trim();
-
-                // Look up paths
-                renderTeamLogo(summaryTeam1Logo, gameState.team1Name);
-                renderTeamLogo(summaryTeam2Logo, gameState.team2Name);
-
-                // --- END RESTORE ---
-
-                summaryTeam1Name.textContent = gameState.team1Name;
-                summaryTeam2Name.textContent = gameState.team2Name;
-                summaryTeam1Score.textContent = gameState.scores.team1;
-                summaryTeam2Score.textContent = gameState.scores.team2;
-                summaryScoreLog.innerHTML = gameState.scoreLogHTML;
-                summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-                summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
-
-                // 1. Extract the logs from the DOM elements that were just populated
-                const scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
-                const defenceLogEntries = Array.from(summaryDefenceLog.querySelectorAll('li'));
-            
-                // 2. Aggregate the stats and store globally for rendering/download
-                window.playerStats = aggregatePlayerStats(scoreLogEntries, defenceLogEntries);
-                
-                // 🚨 NEW: RENDER AGGREGATED STATS TO SCREEN 🚨
-                if (window.playerStats) {
-                    // Update team names in the headers (assuming you defined these in Step 3 HTML)
-                    document.getElementById('team1-stats-header').textContent = gameState.team1Name;
-                    document.getElementById('team2-stats-header').textContent = gameState.team2Name;
-
-                    renderPlayerStats(window.playerStats.team1, 'team1');
-                    renderPlayerStats(window.playerStats.team2, 'team2');
-                }
-
-            }, 0);
-
-            // --- START SUMMARY LOG PLACEHOLDER LOGIC ---
-
-            // Score Log
-            if (gameState.scoreLogHTML && gameState.scoreLogHTML.trim().length > 0) {
-                summaryScoreLog.innerHTML = gameState.scoreLogHTML;
-            } else {
-                summaryScoreLog.innerHTML = '<li class="log-placeholder">No scores logged.</li>';
-            }
-
-            // Timeout Log
-            if (gameState.timeoutLogHTML && gameState.timeoutLogHTML.trim().length > 0) {
-                summaryTimeoutLog.innerHTML = gameState.timeoutLogHTML;
-            } else {
-                summaryTimeoutLog.innerHTML = '<li class="log-placeholder">No timeouts logged.</li>';
-            }
-
-            // Defence Log
-            if (gameState.defenceLogHTML && gameState.defenceLogHTML.trim().length > 0) {
-                summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
-            } else {
-                summaryDefenceLog.innerHTML = '<li class="log-placeholder">No defensive stats logged.</li>';
-            }
-
-            // --- END SUMMARY LOG PLACEHOLDER LOGIC ---
-
-            reverseLogOrder(summaryScoreLog);
-            reverseLogOrder(summaryTimeoutLog);
-            reverseLogOrder(summaryDefenceLog);    
-            if (fixedFooter) {
-                fixedFooter.classList.add('hidden'); 
-            }
-        } else if (window.location.pathname.startsWith('/game/')) {
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.remove('hidden');
-            gameInterface.classList.add('hidden');
-            gameSummary.classList.add('hidden');
-            if (fixedFooter) {
-                fixedFooter.classList.add('visible');
-            }
-            if (undoBtn) {
-                undoBtn.classList.add('hidden');
-            }
-            if (endGameBtn) {
-                endGameBtn.classList.add('hidden');
-            }
-            if (fixedFooter) {
-                fixedFooter.classList.remove('hidden'); 
-            }
-        } else {
-            gameLobby.classList.remove('hidden');
-            settingsForm.classList.add('hidden');
-            gameInterface.classList.add('hidden');
-            gameSummary.classList.add('hidden');
-            // if (fixedFooter) {
-            //     fixedFooter.classList.add('visible');
-            // }
-        }
-
-        applyRolePermissions();
-
-        if (Object.keys(gameState).length === 0) {
-            return;
-        }
-
-        gameDateDisplay.textContent = formatDisplayDate(gameState.date);
-        gameLocationDisplay.textContent = (gameState.location || '').trim() ? `, ${(gameState.location || '').trim()}` : '';
-        //gameLocationDisplay.textContent = gameState.location;
-        team1NameDisplay.textContent = gameState.team1Name;
-        team2NameDisplay.textContent = gameState.team2Name;
-        team1ScoreDisplay.textContent = gameState.scores.team1;
-        team2ScoreDisplay.textContent = gameState.scores.team2;
-        team1TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['1'];
-        team2TimeoutsDisplay.textContent = gameState.timeoutsPerHalf - gameState.timeoutsUsed['2'];
-        gameClockDisplay.textContent = formatTime(gameState.gameTimeLeft);
-        playClockDisplay.textContent = gameState.playTimeLeft;
-
-        if (gamePeriodDisplay) {
-            gamePeriodDisplay.textContent = getPeriodName(gameState.currentHalf);
-        }
-        
-        // === START LOG PLACEHOLDER LOGIC ===
-
-        // Score Log
-        if (gameState.scoreLogHTML && gameState.scoreLogHTML.trim().length > 0) {
-            scoreLogList.innerHTML = gameState.scoreLogHTML;
-        } else {
-            scoreLogList.innerHTML = '<li class="log-placeholder">No scores logged.</li>';
-        }
-
-        // Timeout Log
-        if (gameState.timeoutLogHTML && gameState.timeoutLogHTML.trim().length > 0) {
-            timeoutLogList.innerHTML = gameState.timeoutLogHTML;
-        } else {
-            timeoutLogList.innerHTML = '<li class="log-placeholder">No timeouts logged.</li>';
-        }
-
-        // Defence Log
-        if (gameState.defenceLogHTML && gameState.defenceLogHTML.trim().length > 0) {
-            defenceLogList.innerHTML = gameState.defenceLogHTML;
-        } else {
-            defenceLogList.innerHTML = '<li class="log-placeholder">No defensive stats logged.</li>';
-        }
-
-        // === END LOG PLACEHOLDER LOGIC ===
-
-        updateDownDisplay();
-        updateButtonLabels();
-        team1TimeoutLabel.textContent = gameState.team1Name;
-        team2TimeoutLabel.textContent = gameState.team2Name;
-
-        // if (gameState.coinTossResult) {
-        //     coinTossBtn.textContent = `${gameState.coinTossResult}`;
-        //     coinTossBtn.textContent = `${gameState.coinTossResult}. Click to flip again.`;
-        // } else {
-            // Set the initial text if no toss has occurred
-        //     coinTossBtn.textContent = 'Coin';
-        // }
-
-        if (gameState.gameTimeLeft === 120 && !twoMinuteWarningIssuedLocally) {
-            gameClockDisplay.parentElement.classList.add('warning');
-            twoMinuteWarningIssuedLocally = true;
-        }
-
-        // Update the Defence Log (Add this block)
-        // if (defenceLogList) {
-        //     defenceLogList.innerHTML = gameState.defenceLogHTML;
-        // }
-        // if (summaryDefenceLog) {
-        //     summaryDefenceLog.innerHTML = gameState.defenceLogHTML;
-        // }
-
-    };
+    // updateUI and applyRolePermissions are defined in ui.js
 
     // New/Updated function to format date for display (e.g., "27 September 2025")
-    const formatDisplayDate = (dateString) => {
+    const formatDisplayDate = window.formatDisplayDate = (dateString) => {
     // If the date is not set or is the 'N/A' default, return it as is.
     if (!dateString || dateString === 'N/A') return 'N/A';
     
@@ -851,42 +610,14 @@ if (timeoutsPerHalfInput) {
     };
 
     // Function to apply role-based permissions
-    const applyRolePermissions = window.applyRolePermissions = () => {
-        allControls.forEach(control => {
-            if (control) {
-                control.classList.add('disabled');
-            }
-        });
+    // applyRolePermissions is defined in ui.js
 
-        const controlsToEnable = rolePermissions[userRole] || [];
-        controlsToEnable.forEach(control => {
-            if (control) {
-                control.classList.remove('disabled');
-            }
-        });
-
-        // --- WebSocket Connection Lock for Settings Form (iOS Fix) ---
-        const settingsIsVisible = !settingsForm.classList.contains('hidden');
-        const isConnected = window.ws && window.ws.readyState === WebSocket.OPEN;
-
-        if (settingsIsVisible && !isConnected) {
-            // Disable the buttons if we are on the settings form but not connected
-            startGameBtn.classList.add('disabled');
-            coinTossBtn.classList.add('disabled');
-        } else if (settingsIsVisible) {
-            // Re-enable them if we are connected (This block will run after ws.onopen)
-            startGameBtn.classList.remove('disabled');
-            coinTossBtn.classList.remove('disabled');
-        }
-
-    };
-
-    const updateButtonLabels = () => {
+    const updateButtonLabels = window.updateButtonLabels = () => {
         gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
         playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
     };
 
-    const formatTime = (totalSeconds) => {
+    const formatTime = window.formatTime = (totalSeconds) => {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -966,7 +697,7 @@ if (timeoutsPerHalfInput) {
         return newLogEntry;
     };
 
-    const updateDownDisplay = () => {
+    const updateDownDisplay = window.updateDownDisplay = () => {
         downButtons.forEach(btn => {
             if (parseInt(btn.dataset.down) === gameState.currentDown) {
                 btn.classList.add('active');
@@ -1110,7 +841,7 @@ if (timeoutsPerHalfInput) {
         sendAction('UPDATE_STATE', gameState);
 
         // CRITICAL FIX: Send the updated state to the server/other clients
-        updateUI(); 
+        window.updateUI();
     };
 
     // --- Event Listeners ---
@@ -1118,7 +849,7 @@ if (timeoutsPerHalfInput) {
     const gameIdFromUrl = window.gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
 
     if (gameIdFromUrl) {
-        updateUI();
+        window.updateUI();
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
 
@@ -1144,7 +875,7 @@ if (timeoutsPerHalfInput) {
     startNewGameBtn.addEventListener('click', () => {
 
         const newGameId = Math.random().toString(36).substring(2, 8);
-        history.replaceState(null, '', `/game/${newGameId}?role=${SECURE_ROLE_MAP[userRole] || userRole}`);
+        history.replaceState(null, '', `/game/${newGameId}?role=${SECURE_ROLE_MAP[window.userRole] || window.userRole}`);
 
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
@@ -1184,14 +915,14 @@ if (timeoutsPerHalfInput) {
         document.body.classList.add(`role-stats`); 
 
         // 3. Manually trigger the full UI update and permission check
-        updateUI(); 
+        window.updateUI();
     });
 
     joinGameBtn.addEventListener('click', () => {
 
         const gameId = gameIdInput.value.trim();
         if (gameId) {
-            history.replaceState(null, '', `/game/${gameId}?role=${SECURE_ROLE_MAP[userRole] || userRole}`);
+            history.replaceState(null, '', `/game/${gameId}?role=${SECURE_ROLE_MAP[window.userRole] || window.userRole}`);
 
             joinErrorMessage.classList.add('hidden');
             gameLobby.classList.add('hidden');
@@ -1211,7 +942,7 @@ if (timeoutsPerHalfInput) {
         // 2. RETAIN OTHER VALIDATION AND RESET (keep these lines if they exist)
         // if (!dateField.value || !locationField.value) { /* ... */ }
         // if (!gameState.coinTossResult) { /* ... */ }
-        twoMinuteWarningIssuedLocally = false;
+        window.twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
         actionHistory = [];
 
@@ -1394,7 +1125,7 @@ if (timeoutsPerHalfInput) {
     gameClockResetBtn.addEventListener('click', () => {
         sendAction('STOP_GAME_CLOCK');
         gameClockDisplay.parentElement.classList.remove('warning');
-        twoMinuteWarningIssuedLocally = false;
+        window.twoMinuteWarningIssuedLocally = false;
     
         // --- 1. DETERMINE NEXT PERIOD AND LOG ENTRY ---
         
@@ -1442,7 +1173,7 @@ if (timeoutsPerHalfInput) {
         });
         
         // Force the local UI to refresh immediately (e.g., half display change)
-        updateUI();
+        window.updateUI();
     });
 
     playClockToggleBtn.addEventListener('click', () => {
@@ -1555,7 +1286,7 @@ if (timeoutsPerHalfInput) {
      * Parses the score and defense logs to aggregate player-specific statistics.
      * Uses ultra-resilient regex patterns to handle various log formatting and extra text.
      */
-    const aggregatePlayerStats = (scoreLog, defenceLog) => {
+    const aggregatePlayerStats = window.aggregatePlayerStats = (scoreLog, defenceLog) => {
         const aggregatedStats = {
             team1: { offence: {}, defence: {} },
             team2: { offence: {}, defence: {} }
@@ -1645,7 +1376,7 @@ if (timeoutsPerHalfInput) {
      * @param {object} stats - The aggregated stats for one team (e.g., playerStats.team1).
      * @param {string} teamKey - The key for the team ('team1' or 'team2').
      */
-    const renderPlayerStats = (stats, teamKey) => {
+    const renderPlayerStats = window.renderPlayerStats = (stats, teamKey) => {
         // 1. Get the containers
         const offenceContainer = document.getElementById(`${teamKey}-offence-stats`);
         const defenceContainer = document.getElementById(`${teamKey}-defence-stats`);

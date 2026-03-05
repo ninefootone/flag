@@ -1,0 +1,315 @@
+// --- State Management and UI Updates ---
+window.updateUI = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlRoleParam = urlParams.get('role');
+
+    let determinedRole = 'administrator';
+
+    if (urlRoleParam) {
+        // 1. Try to find a role by token (existing logic)
+        const roleFromToken = window.getRoleFromToken(urlRoleParam);
+
+        // 2. Check for token success OR check for explicit non-token role (e.g., 'stats')
+        if (roleFromToken) {
+            determinedRole = roleFromToken;
+        } else if (window.SECURE_ROLE_MAP.hasOwnProperty(urlRoleParam)) {
+            determinedRole = urlRoleParam;
+        }
+    }
+
+    // Apply the determined role
+    window.userRole = determinedRole;
+
+    // 1. Clear any existing role classes
+    document.body.className = document.body.className.replace(/\brole-[a-z-]+\b/g, '');
+
+    // 2. Apply the new role class (e.g., 'role-stats')
+    document.body.classList.add(`role-${window.userRole}`);
+
+    const gameIdDisplay = document.getElementById('current-game-id');
+    const gameLobby = document.getElementById('game-lobby');
+    const settingsForm = document.getElementById('settings-form');
+    const gameInterface = document.getElementById('game-interface');
+    const gameSummary = document.getElementById('game-summary');
+    const fixedFooter = document.getElementById('fixed-footer-links-container');
+    const undoBtn = document.getElementById('undo-btn');
+    const endGameBtn = document.getElementById('end-game-btn');
+
+    const urlGameId = window.location.pathname.split('/').pop().split('?')[0];
+    if (urlGameId && urlGameId !== 'game.html') {
+        gameIdDisplay.classList.remove('hidden');
+        document.getElementById('game-id-text').textContent = urlGameId;
+    } else {
+        gameIdDisplay.classList.add('hidden');
+    }
+
+    if (Object.keys(window.gameState).length > 0 && window.gameState.gameStarted && !window.gameState.gameEnded) {
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.remove('hidden');
+        gameSummary.classList.add('hidden');
+        if (fixedFooter) {
+            fixedFooter.classList.add('visible');
+        }
+        if (undoBtn) {
+            undoBtn.classList.remove('hidden');
+        }
+        if (endGameBtn) {
+            endGameBtn.classList.remove('hidden');
+        }
+    } else if (Object.keys(window.gameState).length > 0 && window.gameState.gameEnded) {
+
+        // Destroy the Coin Flip Modal animation
+        if (typeof window.coinAnimation !== 'undefined' && window.coinAnimation && window.coinAnimation.destroy) {
+            window.coinAnimation.destroy();
+        }
+
+        // Destroy the Lobby screen animation (if it was active)
+        if (typeof window.lobbyCoinAnimation !== 'undefined' && window.lobbyCoinAnimation && window.lobbyCoinAnimation.destroy) {
+            window.lobbyCoinAnimation.destroy();
+        }
+
+        setTimeout(() => {
+            gameLobby.classList.add('hidden');
+            settingsForm.classList.add('hidden');
+            gameInterface.classList.add('hidden');
+            gameSummary.classList.remove('hidden');
+
+            // --- RESTORE LOGO LOOKUP AND INJECTION ---
+
+            // Re-fetch the elements here to ensure they are not null (robustness)
+            const summaryTeam1Logo = document.getElementById('summary-team1-logo');
+            const summaryTeam2Logo = document.getElementById('summary-team2-logo');
+
+            // Clean the name before lookup (Fixes previous issues)
+            const team1NameClean = (window.gameState.team1Name || '').trim();
+            const team2NameClean = (window.gameState.team2Name || '').trim();
+
+            // Look up paths
+            window.renderTeamLogo(summaryTeam1Logo, window.gameState.team1Name);
+            window.renderTeamLogo(summaryTeam2Logo, window.gameState.team2Name);
+
+            // --- END RESTORE ---
+
+            const summaryTeam1Name = document.getElementById('summary-team1-name');
+            const summaryTeam2Name = document.getElementById('summary-team2-name');
+            const summaryTeam1Score = document.getElementById('summary-team1-score');
+            const summaryTeam2Score = document.getElementById('summary-team2-score');
+            const summaryScoreLog = document.getElementById('summary-score-log');
+            const summaryTimeoutLog = document.getElementById('summary-timeout-log');
+            const summaryDefenceLog = document.getElementById('summary-defence-log');
+
+            summaryTeam1Name.textContent = window.gameState.team1Name;
+            summaryTeam2Name.textContent = window.gameState.team2Name;
+            summaryTeam1Score.textContent = window.gameState.scores.team1;
+            summaryTeam2Score.textContent = window.gameState.scores.team2;
+            summaryScoreLog.innerHTML = window.gameState.scoreLogHTML;
+            summaryTimeoutLog.innerHTML = window.gameState.timeoutLogHTML;
+            summaryDefenceLog.innerHTML = window.gameState.defenceLogHTML;
+
+            // 1. Extract the logs from the DOM elements that were just populated
+            const scoreLogEntries = Array.from(summaryScoreLog.querySelectorAll('li'));
+            const defenceLogEntries = Array.from(summaryDefenceLog.querySelectorAll('li'));
+
+            // 2. Aggregate the stats and store globally for rendering/download
+            window.playerStats = window.aggregatePlayerStats(scoreLogEntries, defenceLogEntries);
+
+            // 🚨 NEW: RENDER AGGREGATED STATS TO SCREEN 🚨
+            if (window.playerStats) {
+                // Update team names in the headers (assuming you defined these in Step 3 HTML)
+                document.getElementById('team1-stats-header').textContent = window.gameState.team1Name;
+                document.getElementById('team2-stats-header').textContent = window.gameState.team2Name;
+
+                window.renderPlayerStats(window.playerStats.team1, 'team1');
+                window.renderPlayerStats(window.playerStats.team2, 'team2');
+            }
+
+        }, 0);
+
+        // --- START SUMMARY LOG PLACEHOLDER LOGIC ---
+
+        const summaryScoreLogOuter = document.getElementById('summary-score-log');
+        const summaryTimeoutLogOuter = document.getElementById('summary-timeout-log');
+        const summaryDefenceLogOuter = document.getElementById('summary-defence-log');
+
+        // Score Log
+        if (window.gameState.scoreLogHTML && window.gameState.scoreLogHTML.trim().length > 0) {
+            summaryScoreLogOuter.innerHTML = window.gameState.scoreLogHTML;
+        } else {
+            summaryScoreLogOuter.innerHTML = '<li class="log-placeholder">No scores logged.</li>';
+        }
+
+        // Timeout Log
+        if (window.gameState.timeoutLogHTML && window.gameState.timeoutLogHTML.trim().length > 0) {
+            summaryTimeoutLogOuter.innerHTML = window.gameState.timeoutLogHTML;
+        } else {
+            summaryTimeoutLogOuter.innerHTML = '<li class="log-placeholder">No timeouts logged.</li>';
+        }
+
+        // Defence Log
+        if (window.gameState.defenceLogHTML && window.gameState.defenceLogHTML.trim().length > 0) {
+            summaryDefenceLogOuter.innerHTML = window.gameState.defenceLogHTML;
+        } else {
+            summaryDefenceLogOuter.innerHTML = '<li class="log-placeholder">No defensive stats logged.</li>';
+        }
+
+        // --- END SUMMARY LOG PLACEHOLDER LOGIC ---
+
+        window.reverseLogOrder(summaryScoreLogOuter);
+        window.reverseLogOrder(summaryTimeoutLogOuter);
+        window.reverseLogOrder(summaryDefenceLogOuter);
+        if (fixedFooter) {
+            fixedFooter.classList.add('hidden');
+        }
+    } else if (window.location.pathname.startsWith('/game/')) {
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.remove('hidden');
+        gameInterface.classList.add('hidden');
+        gameSummary.classList.add('hidden');
+        if (fixedFooter) {
+            fixedFooter.classList.add('visible');
+        }
+        if (undoBtn) {
+            undoBtn.classList.add('hidden');
+        }
+        if (endGameBtn) {
+            endGameBtn.classList.add('hidden');
+        }
+        if (fixedFooter) {
+            fixedFooter.classList.remove('hidden');
+        }
+    } else {
+        gameLobby.classList.remove('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.add('hidden');
+        gameSummary.classList.add('hidden');
+        // if (fixedFooter) {
+        //     fixedFooter.classList.add('visible');
+        // }
+    }
+
+    window.applyRolePermissions();
+
+    if (Object.keys(window.gameState).length === 0) {
+        return;
+    }
+
+    const gameDateDisplay = document.getElementById('game-date');
+    const gameLocationDisplay = document.getElementById('game-location');
+    const team1NameDisplay = document.getElementById('team1-name-display');
+    const team2NameDisplay = document.getElementById('team2-name-display');
+    const team1ScoreDisplay = document.getElementById('team1-score-display');
+    const team2ScoreDisplay = document.getElementById('team2-score-display');
+    const team1TimeoutsDisplay = document.getElementById('team1-timeouts');
+    const team2TimeoutsDisplay = document.getElementById('team2-timeouts');
+    const gameClockDisplay = document.getElementById('game-clock-display');
+    const playClockDisplay = document.getElementById('play-clock-display');
+    const gamePeriodDisplay = document.getElementById('game-period-display');
+    const scoreLogList = document.getElementById('score-log');
+    const timeoutLogList = document.getElementById('timeout-log');
+    const defenceLogList = document.getElementById('defence-log');
+    const team1TimeoutLabel = document.getElementById('team1-timeout-label');
+    const team2TimeoutLabel = document.getElementById('team2-timeout-label');
+
+    gameDateDisplay.textContent = window.formatDisplayDate(window.gameState.date);
+    gameLocationDisplay.textContent = (window.gameState.location || '').trim() ? `, ${(window.gameState.location || '').trim()}` : '';
+    //gameLocationDisplay.textContent = window.gameState.location;
+    team1NameDisplay.textContent = window.gameState.team1Name;
+    team2NameDisplay.textContent = window.gameState.team2Name;
+    team1ScoreDisplay.textContent = window.gameState.scores.team1;
+    team2ScoreDisplay.textContent = window.gameState.scores.team2;
+    team1TimeoutsDisplay.textContent = window.gameState.timeoutsPerHalf - window.gameState.timeoutsUsed['1'];
+    team2TimeoutsDisplay.textContent = window.gameState.timeoutsPerHalf - window.gameState.timeoutsUsed['2'];
+    gameClockDisplay.textContent = window.formatTime(window.gameState.gameTimeLeft);
+    playClockDisplay.textContent = window.gameState.playTimeLeft;
+
+    if (gamePeriodDisplay) {
+        gamePeriodDisplay.textContent = window.getPeriodName(window.gameState.currentHalf);
+    }
+
+    // === START LOG PLACEHOLDER LOGIC ===
+
+    // Score Log
+    if (window.gameState.scoreLogHTML && window.gameState.scoreLogHTML.trim().length > 0) {
+        scoreLogList.innerHTML = window.gameState.scoreLogHTML;
+    } else {
+        scoreLogList.innerHTML = '<li class="log-placeholder">No scores logged.</li>';
+    }
+
+    // Timeout Log
+    if (window.gameState.timeoutLogHTML && window.gameState.timeoutLogHTML.trim().length > 0) {
+        timeoutLogList.innerHTML = window.gameState.timeoutLogHTML;
+    } else {
+        timeoutLogList.innerHTML = '<li class="log-placeholder">No timeouts logged.</li>';
+    }
+
+    // Defence Log
+    if (window.gameState.defenceLogHTML && window.gameState.defenceLogHTML.trim().length > 0) {
+        defenceLogList.innerHTML = window.gameState.defenceLogHTML;
+    } else {
+        defenceLogList.innerHTML = '<li class="log-placeholder">No defensive stats logged.</li>';
+    }
+
+    // === END LOG PLACEHOLDER LOGIC ===
+
+    window.updateDownDisplay();
+    window.updateButtonLabels();
+    team1TimeoutLabel.textContent = window.gameState.team1Name;
+    team2TimeoutLabel.textContent = window.gameState.team2Name;
+
+    // if (window.gameState.coinTossResult) {
+    //     coinTossBtn.textContent = `${window.gameState.coinTossResult}`;
+    //     coinTossBtn.textContent = `${window.gameState.coinTossResult}. Click to flip again.`;
+    // } else {
+        // Set the initial text if no toss has occurred
+    //     coinTossBtn.textContent = 'Coin';
+    // }
+
+    if (window.gameState.gameTimeLeft === 120 && !window.twoMinuteWarningIssuedLocally) {
+        gameClockDisplay.parentElement.classList.add('warning');
+        window.twoMinuteWarningIssuedLocally = true;
+    }
+
+    // Update the Defence Log (Add this block)
+    // if (defenceLogList) {
+    //     defenceLogList.innerHTML = window.gameState.defenceLogHTML;
+    // }
+    // if (summaryDefenceLog) {
+    //     summaryDefenceLog.innerHTML = window.gameState.defenceLogHTML;
+    // }
+
+};
+
+// Function to apply role-based permissions
+window.applyRolePermissions = () => {
+    window.allControls.forEach(control => {
+        if (control) {
+            control.classList.add('disabled');
+        }
+    });
+
+    const controlsToEnable = window.rolePermissions[window.userRole] || [];
+    controlsToEnable.forEach(control => {
+        if (control) {
+            control.classList.remove('disabled');
+        }
+    });
+
+    // --- WebSocket Connection Lock for Settings Form (iOS Fix) ---
+    const settingsForm = document.getElementById('settings-form');
+    const startGameBtn = document.getElementById('start-game-btn');
+    const coinTossBtn = document.getElementById('coin-toss-btn');
+    const settingsIsVisible = !settingsForm.classList.contains('hidden');
+    const isConnected = window.ws && window.ws.readyState === WebSocket.OPEN;
+
+    if (settingsIsVisible && !isConnected) {
+        // Disable the buttons if we are on the settings form but not connected
+        startGameBtn.classList.add('disabled');
+        coinTossBtn.classList.add('disabled');
+    } else if (settingsIsVisible) {
+        // Re-enable them if we are connected (This block will run after ws.onopen)
+        startGameBtn.classList.remove('disabled');
+        coinTossBtn.classList.remove('disabled');
+    }
+
+};
