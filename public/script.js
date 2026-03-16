@@ -1,4 +1,4 @@
-const appVersion = '0.3.92';
+const appVersion = '0.3.93';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -158,28 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameInterface = document.getElementById('game-interface');
     const gameSummary = document.getElementById('game-summary');
     const gameApp = document.getElementById('game-app'); // ADD this one for completeness
-
-    // --- INSERT THE SCREEN RESTORATION LOGIC ---
-    if (window.gameState.gameStarted) {
-        // Case 1: Game was running. Show the interface.
-        gameInterface.classList.remove('hidden');
-        gameLobby.classList.add('hidden');
-        gameSummary.classList.add('hidden'); 
-    } else if (window.gameState.team1Name && window.gameState.team1Name !== 'Team 1') {
-        // Case 2: Game is finished, but we have saved team names. Show the Summary.
-        gameSummary.classList.remove('hidden');
-        gameLobby.classList.add('hidden');
-        gameInterface.classList.add('hidden');
-
-        // CRITICAL: Call the renderer immediately.
-        renderSummaryLogos();
-        
-    } else {
-        // Default start: Show the lobby
-        gameLobby.classList.remove('hidden');
-        gameInterface.classList.add('hidden');
-        gameSummary.classList.add('hidden');
-    }
 
     // --- 1. ELEMENT SELECTION (MUST be here) ---
     const team1NameInput = document.getElementById('team1-name');
