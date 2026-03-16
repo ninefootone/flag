@@ -24,7 +24,7 @@ window.connectWebSocket = (gameId) => {
         const message = JSON.parse(event.data);
         console.log('Received from server:', message);
         Object.assign(window.gameState, message);
-        window.updateUI();
+        setTimeout(() => window.updateUI(), 50);
     };
 
     window.ws.onclose = () => {
