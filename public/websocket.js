@@ -45,7 +45,7 @@ window.connectWebSocket = (gameId) => {
             window.isReconnecting = true;
             setTimeout(() => {
                 window.isReconnecting = false;
-                window.connectWebSocket(window.gameIdFromUrl);
+                window.connectWebSocket(gameId);
             }, delay);
         }
     };
@@ -64,13 +64,14 @@ window.sendAction = (type, payload = {}) => {
 
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-        console.log('Page became visible - checking WebSocket connection...');
-        const reconnectId = window.gameIdFromUrl || window.lastGameId;
+        const pathParts = window.location.pathname.split('/');
+        const currentGameId = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
+        console.log('Page became visible - game ID:', currentGameId);
         if (!window.isReconnecting && (!window.ws || window.ws.readyState === WebSocket.CLOSED)) {
             console.log('WebSocket closed, reconnecting...');
             window.reconnectAttempts = 0;
             setTimeout(() => {
-                window.connectWebSocket(reconnectId);
+                window.connectWebSocket(currentGameId);
             }, 1000);
         } else if (window.ws && window.ws.readyState === WebSocket.OPEN) {
             window.ws.send(JSON.stringify({ type: 'REQUEST_STATE' }));
