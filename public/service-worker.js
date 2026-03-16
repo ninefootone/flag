@@ -1,10 +1,11 @@
-const CACHE_NAME = 'referee-app-cache-v0.3.90';
+const CACHE_NAME = 'referee-app-cache-v0.3.91';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
   '/style-dark.css',
   '/script.js',
+  '/game-logic.js',
   '/penalties.js',
   '/assets/favicon-96x96.png', // Add all your critical assets
   '/assets/apple-touch-icon.png',

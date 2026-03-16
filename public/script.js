@@ -1,4 +1,4 @@
-const appVersion = '0.3.90';
+const appVersion = '0.3.91';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -465,16 +465,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const defenceCancelPopupBtn = document.getElementById('defence-cancel-popup-btn');
     // const defenceLog = document.querySelector('#defence-log');
 
-    const getPeriodName = window.getPeriodName = (half) => {
-        if (half === 1) return '1st Half';
-        if (half === 2) return '2nd Half';
-        if (half >= 3) return `OT ${half - 2}`; // OT 1 starts at half 3 (3 - 2 = 1)
-        return 'Period'; 
-    };
+    // getPeriodName → moved to game-logic.js
 
     let allTeamNames = []; // Global array to store all loaded team names
 
-    let actionTimeLeft = null; // Stores the clock time (in seconds) when a score or defence action is initiated.
+    window.actionTimeLeft = null; // Stores the clock time (in seconds) when a score or defence action is initiated.
     
     /**
     * Reverses the order of list items (li) in a given <ul> or <ol> element.
@@ -574,9 +569,9 @@ if (timeoutsPerHalfInput) {
         });
     });
 
-    let tempScoreEvent = null;
+    window.tempScoreEvent = null;
     window.twoMinuteWarningIssuedLocally = false;
-    let actionHistory = [];
+    window.actionHistory = [];
 
     // --- State Management and UI Updates ---
     // updateUI and applyRolePermissions are defined in ui.js
@@ -612,16 +607,9 @@ if (timeoutsPerHalfInput) {
     // Function to apply role-based permissions
     // applyRolePermissions is defined in ui.js
 
-    const updateButtonLabels = window.updateButtonLabels = () => {
-        gameClockToggleBtn.textContent = gameState.gameClockRunning ? 'Stop' : 'Start';
-        playClockToggleBtn.textContent = gameState.playClockRunning ? 'Stop' : 'Start';
-    };
+    // updateButtonLabels → moved to game-logic.js
 
-    const formatTime = window.formatTime = (totalSeconds) => {
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
+    // formatTime → moved to game-logic.js
 
     // --- NEW: QR CODE GENERATION FUNCTION ---
     const generateQRCode = (url) => {
@@ -642,86 +630,29 @@ if (timeoutsPerHalfInput) {
         });
     };
 
-    const getNewScoreLog = (event, players = {}) => {
-        const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
+    // getNewScoreLog → moved to game-logic.js
 
-        // --- FIX: Use the stored time, then clear the variable ---
-        const eventTime = actionTimeLeft !== null ? actionTimeLeft : gameState.gameTimeLeft;
-        const elapsedTime = gameState.halfDuration - eventTime;
-        actionTimeLeft = null; // Clear the stored time after use
-        
-        // --- FIX: Use helper function for period name ---
-        const halfText = getPeriodName(gameState.currentHalf); 
-        const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
-        
-        let playerDetails = [];
-        if (players.qb) { playerDetails.push(`QB #${players.qb}`); }
-        if (players.wr) { playerDetails.push(`WR #${players.wr}`); }
-        if (players.rb) { playerDetails.push(`RB #${players.rb}`); }
-        if (players.int) { playerDetails.push(`INT #${players.int}`); }
-        if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
-        const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
-        
-        // Use the new fullTimestamp
-        // const newLogEntry = `<li>${fullTimestamp} ${teamName} scored a ${event.scoreLabel} for ${event.scoreToAdd} points${playerString}.</li>`;
-        const newLogEntry = `<li><span class="log-time-stamp">${fullTimestamp} </span>${teamName} scored a ${event.scoreLabel} ${playerString}.</li>`;
-        
-        return newLogEntry + gameState.scoreLogHTML;
-    };
+    // getNewTimeoutLog → moved to game-logic.js
 
-    const getNewTimeoutLog = (event) => {
-        const teamName = event.team === '1' ? gameState.team1Name : gameState.team2Name;
-        const elapsedTime = gameState.halfDuration - gameState.gameTimeLeft;
+    // getNewEndOfHalfLog → moved to game-logic.js
 
-        // --- FIX: Use helper function for period name ---
-        const halfText = getPeriodName(gameState.currentHalf);
-        const fullTimestamp = `${halfText} [${formatTime(elapsedTime)}]`;
-
-        // Use the new fullTimestamp
-        const newLogEntry = `<li>${fullTimestamp} ${teamName} called a timeout.</li>`;
-        
-        return newLogEntry + gameState.timeoutLogHTML;
-    };
-
-    /**
-    * Generates an HTML log entry marking the end of the half.
-    */
-    const getNewEndOfHalfLog = () => {
-        // The game clock reset is triggered at the end of the half, 
-        // so we use the full half duration as the elapsed time.
-        const elapsedTime = gameState.halfDuration; 
-    
-        // Creates a distinctive log entry (using formatTime which is already available)
-        // const newLogEntry = `<li class="end-of-half-log">[${formatTime(elapsedTime)}] --- END OF HALF ---</li>`;
-        const newLogEntry = `<li class="end-of-half-log">--- END OF HALF ---</li>`;
-        return newLogEntry;
-    };
-
-    const updateDownDisplay = window.updateDownDisplay = () => {
-        downButtons.forEach(btn => {
-            if (parseInt(btn.dataset.down) === gameState.currentDown) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    };
+    // updateDownDisplay → moved to game-logic.js
 
     const showScorePopup = (team, scoreToAdd, scoreLabel) => {
-        tempScoreEvent = { team, scoreToAdd, scoreLabel };
+        window.tempScoreEvent = { team, scoreToAdd, scoreLabel };
         const teamName = team === '1' ? gameState.team1Name : gameState.team2Name;
         popupHeader.textContent = `Log ${scoreLabel} for ${teamName}`;
         scorePopup.classList.remove('hidden');
     };
 
-    const hideScorePopup = () => {
+    const hideScorePopup = window.hideScorePopup = () => {
         scorePopup.classList.add('hidden');
         qbNumberInput.value = '';
         wrNumberInput.value = '';
         rbNumberInput.value = '';
         intNumberInput.value = '';
         safetyNumberInput.value = '';
-        tempScoreEvent = null;
+        window.tempScoreEvent = null;
     };
 
     let tempDefenceEvent = null; // Declare a variable to hold the temporary defence event details
@@ -770,7 +701,7 @@ if (timeoutsPerHalfInput) {
         // 🚀 NEW: Save the current state for undo functionality (must be first)
         // We use JSON.parse(JSON.stringify()) to create a deep copy of the object,
         // ensuring the history record isn't changed by subsequent actions.
-        actionHistory.push({
+        window.actionHistory.push({
             type: 'defence',
             defenceStats: JSON.parse(JSON.stringify(gameState.defenceStats || {team1: {}, team2: {}})), 
             defenceLogHTML: defenceLogList.innerHTML 
@@ -944,7 +875,7 @@ if (timeoutsPerHalfInput) {
         // if (!gameState.coinTossResult) { /* ... */ }
         window.twoMinuteWarningIssuedLocally = false;
         gameClockDisplay.parentElement.classList.remove('warning');
-        actionHistory = [];
+        window.actionHistory = [];
 
         // *** 3. Dynamic Time Calculation & State Creation ***
         const initialMinutes = parseInt(halfDurationInput.value, 10);
@@ -1021,30 +952,7 @@ if (timeoutsPerHalfInput) {
     });
 
     logScoreBtn.addEventListener('click', () => {
-        if (!tempScoreEvent) return;
-        actionHistory.push({
-            type: 'score',
-            scores: { ...gameState.scores },
-            scoreLogHTML: gameState.scoreLogHTML
-        });
-
-        const { team, scoreToAdd } = tempScoreEvent;
-        const newScores = { ...gameState.scores };
-        if (team === '1') {
-            newScores.team1 += scoreToAdd;
-        } else {
-            newScores.team2 += scoreToAdd;
-        }
-        const players = {
-            qb: qbNumberInput.value || '',
-            wr: wrNumberInput.value || '',
-            rb: rbNumberInput.value || '',
-            int: intNumberInput.value || '',
-            safety: safetyNumberInput.value || ''
-        };
-        const newScoreLogHTML = getNewScoreLog(tempScoreEvent, players);
-        sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: newScoreLogHTML });
-        hideScorePopup();
+        window.handleLogScore();
     });
 
     cancelPopupBtn.addEventListener('click', () => {
@@ -1067,130 +975,37 @@ if (timeoutsPerHalfInput) {
 
     adjustButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const team = button.dataset.team;
-            const adjustment = button.dataset.adjust;
-            const newScores = { ...gameState.scores };
-            
-            // Determine if we are adding (+1) or subtracting (-1)
-            const scoreChange = (adjustment === '+' ? 1 : -1);
-
-            if (team === '1') {
-                // CRITICAL FIX: Use Math.max(0, ...) to prevent the score from going below 0.
-                newScores.team1 = Math.max(0, newScores.team1 + scoreChange);
-            } else {
-                // CRITICAL FIX: Use Math.max(0, ...) to prevent the score from going below 0.
-                newScores.team2 = Math.max(0, newScores.team2 + scoreChange);
-            }
-            
-            sendAction('UPDATE_STATE', { scores: newScores });
+            window.handleAdjustScore(button);
         });
     });
 
     useTimeoutBtns.forEach(button => {
         button.addEventListener('click', () => {
-            const team = button.dataset.team;
-            if (gameState.timeoutsUsed[team] < gameState.timeoutsPerHalf) {
-                actionHistory.push({
-                    type: 'timeout',
-                    timeoutsUsed: { ...gameState.timeoutsUsed },
-                    timeoutLogHTML: gameState.timeoutLogHTML
-                });
-                const newTimeoutsUsed = { ...gameState.timeoutsUsed };
-                newTimeoutsUsed[team]++;
-                const newTimeoutLogHTML = getNewTimeoutLog({ team: team });
-                sendAction('STOP_GAME_CLOCK');
-                sendAction('UPDATE_STATE', { timeoutsUsed: newTimeoutsUsed, timeoutLogHTML: newTimeoutLogHTML });
-            } else {
-                alert('No timeouts left for this team.');
-            }
+            window.handleUseTimeout(button);
         });
     });
 
     downButtons.forEach(button => {
         button.addEventListener('click', () => {
-            sendAction('UPDATE_STATE', { currentDown: parseInt(button.dataset.down) });
+            window.handleDownSelect(button);
         });
     });
 
     gameClockToggleBtn.addEventListener('click', () => {
-        triggerHapticFeedback(60); // A slightly longer tap for confirmation    
-        if (gameState.gameClockRunning) {
-            sendAction('STOP_GAME_CLOCK');
-            gameClockDisplay.parentElement.classList.remove('warning');
-        } else {
-            sendAction('START_GAME_CLOCK');
-        }
+        triggerHapticFeedback(60);
+        window.handleGameClockToggle();
     });
 
     gameClockResetBtn.addEventListener('click', () => {
-        sendAction('STOP_GAME_CLOCK');
-        gameClockDisplay.parentElement.classList.remove('warning');
-        window.twoMinuteWarningIssuedLocally = false;
-    
-        // --- 1. DETERMINE NEXT PERIOD AND LOG ENTRY ---
-        
-        // The game will now always advance to the next period (Half 2, OT 1, OT 2, etc.)
-        const nextHalfValue = gameState.currentHalf + 1;
-        let periodName = '';
-        
-        if (gameState.currentHalf === 1) {
-            // Advancing from 1st Half -> 2nd Half
-            periodName = 'END OF 1ST HALF';
-        } else if (gameState.currentHalf === 2) {
-            // Advancing from 2nd Half (Regulation) -> Overtime 1
-            periodName = 'END OF REGULATION';
-        } else if (gameState.currentHalf >= 3) {
-            // Advancing from Overtime X -> Overtime X+1
-            // Overtime 1 starts at half 3 (3 - 2 = 1)
-            const currentOT = gameState.currentHalf - 2;
-            periodName = `END OF OVERTIME ${currentOT}`;
-        } else {
-            periodName = 'PERIOD BREAK'; // Default safety fallback
-        }
-
-        // Construct the log entry
-        const timeRemaining = formatTime(gameState.gameTimeLeft); 
-        const nextPeriodText = (nextHalfValue === 2) ? '2ND HALF' : `OVERTIME ${nextHalfValue - 2}`;
-        // const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${periodName} [${timeRemaining}] --- STARTING ${nextPeriodText} ---</li>`;
-        const endOfPeriodLogEntry = `<li class="log-entry log-period-end">${periodName} --- STARTING ${nextPeriodText}</li>`;
-    
-        // 2. Prepend the new entry to the existing log HTML and update local state
-        const newScoreLogHTML = endOfPeriodLogEntry + gameState.scoreLogHTML;
-        gameState.scoreLogHTML = newScoreLogHTML; 
-
-        // 3. Send the updated state
-        sendAction('UPDATE_STATE', {
-            gameTimeLeft: gameState.halfDuration, // Resets the clock to the start time
-            timeoutsUsed: { '1': 0, '2': 0 },     // Resets timeouts
-            twoMinuteWarningIssued: false,
-        
-            // Update the game status
-            currentHalf: nextHalfValue, // Advances the period number
-            gameEnded: false, // Always false here, game must be ended via End Game button
-        
-            // Send the updated log content
-            scoreLogHTML: newScoreLogHTML 
-        });
-        
-        // Force the local UI to refresh immediately (e.g., half display change)
-        window.updateUI();
+        window.handleGameClockReset();
     });
 
     playClockToggleBtn.addEventListener('click', () => {
-        if (gameState.playClockRunning) {
-            sendAction('STOP_PLAY_CLOCK');
-        } else {
-            if (autoAdvanceCheckbox.checked) {
-                const newDown = (gameState.currentDown % 4) + 1;
-                sendAction('UPDATE_STATE', { currentDown: newDown });
-            }
-            sendAction('START_PLAY_CLOCK');
-        }
+        window.handlePlayClockToggle();
     });
 
     playClockResetBtn.addEventListener('click', () => {
-        sendAction('STOP_PLAY_CLOCK');
-        sendAction('UPDATE_STATE', { playTimeLeft: gameState.playClockDuration });
+        window.handlePlayClockReset();
     });
 
     // --- Defence Button Listeners ---
@@ -1249,19 +1064,7 @@ if (timeoutsPerHalfInput) {
 
     // Event listener for the "End Game" button with confirmation
     endGameBtn.addEventListener('click', () => {
-        // 🛑 CRITICAL FIX: Defer the entire logic to prevent UI thread lockup on resume.
-        // This allows the browser to stabilize its internal state before opening the 
-        // blocking 'confirm' dialog and triggering the final END_GAME action.
-        setTimeout(() => {
-            // Show a confirmation dialog
-            const confirmed = confirm('Are you sure you want to end the game? This action cannot be undone.');
-            
-            // Only proceed if the user clicked OK
-            if (confirmed) {
-                sendAction('END_GAME');
-            }
-            // If the user clicks Cancel, the action is ignored.
-        }, 100); // Use 100ms for a robust delay on system resume.
+        window.handleEndGame();
     });
 
     /**
@@ -1604,8 +1407,8 @@ if (timeoutsPerHalfInput) {
     });
 
     undoBtn.addEventListener('click', () => {
-        if (actionHistory.length > 0) {
-            const lastAction = actionHistory.pop();
+        if (window.actionHistory.length > 0) {
+            const lastAction = window.actionHistory.pop();
             if (lastAction.type === 'score') {
                 sendAction('UPDATE_STATE', {
                     scores: lastAction.scores,
