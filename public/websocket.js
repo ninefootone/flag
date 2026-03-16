@@ -1,5 +1,6 @@
 window.reconnectAttempts = 0;
 window.pingInterval = null;
+window.isReconnecting = false;
 
 // --- WebSocket Event Handlers ---
 window.connectWebSocket = (gameId) => {
@@ -40,11 +41,11 @@ window.connectWebSocket = (gameId) => {
         if (window.reconnectAttempts < 5) {
             const delay = Math.min(1000 * Math.pow(2, window.reconnectAttempts), 15000);
             window.reconnectAttempts++;
+            window.isReconnecting = true;
             setTimeout(() => {
+                window.isReconnecting = false;
                 window.connectWebSocket(window.gameIdFromUrl);
             }, delay);
-        } else {
-            console.error("Maximum reconnect attempts reached. Please refresh.");
         }
     };
 
@@ -63,14 +64,13 @@ window.sendAction = (type, payload = {}) => {
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
         console.log('Page became visible - checking WebSocket connection...');
-        if (!window.ws || window.ws.readyState === WebSocket.CLOSED) {
+        if (!window.isReconnecting && (!window.ws || window.ws.readyState === WebSocket.CLOSED)) {
             console.log('WebSocket closed, reconnecting...');
             window.reconnectAttempts = 0;
             setTimeout(() => {
                 window.connectWebSocket(window.gameIdFromUrl);
             }, 1000);
-        } else if (window.ws.readyState === WebSocket.OPEN) {
-            // Connection still open - just request a fresh state from server
+        } else if (window.ws && window.ws.readyState === WebSocket.OPEN) {
             window.ws.send(JSON.stringify({ type: 'REQUEST_STATE' }));
         }
     }
