@@ -1,4 +1,4 @@
-const appVersion = '0.3.99';
+const appVersion = '0.4.00';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -597,15 +597,22 @@ if (timeoutsPerHalfInput) {
         qrCodeContainer.innerHTML = '';
         
         // 2. Generate the QR Code
-        // 'QRCode' object is provided by the library you loaded in index.html
         new QRCode(qrCodeContainer, {
             text: url,
-            width: 200,       // You can adjust size
-            height: 200,      // You can adjust size
+            width: 200,
+            height: 200,
             colorDark : "#000000",
             colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H // Highest correction level
+            correctLevel : QRCode.CorrectLevel.H
         });
+
+        // 3. Show game code beneath QR
+        const gameCodeText = document.getElementById('qr-game-code-text');
+        if (gameCodeText) {
+            const pathParts = url.split('/game/');
+            const gameId = pathParts[1] ? pathParts[1].split('?')[0] : '';
+            gameCodeText.textContent = gameId;
+        }
     };
 
     // getNewScoreLog → moved to game-logic.js
