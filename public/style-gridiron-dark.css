@@ -1,79 +1,4 @@
-/* Font Declarations — keeping Greycliff and Metropolis */
-
-@import url("https://use.typekit.net/fnt1wxx.css");
-
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-Thin.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-Thin.woff') format('woff');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-ExtraLight.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-Light.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-Regular.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-Medium.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-SemiBold.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-Bold.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-ExtraBold.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-ExtraBold.woff') format('woff');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Metropolis';
-  src: url('/assets/fonts/metropolis/Metropolis-Black.woff2') format('woff2'),
-       url('/assets/fonts/metropolis/Metropolis-Black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
+@media (prefers-color-scheme: dark) {
 
 /* --- Gridiron Stats Colour Palette (Dark by default) --- */
 :root {
@@ -132,19 +57,16 @@ html {
 h1, h2, h3, h4, h5, h6, button {
     font-family: var(--headline-font);
     color: var(--primary-color);
-    font-weight: 700;
 }
 
 p, ul, ol, input, .penalties-list {
     font-family: var(--body-font);
     color: var(--text-color);
-    font-weight: 400;
     line-height: 1.4em;
 }
 
 .title {
     font-size: 14px;
-    font-weight: 700;
     color: var(--text-color);
     margin: 0;
 }
@@ -203,7 +125,6 @@ button:hover {
 
 #settings-form input {
     font-size: 20px;
-    font-weight: 600;
     text-align: center;
     color: var(--primary-color);
     background-color: var(--background-color);
@@ -745,7 +666,6 @@ li {
 #info-modal-ref a, #info-modal-scorer a, #info-modal-clock a, #info-modal-coach a {
     text-decoration: none;
     color: var(--primary-color);
-    font-weight: bold;
 }
 
 #info-modal-ref a:hover, #info-modal-scorer a:hover, #info-modal-clock a:hover, #info-modal-coach a:hover {
@@ -837,7 +757,6 @@ li {
 
 .fixed-footer-links button .button-text {
     font-size: 11px;
-    font-weight: 500;
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -871,7 +790,6 @@ li {
 .penalty-header-row {
     background-color: var(--secondary-button-bgnd);
     color: var(--primary-color);
-    font-weight: 700;
     font-size: 1em;
     letter-spacing: 0;
 }
@@ -897,12 +815,10 @@ li {
 .penalty-header-row .col-description,
 .penalty-header-row .col-effect {
     color: var(--primary-color);
-    font-weight: 600;
 }
 
 .col-name {
     color: var(--text-color);
-    font-weight: 600;
     text-align: left;
     text-wrap: auto;
     padding: 0 10px 0 0;
@@ -911,7 +827,6 @@ li {
 .col-yards {
     color: var(--text-color);
     text-align: center;
-    font-weight: 600;
     text-wrap: auto;
     padding: 0 10px;
 }
@@ -919,7 +834,6 @@ li {
 .col-enforced {
     color: var(--text-color);
     text-align: center;
-    font-weight: 400;
     text-wrap: auto;
     padding: 0 10px;
 }
@@ -927,7 +841,6 @@ li {
 .col-description {
     color: var(--text-color);
     text-align: left;
-    font-weight: 400;
     text-wrap: auto;
     padding: 0 10px;
 }
@@ -935,7 +848,6 @@ li {
 .col-effect {
     color: var(--text-color);
     align-items: center;
-    font-weight: 400;
     text-wrap: auto;
     padding: 0 10px;
 }
@@ -992,3 +904,5 @@ li {
 .player-input-grid input::placeholder, .defence-input-grid input::placeholder {
     color: var(--placeholder-color) !important;
 }
+
+} /* end dark mode */
