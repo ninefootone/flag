@@ -1,4 +1,4 @@
-const appVersion = '0.4.01';
+const appVersion = '0.4.02';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -612,6 +612,7 @@ if (timeoutsPerHalfInput) {
             const pathParts = url.split('/game/');
             const gameId = pathParts[1] ? pathParts[1].split('?')[0] : '';
             gameCodeText.textContent = gameId;
+            document.getElementById('qr-game-code').style.display = 'block';
         }
     };
 
