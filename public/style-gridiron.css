@@ -1,0 +1,945 @@
+/* Font Declarations — keeping Greycliff and Metropolis */
+
+@import url("https://use.typekit.net/fnt1wxx.css");
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-Thin.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-ExtraLight.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-Light.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-Regular.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-Medium.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-SemiBold.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-Bold.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-ExtraBold.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/assets/fonts/metropolis/Metropolis-Black.woff2') format('woff2'),
+       url('/assets/fonts/metropolis/Metropolis-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Gridiron Stats Colour Palette (Dark by default) --- */
+:root {
+  --background-color: #1a3a2a;        /* field-green */
+  --surface-color: #1e4a34;           /* field-mid — cards, containers */
+  --primary-color: #f5a623;           /* gold */
+  --secondary-color: #f7b94c;         /* gold-light */
+  --section-border: rgba(255,255,255,0.08);
+  --focus-color: rgba(245,166,35,0.15);
+  --text-color: #f8f9fa;              /* white */
+  --notes-color: #a8b0a4;             /* gray-300 */
+  --error-color: #d94f4f;
+  --error-color-flash: #b33939;
+  --button-text: #1a3a2a;             /* dark text on gold buttons */
+  --button-text-hover: #f8f9fa;
+  --secondary-button-bgnd: rgba(255,255,255,0.07);
+  --secondary-button-bgnd-hover: rgba(255,255,255,0.14);
+  --subtle-border-color: rgba(255,255,255,0.12);
+  --placeholder-color: rgba(255,255,255,0.4);
+  --modal-overlay: rgba(0,0,0,0.65);
+  --drop-shadow-color: rgba(0,0,0,0.3);
+  --headline-font: "greycliff-cf", 'Metropolis', sans-serif;
+  --body-font: "greycliff-cf", "azo-sans-web", sans-serif;
+}
+
+/* Logo — always show dark logo (white/light version) */
+.logo-swap { height: auto; }
+.light-logo { display: none !important; }
+.dark-logo { display: block; margin: 0 auto !important; }
+
+/* General Body and Container Styling */
+body {
+    font-family: var(--body-font);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+}
+
+html {
+    height: 100vh;
+    height: 100dvh;
+}
+
+h1, h2, h3, h4, h5, h6, button {
+    font-family: var(--headline-font);
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+p, ul, ol, input, .penalties-list {
+    font-family: var(--body-font);
+    color: var(--text-color);
+    font-weight: 400;
+    line-height: 1.4em;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+}
+
+input::placeholder {
+    color: var(--placeholder-color);
+}
+
+input:focus::placeholder {
+    color: var(--primary-color);
+}
+
+input:focus {
+    background-color: var(--focus-color);
+    border: 1px solid var(--primary-color) !important;
+    outline: none;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    border-radius: 500px !important;
+    border: 1px solid var(--primary-color);
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    color: var(--button-text);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 640px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    height: 100dvh;
+    align-items: center;
+}
+
+.giants-logo {
+    width: 180px;
+    max-width: 90%;
+}
+
+/* Settings Form */
+
+#settings-form input {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border-radius: 500px;
+}
+
+#settings-form input:focus {
+    background-color: var(--focus-color);
+    color: var(--text-color);
+}
+
+.settings-grid {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.settings-grid .one-third {
+    width: 32%;
+}
+
+@media only screen and (max-width: 320px) {
+    .settings-grid .one, .settings-grid .two { width: 48%; }
+    .settings-grid .three { width: 100%; }
+}
+
+.settings-grid label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.settings-grid input {
+    text-align: left;
+    font-size: 48px !important;
+    margin-bottom: 5px !important;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+@media only screen and (max-width: 480px) {
+    .settings-grid input { font-size: 36px; }
+}
+
+#location-field {
+    margin-bottom: 20px;
+}
+
+.settings-grid input#half-duration,
+.settings-grid input#play-clock-duration,
+.settings-grid input#timeouts-per-half {
+    font-family: var(--headline-font);
+    text-align: center;
+    border-radius: 8px;
+    padding: 5px 10px 10px 10px;
+    background-color: var(--surface-color);
+    border-color: var(--subtle-border-color);
+    color: var(--text-color);
+}
+
+.settings-grid .settings-notes {
+    color: var(--placeholder-color);
+}
+
+/* Team Selection */
+
+.team-input-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.team-options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--subtle-border-color);
+    background-color: var(--surface-color);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.team-options-list.hidden { display: none; }
+
+.team-options-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    color: var(--text-color);
+    background-color: var(--surface-color);
+}
+
+.team-options-list li:hover,
+.team-options-list li.highlighted {
+    background-color: var(--focus-color);
+    color: var(--primary-color);
+}
+
+/* Common Form Inputs */
+
+input[type="text"], input[type="number"], input[type="date"] {
+    border-color: var(--subtle-border-color);
+    background-color: var(--surface-color);
+    color: var(--text-color);
+}
+
+.player-input-grid input, .defence-input-grid input {
+    color: var(--background-color);
+}
+
+/* Coin Toss */
+
+#coin-toss-btn {
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--background-color);
+}
+
+#coin-toss-btn:hover {
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--background-color);
+}
+
+#toss-rerun-btn {
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--primary-color);
+}
+
+#toss-rerun-btn:hover {
+    color: var(--button-text);
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+#toss-result-message {
+    color: var(--primary-color);
+}
+
+#start-game-btn {
+    background: var(--primary-color);
+    color: var(--button-text);
+}
+
+#start-game-btn:hover {
+    background: var(--secondary-color);
+    color: var(--button-text);
+}
+
+/* LOBBY-SPECIFIC STYLES */
+
+#start-new-game-btn {
+    background: var(--primary-color);
+    color: var(--button-text);
+}
+
+#start-new-game-btn:hover {
+    background: var(--secondary-color);
+    color: var(--button-text);
+}
+
+#startStatsViewBtn {
+    background: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--subtle-border-color);
+}
+
+#startStatsViewBtn:hover {
+    background: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    color: var(--button-text);
+}
+
+.error-message {
+    color: var(--error-color);
+}
+
+.role-selection-wrapper label {
+    border-color: var(--primary-color);
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+.role-selection-wrapper input[type="radio"]:checked + label {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+}
+
+.role-selection-wrapper label:hover {
+    background-color: var(--focus-color);
+}
+
+/* Current Game ID */
+
+#current-game-id {
+    color: var(--primary-color);
+}
+
+#game-id-text {
+    color: var(--primary-color);
+}
+
+#current-game-id .share-notes {
+    color: var(--notes-color);
+}
+
+/* Header and Game Clocks Section */
+
+.game-info {
+    color: var(--primary-color);
+}
+
+.clock-display {
+    border-color: var(--subtle-border-color);
+    background-color: var(--surface-color);
+}
+
+.clock-time {
+    color: var(--primary-color);
+}
+
+.clock-label {
+    color: var(--text-color);
+}
+
+.reset-btn {
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border-color: var(--subtle-border-color);
+}
+
+.reset-btn:hover {
+    color: var(--text-color);
+    background-color: var(--secondary-button-bgnd);
+    border-color: var(--subtle-border-color);
+}
+
+/* Sticky Game Clock */
+.game-clocks-section.sticky-clock-active .clock-display {
+    background-color: var(--surface-color);
+}
+
+.game-clocks-section.sticky-clock-active .clock-display.warning {
+    background-color: var(--error-color);
+}
+
+/* Down Buttons */
+
+.down-buttons-section-wrapper {
+    border-color: var(--subtle-border-color);
+}
+
+.down-label {
+    color: var(--text-color);
+}
+
+.down-buttons button {
+    background-color: var(--secondary-button-bgnd);
+    color: var(--text-color);
+    border-color: var(--secondary-button-bgnd);
+}
+
+.down-buttons button:hover {
+    background-color: var(--secondary-button-bgnd-hover);
+}
+
+.down-buttons button.active {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+}
+
+/* Score */
+
+.team-score {
+    border-color: var(--subtle-border-color);
+}
+
+.score {
+    color: var(--primary-color);
+}
+
+.adjust-btn {
+    color: var(--secondary-color);
+    background: none;
+}
+
+.adjust-btn:hover {
+    background-color: var(--focus-color);
+}
+
+.score-buttons button {
+    background-color: var(--secondary-button-bgnd);
+    color: var(--text-color);
+}
+
+.score-buttons button:hover {
+    background-color: var(--secondary-button-bgnd-hover);
+}
+
+/* Timeouts */
+
+.timeout-buttons-section-wrapper {
+    border-color: var(--subtle-border-color);
+}
+
+.use-timeout-btn {
+    background-color: var(--primary-color);
+    color: var(--button-text);
+}
+
+.use-timeout-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Log and End Game Section */
+
+li {
+    border-color: var(--secondary-button-bgnd-hover);
+}
+
+.log-placeholder {
+    color: var(--placeholder-color);
+}
+
+.undo-btn {
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border-color: var(--subtle-border-color);
+}
+
+.undo-btn:hover {
+    color: var(--text-color);
+    background-color: var(--secondary-button-bgnd);
+    border-color: var(--subtle-border-color);
+}
+
+/* Score Popup */
+
+#score-popup {
+    background-color: var(--background-color);
+}
+
+.popup-content {
+    background-color: var(--surface-color);
+}
+
+.popup-buttons #cancel-popup-btn {
+    background-color: var(--background-color);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.popup-buttons #cancel-popup-btn:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--button-text);
+}
+
+/* Game Summary */
+
+.summary-team {
+    border-color: var(--subtle-border-color);
+    background-color: var(--surface-color);
+}
+
+.summary-team-name {
+    color: var(--primary-color);
+}
+
+.summary-score {
+    color: var(--primary-color);
+}
+
+#download-summary-btn {
+    background: var(--surface-color);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+#download-summary-btn:hover {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--button-text);
+}
+
+.download-icon {
+    fill: currentColor;
+}
+
+/* Share Links */
+
+.share-link-btn {
+    color: var(--button-text);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.share-link-btn:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--button-text);
+}
+
+#share-feedback {
+    color: var(--primary-color);
+}
+
+/* Two-minute warning */
+
+@keyframes flash-warning {
+    0%   { background-color: var(--error-color); color: var(--button-text-hover); }
+    50%  { background-color: var(--error-color-flash); color: var(--button-text-hover); }
+    100% { background-color: var(--error-color); color: var(--button-text-hover); }
+}
+
+.warning .clock-time, .warning .title {
+    color: var(--text-color);
+}
+
+.disabled {
+    border-color: var(--subtle-border-color);
+    opacity: 0.5;
+}
+
+/* Modals */
+
+.modal-overlay, .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.penalty-finder-container {
+    background-color: var(--background-color);
+    padding: 20px 0 120px 0;
+    width: 100%;
+    max-width: 740px;
+    margin: auto;
+}
+
+.info-modal-content, .share-modal-content {
+    background-color: var(--background-color);
+    padding: 20px 0 120px 0;
+    width: 100%;
+    max-width: 740px;
+    margin: auto;
+}
+
+.penalty-finder-container h2, .info-modal-content h2, .share-modal-content h2 {
+    text-align: left;
+}
+
+.info-modal-content h3 {
+    text-align: left;
+    line-height: 1.4em;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+.info-modal-content h4, .info-modal-content p {
+    text-align: left;
+    line-height: 1.4em;
+    margin-bottom: 10px;
+}
+
+.penalty-finder-container .title, .info-modal-content .title {
+    margin: 0 0 10px 0;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+#info-modal, #share-modal {
+    display: none;
+}
+
+#close-penalty-modal-btn,
+#close-info-modal-btn,
+#close-share-modal-btn,
+#cancel-popup-btn,
+#defence-cancel-popup-btn,
+#close-coin-toss-modal-btn {
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 500px !important;
+    background-color: var(--primary-color);
+    color: var(--button-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    position: fixed;
+    top: 0px;
+    right: 20px;
+    z-index: 1001;
+}
+
+#close-penalty-modal-btn:hover,
+#close-info-modal-btn:hover,
+#close-share-modal-btn:hover,
+#cancel-popup-btn:hover,
+#defence-cancel-popup-btn:hover {
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+#close-penalty-modal-btn svg,
+#close-info-modal-btn svg,
+#close-share-modal-btn svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+}
+
+/* Modal Links */
+
+#info-modal-ref a, #info-modal-scorer a, #info-modal-clock a, #info-modal-coach a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+#info-modal-ref a:hover, #info-modal-scorer a:hover, #info-modal-clock a:hover, #info-modal-coach a:hover {
+    color: var(--secondary-color);
+}
+
+.info-link {
+    padding-top: 10px;
+    margin-top: 20px;
+    border-top: 1px solid var(--subtle-border-color);
+}
+
+#info-modal-img img { width: 180px; }
+
+/* Fixed Footer */
+
+#fixed-footer-links-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding-bottom: env(safe-area-inset-bottom);
+    display: none;
+    justify-content: center;
+    z-index: 9999;
+    box-sizing: border-box;
+    border-top: 1px solid var(--subtle-border-color);
+    background-color: var(--surface-color);
+    box-shadow: 0 0 20px -2px var(--drop-shadow-color);
+}
+
+#fixed-footer-links-container.visible { display: flex; }
+
+#fixed-footer-links-container.hidden,
+#undoBtn.hidden,
+#endGameBtn.hidden { display: none; }
+
+.fixed-footer-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 2px 12px 12px 12px;
+    gap: 2px;
+    justify-content: space-between;
+    max-width: 740px;
+    width: 100%;
+}
+
+.fixed-footer-links button {
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    background-color: var(--surface-color);
+    color: var(--primary-color);
+    border: none;
+    padding: 8px 8px;
+    border-radius: 8px !important;
+}
+
+.fixed-footer-links button:hover {
+    color: var(--secondary-color);
+    background-color: var(--focus-color);
+}
+
+#penalty-lookup-btn {
+    color: var(--primary-color);
+    background-color: var(--surface-color);
+}
+
+#penalty-lookup-btn:hover {
+    color: var(--secondary-color);
+    background-color: var(--focus-color);
+}
+
+.fixed-footer-links button .button-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.fixed-footer-links button .button-text {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 320px) {
+    .fixed-footer-links button .button-text { display: none; }
+}
+
+/* Penalties */
+
+.search-input {
+    border-color: var(--notes-color);
+    color: var(--text-color);
+    background-color: var(--surface-color);
+}
+
+.search-input:focus {
+    background-color: var(--focus-color);
+}
+
+.search-input::placeholder {
+    color: var(--notes-color);
+}
+
+.penalty-header-row, .penalty-item-grid {
+    border-bottom: 1px solid var(--focus-color);
+}
+
+.penalty-header-row {
+    background-color: var(--secondary-button-bgnd);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1em;
+    letter-spacing: 0;
+}
+
+.penalty-item-grid {
+    background-color: var(--surface-color);
+    font-size: 14px;
+    color: var(--text-color);
+    align-items: start;
+}
+
+.penalty-item-grid:nth-child(even) {
+    background-color: var(--background-color);
+}
+
+.penalty-item-grid:last-child {
+    border-bottom: none;
+}
+
+.penalty-header-row .col-name,
+.penalty-header-row .col-yards,
+.penalty-header-row .col-enforced,
+.penalty-header-row .col-description,
+.penalty-header-row .col-effect {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.col-name {
+    color: var(--text-color);
+    font-weight: 600;
+    text-align: left;
+    text-wrap: auto;
+    padding: 0 10px 0 0;
+}
+
+.col-yards {
+    color: var(--text-color);
+    text-align: center;
+    font-weight: 600;
+    text-wrap: auto;
+    padding: 0 10px;
+}
+
+.col-enforced {
+    color: var(--text-color);
+    text-align: center;
+    font-weight: 400;
+    text-wrap: auto;
+    padding: 0 10px;
+}
+
+.col-description {
+    color: var(--text-color);
+    text-align: left;
+    font-weight: 400;
+    text-wrap: auto;
+    padding: 0 10px;
+}
+
+.col-effect {
+    color: var(--text-color);
+    align-items: center;
+    font-weight: 400;
+    text-wrap: auto;
+    padding: 0 10px;
+}
+
+/* Version */
+.version, .version-notes {
+    color: var(--notes-color);
+}
+
+#refresh-note p {
+    text-align: center;
+    font-size: 12px;
+    color: var(--notes-color);
+}
