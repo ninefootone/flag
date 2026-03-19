@@ -1,4 +1,4 @@
-const appVersion = '0.4.11';
+const appVersion = '0.4.12';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -803,7 +803,7 @@ if (timeoutsPerHalfInput) {
         connectWebSocket(newGameId);
     });
 
-    startStatsViewBtn.addEventListener('click', () => {
+    if (startStatsViewBtn) startStatsViewBtn.addEventListener('click', () => {
         const newGameId = Math.random().toString(36).substring(2, 8);
     
         // CRITICAL: Sets the URL with the non-secure 'stats' role
