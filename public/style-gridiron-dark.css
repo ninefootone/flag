@@ -905,4 +905,13 @@ li {
     color: var(--placeholder-color) !important;
 }
 
+.gr-game-code-text {
+    color:var(--primary-color) !important;
+}
+
+.gr-game-code-text span {
+    color:#ffffff !important;
+    background-color:var(--primary-color) !important;
+}
+
 } /* end dark mode */
