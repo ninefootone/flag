@@ -910,7 +910,7 @@ li {
 }
 
 .gr-game-code-text span {
-    color:#ffffff !important;
+    color:var(--button-text) !important;
     background-color:var(--primary-color) !important;
 }
 
