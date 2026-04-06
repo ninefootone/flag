@@ -918,4 +918,8 @@ li {
   color: var(--primary-color);
 }
 
+.submit-team-link:hover {
+  color: var(--primary-color);
+}
+
 } /* end dark mode */

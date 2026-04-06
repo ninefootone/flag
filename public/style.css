@@ -2068,3 +2068,7 @@ ul.stats-list {
   padding: 0;
   margin-top: 2px;
 }
+.submit-team-link:hover {
+  color: #106486;
+  text-decoration: none;
+}
