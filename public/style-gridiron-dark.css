@@ -914,4 +914,8 @@ li {
     background-color:var(--primary-color) !important;
 }
 
+.submit-team-link {
+  color: var(--primary-color);
+}
+
 } /* end dark mode */

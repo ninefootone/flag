@@ -2057,3 +2057,14 @@ ul.stats-list {
     font-size:1.4em;
     text-transform:uppercase;
 }
+
+.submit-team-link {
+  background: none;
+  border: none;
+  color: #106486;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+  margin-top: 2px;
+}
