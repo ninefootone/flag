@@ -922,4 +922,11 @@ li {
   color: var(--primary-color);
 }
 
+#feedback-message,
+#feedback-type {
+  background: var(--surface-color) !important;
+  color: var(--text-color) !important;
+  border-color: var(--subtle-border-color) !important;
+}
+
 } /* end dark mode */
