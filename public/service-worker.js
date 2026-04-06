@@ -1,4 +1,4 @@
-const CACHE_NAME = 'referee-app-cache-v0.4.16';
+const CACHE_NAME = 'referee-app-cache-v0.4.17';
 const urlsToCache = [
   '/',
   '/index.html',
