@@ -172,6 +172,7 @@ app.use(express.json());
 
 // Redirect .co.uk to .co
 app.use((req, res, next) => {
+  console.log('Hostname:', req.hostname);
   if (req.hostname === 'whistle-app.co.uk' || req.hostname === 'www.whistle-app.co.uk') {
     return res.redirect(301, `https://whistle-app.co${req.url}`);
   }
