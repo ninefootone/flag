@@ -1,4 +1,4 @@
-const appVersion = '0.4.17';
+const appVersion = '0.4.18';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -112,6 +112,66 @@ const initializeTeamData = () => {
             optionsList.classList.add('hidden');
         }
 };
+
+    // Team submission modal
+    const submitTeamBtn = document.getElementById('submit-team-btn');
+    const submitTeamModal = document.getElementById('submit-team-modal');
+    const submitTeamCancel = document.getElementById('submit-team-cancel');
+    const submitTeamConfirm = document.getElementById('submit-team-confirm');
+    const submitTeamError = document.getElementById('submit-team-error');
+    const submitTeamSuccess = document.getElementById('submit-team-success');
+
+    if (submitTeamBtn) {
+      submitTeamBtn.addEventListener('click', () => {
+        submitTeamModal.classList.remove('hidden');
+        submitTeamError.style.display = 'none';
+        submitTeamSuccess.style.display = 'none';
+        document.getElementById('submit-team-name').value = '';
+        document.getElementById('submit-team-league').value = '';
+        document.getElementById('submit-team-logo').value = '';
+      });
+    }
+
+    if (submitTeamCancel) {
+      submitTeamCancel.addEventListener('click', () => {
+        submitTeamModal.classList.add('hidden');
+      });
+    }
+
+    if (submitTeamConfirm) {
+      submitTeamConfirm.addEventListener('click', async () => {
+        const teamName = document.getElementById('submit-team-name').value.trim();
+        if (!teamName) {
+          submitTeamError.textContent = 'Please enter a team name.';
+          submitTeamError.style.display = 'block';
+          return;
+        }
+        submitTeamConfirm.disabled = true;
+        submitTeamConfirm.textContent = 'Submitting...';
+        submitTeamError.style.display = 'none';
+        try {
+          const res = await fetch('/submit-team', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              teamName,
+              league: document.getElementById('submit-team-league').value.trim(),
+              logoUrl: document.getElementById('submit-team-logo').value.trim(),
+            }),
+          });
+          if (!res.ok) throw new Error('Failed');
+          submitTeamSuccess.style.display = 'block';
+          setTimeout(() => submitTeamModal.classList.add('hidden'), 2500);
+        } catch {
+          submitTeamError.textContent = 'Something went wrong. Please try again.';
+          submitTeamError.style.display = 'block';
+        } finally {
+          submitTeamConfirm.disabled = false;
+          submitTeamConfirm.textContent = 'Submit Team';
+        }
+      });
+    }
+
 
 /**
  * Renders a team logo into a container element, with fallback.

@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.4.17">
-    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.17">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.17" />
+    <link rel="stylesheet" href="/style.css?v=0.4.18">
+    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.18">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.18" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -92,6 +92,11 @@
                 </div>
 
                 <datalist id="team-names-datalist"></datalist>
+                <p style="text-align:center; margin-top: 6px;">
+                  <button type="button" id="submit-team-btn" style="background:none; border:none; color: var(--accent, #f5a623); font-size:0.85rem; cursor:pointer; text-decoration:underline;">
+                    Can't find your team? Submit it →
+                  </button>
+                </p>
 
                 <div class="settings-grid">
                     <div class="one-third one">
@@ -241,15 +246,15 @@
                                 <span class="button-label">FG</span>
                                 <span class="button-score">(3)</span>
                             </button>
+                            <!-- <button class="defence-stats-btn" data-team="1">
+                                <span class="button-label">+ Defense</span>
+                            </button> -->
+                        </div>
+                        <div class="defence-buttons">
                             <button class="defence-stats-btn" data-team="1">
                                 <span class="button-label">+ Defensive Stat</span>
                             </button>
                         </div>
-                        <!-- <div class="defence-buttons">
-                            <button class="defence-stats-btn" data-team="1">
-                                <span class="button-label">+ Defensive Stat</span>
-                            </button>
-                        </div> -->
                     </span>
                 </div>
             </section>
@@ -284,15 +289,15 @@
                                 <span class="button-label">FG</span>
                                 <span class="button-score">(3)</span>
                             </button>
+                            <!-- <button class="defence-stats-btn" data-team="2">
+                                <span class="button-label">+ Defense</span>
+                            </button> -->
+                        </div>
+                        <div class="defence-buttons">
                             <button class="defence-stats-btn" data-team="2">
                                 <span class="button-label">+ Defensive Stat</span>
                             </button>
                         </div>
-                        <!-- <div class="defence-buttons">
-                            <button class="defence-stats-btn" data-team="2">
-                                <span class="button-label">+ Defensive Stat</span>
-                            </button>
-                        </div> -->
                     </span>
                 </div>
             </section>
@@ -678,11 +683,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.4.17"></script>
-<script src="/websocket.js?v=0.4.17"></script>
-<script src="/game-logic.js?v=0.4.17"></script>
-<script src="/ui.js?v=0.4.17"></script>
-<script src="/script.js?v=0.4.17"></script>
+<script src="/teams.js?v=0.4.18"></script>
+<script src="/websocket.js?v=0.4.18"></script>
+<script src="/game-logic.js?v=0.4.18"></script>
+<script src="/ui.js?v=0.4.18"></script>
+<script src="/script.js?v=0.4.18"></script>
 <script src="/penalties.js"></script>
 
 <script>
@@ -708,6 +713,36 @@
 
   gtag('config', 'G-PVR11D6EB1');
 </script>
+
+<!-- Team Submission Modal -->
+<div id="submit-team-modal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Submit Your Team</h2>
+    <p style="color: var(--text-secondary, #aaa); font-size: 0.88rem; margin-bottom: 16px;">
+      Fill in your team details and we'll add you to the Whistle team database.
+    </p>
+    <div class="form-group">
+      <label for="submit-team-name">Team Name *</label>
+      <input type="text" id="submit-team-name" placeholder="e.g. Sheffield Giants" autocomplete="off">
+    </div>
+    <div class="form-group" style="margin-top: 12px;">
+      <label for="submit-team-league">League (optional)</label>
+      <input type="text" id="submit-team-league" placeholder="e.g. BAFA Northern League" autocomplete="off">
+    </div>
+    <div class="form-group" style="margin-top: 12px;">
+      <label for="submit-team-logo">Logo URL (optional)</label>
+      <input type="url" id="submit-team-logo" placeholder="https://..." autocomplete="off">
+    </div>
+    <div id="submit-team-error" style="color: #ff6b6b; font-size: 0.85rem; margin-top: 8px; display: none;"></div>
+    <div id="submit-team-success" style="color: #51cf66; font-size: 0.85rem; margin-top: 8px; display: none;">
+      ✓ Thanks! We'll review and add your team shortly.
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+      <button type="button" id="submit-team-cancel" class="btn-secondary">Cancel</button>
+      <button type="button" id="submit-team-confirm" class="btn-primary">Submit Team</button>
+    </div>
+  </div>
+</div>
 
     </body>
 </html>

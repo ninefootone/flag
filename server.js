@@ -167,6 +167,40 @@ wss.on('connection', (ws, request, gameId) => {
     });
 });
 
+// Team submission endpoint
+app.use(express.json());
+app.post('/submit-team', async (req, res) => {
+  const { teamName, league, logoUrl } = req.body;
+  if (!teamName || !teamName.trim()) {
+    return res.status(400).json({ error: 'Team name required' });
+  }
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
+      },
+      body: JSON.stringify({
+        sender: { name: 'Whistle App', email: 'hello@gridiron-stats.co' },
+        to: [{ email: 'hello@gridiron-stats.co', name: 'Whistle Team' }],
+        subject: `New Team Submission: ${teamName.trim()}`,
+        htmlContent: `
+          <h2>New Team Submission</h2>
+          <p><strong>Team Name:</strong> ${teamName.trim()}</p>
+          <p><strong>League:</strong> ${league?.trim() || 'Not provided'}</p>
+          <p><strong>Logo URL:</strong> ${logoUrl?.trim() || 'Not provided'}</p>
+        `,
+      }),
+    });
+    if (!response.ok) throw new Error('Brevo API error');
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Team submission error:', err);
+    res.status(500).json({ error: 'Failed to send submission' });
+  }
+});
+
 const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
