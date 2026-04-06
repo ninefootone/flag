@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.4.22">
-    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.22">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.22" />
+    <link rel="stylesheet" href="/style.css?v=0.4.23">
+    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.23">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.23" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -242,7 +242,7 @@
                                 <span class="button-label">Safety</span>
                                 <span class="button-score">(2)</span>
                             </button>
-                            <button class="score-btn" data-team="1" data-score="3" data-label="Field Goal">
+                            <button class="score-btn score-btn-fg" data-team="1" data-score="3" data-label="Field Goal">
                                 <span class="button-label">FG</span>
                                 <span class="button-score">(3)</span>
                             </button>
@@ -285,7 +285,7 @@
                                 <span class="button-label">Safety</span>
                                 <span class="button-score">(2)</span>
                             </button>
-                            <button class="score-btn" data-team="2" data-score="3" data-label="Field Goal">
+                            <button class="score-btn score-btn-fg" data-team="2" data-score="3" data-label="Field Goal">
                                 <span class="button-label">FG</span>
                                 <span class="button-score">(3)</span>
                             </button>
@@ -522,6 +522,10 @@
                         <!-- <label for="safety-number">Safety #</label> -->
                         <input type="number" id="safety-number" placeholder="Safety#" inputmode="numeric">
                     </div>
+                    <div>
+                        <!-- <label for="field-goal-number">Field Goal #</label> -->
+                        <input type="number" id="fg-number" placeholder="Kicker#" inputmode="numeric">
+                    </div>
                 </div>
                 <div class="popup-buttons">
                     <button id="log-score-btn" class="log-score-btn">Log Score</button>
@@ -683,11 +687,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.4.22"></script>
-<script src="/websocket.js?v=0.4.22"></script>
-<script src="/game-logic.js?v=0.4.22"></script>
-<script src="/ui.js?v=0.4.22"></script>
-<script src="/script.js?v=0.4.22"></script>
+<script src="/teams.js?v=0.4.23"></script>
+<script src="/websocket.js?v=0.4.23"></script>
+<script src="/game-logic.js?v=0.4.23"></script>
+<script src="/ui.js?v=0.4.23"></script>
+<script src="/script.js?v=0.4.23"></script>
 <script src="/penalties.js"></script>
 
 <script>

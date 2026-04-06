@@ -32,6 +32,7 @@ window.getNewScoreLog = (event, players = {}) => {
     if (players.rb) { playerDetails.push(`RB #${players.rb}`); }
     if (players.int) { playerDetails.push(`INT #${players.int}`); }
     if (players.safety) { playerDetails.push(`Safety #${players.safety}`); }
+    if (players.fg) { playerDetails.push(`Kicker #${players.fg}`); }
     const playerString = playerDetails.length > 0 ? ` (${playerDetails.join(', ')})` : '';
 
     const newLogEntry = `<li><span class="log-time-stamp">${fullTimestamp} </span>${teamName} scored a ${event.scoreLabel} ${playerString}.</li>`;
@@ -159,7 +160,8 @@ window.handleLogScore = () => {
         wr: document.getElementById('wr-number').value || '',
         rb: document.getElementById('rb-number').value || '',
         int: document.getElementById('int-number').value || '',
-        safety: document.getElementById('safety-number').value || ''
+        safety: document.getElementById('safety-number').value || '',
+        fg: document.getElementById('fg-number').value || ''
     };
     const newScoreLogHTML = window.getNewScoreLog(window.tempScoreEvent, players);
     window.sendAction('UPDATE_STATE', { scores: newScores, scoreLogHTML: newScoreLogHTML });

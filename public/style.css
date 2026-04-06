@@ -2061,7 +2061,7 @@ ul.stats-list {
 .submit-team-link {
   background: none;
   border: none;
-  color: #106486;
+  color:var(--primary-color) !important;
   font-size: 0.85rem;
   cursor: pointer;
   text-decoration: none;
@@ -2069,6 +2069,13 @@ ul.stats-list {
   margin-top: 2px;
 }
 .submit-team-link:hover {
-  color: #106486;
+  color:var(--secondary-color) !important;
   text-decoration: none;
+  background: none !important;
+}
+
+.score-btn-fg {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 48%;
 }

@@ -1,4 +1,4 @@
-const appVersion = '0.4.22';
+const appVersion = '0.4.23';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -697,6 +697,8 @@ if (timeoutsPerHalfInput) {
         rbNumberInput.value = '';
         intNumberInput.value = '';
         safetyNumberInput.value = '';
+        const fgNumberInput = document.getElementById('fg-number');
+        if (fgNumberInput) fgNumberInput.value = '';
         window.tempScoreEvent = null;
     };
 
