@@ -202,6 +202,39 @@ app.post('/submit-team', async (req, res) => {
 });
 
 const port = process.env.PORT || 5000;
+
+app.post('/submit-feedback', async (req, res) => {
+  const { feedbackType, message, email } = req.body;
+  if (!message || !message.trim()) {
+    return res.status(400).json({ error: 'Message required' });
+  }
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
+      },
+      body: JSON.stringify({
+        sender: { name: 'Whistle App', email: 'hello@gridiron-stats.co' },
+        to: [{ email: 'hello@gridiron-stats.co', name: 'Whistle Team' }],
+        subject: `Whistle Feedback: ${feedbackType || 'General'}`,
+        htmlContent: `
+          <h2>Whistle App Feedback</h2>
+          <p><strong>Type:</strong> ${feedbackType || 'General'}</p>
+          <p><strong>Message:</strong> ${message.trim()}</p>
+          <p><strong>Email:</strong> ${email?.trim() || 'Not provided'}</p>
+        `,
+      }),
+    });
+    if (!response.ok) throw new Error('Brevo API error');
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Feedback submission error:', err);
+    res.status(500).json({ error: 'Failed to send feedback' });
+  }
+});
+
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

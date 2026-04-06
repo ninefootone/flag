@@ -251,6 +251,64 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+        // Feedback modal
+    const feedbackBtn = document.getElementById('feedback-btn');
+    const feedbackModal = document.getElementById('feedback-modal');
+    const feedbackCancel = document.getElementById('feedback-cancel');
+    const feedbackConfirm = document.getElementById('feedback-confirm');
+    const feedbackError = document.getElementById('feedback-error');
+    const feedbackSuccess = document.getElementById('feedback-success');
+
+    if (feedbackBtn && feedbackModal) {
+      feedbackBtn.addEventListener('click', () => {
+        feedbackModal.classList.remove('hidden');
+        feedbackError.style.display = 'none';
+        feedbackSuccess.style.display = 'none';
+        document.getElementById('feedback-message').value = '';
+        document.getElementById('feedback-email').value = '';
+      });
+    }
+
+    if (feedbackCancel) {
+      feedbackCancel.addEventListener('click', () => {
+        feedbackModal.classList.add('hidden');
+      });
+    }
+
+    if (feedbackConfirm) {
+      feedbackConfirm.addEventListener('click', async () => {
+        const message = document.getElementById('feedback-message').value.trim();
+        if (!message) {
+          feedbackError.textContent = 'Please enter a message.';
+          feedbackError.style.display = 'block';
+          return;
+        }
+        feedbackConfirm.disabled = true;
+        feedbackConfirm.textContent = 'Sending...';
+        feedbackError.style.display = 'none';
+        try {
+          const res = await fetch('/submit-feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              feedbackType: document.getElementById('feedback-type').value,
+              message,
+              email: document.getElementById('feedback-email').value.trim(),
+            }),
+          });
+          if (!res.ok) throw new Error('Failed');
+          feedbackSuccess.style.display = 'block';
+          setTimeout(() => feedbackModal.classList.add('hidden'), 2500);
+        } catch {
+          feedbackError.textContent = 'Something went wrong. Please try again.';
+          feedbackError.style.display = 'block';
+        } finally {
+          feedbackConfirm.disabled = false;
+          feedbackConfirm.textContent = 'Send Feedback';
+        }
+      });
+    }
+
     // --- END NEW TEAM LIST INTEGRATION LOGIC ---
 
     // ... (The rest of your existing DOMContentLoaded code continues here, e.g., security, WebSocket, etc.)
