@@ -2072,10 +2072,12 @@ ul.stats-list {
   color:var(--secondary-color) !important;
   text-decoration: none;
   background: none !important;
+  border: none !important;
+  padding: 0 !important;
 }
 
 .score-btn-fg {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: 48%;
+  width: 48% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
