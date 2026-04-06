@@ -929,4 +929,10 @@ li {
   border-color: var(--subtle-border-color) !important;
 }
 
+input[type="email"] {
+  background: var(--surface-color) !important;
+  color: var(--text-color) !important;
+  border-color: var(--subtle-border-color) !important;
+}
+
 } /* end dark mode */
