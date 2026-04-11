@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- New Modal Toggle Logic ---
+    // --- Modal Toggle Logic ---
     const penaltyLookupBtn = document.getElementById('penalty-lookup-btn');
     const penaltyModal = document.getElementById('penalty-lookup-modal');
     const closeModalBtn = document.getElementById('close-penalty-modal-btn');
@@ -15,74 +15,85 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeModalBtn) {
         closeModalBtn.addEventListener('click', () => {
             penaltyModal.classList.add('hidden');
-            searchInput.value = ''; // Clear search when closing
-            renderPenaltiesList(penaltiesData); // Reset to full list
+            searchInput.value = '';
+            renderPenaltiesList(penaltiesData);
         });
     }
-    // -----------------------------
 
+    // --- Google Sheet URLs ---
+    const SHEET_URLS = {
+        flag: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLx1lsciNI7CiAUoLH-8g7DxgsZZhrLuq-SYUcTW-vIXTegPRT6UHF4FAoRKOGqug0nSa3FjU7zfzG/pub?gid=962305796&output=csv',
+        contact: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLx1lsciNI7CiAUoLH-8g7DxgsZZhrLuq-SYUcTW-vIXTegPRT6UHF4FAoRKOGqug0nSa3FjU7zfzG/pub?gid=1263276403&single=true&output=csv',
+    };
 
-    // --- Existing Penalty Lookup Logic ---
+    // --- State ---
     const penaltiesListContainer = document.getElementById('penalties-list');
     const noResultsMessage = document.getElementById('no-results');
-    let penaltiesData = []; // Store the fetched data
+    let penaltiesData = [];
+    let currentType = localStorage.getItem('whistle_penalty_type') || 'flag';
 
-
-    // 🚨 NEW: Google Sheet Configuration and CSV Parser 🚨
-    // PASTE YOUR GOOGLE SHEET CSV EXPORT URL HERE (File -> Share -> Publish to web -> Link -> CSV)
-    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLx1lsciNI7CiAUoLH-8g7DxgsZZhrLuq-SYUcTW-vIXTegPRT6UHF4FAoRKOGqug0nSa3FjU7zfzG/pub?gid=962305796&output=csv';
-
-    /**
-     * Helper function to parse CSV text into an array of objects.
-     */
+    // --- CSV Parser ---
     const parseCSV = (csvText) => {
         const lines = csvText.split('\n');
         if (lines.length === 0) return [];
-
         const headers = lines[0].replace(/"/g, '').replace(/\r/g, '').split(',');
         const data = [];
-
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
-
-            const values = line.split(','); 
+            const values = line.split(',');
             const rowData = {};
-
             headers.forEach((header, index) => {
                 const cleanHeader = header.trim();
                 let value = (values[index] || '').replace(/"/g, '').replace(/\r/g, '').trim();
-                
-                // Convert numeric strings to numbers for fields like 'yards'
                 if (cleanHeader === 'yards' && !isNaN(value) && value !== '') {
                     value = Number(value);
                 }
-                
                 rowData[cleanHeader] = value;
             });
-
             data.push(rowData);
         }
         return data;
     };
-    // ----------------------------------------------------
 
-
-    /**
-     * Helper to get the descriptive effect string based on the booleans.
-     */
+    // --- Effect helper ---
     const getPenaltyEffect = (penalty) => {
         if (penalty.automaticFirstDown && String(penalty.automaticFirstDown).toLowerCase() === 'true') return "Automatic 1st Down";
         if (penalty.lossOfDown && String(penalty.lossOfDown).toLowerCase() === 'true') return "Loss of Down";
         if (penalty.lossOfTimeout && String(penalty.lossOfTimeout).toLowerCase() === 'true') return "Loss of Timeout";
         return "-";
-    }
+    };
 
-    /**
-     * Renders the list of penalties based on the provided array.
-     */
+    // --- Type toggle ---
+    const createToggle = () => {
+        const existing = document.getElementById('penalty-type-toggle');
+        if (existing) existing.remove();
+
+        const toggle = document.createElement('div');
+        toggle.id = 'penalty-type-toggle';
+        toggle.style.cssText = 'display:flex;gap:8px;margin-bottom:12px;';
+        toggle.innerHTML = `
+            <button id="penalty-flag-btn" style="flex:1;padding:8px;border-radius:6px;border:none;cursor:pointer;font-weight:700;background:${currentType === 'flag' ? '#f5a623' : '#333'};color:${currentType === 'flag' ? '#000' : '#fff'};">🚩 Flag</button>
+            <button id="penalty-contact-btn" style="flex:1;padding:8px;border-radius:6px;border:none;cursor:pointer;font-weight:700;background:${currentType === 'contact' ? '#f5a623' : '#333'};color:${currentType === 'contact' ? '#000' : '#fff'};">🏈 Contact</button>
+        `;
+        searchInput.parentNode.insertBefore(toggle, searchInput);
+
+        document.getElementById('penalty-flag-btn').addEventListener('click', () => switchType('flag'));
+        document.getElementById('penalty-contact-btn').addEventListener('click', () => switchType('contact'));
+    };
+
+    const switchType = async (type) => {
+        currentType = type;
+        localStorage.setItem('whistle_penalty_type', type);
+        createToggle();
+        searchInput.value = '';
+        penaltiesListContainer.innerHTML = '<p style="color:#999;padding:16px;">Loading...</p>';
+        await loadPenalties();
+    };
+
+    // --- Render ---
     const renderPenaltiesList = (list) => {
-        penaltiesListContainer.innerHTML = ''; 
+        penaltiesListContainer.innerHTML = '';
         noResultsMessage.style.display = 'none';
 
         if (list.length === 0) {
@@ -90,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Add a header row for the structured format (5 columns now)
         penaltiesListContainer.innerHTML = `
             <div class="penalty-header-row">
                 <div class="col-name">Penalty</div>
@@ -103,37 +113,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         list.forEach(penalty => {
             const effectText = getPenaltyEffect(penalty);
-
             const item = document.createElement('div');
-            item.className = 'penalty-item-grid'; 
-            
+            item.className = 'penalty-item-grid';
             item.innerHTML = `
                 <div class="col-name penalty-name">${penalty.name}</div>
                 <div class="col-description penalty-description">${penalty.description || '-'}</div>
                 <div class="col-yards penalty-yards">${penalty.yards}</div>
                 <div class="col-enforced penalty-enforced">${penalty.enforcedFrom || '-'}</div>
-                <div class="col-effect penalty-effect">
-                    ${effectText}
-                </div>
+                <div class="col-effect penalty-effect">${effectText}</div>
             `;
             penaltiesListContainer.appendChild(item);
         });
     };
 
-    /**
-     * Filters the main penalty list based on the search query.
-     */
+    // --- Filter ---
     const filterPenalties = () => {
         const query = searchInput.value.toLowerCase().trim();
-
         const filteredList = penaltiesData.filter(penalty => {
-            // Ensure fields exist before trying to call .toLowerCase()
             const name = penalty.name ? penalty.name.toLowerCase() : '';
             const description = penalty.description ? penalty.description.toLowerCase() : '';
             const enforcedFrom = penalty.enforcedFrom ? penalty.enforcedFrom.toLowerCase() : '';
             const keywords = penalty.keywords ? penalty.keywords.toLowerCase() : '';
-
-            // Search across all relevant text fields and keywords
             return (
                 name.includes(query) ||
                 description.includes(query) ||
@@ -143,38 +143,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 keywords.includes(query)
             );
         });
-
         renderPenaltiesList(filteredList);
     };
 
-
-    /**
-     * 🚨 REPLACED: Loads penalty data from the Google Sheet (CSV).
-     */
+    // --- Load ---
     const loadPenalties = async () => {
         try {
-            console.log("Loading Penalties: Fetching data from Google Sheet...");
-            const response = await fetch(GOOGLE_SHEET_URL);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
+            const response = await fetch(SHEET_URLS[currentType]);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const csvText = await response.text();
-            penaltiesData = parseCSV(csvText); // Use the new CSV parser
-            
-            renderPenaltiesList(penaltiesData); // Render on load
-            console.log(`Loading Penalties: Successfully loaded ${penaltiesData.length} entries.`);
-            
+            penaltiesData = parseCSV(csvText);
+            renderPenaltiesList(penaltiesData);
         } catch (error) {
             console.error("Could not load penalty data:", error);
-            penaltiesListContainer.innerHTML = '<p class="error-message">Error loading penalty data. Check your Google Sheet URL and publish settings.</p>';
+            penaltiesListContainer.innerHTML = '<p class="error-message">Error loading penalty data.</p>';
         }
     };
 
-    // Event Listener for the search input
     searchInput.addEventListener('input', filterPenalties);
 
-    // Load the data when the page loads
+    // Initialise
+    createToggle();
     loadPenalties();
 });
