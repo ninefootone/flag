@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('penalty-flag-btn').addEventListener('click', () => switchType('flag'));
         document.getElementById('penalty-contact-btn').addEventListener('click', () => switchType('contact'));
+        document.getElementById('penalty-modal-title').textContent = `Penalties — ${currentType === 'flag' ? 'Flag' : 'Contact'}`;
     };
 
     const switchType = async (type) => {
