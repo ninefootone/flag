@@ -72,9 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const toggle = document.createElement('div');
         toggle.id = 'penalty-type-toggle';
         toggle.style.cssText = 'display:flex;gap:8px;margin-bottom:12px;';
+        const activeStyle = 'flex:1;padding:8px;border-radius:500px;cursor:pointer;font-weight:700;background-color:var(--primary-color);color:var(--button-text);border:1px solid var(--primary-color);';
+        const inactiveStyle = 'flex:1;padding:8px;border-radius:500px;cursor:pointer;font-weight:700;background-color:var(--background-color);color:var(--primary-color);border:1px solid var(--primary-color);';
         toggle.innerHTML = `
-            <button id="penalty-flag-btn" style="flex:1;padding:8px;border-radius:6px;border:none;cursor:pointer;font-weight:700;background:${currentType === 'flag' ? '#f5a623' : '#333'};color:${currentType === 'flag' ? '#000' : '#fff'};">🚩 Flag</button>
-            <button id="penalty-contact-btn" style="flex:1;padding:8px;border-radius:6px;border:none;cursor:pointer;font-weight:700;background:${currentType === 'contact' ? '#f5a623' : '#333'};color:${currentType === 'contact' ? '#000' : '#fff'};">🏈 Contact</button>
+            <button id="penalty-flag-btn" style="${currentType === 'flag' ? activeStyle : inactiveStyle}">Flag</button>
+            <button id="penalty-contact-btn" style="${currentType === 'contact' ? activeStyle : inactiveStyle}">Contact</button>
         `;
         searchInput.parentNode.insertBefore(toggle, searchInput);
 
