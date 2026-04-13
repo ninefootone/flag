@@ -5,7 +5,8 @@ window.isReconnecting = false;
 // --- WebSocket Event Handlers ---
 window.connectWebSocket = (gameId) => {
     window.lastGameId = gameId;
-    window.ws = new WebSocket(`wss://${location.host}/game/${gameId}`);
+    const WS_HOST = 'flag-production-d4bb.up.railway.app';
+    window.ws = new WebSocket(`wss://${WS_HOST}/game/${gameId}`);
 
     window.ws.onopen = () => {
         console.log(`Connected to the WebSocket server for game ${gameId}!`);
