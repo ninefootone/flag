@@ -1,0 +1,7 @@
+{
+  "$schema": "https://schema.railway.app/railpack.json",
+  "deploy": {
+    "startCommand": "node server.js",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
