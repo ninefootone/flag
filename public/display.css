@@ -502,6 +502,7 @@
         gap: 2px 12px;
         width: 100%;
         text-align: left !important;
+        padding: 3px;
     }
 
     .dm-team-name {
