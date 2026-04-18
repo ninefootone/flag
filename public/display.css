@@ -1,0 +1,547 @@
+/* =============================================================
+   display.css — Whistle Display Mode (broadcast scoreboard)
+   Completely separate from style.css — do not import or modify style.css.
+   ============================================================= */
+
+/* ---- Reset / base ---- */
+#display-mode,
+#display-mode * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---- Root container ---- */
+#display-mode {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: #0a0a12;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Metropolis', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#display-mode.hidden {
+    display: none;
+}
+
+/* ---- Settings button (top-right cog) ---- */
+.dm-settings-btn {
+    position: absolute;
+    top: clamp(12px, 2vh, 24px);
+    right: clamp(12px, 2vw, 24px);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    width: clamp(40px, 5vw, 56px);
+    height: clamp(40px, 5vw, 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.3s ease;
+    z-index: 20;
+    color: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.dm-settings-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    transform: rotate(45deg);
+}
+
+.dm-settings-btn svg {
+    width: clamp(20px, 2.4vw, 28px);
+    height: clamp(20px, 2.4vw, 28px);
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---- Main area (clock + down) ---- */
+.dm-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0 20px 8px;
+}
+
+.dm-clock-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(4px, 1vh, 12px);
+}
+
+/* Period label */
+.dm-period {
+    font-size: clamp(0.9rem, 2vw, 1.6rem);
+    font-weight: 500;
+    color: #8ab4c8;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* Big game clock */
+.dm-game-clock {
+    font-size: clamp(6rem, 22vw, 20rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+/* Two-minute warning pulse */
+.dm-game-clock.dm-warning {
+    animation: dm-clock-warning-pulse 1s ease-in-out infinite;
+}
+
+@keyframes dm-clock-warning-pulse {
+    0%, 100% { color: #ffffff; }
+    50% { color: #ff6b6b; }
+}
+
+/* Down indicator */
+.dm-down {
+    font-size: clamp(1.2rem, 3.5vw, 3rem);
+    font-weight: 600;
+    color: #d0d0d0;
+    letter-spacing: 0.03em;
+    line-height: 1;
+}
+
+/* Play clock pill */
+.dm-play-clock-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: clamp(4px, 0.8vh, 12px);
+    padding: clamp(6px, 0.8vh, 10px) clamp(16px, 2vw, 28px);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dm-play-clock-label {
+    font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+    color: #8ab4c8;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+}
+
+.dm-play-clock {
+    font-size: clamp(1.4rem, 2.8vw, 2.6rem);
+    font-weight: 700;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+/* ---- Lower third strip ---- */
+.dm-lower-third {
+    width: 100%;
+    background: linear-gradient(180deg, #0f1826 0%, #111a2e 100%);
+    border-top: 3px solid #106386;
+    display: flex;
+    align-items: stretch;
+    flex-shrink: 0;
+    min-height: clamp(80px, 15vh, 150px);
+}
+
+/* Team block (shared) */
+.dm-team {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 1.5vw, 24px);
+    flex: 1;
+    padding: clamp(10px, 1.5vh, 20px) clamp(14px, 2.5vw, 40px);
+}
+
+.dm-team-home {
+    justify-content: flex-start;
+}
+
+.dm-team-away {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+/* Team logo container */
+.dm-team-logo-wrap {
+    width: clamp(44px, 8vw, 88px);
+    height: clamp(44px, 8vw, 88px);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dm-team-logo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dm-team-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Logo fallback initials circle */
+.dm-logo-placeholder {
+    width: clamp(40px, 7vw, 80px);
+    height: clamp(40px, 7vw, 80px);
+    border-radius: 50%;
+    background: rgba(16, 99, 134, 0.3);
+    border: 2px solid rgba(16, 99, 134, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.9rem, 2vw, 1.8rem);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1;
+}
+
+/* Team info block */
+.dm-team-info {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2px, 0.4vh, 6px);
+}
+
+.dm-team-away .dm-team-info {
+    align-items: flex-end;
+}
+
+.dm-team-name {
+    font-size: clamp(0.75rem, 2vw, 1.6rem);
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: clamp(120px, 20vw, 320px);
+}
+
+.dm-team-score {
+    font-size: clamp(2.5rem, 7vw, 6rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.dm-team-timeouts {
+    display: flex;
+    gap: clamp(4px, 0.6vw, 8px);
+    align-items: center;
+}
+
+.dm-timeout-dot {
+    width: clamp(8px, 1.1vw, 13px);
+    height: clamp(8px, 1.1vw, 13px);
+    border-radius: 50%;
+    background: #106386;
+    flex-shrink: 0;
+    transition: background 0.3s ease, opacity 0.3s ease;
+}
+
+.dm-timeout-dot.dm-used {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Centre divider */
+.dm-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 clamp(12px, 2.5vw, 40px);
+    flex-shrink: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dm-vs {
+    font-size: clamp(0.65rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    color: #8ab4c8;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+}
+
+/* ---- Branding ---- */
+.dm-branding {
+    position: absolute;
+    bottom: clamp(6px, 1.2vh, 14px);
+    right: clamp(12px, 2vw, 24px);
+    font-size: clamp(0.55rem, 0.9vw, 0.8rem);
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ---- Settings overlay ---- */
+.dm-settings-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.dm-settings-overlay.hidden {
+    display: none;
+}
+
+.dm-settings-panel {
+    background: #151e30;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: clamp(20px, 3vw, 32px);
+    width: clamp(280px, 38vw, 440px);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.dm-settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: clamp(16px, 2.5vh, 28px);
+    padding-bottom: clamp(12px, 1.5vh, 20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dm-settings-header h2 {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+}
+
+.dm-settings-close {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    width: clamp(32px, 3.5vw, 40px);
+    height: clamp(32px, 3.5vw, 40px);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.dm-settings-close:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.dm-settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Toggle row */
+.dm-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(10px, 1.4vh, 16px) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    user-select: none;
+}
+
+.dm-toggle-row:last-child {
+    border-bottom: none;
+}
+
+.dm-toggle-label {
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    color: #d0d8e8;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* Hide real checkbox */
+.dm-toggle-row input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Custom toggle track */
+.dm-toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+    cursor: pointer;
+}
+
+/* Toggle thumb */
+.dm-toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.dm-toggle-row input:checked + .dm-toggle-slider {
+    background: #106386;
+}
+
+.dm-toggle-row input:checked + .dm-toggle-slider::after {
+    transform: translateX(24px);
+    background: #ffffff;
+}
+
+/* ---- State modifier classes ---- */
+
+/* Clock-only mode: hide everything except game clock and period */
+#display-mode.dm-clock-only .dm-lower-third,
+#display-mode.dm-clock-only .dm-down,
+#display-mode.dm-clock-only .dm-play-clock-wrap {
+    display: none;
+}
+
+/* Hide play clock */
+#display-mode.dm-hide-play-clock .dm-play-clock-wrap {
+    display: none;
+}
+
+/* Hide team logos */
+#display-mode.dm-hide-logos .dm-team-logo-wrap {
+    display: none;
+}
+
+/* Hide timeouts */
+#display-mode.dm-hide-timeouts .dm-team-timeouts {
+    display: none;
+}
+
+/* ---- Responsive: portrait / small screens ---- */
+@media (orientation: portrait) {
+    .dm-game-clock {
+        font-size: clamp(5rem, 28vw, 14rem);
+    }
+
+    .dm-team-score {
+        font-size: clamp(2.2rem, 10vw, 5rem);
+    }
+
+    .dm-team-name {
+        font-size: clamp(0.7rem, 3.5vw, 1.4rem);
+        max-width: clamp(100px, 28vw, 240px);
+    }
+}
+
+@media (orientation: portrait) and (max-width: 480px) {
+    .dm-lower-third {
+        flex-direction: column;
+        min-height: auto;
+        padding: 0;
+    }
+
+    .dm-team {
+        width: 100%;
+        padding: 10px 16px;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .dm-team-away {
+        flex-direction: row !important;
+    }
+
+    .dm-team-info {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .dm-team-away .dm-team-info {
+        align-items: center;
+        flex-direction: row;
+    }
+
+    .dm-divider {
+        display: none;
+    }
+
+    .dm-team-logo-wrap {
+        width: 36px;
+        height: 36px;
+    }
+
+    .dm-timeout-dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* ---- Landscape TVs / large displays ---- */
+@media (min-width: 1920px) {
+    .dm-game-clock {
+        font-size: clamp(14rem, 18vw, 24rem);
+    }
+
+    .dm-team-score {
+        font-size: clamp(5rem, 8vw, 9rem);
+    }
+
+    .dm-team-name {
+        font-size: clamp(1.4rem, 2.2vw, 2.4rem);
+        max-width: clamp(200px, 22vw, 440px);
+    }
+
+    .dm-lower-third {
+        min-height: clamp(120px, 16vh, 200px);
+    }
+}

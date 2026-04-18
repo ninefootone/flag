@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Whistle</title>
-    <link rel="stylesheet" href="/style.css?v=0.4.39">
-    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.39">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.39" />
+    <link rel="stylesheet" href="/style.css?v=0.4.40">
+    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.40">
+    <link rel="stylesheet" href="/display.css?v=0.4.40">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.40" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -686,13 +687,123 @@
             </div>
         </div>
 
+<!-- ============================================================
+     Display Mode — broadcast scoreboard view (role: display)
+     Completely separate from #game-interface. Hidden by default.
+     ============================================================ -->
+<div id="display-mode" class="hidden">
+
+    <!-- Settings cog — top right corner -->
+    <button class="dm-settings-btn" id="dm-settings-btn" aria-label="Display settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+        </svg>
+    </button>
+
+    <!-- Main clock area -->
+    <div class="dm-main">
+        <div class="dm-clock-section">
+            <div class="dm-period" id="dm-period">1st Half</div>
+            <div class="dm-game-clock" id="dm-game-clock">20:00</div>
+            <div class="dm-down" id="dm-down">1st &amp; 10</div>
+            <div class="dm-play-clock-wrap" id="dm-play-clock-wrap">
+                <span class="dm-play-clock-label">Play Clock</span>
+                <span class="dm-play-clock" id="dm-play-clock">25</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lower third strip -->
+    <div class="dm-lower-third">
+
+        <!-- Home team (team 1) -->
+        <div class="dm-team dm-team-home">
+            <div class="dm-team-logo-wrap" id="dm-team1-logo-wrap">
+                <div class="dm-team-logo" id="dm-team1-logo">
+                    <div class="dm-logo-placeholder" id="dm-team1-logo-placeholder">H</div>
+                </div>
+            </div>
+            <div class="dm-team-info">
+                <div class="dm-team-name" id="dm-team1-name">Home</div>
+                <div class="dm-team-score" id="dm-team1-score">0</div>
+                <div class="dm-team-timeouts" id="dm-team1-timeouts">
+                    <span class="dm-timeout-dot"></span>
+                    <span class="dm-timeout-dot"></span>
+                    <span class="dm-timeout-dot"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centre divider -->
+        <div class="dm-divider">
+            <span class="dm-vs">VS</span>
+        </div>
+
+        <!-- Away team (team 2) -->
+        <div class="dm-team dm-team-away">
+            <div class="dm-team-info">
+                <div class="dm-team-name" id="dm-team2-name">Away</div>
+                <div class="dm-team-score" id="dm-team2-score">0</div>
+                <div class="dm-team-timeouts" id="dm-team2-timeouts">
+                    <span class="dm-timeout-dot"></span>
+                    <span class="dm-timeout-dot"></span>
+                    <span class="dm-timeout-dot"></span>
+                </div>
+            </div>
+            <div class="dm-team-logo-wrap" id="dm-team2-logo-wrap">
+                <div class="dm-team-logo" id="dm-team2-logo">
+                    <div class="dm-logo-placeholder" id="dm-team2-logo-placeholder">A</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.dm-lower-third -->
+
+    <!-- Branding -->
+    <div class="dm-branding">Powered by Whistle</div>
+
+    <!-- Settings overlay -->
+    <div class="dm-settings-overlay hidden" id="dm-settings-overlay">
+        <div class="dm-settings-panel">
+            <div class="dm-settings-header">
+                <h2>Display Settings</h2>
+                <button class="dm-settings-close" id="dm-settings-close" aria-label="Close settings">&#x2715;</button>
+            </div>
+            <div class="dm-settings-body">
+                <label class="dm-toggle-row">
+                    <span class="dm-toggle-label">Show Play Clock</span>
+                    <input type="checkbox" id="dm-toggle-play-clock" checked>
+                    <span class="dm-toggle-slider"></span>
+                </label>
+                <label class="dm-toggle-row">
+                    <span class="dm-toggle-label">Show Team Logos</span>
+                    <input type="checkbox" id="dm-toggle-logos" checked>
+                    <span class="dm-toggle-slider"></span>
+                </label>
+                <label class="dm-toggle-row">
+                    <span class="dm-toggle-label">Show Timeouts</span>
+                    <input type="checkbox" id="dm-toggle-timeouts" checked>
+                    <span class="dm-toggle-slider"></span>
+                </label>
+                <label class="dm-toggle-row">
+                    <span class="dm-toggle-label">Clock Only Mode</span>
+                    <input type="checkbox" id="dm-toggle-clock-only">
+                    <span class="dm-toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div><!-- /.dm-settings-overlay -->
+
+</div><!-- /#display-mode -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.4.39"></script>
-<script src="/websocket.js?v=0.4.39"></script>
-<script src="/game-logic.js?v=0.4.39"></script>
-<script src="/ui.js?v=0.4.39"></script>
-<script src="/script.js?v=0.4.39"></script>
+<script src="/teams.js?v=0.4.40"></script>
+<script src="/websocket.js?v=0.4.40"></script>
+<script src="/game-logic.js?v=0.4.40"></script>
+<script src="/ui.js?v=0.4.40"></script>
+<script src="/script.js?v=0.4.40"></script>
 <script src="/penalties.js"></script>
 
 <script>
