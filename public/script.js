@@ -323,7 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'coach': '5hd74h',
         'stats': null,
         // 'administrator' is not usually shared, but included for completeness if needed.
-        'administrator': 'b3f5z2' 
+        'administrator': 'b3f5z2',
+        'display': 'x9m2kp'
     };
 
     // Finds the original role name (e.g., 'coach') by searching for its secure token (e.g., '5hd74h').
@@ -650,7 +651,8 @@ if (timeoutsPerHalfInput) {
         'scorer': [...clockContainer, ...scoreButtons, ...defenceButtons, ...adjustButtons, ...downButtonsSection, ...timeoutButtonsSection, fixedFooter, ...timeoutLogContainer, undoBtn, infoBtn, infoModalScorer],
         'clock': [...clockContainer, gameClockToggleBtn, gameClockResetBtn, playClockToggleBtn, playClockResetBtn, playClockOptions, autoAdvanceCheckbox, ...downButtonsSection, ...downButtons, ...timeoutButtonsSection, ...timeoutLogContainer, fixedFooter, infoBtn, infoModalClock],
         'coach': [...clockContainer, ...downButtonsSection, ...timeoutButtonsSection, ...timeoutLogContainer, fixedFooter, infoBtn, infoModalCoach],
-        'stats': [...scoreButtons, ...defenceButtons, ...adjustButtons, fixedFooter, penaltyLookupBtn, endGameBtn, startNewGameFromSummaryBtn]
+        'stats': [...scoreButtons, ...defenceButtons, ...adjustButtons, fixedFooter, penaltyLookupBtn, endGameBtn, startNewGameFromSummaryBtn],
+        'display': []
     };
 
     window.userRole = 'administrator';

@@ -31,6 +31,7 @@ window.updateUI = () => {
     const settingsForm = document.getElementById('settings-form');
     const gameInterface = document.getElementById('game-interface');
     const gameSummary = document.getElementById('game-summary');
+    const displayMode = document.getElementById('display-mode');
     const fixedFooter = document.getElementById('fixed-footer-links-container');
     const undoBtn = document.getElementById('undo-btn');
     const endGameBtn = document.getElementById('end-game-btn');
@@ -43,7 +44,18 @@ window.updateUI = () => {
         gameIdDisplay.classList.add('hidden');
     }
 
-    if (Object.keys(window.gameState).length > 0 && window.gameState.gameStarted && !window.gameState.gameEnded) {
+    if (window.userRole === 'display') {
+        gameLobby.classList.add('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.add('hidden');
+        gameSummary.classList.add('hidden');
+        if (displayMode) displayMode.classList.remove('hidden');
+        if (fixedFooter) {
+            fixedFooter.classList.remove('visible');
+            fixedFooter.classList.add('hidden');
+        }
+    } else if (Object.keys(window.gameState).length > 0 && window.gameState.gameStarted && !window.gameState.gameEnded) {
+        if (displayMode) displayMode.classList.add('hidden');
         gameLobby.classList.add('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.remove('hidden');
@@ -58,6 +70,7 @@ window.updateUI = () => {
             endGameBtn.classList.remove('hidden');
         }
     } else if (Object.keys(window.gameState).length > 0 && window.gameState.gameEnded) {
+        if (displayMode) displayMode.classList.add('hidden');
 
         // Destroy the Coin Flip Modal animation
         if (typeof window.coinAnimation !== 'undefined' && window.coinAnimation && window.coinAnimation.destroy) {
@@ -162,6 +175,7 @@ window.updateUI = () => {
             fixedFooter.classList.add('hidden');
         }
     } else if (window.location.pathname.startsWith('/game/')) {
+        if (displayMode) displayMode.classList.add('hidden');
         gameLobby.classList.add('hidden');
         settingsForm.classList.remove('hidden');
         gameInterface.classList.add('hidden');
@@ -179,6 +193,7 @@ window.updateUI = () => {
             fixedFooter.classList.remove('hidden');
         }
     } else {
+        if (displayMode) displayMode.classList.add('hidden');
         gameLobby.classList.remove('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.add('hidden');
