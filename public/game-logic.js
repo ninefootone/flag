@@ -223,6 +223,63 @@ window.handleEndGame = () => {
 window.updateButtonLabels = () => {
     const gameClockToggleBtn = document.getElementById('game-clock-toggle');
     const playClockToggleBtn = document.getElementById('play-clock-toggle');
+
+    // ── Clock Adjust Modal ──
+    const adjustClockModal = document.getElementById('adjust-clock-modal');
+    const adjustClockCurrentValue = document.getElementById('adjust-clock-current-value');
+    const adjustClockExact = document.getElementById('adjust-clock-exact');
+    const adjustClockSetBtn = document.getElementById('adjust-clock-set-btn');
+    const closeAdjustClockBtn = document.getElementById('close-adjust-clock-modal-btn');
+
+    function formatClockTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function openAdjustClockModal() {
+        if (window.gameState.gameClockRunning) return;
+        const t = window.gameState.gameTimeLeft || 0;
+        adjustClockCurrentValue.textContent = formatClockTime(t);
+        adjustClockExact.value = '';
+        adjustClockModal.classList.remove('hidden');
+    }
+
+    function closeAdjustClockModal() {
+        adjustClockModal.classList.add('hidden');
+    }
+
+    function applyClockDelta(delta) {
+        const newTime = Math.max(0, (window.gameState.gameTimeLeft || 0) + delta);
+        window.sendMessage({ type: 'UPDATE_STATE', payload: { gameTimeLeft: newTime } });
+        adjustClockCurrentValue.textContent = formatClockTime(newTime);
+    }
+
+    document.getElementById('game-clock-display').addEventListener('click', openAdjustClockModal);
+    closeAdjustClockBtn.addEventListener('click', closeAdjustClockModal);
+
+    document.querySelectorAll('.adjust-clock-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            applyClockDelta(parseInt(btn.dataset.delta, 10));
+        });
+    });
+
+    adjustClockSetBtn.addEventListener('click', () => {
+        const val = adjustClockExact.value.trim();
+        const parts = val.split(':');
+        let seconds;
+        if (parts.length === 2) {
+            seconds = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        } else {
+            seconds = parseInt(val, 10);
+        }
+        if (!isNaN(seconds) && seconds >= 0) {
+            window.sendMessage({ type: 'UPDATE_STATE', payload: { gameTimeLeft: seconds } });
+            adjustClockCurrentValue.textContent = formatClockTime(seconds);
+            adjustClockExact.value = '';
+        }
+    });
+    // ── End Clock Adjust Modal ──
     if (gameClockToggleBtn) gameClockToggleBtn.textContent = window.gameState.gameClockRunning ? 'Stop' : 'Start';
     if (playClockToggleBtn) playClockToggleBtn.textContent = window.gameState.playClockRunning ? 'Stop' : 'Start';
 };

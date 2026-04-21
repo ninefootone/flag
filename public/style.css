@@ -813,6 +813,123 @@ header {
     margin:0;
 }
 
+/* Clock adjust — make the time tappable */
+.clock-time-adjustable {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+}
+.clock-time-adjustable:hover,
+.clock-time-adjustable:focus {
+    opacity: 0.8;
+    outline: none;
+}
+.game-clocks-section.running .clock-time-adjustable {
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Adjust clock modal content */
+.adjust-clock-content {
+    background-color: var(--background-color);
+    padding: 20px 0 120px 0;
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+}
+.adjust-clock-content h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+.adjust-clock-current {
+    background: var(--secondary-button-bgnd);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.adjust-clock-current-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--notes-color);
+    margin-bottom: 4px;
+}
+.adjust-clock-current-value {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--primary-color);
+}
+.adjust-clock-group {
+    margin-bottom: 20px;
+}
+.adjust-clock-group-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--notes-color);
+    margin-bottom: 8px;
+}
+.adjust-clock-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+.adjust-clock-btn {
+    font-family: var(--body-font);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 12px 4px;
+    border-radius: 6px;
+    border: 1px solid var(--section-border);
+    cursor: pointer;
+    background: var(--secondary-button-bgnd);
+    color: var(--text-color);
+    transition: background 0.15s;
+}
+.adjust-clock-btn:hover {
+    background: var(--secondary-button-bgnd-hover);
+}
+.adjust-clock-btn.add {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+.adjust-clock-btn.sub {
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+.adjust-clock-exact-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.adjust-clock-exact-input {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--section-border);
+    background: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    font-family: var(--body-font);
+}
+.adjust-clock-exact-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+.adjust-clock-note {
+    font-size: 0.75rem;
+    color: var(--notes-color);
+    text-align: center;
+    margin-top: 16px;
+}
+
 .clock-controls, .play-clock-controls {
     display: flex;
     flex-direction: row;

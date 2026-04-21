@@ -178,7 +178,7 @@
             <section class="game-clocks-section">
                 <div class="clock-display game-clock-bg">
                      <p class="title">Game Clock</p>
-                     <span id="game-clock-display" class="clock-time"></span>
+                     <button id="game-clock-display" class="clock-time clock-time-adjustable" title="Tap to adjust"></button>
                     <div class="clock-controls">
                         <button id="game-clock-toggle" class="clock-btn start-stop-btn">Start</button>
                         <button id="game-clock-reset" class="clock-btn reset-btn">Reset</button>
@@ -815,6 +815,49 @@
         });
     }
 </script>
+
+<!-- Clock Adjust Modal -->
+<div id="adjust-clock-modal" class="modal hidden">
+  <div class="adjust-clock-content">
+    <h2>Adjust Game Clock</h2>
+    <div class="adjust-clock-current">
+      <div class="adjust-clock-current-label">Current time</div>
+      <div id="adjust-clock-current-value" class="adjust-clock-current-value">00:00</div>
+    </div>
+    <div class="adjust-clock-group">
+      <p class="adjust-clock-group-label">Add time</p>
+      <div class="adjust-clock-buttons">
+        <button class="adjust-clock-btn add" data-delta="5">+5s</button>
+        <button class="adjust-clock-btn add" data-delta="10">+10s</button>
+        <button class="adjust-clock-btn add" data-delta="15">+15s</button>
+        <button class="adjust-clock-btn add" data-delta="20">+20s</button>
+      </div>
+    </div>
+    <div class="adjust-clock-group">
+      <p class="adjust-clock-group-label">Remove time</p>
+      <div class="adjust-clock-buttons">
+        <button class="adjust-clock-btn sub" data-delta="-5">−5s</button>
+        <button class="adjust-clock-btn sub" data-delta="-10">−10s</button>
+        <button class="adjust-clock-btn sub" data-delta="-15">−15s</button>
+        <button class="adjust-clock-btn sub" data-delta="-20">−20s</button>
+      </div>
+    </div>
+    <div class="adjust-clock-group">
+      <p class="adjust-clock-group-label">Set exact time (mm:ss)</p>
+      <div class="adjust-clock-exact-row">
+        <input type="text" id="adjust-clock-exact" class="adjust-clock-exact-input" placeholder="e.g. 08:30" inputmode="numeric">
+        <button id="adjust-clock-set-btn" class="primary-button">Set</button>
+      </div>
+    </div>
+    <p class="adjust-clock-note">Clock must be stopped to adjust</p>
+    <button id="close-adjust-clock-modal-btn" class="main-btn close-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</div>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PVR11D6EB1"></script>
