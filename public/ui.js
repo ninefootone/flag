@@ -308,8 +308,6 @@ window.updateUI = () => {
         const dmTeam2Name     = document.getElementById('dm-team2-name');
         const dmTeam1Score    = document.getElementById('dm-team1-score');
         const dmTeam2Score    = document.getElementById('dm-team2-score');
-        const dmTeam1Logo     = document.getElementById('dm-team1-logo');
-        const dmTeam2Logo     = document.getElementById('dm-team2-logo');
         const dmTeam1Timeouts = document.getElementById('dm-team1-timeouts');
         const dmTeam2Timeouts = document.getElementById('dm-team2-timeouts');
 
@@ -324,21 +322,19 @@ window.updateUI = () => {
 
         const updateTimeoutDots = (container, teamKey) => {
             if (!container) return;
-            const dots = container.querySelectorAll('.dm-timeout-dot');
-            const remaining = window.gameState.timeoutsPerHalf - window.gameState.timeoutsUsed[teamKey];
-            dots.forEach((dot, i) => {
-                dot.style.opacity = i < remaining ? '1' : '0.2';
-            });
+            const total = window.gameState.timeoutsPerHalf;
+            const remaining = total - window.gameState.timeoutsUsed[teamKey];
+            container.innerHTML = '';
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'dm-timeout-dot';
+                if (i >= remaining) dot.style.opacity = '0.2';
+                container.appendChild(dot);
+            }
         };
         updateTimeoutDots(dmTeam1Timeouts, '1');
         updateTimeoutDots(dmTeam2Timeouts, '2');
 
-        const getLogoSrc = (teamName) => {
-            const teamData = window.TEAM_DATA_MAP.get((teamName || '').trim());
-            return teamData?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
-        };
-        if (dmTeam1Logo) dmTeam1Logo.src = getLogoSrc(window.gameState.team1Name);
-        if (dmTeam2Logo) dmTeam2Logo.src = getLogoSrc(window.gameState.team2Name);
     }
     // === END DISPLAY MODE LIVE DATA BINDING ===
 

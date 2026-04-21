@@ -25,7 +25,6 @@
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding-bottom: 80px;
 }
 
 #display-mode.hidden {
@@ -104,7 +103,8 @@
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
     min-width: 5ch;
-    text-align: center;
+    text-align: right;
+    padding-right: 0.1em;
 }
 
 /* Two-minute warning pulse */
@@ -181,7 +181,7 @@
     width: clamp(44px, 8vw, 88px);
     height: clamp(44px, 8vw, 88px);
     flex-shrink: 0;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 }
@@ -237,6 +237,8 @@
     line-height: 1;
     white-space: normal;
     word-break: break-word;
+    width: 100%;
+    text-align: center;
 }
 
 .dm-team-score {
@@ -280,14 +282,19 @@
 /* ---- Branding ---- */
 .dm-branding {
     position: absolute;
-    bottom: clamp(6px, 1.2vh, 14px);
-    right: clamp(12px, 2vw, 24px);
-    font-size: clamp(0.55rem, 0.9vw, 0.8rem);
-    color: rgba(255, 255, 255, 0.2);
-    font-weight: 400;
+    bottom: clamp(10px, 1.5vh, 20px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(0.75rem, 1.2vw, 1rem);
+    color: #ffffff;
+    font-weight: 500;
     letter-spacing: 0.04em;
     pointer-events: none;
     user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 /* ---- Settings overlay ---- */
@@ -311,7 +318,7 @@
     background: #151e30;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 18px;
-    padding: clamp(20px, 3vw, 32px);
+    padding: clamp(16px, 3vw, 32px);
     width: clamp(280px, 38vw, 440px);
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
 }
@@ -357,7 +364,7 @@
 .dm-settings-body {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 16px;
 }
 
 /* Toggle row */
@@ -365,7 +372,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: clamp(10px, 1.4vh, 16px) 0;
+    padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     cursor: pointer;
     user-select: none;
@@ -437,11 +444,6 @@
 
 /* Hide play clock */
 #display-mode.dm-hide-play-clock .dm-play-clock-wrap {
-    display: none;
-}
-
-/* Hide team logos */
-#display-mode.dm-hide-logos .dm-team-logo-wrap {
     display: none;
 }
 
@@ -582,4 +584,11 @@
         max-width: clamp(200px, 22vw, 440px);
     }
 
+}
+
+@media (max-width: 737px) {
+    .dm-lower-third {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }
