@@ -22,7 +22,7 @@
     align-items: center;
     justify-content: center;
     padding-bottom: clamp(40px, 6vh, 80px);
-    font-family: "greycliff-cf", 'Metropolis', sans-serif;
+    font-family: 'Barlow Condensed', 'Metropolis', sans-serif;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
