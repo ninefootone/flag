@@ -1759,5 +1759,79 @@ if (scrollingElement && stickyTarget) {
 // }
 // --- END SCROLL HANDLER ---
 
+    // === DISPLAY MODE SETTINGS (Phase 4) ===
+    const dmSettingsBtn   = document.getElementById('dm-settings-btn');
+    const dmSettingsOverlay = document.getElementById('dm-settings-overlay');
+    const dmSettingsClose = document.getElementById('dm-settings-close');
+    const dmTogglePlayClock = document.getElementById('dm-toggle-play-clock');
+    const dmToggleLogos     = document.getElementById('dm-toggle-logos');
+    const dmToggleTimeouts  = document.getElementById('dm-toggle-timeouts');
+    const dmToggleClockOnly = document.getElementById('dm-toggle-clock-only');
+    const dmDisplayRoot     = document.getElementById('display-mode');
+
+    if (dmSettingsBtn && dmSettingsOverlay) {
+        const STORAGE_KEY = 'whistleDisplaySettings';
+
+        const loadDisplaySettings = () => {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch (e) {
+                return {};
+            }
+        };
+
+        const saveDisplaySettings = () => {
+            const settings = {
+                showPlayClock: dmTogglePlayClock ? dmTogglePlayClock.checked : true,
+                showLogos:     dmToggleLogos     ? dmToggleLogos.checked     : true,
+                showTimeouts:  dmToggleTimeouts  ? dmToggleTimeouts.checked  : true,
+                clockOnly:     dmToggleClockOnly ? dmToggleClockOnly.checked : false,
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        };
+
+        const applyDisplaySettings = () => {
+            if (!dmDisplayRoot) return;
+            const showPlayClock = dmTogglePlayClock ? dmTogglePlayClock.checked : true;
+            const showLogos     = dmToggleLogos     ? dmToggleLogos.checked     : true;
+            const showTimeouts  = dmToggleTimeouts  ? dmToggleTimeouts.checked  : true;
+            const clockOnly     = dmToggleClockOnly ? dmToggleClockOnly.checked : false;
+
+            dmDisplayRoot.classList.toggle('dm-hide-play-clock', !showPlayClock);
+            dmDisplayRoot.classList.toggle('dm-hide-logos',      !showLogos);
+            dmDisplayRoot.classList.toggle('dm-hide-timeouts',   !showTimeouts);
+            dmDisplayRoot.classList.toggle('dm-clock-only',      clockOnly);
+        };
+
+        // Initialise checkboxes from localStorage
+        const saved = loadDisplaySettings();
+        if (dmTogglePlayClock) dmTogglePlayClock.checked = saved.showPlayClock !== undefined ? saved.showPlayClock : true;
+        if (dmToggleLogos)     dmToggleLogos.checked     = saved.showLogos     !== undefined ? saved.showLogos     : true;
+        if (dmToggleTimeouts)  dmToggleTimeouts.checked  = saved.showTimeouts  !== undefined ? saved.showTimeouts  : true;
+        if (dmToggleClockOnly) dmToggleClockOnly.checked = saved.clockOnly     !== undefined ? saved.clockOnly     : false;
+
+        // Apply on load
+        applyDisplaySettings();
+
+        // Open / close overlay
+        dmSettingsBtn.addEventListener('click', () => {
+            dmSettingsOverlay.classList.toggle('hidden');
+        });
+        if (dmSettingsClose) {
+            dmSettingsClose.addEventListener('click', () => {
+                dmSettingsOverlay.classList.add('hidden');
+            });
+        }
+
+        // Save + apply on any checkbox change
+        [dmTogglePlayClock, dmToggleLogos, dmToggleTimeouts, dmToggleClockOnly].forEach(cb => {
+            if (cb) cb.addEventListener('change', () => {
+                saveDisplaySettings();
+                applyDisplaySettings();
+            });
+        });
+    }
+    // === END DISPLAY MODE SETTINGS ===
+
 });
 
