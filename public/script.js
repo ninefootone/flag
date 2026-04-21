@@ -1764,7 +1764,6 @@ if (scrollingElement && stickyTarget) {
     const dmSettingsOverlay = document.getElementById('dm-settings-overlay');
     const dmSettingsClose = document.getElementById('dm-settings-close');
     const dmTogglePlayClock = document.getElementById('dm-toggle-play-clock');
-    const dmToggleLogos     = document.getElementById('dm-toggle-logos');
     const dmToggleTimeouts  = document.getElementById('dm-toggle-timeouts');
     const dmToggleClockOnly = document.getElementById('dm-toggle-clock-only');
     const dmDisplayRoot     = document.getElementById('display-mode');
@@ -1783,7 +1782,6 @@ if (scrollingElement && stickyTarget) {
         const saveDisplaySettings = () => {
             const settings = {
                 showPlayClock: dmTogglePlayClock ? dmTogglePlayClock.checked : true,
-                showLogos:     dmToggleLogos     ? dmToggleLogos.checked     : true,
                 showTimeouts:  dmToggleTimeouts  ? dmToggleTimeouts.checked  : true,
                 clockOnly:     dmToggleClockOnly ? dmToggleClockOnly.checked : false,
             };
@@ -1793,12 +1791,10 @@ if (scrollingElement && stickyTarget) {
         const applyDisplaySettings = () => {
             if (!dmDisplayRoot) return;
             const showPlayClock = dmTogglePlayClock ? dmTogglePlayClock.checked : true;
-            const showLogos     = dmToggleLogos     ? dmToggleLogos.checked     : true;
             const showTimeouts  = dmToggleTimeouts  ? dmToggleTimeouts.checked  : true;
             const clockOnly     = dmToggleClockOnly ? dmToggleClockOnly.checked : false;
 
             dmDisplayRoot.classList.toggle('dm-hide-play-clock', !showPlayClock);
-            dmDisplayRoot.classList.toggle('dm-hide-logos',      !showLogos);
             dmDisplayRoot.classList.toggle('dm-hide-timeouts',   !showTimeouts);
             dmDisplayRoot.classList.toggle('dm-clock-only',      clockOnly);
         };
@@ -1806,7 +1802,6 @@ if (scrollingElement && stickyTarget) {
         // Initialise checkboxes from localStorage
         const saved = loadDisplaySettings();
         if (dmTogglePlayClock) dmTogglePlayClock.checked = saved.showPlayClock !== undefined ? saved.showPlayClock : true;
-        if (dmToggleLogos)     dmToggleLogos.checked     = saved.showLogos     !== undefined ? saved.showLogos     : true;
         if (dmToggleTimeouts)  dmToggleTimeouts.checked  = saved.showTimeouts  !== undefined ? saved.showTimeouts  : true;
         if (dmToggleClockOnly) dmToggleClockOnly.checked = saved.clockOnly     !== undefined ? saved.clockOnly     : false;
 
@@ -1824,7 +1819,7 @@ if (scrollingElement && stickyTarget) {
         }
 
         // Save + apply on any checkbox change
-        [dmTogglePlayClock, dmToggleLogos, dmToggleTimeouts, dmToggleClockOnly].forEach(cb => {
+        [dmTogglePlayClock, dmToggleTimeouts, dmToggleClockOnly].forEach(cb => {
             if (cb) cb.addEventListener('change', () => {
                 saveDisplaySettings();
                 applyDisplaySettings();
