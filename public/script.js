@@ -1221,10 +1221,11 @@ if (timeoutsPerHalfInput) {
             const scoreType = coreActionMatch[2]; 
             const playerInfo = coreActionMatch[3]; 
 
-            // Pattern 2: Get Team Number
-            const teamMatch = text.match(/Team\s*(\d+)/i);
-            if (!teamMatch) return;
-            const teamKey = 'team' + teamMatch[1]; 
+            // Pattern 2: Match team name against known team names
+            let teamKey = null;
+            if (text.includes(window.gameState.team1Name)) teamKey = 'team1';
+            else if (text.includes(window.gameState.team2Name)) teamKey = 'team2';
+            if (!teamKey) return;
 
             // Pattern 3: Get Player Roles (The most critical part)
             const passMatch = playerInfo.match(/\((QB\s*#\d+)\s*,\s*([A-Z]*\s*#\d+)\)/i);
@@ -1265,14 +1266,16 @@ if (timeoutsPerHalfInput) {
             const text = entry.textContent.replace(/\s+/g, ' ').trim(); 
 
             // Finds Team X, then Player #Y, then Stat Type (PBU, TACKLE, etc.)
-            const defMatch = text.match(/Team\s*(\d+).*?(#\d+)\s*(PBU|TACKLE|TFL|Sack|INT)/i);
+            const defMatch = text.match(/(#\d+)\s*(PBU|TACKLE|TFL|SACK|INT)/i);
             
             if (defMatch) {
-                const teamNum = defMatch[1]; 
-                const player = defMatch[2];  
-                const stat = defMatch[3];  
+                const player = defMatch[1];  
+                const stat = defMatch[2];  
                 
-                const teamKey = 'team' + teamNum;
+                let teamKey = null;
+                if (text.includes(window.gameState.team1Name)) teamKey = 'team1';
+                else if (text.includes(window.gameState.team2Name)) teamKey = 'team2';
+                if (!teamKey) return;
 
                 updateStat(teamKey, 'defence', player, stat);
             }
