@@ -342,6 +342,7 @@
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
 
 .dm-settings-close {
