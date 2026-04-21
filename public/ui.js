@@ -278,6 +278,55 @@ window.updateUI = () => {
     //     summaryDefenceLog.innerHTML = window.gameState.defenceLogHTML;
     // }
 
+    // === DISPLAY MODE LIVE DATA BINDING ===
+    if (window.userRole === 'display') {
+        const displayModeDiv = document.getElementById('display-mode');
+        if (!displayModeDiv || displayModeDiv.classList.contains('hidden')) return;
+
+        const ordinals = ['', '1st Down', '2nd Down', '3rd Down', '4th Down'];
+
+        const dmGameClock     = document.getElementById('dm-game-clock');
+        const dmPeriod        = document.getElementById('dm-period');
+        const dmDown          = document.getElementById('dm-down');
+        const dmPlayClock     = document.getElementById('dm-play-clock');
+        const dmTeam1Name     = document.getElementById('dm-team1-name');
+        const dmTeam2Name     = document.getElementById('dm-team2-name');
+        const dmTeam1Score    = document.getElementById('dm-team1-score');
+        const dmTeam2Score    = document.getElementById('dm-team2-score');
+        const dmTeam1Logo     = document.getElementById('dm-team1-logo');
+        const dmTeam2Logo     = document.getElementById('dm-team2-logo');
+        const dmTeam1Timeouts = document.getElementById('dm-team1-timeouts');
+        const dmTeam2Timeouts = document.getElementById('dm-team2-timeouts');
+
+        if (dmGameClock)  dmGameClock.textContent  = window.formatTime(window.gameState.gameTimeLeft);
+        if (dmPeriod)     dmPeriod.textContent     = window.getPeriodName(window.gameState.currentHalf);
+        if (dmDown)       dmDown.textContent       = ordinals[window.gameState.currentDown] || '';
+        if (dmPlayClock)  dmPlayClock.textContent  = window.gameState.playTimeLeft;
+        if (dmTeam1Name)  dmTeam1Name.textContent  = window.gameState.team1Name;
+        if (dmTeam2Name)  dmTeam2Name.textContent  = window.gameState.team2Name;
+        if (dmTeam1Score) dmTeam1Score.textContent = window.gameState.scores.team1;
+        if (dmTeam2Score) dmTeam2Score.textContent = window.gameState.scores.team2;
+
+        const updateTimeoutDots = (container, teamKey) => {
+            if (!container) return;
+            const dots = container.querySelectorAll('.dm-timeout-dot');
+            const remaining = window.gameState.timeoutsPerHalf - window.gameState.timeoutsUsed[teamKey];
+            dots.forEach((dot, i) => {
+                dot.style.opacity = i < remaining ? '1' : '0.2';
+            });
+        };
+        updateTimeoutDots(dmTeam1Timeouts, '1');
+        updateTimeoutDots(dmTeam2Timeouts, '2');
+
+        const getLogoSrc = (teamName) => {
+            const teamData = window.TEAM_DATA_MAP.get((teamName || '').trim());
+            return teamData?.['Final Logo Path'] || window.DEFAULT_LOGO_PATH;
+        };
+        if (dmTeam1Logo) dmTeam1Logo.src = getLogoSrc(window.gameState.team1Name);
+        if (dmTeam2Logo) dmTeam2Logo.src = getLogoSrc(window.gameState.team2Name);
+    }
+    // === END DISPLAY MODE LIVE DATA BINDING ===
+
 };
 
 // Function to apply role-based permissions
