@@ -251,7 +251,7 @@ window.updateButtonLabels = () => {
 
     function applyClockDelta(delta) {
         const newTime = Math.max(0, (window.gameState.gameTimeLeft || 0) + delta);
-        window.sendMessage({ type: 'UPDATE_STATE', payload: { gameTimeLeft: newTime } });
+        window.sendAction('UPDATE_STATE', { gameTimeLeft: newTime });
         adjustClockCurrentValue.textContent = formatClockTime(newTime);
     }
 
@@ -274,7 +274,7 @@ window.updateButtonLabels = () => {
             seconds = parseInt(val, 10);
         }
         if (!isNaN(seconds) && seconds >= 0) {
-            window.sendMessage({ type: 'UPDATE_STATE', payload: { gameTimeLeft: seconds } });
+            window.sendAction('UPDATE_STATE', { gameTimeLeft: seconds });
             adjustClockCurrentValue.textContent = formatClockTime(seconds);
             adjustClockExact.value = '';
         }
