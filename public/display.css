@@ -103,6 +103,8 @@
     line-height: 0.9;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
+    min-width: 5ch;
+    text-align: center;
 }
 
 /* Two-minute warning pulse */
@@ -233,10 +235,8 @@
     color: #ffffff;
     letter-spacing: 0;
     line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: clamp(120px, 20vw, 320px);
+    white-space: normal;
+    word-break: break-word;
 }
 
 .dm-team-score {
@@ -462,7 +462,49 @@
 
     .dm-team-name {
         font-size: clamp(0.7rem, 3.5vw, 1.4rem);
-        max-width: clamp(100px, 28vw, 240px);
+    }
+
+    .dm-lower-third {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .dm-divider {
+        display: none;
+    }
+
+    .dm-team {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .dm-team-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .dm-team-name {
+        text-align: left;
+        flex: 1;
+    }
+
+    .dm-team-score {
+        text-align: right;
+        margin-left: auto;
+    }
+
+    .dm-team-logo-wrap {
+        display: none;
+    }
+
+    .dm-team-timeouts {
+        display: none;
     }
 }
 
