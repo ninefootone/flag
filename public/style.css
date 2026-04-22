@@ -919,6 +919,12 @@ header {
     gap: 8px;
     align-items: center;
 }
+.adjust-clock-colon {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--text-color);
+    flex-shrink: 0;
+}
 .adjust-clock-exact-input {
     flex: 1;
     font-size: 1.1rem;

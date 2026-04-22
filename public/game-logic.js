@@ -227,7 +227,8 @@ window.updateButtonLabels = () => {
     // ── Clock Adjust Modal ──
     const adjustClockModal = document.getElementById('adjust-clock-modal');
     const adjustClockCurrentValue = document.getElementById('adjust-clock-current-value');
-    const adjustClockExact = document.getElementById('adjust-clock-exact');
+    const adjustClockMins = document.getElementById('adjust-clock-mins');
+    const adjustClockSecs = document.getElementById('adjust-clock-secs');
     const adjustClockSetBtn = document.getElementById('adjust-clock-set-btn');
     const closeAdjustClockBtn = document.getElementById('close-adjust-clock-modal-btn');
 
@@ -241,7 +242,8 @@ window.updateButtonLabels = () => {
         if (window.gameState.gameClockRunning) return;
         const t = window.gameState.gameTimeLeft || 0;
         adjustClockCurrentValue.textContent = formatClockTime(t);
-        adjustClockExact.value = '';
+        adjustClockMins.value = '';
+        adjustClockSecs.value = '';
         adjustClockModal.classList.remove('hidden');
     }
 
@@ -265,18 +267,14 @@ window.updateButtonLabels = () => {
     });
 
     adjustClockSetBtn.addEventListener('click', () => {
-        const val = adjustClockExact.value.trim();
-        const parts = val.split(':');
-        let seconds;
-        if (parts.length === 2) {
-            seconds = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-        } else {
-            seconds = parseInt(val, 10);
-        }
-        if (!isNaN(seconds) && seconds >= 0) {
+        const mins = parseInt(adjustClockMins.value, 10) || 0;
+        const secs = parseInt(adjustClockSecs.value, 10) || 0;
+        const seconds = (mins * 60) + secs;
+        if (seconds >= 0) {
             window.sendAction('UPDATE_STATE', { gameTimeLeft: seconds });
             adjustClockCurrentValue.textContent = formatClockTime(seconds);
-            adjustClockExact.value = '';
+            adjustClockMins.value = '';
+            adjustClockSecs.value = '';
         }
     });
     // ── End Clock Adjust Modal ──
