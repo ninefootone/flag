@@ -542,10 +542,6 @@
     .dm-team-logo-wrap {
         display: none;
     }
-
-    .dm-team-timeouts {
-        display: none;
-    }
 }
 
 @media (orientation: portrait) and (max-width: 480px) {
