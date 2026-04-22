@@ -289,6 +289,11 @@ window.updateUI = () => {
         window.twoMinuteWarningIssuedLocally = true;
     }
 
+    if (!window.gameState.gameClockRunning) {
+        const dmDiv = document.getElementById('display-mode');
+        if (dmDiv) dmDiv.classList.remove('dm-clock-warning');
+    }
+
     // Update the Defence Log (Add this block)
     // if (defenceLogList) {
     //     defenceLogList.innerHTML = window.gameState.defenceLogHTML;
