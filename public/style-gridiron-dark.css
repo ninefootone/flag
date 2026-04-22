@@ -957,4 +957,19 @@ input[type="email"] {
     border-color: var(--primary-color);
 }
 
+#adjust-clock-set-btn {
+    background: var(--primary-color);
+    color: var(--button-text);
+}
+#adjust-clock-set-btn:hover {
+    background: var(--primary-color);
+}
+.adjust-clock-close-btn {
+    background: var(--primary-color);
+    color: var(--button-text);
+}
+.adjust-clock-close-btn:hover {
+    background: var(--primary-color);
+}
+
 } /* end dark mode */

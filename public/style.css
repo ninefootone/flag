@@ -950,10 +950,12 @@ header {
     outline: none;
 }
 #adjust-clock-set-btn {
+    display: block;
     width: 100%;
-    border-radius: 6px !important;
-    margin-top: 8px;
-    padding: 14px 4px;
+    max-width: 150px;
+    margin: 8px auto 0;
+    border-radius: 500px !important;
+    padding: 12px 4px;
     font-size: 1.1rem;
     font-weight: 700;
     background: #106386;
