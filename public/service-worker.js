@@ -1,4 +1,4 @@
-const CACHE_NAME = 'referee-app-cache-v0.4.42';
+const CACHE_NAME = 'referee-app-cache-v0.4.46';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -18,6 +18,7 @@ const urlsToCache = [
 
 // 1. Install Event: Cache all necessary assets
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
