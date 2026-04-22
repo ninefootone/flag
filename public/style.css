@@ -824,6 +824,7 @@ header {
     font-family: inherit;
     font-size: 60px;
     font-weight: 900;
+    line-height: 1em;
     color: var(--primary-color);
     box-sizing: border-box;
     text-align: center;
@@ -1012,13 +1013,21 @@ header {
     border: none;
     padding: 15px 0px 15px 0px;
     width: 100%;
-    justify-content: center;
     margin: 0px;
     border-radius: 0px;
     background-color: var(--primary-color);
     transition: all 0.3s ease-in-out;
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
+    gap: 16px;
+}
+
+.game-clocks-section.sticky-clock-active .clock-time-adjustable {
+    display: block;
+    width: auto;
+    flex-shrink: 0;
 }
 
 /* 4. Hide the Reset Button */
