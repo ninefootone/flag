@@ -282,6 +282,10 @@ window.updateUI = () => {
 
     if (window.gameState.gameTimeLeft === 120 && !window.twoMinuteWarningIssuedLocally) {
         gameClockDisplay.parentElement.classList.add('warning');
+        const dmDiv = document.getElementById('display-mode');
+        if (dmDiv && !dmDiv.classList.contains('hidden')) {
+            dmDiv.classList.add('dm-clock-warning');
+        }
         window.twoMinuteWarningIssuedLocally = true;
     }
 
@@ -336,9 +340,9 @@ window.updateUI = () => {
             const scoreLog = document.getElementById('score-log');
             const lastEntry = scoreLog ? scoreLog.querySelector('li:first-child') : null;
             const entryText = lastEntry ? lastEntry.textContent : '';
-            const typeMatch = entryText.match(/scored\s+a?\s*(Touchdown|PAT|2PT)/i);
+            const typeMatch = entryText.match(/scored\s+a?\s*(Touchdown|PAT|2PT|Safety|Field Goal)/i);
             const scoreType = typeMatch ? typeMatch[1].toUpperCase() : 'SCORE';
-            const displayType = scoreType === 'PAT' ? '+ 1' : scoreType === '2PT' ? '+ 2' : 'TOUCHDOWN';
+            const displayType = scoreType === 'PAT' ? '+ 1' : scoreType === '2PT' ? '+ 2' : scoreType === 'SAFETY' ? 'SAFETY' : scoreType === 'FIELD GOAL' ? 'FIELD GOAL' : 'TOUCHDOWN';
 
             const notify = document.getElementById('dm-score-notify');
             const notifyTeam = document.getElementById('dm-score-notify-team');
