@@ -819,9 +819,12 @@ header {
     border: none;
     padding: 0;
     cursor: pointer;
-    display: block;
-    width: 100%;
+    display: inline;
+    width: auto;
     font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
     box-sizing: border-box;
     text-align: center;
 }
@@ -1001,30 +1004,21 @@ header {
 */
 .game-clocks-section.sticky-clock-active > div { 
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 16px;
 }
 
 .game-clocks-section.sticky-clock-active .clock-display {
     border: none;
-    padding: 15px 20px;
+    padding: 15px 0px 15px 0px;
     width: 100%;
-    margin: 0;
-    border-radius: 0;
+    justify-content: center;
+    margin: 0px;
+    border-radius: 0px;
     background-color: var(--primary-color);
     transition: all 0.3s ease-in-out;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
-    gap: 16px;
-}
-
-.game-clocks-section.sticky-clock-active .clock-controls {
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
 }
 
 /* 4. Hide the Reset Button */
@@ -1037,19 +1031,17 @@ header {
     font-size: 48px;
     line-height: 1;
     padding: 0;
-    margin: 0;
+    margin-right: 16px;
     color: var(--background-color);
-    flex: 0 0 auto;
 }
 
 /* 6. Shrink the Play/Pause Button */
 .game-clocks-section.sticky-clock-active .start-stop-btn {
     font-size: 18px;
     border-color: #ffffff;
-    background-color:#ffffff;
-    color:#106386;
+    background-color: #ffffff;
+    color: #106386;
     margin-top: 0;
-    align-self: center;
 }
 
 .game-clocks-section.sticky-clock-active .start-stop-btn:hover {
