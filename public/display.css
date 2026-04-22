@@ -626,3 +626,40 @@
         padding-right: 16px !important;
     }
 }
+
+/* ---- Score notification overlay ---- */
+.dm-score-notify {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 2vh, 20px);
+    animation: dm-notify-in 0.3s ease-out;
+}
+.dm-score-notify.hidden {
+    display: none;
+}
+@keyframes dm-notify-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+.dm-score-notify-team {
+    font-size: clamp(1rem, 3vw, 2rem);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.dm-score-notify-type {
+    font-size: clamp(3rem, 12vw, 9rem);
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}

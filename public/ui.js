@@ -293,6 +293,8 @@ window.updateUI = () => {
     //     summaryDefenceLog.innerHTML = window.gameState.defenceLogHTML;
     // }
 
+    window.dmPrevScores = window.dmPrevScores || { team1: null, team2: null };
+
     // === DISPLAY MODE LIVE DATA BINDING ===
     if (window.userRole === 'display') {
         const displayModeDiv = document.getElementById('display-mode');
@@ -319,6 +321,38 @@ window.updateUI = () => {
         if (dmTeam2Name)  dmTeam2Name.textContent  = window.gameState.team2Name;
         if (dmTeam1Score) dmTeam1Score.textContent = window.gameState.scores.team1;
         if (dmTeam2Score) dmTeam2Score.textContent = window.gameState.scores.team2;
+
+        const newTeam1 = window.gameState.scores.team1;
+        const newTeam2 = window.gameState.scores.team2;
+        const scoreChanged = (window.dmPrevScores.team1 !== null) &&
+            (newTeam1 !== window.dmPrevScores.team1 || newTeam2 !== window.dmPrevScores.team2);
+
+        if (scoreChanged) {
+            const changedTeam = newTeam1 !== window.dmPrevScores.team1
+                ? window.gameState.team1Name
+                : window.gameState.team2Name;
+
+            // Extract score type from the latest score log entry
+            const scoreLog = document.getElementById('score-log');
+            const lastEntry = scoreLog ? scoreLog.querySelector('li:first-child') : null;
+            const entryText = lastEntry ? lastEntry.textContent : '';
+            const typeMatch = entryText.match(/scored\s+a?\s*(Touchdown|PAT|2PT)/i);
+            const scoreType = typeMatch ? typeMatch[1].toUpperCase() : 'SCORE';
+            const displayType = scoreType === 'PAT' ? '+ 1' : scoreType === '2PT' ? '+ 2' : 'TOUCHDOWN';
+
+            const notify = document.getElementById('dm-score-notify');
+            const notifyTeam = document.getElementById('dm-score-notify-team');
+            const notifyType = document.getElementById('dm-score-notify-type');
+            if (notify && notifyTeam && notifyType) {
+                notifyTeam.textContent = changedTeam;
+                notifyType.textContent = displayType;
+                notify.classList.remove('hidden');
+                setTimeout(() => notify.classList.add('hidden'), 3000);
+            }
+        }
+
+        window.dmPrevScores.team1 = newTeam1;
+        window.dmPrevScores.team2 = newTeam2;
 
         const updateTimeoutDots = (container, teamKey) => {
             if (!container) return;
