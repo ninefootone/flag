@@ -77,6 +77,8 @@ window.handleGameClockToggle = () => {
         window.sendAction('STOP_GAME_CLOCK');
         const gameClockDisplay = document.getElementById('game-clock-display');
         if (gameClockDisplay) gameClockDisplay.parentElement.classList.remove('warning');
+        const dmDiv = document.getElementById('display-mode');
+        if (dmDiv) dmDiv.classList.remove('dm-clock-warning');
     } else {
         window.sendAction('START_GAME_CLOCK');
     }
@@ -86,6 +88,8 @@ window.handleGameClockReset = () => {
     window.sendAction('STOP_GAME_CLOCK');
     const gameClockDisplay = document.getElementById('game-clock-display');
     if (gameClockDisplay) gameClockDisplay.parentElement.classList.remove('warning');
+    const dmDiv = document.getElementById('display-mode');
+    if (dmDiv) dmDiv.classList.remove('dm-clock-warning');
     window.twoMinuteWarningIssuedLocally = false;
 
     // Determine next period name
