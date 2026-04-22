@@ -825,12 +825,13 @@ header {
     box-sizing: border-box;
     text-align: center;
     align-self: center;
-    margin: 0 auto;
 }
 .clock-time-adjustable:focus,
 .clock-time-adjustable:hover {
     outline: none;
     background: none;
+    border: none;
+    box-shadow: none;
 }
 .game-clocks-section.running .clock-time-adjustable {
     cursor: default;
