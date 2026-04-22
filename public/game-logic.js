@@ -267,15 +267,17 @@ window.updateButtonLabels = () => {
     });
 
     adjustClockSetBtn.addEventListener('click', () => {
-        const mins = parseInt(adjustClockMins.value, 10) || 0;
-        const secs = parseInt(adjustClockSecs.value, 10) || 0;
+        const minsRaw = adjustClockMins.value.trim();
+        const secsRaw = adjustClockSecs.value.trim();
+        if (minsRaw === '' && secsRaw === '') return;
+        const mins = minsRaw === '' ? 0 : parseInt(minsRaw, 10);
+        const secs = secsRaw === '' ? 0 : parseInt(secsRaw, 10);
+        if (isNaN(mins) || isNaN(secs) || secs > 59) return;
         const seconds = (mins * 60) + secs;
-        if (seconds >= 0) {
-            window.sendAction('UPDATE_STATE', { gameTimeLeft: seconds });
-            adjustClockCurrentValue.textContent = formatClockTime(seconds);
-            adjustClockMins.value = '';
-            adjustClockSecs.value = '';
-        }
+        window.sendAction('UPDATE_STATE', { gameTimeLeft: seconds });
+        adjustClockCurrentValue.textContent = formatClockTime(seconds);
+        adjustClockMins.value = '';
+        adjustClockSecs.value = '';
     });
     // ── End Clock Adjust Modal ──
     if (gameClockToggleBtn) gameClockToggleBtn.textContent = window.gameState.gameClockRunning ? 'Stop' : 'Start';
