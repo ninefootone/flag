@@ -906,14 +906,20 @@ header {
 }
 .adjust-clock-btn.add {
     background: #106386;
+    border: none;
 }
 .adjust-clock-btn.add:hover {
+    background: #106386;
+    border: none;
     filter: brightness(1.15);
 }
 .adjust-clock-btn.sub {
     background: #c0392b;
+    border: none;
 }
 .adjust-clock-btn.sub:hover {
+    background: #c0392b;
+    border: none;
     filter: brightness(1.15);
 }
 .adjust-clock-exact-row {
@@ -943,19 +949,38 @@ header {
     border-color: #106386;
     outline: none;
 }
+#adjust-clock-set-btn {
+    flex-shrink: 0;
+    border-radius: 6px !important;
+    margin-top: 0;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    align-self: stretch;
+}
 .adjust-clock-close-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 24px auto 0;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    border: 2px solid var(--section-border);
-    background: var(--secondary-button-bgnd);
-    color: var(--text-color);
+    border-radius: 50% !important;
+    border: none !important;
+    background: #106386;
+    color: #ffffff;
     font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
     line-height: 1;
+    padding: 0;
+    margin-top: 24px;
+}
+.adjust-clock-close-btn:hover {
+    background: #106386;
+    border: none !important;
+    filter: brightness(1.15);
 }
 .adjust-clock-note {
     font-size: 0.75rem;
