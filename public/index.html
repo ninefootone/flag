@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Whistle</title>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css?v=0.4.53">
-    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.53">
-    <link rel="stylesheet" href="/display.css?v=0.4.53">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.53" />
+    <link rel="stylesheet" href="/style.css?v=0.4.54">
+    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.54">
+    <link rel="stylesheet" href="/display.css?v=0.4.54">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.54" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -800,11 +800,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.4.53"></script>
-<script src="/websocket.js?v=0.4.53"></script>
-<script src="/game-logic.js?v=0.4.53"></script>
-<script src="/ui.js?v=0.4.53"></script>
-<script src="/script.js?v=0.4.53"></script>
+<script src="/teams.js?v=0.4.54"></script>
+<script src="/websocket.js?v=0.4.54"></script>
+<script src="/game-logic.js?v=0.4.54"></script>
+<script src="/ui.js?v=0.4.54"></script>
+<script src="/script.js?v=0.4.54"></script>
 <script src="/penalties.js"></script>
 
 <script>
@@ -830,27 +830,17 @@
       <div id="adjust-clock-current-value" class="adjust-clock-current-value">00:00</div>
     </div>
     <div class="adjust-clock-group">
-      <p class="adjust-clock-group-label">Add time</p>
-      <div class="adjust-clock-buttons">
-        <button class="adjust-clock-btn add" data-delta="5">+5s</button>
-        <button class="adjust-clock-btn add" data-delta="10">+10s</button>
-        <button class="adjust-clock-btn add" data-delta="15">+15s</button>
-        <button class="adjust-clock-btn add" data-delta="20">+20s</button>
-      </div>
-    </div>
-    <div class="adjust-clock-group">
-      <p class="adjust-clock-group-label">Remove time</p>
       <div class="adjust-clock-buttons">
         <button class="adjust-clock-btn sub" data-delta="-5">−5s</button>
-        <button class="adjust-clock-btn sub" data-delta="-10">−10s</button>
-        <button class="adjust-clock-btn sub" data-delta="-15">−15s</button>
-        <button class="adjust-clock-btn sub" data-delta="-20">−20s</button>
+        <button class="adjust-clock-btn sub" data-delta="-1">−1s</button>
+        <button class="adjust-clock-btn add" data-delta="1">+1s</button>
+        <button class="adjust-clock-btn add" data-delta="5">+5s</button>
       </div>
     </div>
     <div class="adjust-clock-group">
       <p class="adjust-clock-group-label">Set exact time (mm:ss)</p>
       <div class="adjust-clock-exact-row">
-        <input type="text" id="adjust-clock-exact" class="adjust-clock-exact-input" placeholder="e.g. 08:30" inputmode="numeric">
+        <input type="text" id="adjust-clock-exact" class="adjust-clock-exact-input" placeholder="e.g. 08:30">
         <button id="adjust-clock-set-btn" class="primary-button">Set</button>
       </div>
     </div>

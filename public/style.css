@@ -889,6 +889,7 @@ header {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+    margin-bottom: 0;
 }
 .adjust-clock-btn {
     font-family: var(--body-font);
