@@ -820,11 +820,10 @@ header {
     padding: 0;
     cursor: pointer;
     display: block;
-    width: auto;
+    width: 100%;
     font-family: inherit;
     box-sizing: border-box;
     text-align: center;
-    align-self: center;
 }
 .clock-time-adjustable:focus,
 .clock-time-adjustable:hover {
@@ -1008,14 +1007,23 @@ header {
 }
 
 .game-clocks-section.sticky-clock-active .clock-display {
-    border:none;
-    padding:15px 0px 15px 0px;
+    border: none;
+    padding: 15px 20px;
     width: 100%;
-    justify-content: center;
-    margin: 0px;
-    border-radius: 0px;
+    margin: 0;
+    border-radius: 0;
     background-color: var(--primary-color);
     transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.game-clocks-section.sticky-clock-active .clock-controls {
+    display: flex;
+    align-items: center;
 }
 
 /* 4. Hide the Reset Button */
