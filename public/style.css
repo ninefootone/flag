@@ -823,10 +823,11 @@ header {
     width: auto;
     font-family: inherit;
     box-sizing: border-box;
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
 }
-.clock-time-adjustable:hover,
 .clock-time-adjustable:focus {
-    opacity: 0.8;
     outline: none;
 }
 .game-clocks-section.running .clock-time-adjustable {
@@ -1033,7 +1034,8 @@ header {
     border-color: #ffffff;
     background-color:#ffffff;
     color:#106386;
-    margin-top:4px;
+    margin-top: 0;
+    align-self: center;
 }
 
 .game-clocks-section.sticky-clock-active .start-stop-btn:hover {
