@@ -820,7 +820,9 @@ header {
     padding: 0;
     cursor: pointer;
     display: block;
-    width: 100%;
+    width: auto;
+    font-family: inherit;
+    box-sizing: border-box;
 }
 .clock-time-adjustable:hover,
 .clock-time-adjustable:focus {
