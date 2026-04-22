@@ -818,6 +818,7 @@ header {
     background: none;
     border: none;
     padding: 0;
+    margin: 0;
     cursor: pointer;
     display: block;
     width: 100%;
@@ -828,6 +829,7 @@ header {
     color: var(--primary-color);
     box-sizing: border-box;
     text-align: center;
+    vertical-align: baseline;
 }
 .clock-time-adjustable:focus,
 .clock-time-adjustable:hover {
@@ -1030,6 +1032,12 @@ header {
     flex-shrink: 0;
 }
 
+.game-clocks-section.sticky-clock-active .clock-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* 4. Hide the Reset Button */
 .game-clocks-section.sticky-clock-active .title, .game-clocks-section.sticky-clock-active .reset-btn {
     display: none; 
@@ -1040,7 +1048,7 @@ header {
     font-size: 48px;
     line-height: 1;
     padding: 0;
-    margin-right: 16px;
+    margin: 0;
     color: var(--background-color);
 }
 
