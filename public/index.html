@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Whistle</title>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css?v=0.4.60">
-    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.60">
-    <link rel="stylesheet" href="/display.css?v=0.4.60">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.60" />
+    <link rel="stylesheet" href="/style.css?v=0.4.61">
+    <link rel="stylesheet" href="/style-gridiron-dark.css?v=0.4.61">
+    <link rel="stylesheet" href="/display.css?v=0.4.61">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.61" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -805,11 +805,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.4.60"></script>
-<script src="/websocket.js?v=0.4.60"></script>
-<script src="/game-logic.js?v=0.4.60"></script>
-<script src="/ui.js?v=0.4.60"></script>
-<script src="/script.js?v=0.4.60"></script>
+<script src="/teams.js?v=0.4.61"></script>
+<script src="/websocket.js?v=0.4.61"></script>
+<script src="/game-logic.js?v=0.4.61"></script>
+<script src="/ui.js?v=0.4.61"></script>
+<script src="/script.js?v=0.4.61"></script>
 <script src="/penalties.js"></script>
 
 <script>
@@ -829,7 +829,7 @@
 <!-- Clock Adjust Modal -->
 <div id="adjust-clock-modal" class="modal hidden">
   <div class="adjust-clock-content">
-    <h2>Adjust Game Clock</h2>
+    <h2 class="adjust-clock-title">Adjust Game Clock</h2>
     <div class="adjust-clock-current">
       <div class="adjust-clock-current-label">Current time</div>
       <div id="adjust-clock-current-value" class="adjust-clock-current-value">00:00</div>
@@ -843,7 +843,7 @@
       </div>
     </div>
     <div class="adjust-clock-group">
-      <p class="adjust-clock-group-label">Set exact time (mm:ss)</p>
+      <p class="adjust-clock-group-label">Set exact time</p>
       <div class="adjust-clock-exact-row">
         <input type="number" id="adjust-clock-mins" class="adjust-clock-exact-input" placeholder="mm" min="0" max="99" inputmode="numeric">
         <span class="adjust-clock-colon">:</span>
@@ -852,12 +852,7 @@
       </div>
     </div>
     <p class="adjust-clock-note">Clock must be stopped to adjust</p>
-    <button id="close-adjust-clock-modal-btn" class="main-btn close-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
+    <button id="close-adjust-clock-modal-btn" class="adjust-clock-close-btn">✕</button>
   </div>
 </div>
 

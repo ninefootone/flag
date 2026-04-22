@@ -935,4 +935,26 @@ input[type="email"] {
   border-color: var(--subtle-border-color) !important;
 }
 
+.adjust-clock-current {
+    background: rgba(255,255,255,0.06);
+}
+.adjust-clock-current-label,
+.adjust-clock-current-value {
+    color: var(--primary-color);
+}
+.adjust-clock-group-label {
+    color: var(--primary-color);
+}
+.adjust-clock-btn.add {
+    background: var(--primary-color);
+    color: var(--button-text);
+}
+.adjust-clock-btn.sub {
+    background: var(--error-color);
+    color: #ffffff;
+}
+.adjust-clock-exact-input:focus {
+    border-color: var(--primary-color);
+}
+
 } /* end dark mode */

@@ -851,12 +851,13 @@ header {
     max-width: 480px;
     margin: auto;
 }
-.adjust-clock-content h2 {
-    text-align: left;
+.adjust-clock-title {
+    text-align: center;
     margin-bottom: 20px;
 }
 .adjust-clock-current {
-    background: var(--secondary-button-bgnd);
+    background: #ffffff;
+    border: 1px solid var(--section-border);
     border-radius: 8px;
     padding: 16px;
     text-align: center;
@@ -866,23 +867,24 @@ header {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--notes-color);
+    color: #106386;
+    font-weight: 700;
     margin-bottom: 4px;
 }
 .adjust-clock-current-value {
     font-size: 52px;
     font-weight: 900;
     line-height: 1;
-    color: var(--primary-color);
+    color: #106386;
 }
 .adjust-clock-group {
     margin-bottom: 20px;
 }
 .adjust-clock-group-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--notes-color);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #106386;
+    text-align: center;
     margin-bottom: 8px;
 }
 .adjust-clock-buttons {
@@ -894,25 +896,25 @@ header {
 .adjust-clock-btn {
     font-family: var(--body-font);
     font-weight: 700;
-    font-size: 1rem;
-    padding: 12px 4px;
+    font-size: 1.1rem;
+    padding: 14px 4px;
     border-radius: 6px;
-    border: 1px solid var(--section-border);
+    border: none;
     cursor: pointer;
-    background: var(--secondary-button-bgnd);
-    color: var(--text-color);
-    transition: background 0.15s;
-}
-.adjust-clock-btn:hover {
-    background: var(--secondary-button-bgnd-hover);
+    color: #ffffff;
+    transition: filter 0.15s;
 }
 .adjust-clock-btn.add {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+    background: #106386;
+}
+.adjust-clock-btn.add:hover {
+    filter: brightness(1.15);
 }
 .adjust-clock-btn.sub {
-    border-color: var(--error-color);
-    color: var(--error-color);
+    background: #c0392b;
+}
+.adjust-clock-btn.sub:hover {
+    filter: brightness(1.15);
 }
 .adjust-clock-exact-row {
     display: flex;
@@ -938,8 +940,22 @@ header {
     font-family: var(--body-font);
 }
 .adjust-clock-exact-input:focus {
-    border-color: var(--primary-color);
+    border-color: #106386;
     outline: none;
+}
+.adjust-clock-close-btn {
+    display: block;
+    margin: 24px auto 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--section-border);
+    background: var(--secondary-button-bgnd);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1;
 }
 .adjust-clock-note {
     font-size: 0.75rem;
