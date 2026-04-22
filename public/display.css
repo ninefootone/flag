@@ -68,6 +68,36 @@
     stroke-linejoin: round;
 }
 
+/* ---- Fullscreen button (below settings cog) ---- */
+.dm-fullscreen-btn {
+    position: absolute;
+    top: calc(clamp(40px, 5vw, 56px) + clamp(12px, 2vh, 24px) + 8px);
+    right: clamp(12px, 2vw, 24px);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    width: clamp(40px, 5vw, 56px);
+    height: clamp(40px, 5vw, 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.3s ease;
+    z-index: 20;
+    color: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.dm-fullscreen-btn svg {
+    width: clamp(20px, 2.4vw, 28px);
+    height: clamp(20px, 2.4vw, 28px);
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 /* ---- Main area (clock + down) ---- */
 .dm-main {
     flex: 1;
