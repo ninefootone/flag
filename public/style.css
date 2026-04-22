@@ -827,8 +827,10 @@ header {
     align-self: center;
     margin: 0 auto;
 }
-.clock-time-adjustable:focus {
+.clock-time-adjustable:focus,
+.clock-time-adjustable:hover {
     outline: none;
+    background: none;
 }
 .game-clocks-section.running .clock-time-adjustable {
     cursor: default;
@@ -999,8 +1001,9 @@ header {
 */
 .game-clocks-section.sticky-clock-active > div { 
     display: flex;
-    justify-content: space-between; /* Spreads out contents */
+    justify-content: center;
     align-items: center;
+    gap: 16px;
 }
 
 .game-clocks-section.sticky-clock-active .clock-display {
