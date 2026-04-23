@@ -701,11 +701,11 @@
 }
 #display-mode.dm-scores-first .dm-lower-third {
     order: 1;
-    margin-top: clamp(20px, 4vh, 60px);
+    margin-top: clamp(40px, 8vh, 120px);
     margin-bottom: clamp(16px, 3vh, 40px);
 }
 #display-mode.dm-scores-first .dm-team-score {
-    font-size: clamp(4rem, 15vw, 12rem);
+    font-size: clamp(5rem, 20vw, 14rem);
 }
 #display-mode.dm-scores-first .dm-team-name {
     font-size: clamp(1rem, 3vw, 2.5rem);
