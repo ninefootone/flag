@@ -494,6 +494,13 @@
 @media (orientation: portrait) {
     .dm-game-clock {
         font-size: clamp(5rem, 28vw, 14rem);
+        margin: 0 0 8px 0 !important;
+    }
+    .dm-period {
+        margin-bottom: 0;
+    }
+    .dm-down {
+        margin-top: 0;
     }
 
     .dm-team-score {
@@ -509,6 +516,10 @@
         gap: 8px;
     }
 
+    #display-mode {
+        padding-top: clamp(60px, 10vh, 100px);
+    }
+
     .dm-divider {
         display: none;
     }
@@ -516,27 +527,29 @@
     .dm-team {
         width: 100%;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
     }
 
     .dm-team-info {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
         width: 100%;
     }
 
     .dm-team-name {
-        text-align: left;
-        flex: 1;
+        text-align: center;
+        width: 100%;
     }
 
     .dm-team-score {
-        text-align: right;
-        margin-left: auto;
+        text-align: center;
+        margin-left: 0;
+    }
+
+    .dm-team-timeouts {
+        justify-content: center;
     }
 
     .dm-team-logo-wrap {
@@ -689,4 +702,7 @@
 }
 #display-mode.dm-scores-first .dm-game-clock {
     font-size: clamp(3rem, 10vw, 8rem);
+}
+#display-mode.dm-scores-first .dm-down {
+    font-size: clamp(0.9rem, 2vw, 1.6rem);
 }
