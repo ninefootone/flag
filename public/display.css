@@ -678,6 +678,7 @@
 }
 #display-mode.dm-scores-first .dm-lower-third {
     order: 1;
+    margin-top: clamp(20px, 4vh, 60px);
     margin-bottom: clamp(16px, 3vh, 40px);
 }
 #display-mode.dm-scores-first .dm-team-score {
