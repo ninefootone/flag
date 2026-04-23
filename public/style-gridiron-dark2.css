@@ -67,7 +67,7 @@ p, ul, ol, input, .penalties-list {
 
 .title {
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--secondary-color);
     margin: 0;
 }
 
@@ -99,7 +99,7 @@ button {
 button:hover {
     background-color: var(--secondary-color);
     border: 1px solid var(--secondary-color);
-    color: var(--button-text);
+    color: #ffffff;
 }
 
 .app-container {
@@ -281,7 +281,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 
 #start-game-btn:hover {
     background: var(--secondary-color);
-    color: var(--button-text);
+    color: var(--text-color);
 }
 
 /* LOBBY-SPECIFIC STYLES */
@@ -293,19 +293,19 @@ input[type="text"], input[type="number"], input[type="date"] {
 
 #start-new-game-btn:hover {
     background: var(--secondary-color);
-    color: var(--button-text);
+    color: var(--text-color);
 }
 
 #startStatsViewBtn {
     background: var(--background-color);
     color: var(--text-color);
-    border: 1px solid var(--subtle-border-color);
+    border: 1px solid var(--text-color);
 }
 
 #startStatsViewBtn:hover {
     background: var(--secondary-color);
     border: 1px solid var(--secondary-color);
-    color: var(--button-text);
+    color: var(--text-color);
 }
 
 .error-message {
@@ -349,7 +349,6 @@ input[type="text"], input[type="number"], input[type="date"] {
 
 .clock-display {
     border-color: var(--subtle-border-color);
-    background-color: var(--surface-color);
 }
 
 .clock-time {
@@ -363,7 +362,7 @@ input[type="text"], input[type="number"], input[type="date"] {
 .reset-btn {
     color: var(--text-color);
     background-color: var(--background-color);
-    border-color: var(--subtle-border-color);
+    border-color: var(--secondary-button-bgnd-hover);
 }
 
 .reset-btn:hover {
@@ -873,7 +872,7 @@ li {
 }
 
 .game-clocks-section.sticky-clock-active .clock-display {
-    background-color: var(--surface-color) !important;
+    background-color: var(--section-border) !important;
     border-color: var(--subtle-border-color) !important;
 }
 
