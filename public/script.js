@@ -1,4 +1,4 @@
-const appVersion = '0.4.67';
+const appVersion = '0.4.68';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1769,6 +1769,7 @@ if (scrollingElement && stickyTarget) {
     const dmTogglePlayClock = document.getElementById('dm-toggle-play-clock');
     const dmToggleTimeouts  = document.getElementById('dm-toggle-timeouts');
     const dmToggleClockOnly = document.getElementById('dm-toggle-clock-only');
+    const dmToggleScoresFirst = document.getElementById('dm-toggle-scores-first');
     const dmDisplayRoot     = document.getElementById('display-mode');
 
     if (dmSettingsBtn && dmSettingsOverlay) {
@@ -1787,6 +1788,7 @@ if (scrollingElement && stickyTarget) {
                 showPlayClock: dmTogglePlayClock ? dmTogglePlayClock.checked : true,
                 showTimeouts:  dmToggleTimeouts  ? dmToggleTimeouts.checked  : true,
                 clockOnly:     dmToggleClockOnly ? dmToggleClockOnly.checked : false,
+                scoresFirst:   dmToggleScoresFirst ? dmToggleScoresFirst.checked : false,
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
         };
@@ -1800,6 +1802,7 @@ if (scrollingElement && stickyTarget) {
             dmDisplayRoot.classList.toggle('dm-hide-play-clock', !showPlayClock);
             dmDisplayRoot.classList.toggle('dm-hide-timeouts',   !showTimeouts);
             dmDisplayRoot.classList.toggle('dm-clock-only',      clockOnly);
+            dmDisplayRoot.classList.toggle('dm-scores-first', dmToggleScoresFirst ? dmToggleScoresFirst.checked : false);
         };
 
         // Initialise checkboxes from localStorage
@@ -1807,6 +1810,7 @@ if (scrollingElement && stickyTarget) {
         if (dmTogglePlayClock) dmTogglePlayClock.checked = saved.showPlayClock !== undefined ? saved.showPlayClock : true;
         if (dmToggleTimeouts)  dmToggleTimeouts.checked  = saved.showTimeouts  !== undefined ? saved.showTimeouts  : true;
         if (dmToggleClockOnly) dmToggleClockOnly.checked = saved.clockOnly     !== undefined ? saved.clockOnly     : false;
+        if (dmToggleScoresFirst) dmToggleScoresFirst.checked = saved.scoresFirst !== undefined ? saved.scoresFirst : false;
 
         // Apply on load
         applyDisplaySettings();
@@ -1822,7 +1826,7 @@ if (scrollingElement && stickyTarget) {
         }
 
         // Save + apply on any checkbox change
-        [dmTogglePlayClock, dmToggleTimeouts, dmToggleClockOnly].forEach(cb => {
+        [dmTogglePlayClock, dmToggleTimeouts, dmToggleClockOnly, dmToggleScoresFirst].forEach(cb => {
             if (cb) cb.addEventListener('change', () => {
                 saveDisplaySettings();
                 applyDisplaySettings();

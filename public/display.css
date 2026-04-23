@@ -671,3 +671,21 @@
 #display-mode.dm-clock-warning {
     animation: dm-flash-warning 1s ease-in-out infinite;
 }
+
+/* ---- Scores First layout ---- */
+#display-mode.dm-scores-first .dm-main {
+    order: 2;
+}
+#display-mode.dm-scores-first .dm-lower-third {
+    order: 1;
+    margin-bottom: clamp(16px, 3vh, 40px);
+}
+#display-mode.dm-scores-first .dm-team-score {
+    font-size: clamp(4rem, 15vw, 12rem);
+}
+#display-mode.dm-scores-first .dm-team-name {
+    font-size: clamp(1rem, 3vw, 2.5rem);
+}
+#display-mode.dm-scores-first .dm-game-clock {
+    font-size: clamp(3rem, 10vw, 8rem);
+}
