@@ -280,6 +280,10 @@ window.updateUI = () => {
     //     coinTossBtn.textContent = 'Coin';
     // }
 
+    if (window.gameState.gameTimeLeft > 120) {
+        window.twoMinuteWarningIssuedLocally = false;
+    }
+
     if (window.gameState.gameTimeLeft === 120 && !window.twoMinuteWarningIssuedLocally) {
         gameClockDisplay.parentElement.classList.add('warning');
         const dmDiv = document.getElementById('display-mode');

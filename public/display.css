@@ -712,9 +712,14 @@
 }
 #display-mode.dm-scores-first .dm-game-clock {
     font-size: clamp(3rem, 10vw, 8rem);
+    margin: clamp(16px, 3vh, 40px) 0 4px 0 !important;
+}
+#display-mode.dm-scores-first .dm-period {
+    margin-top: clamp(8px, 2vh, 24px);
 }
 #display-mode.dm-scores-first .dm-down {
     font-size: clamp(0.9rem, 2vw, 1.6rem);
+    margin-top: 2px;
 }
 
 /* ---- Period end overlay (Half Time / Full Time) ---- */
