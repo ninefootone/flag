@@ -27,6 +27,7 @@ window.connectWebSocket = (gameId) => {
         const message = JSON.parse(event.data);
         console.log('Received from server:', message);
         Object.assign(window.gameState, message);
+        document.getElementById('connecting-spinner').classList.add('hidden');
         setTimeout(() => window.updateUI(), 50);
     };
 

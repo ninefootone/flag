@@ -1,4 +1,4 @@
-const appVersion = '0.4.72';
+const appVersion = '0.4.73';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -887,10 +887,11 @@ if (timeoutsPerHalfInput) {
     const gameIdFromUrl = window.gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
 
     if (gameIdFromUrl) {
-        // Hide everything while we connect — prevents flash of setup screen
+        // Hide everything and show spinner while we connect
         gameLobby.classList.add('hidden');
         settingsForm.classList.add('hidden');
         gameInterface.classList.add('hidden');
+        document.getElementById('connecting-spinner').classList.remove('hidden');
 
         // 2. Apply the CRITICAL 150ms Safari delay
         setTimeout(() => {
