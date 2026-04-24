@@ -244,6 +244,8 @@ window.updateButtonLabels = () => {
 
     function openAdjustClockModal() {
         if (window.gameState.gameClockRunning) return;
+        const allowedRoles = ['administrator', 'head-referee', 'clock'];
+        if (!allowedRoles.includes(window.userRole)) return;
         const t = window.gameState.gameTimeLeft || 0;
         adjustClockCurrentValue.textContent = formatClockTime(t);
         adjustClockMins.value = '';
