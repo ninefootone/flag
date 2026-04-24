@@ -716,3 +716,26 @@
 #display-mode.dm-scores-first .dm-down {
     font-size: clamp(0.9rem, 2vw, 1.6rem);
 }
+
+/* ---- Period end overlay (Half Time / Full Time) ---- */
+.dm-period-end {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(16, 99, 134, 0.92);
+    animation: dm-notify-in 0.4s ease-out;
+}
+.dm-period-end.hidden {
+    display: none;
+}
+.dm-period-end-label {
+    font-size: clamp(3rem, 14vw, 10rem);
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}

@@ -379,6 +379,25 @@ window.updateUI = () => {
         updateTimeoutDots(dmTeam1Timeouts, '1');
         updateTimeoutDots(dmTeam2Timeouts, '2');
 
+        const dmPeriodEnd = document.getElementById('dm-period-end');
+        const dmPeriodEndLabel = document.getElementById('dm-period-end-label');
+        if (dmPeriodEnd && dmPeriodEndLabel) {
+            const clockExpired = window.gameState.gameTimeLeft === 0 && !window.gameState.gameClockRunning;
+            if (clockExpired) {
+                const half = window.gameState.currentHalf;
+                if (half === 1) {
+                    dmPeriodEndLabel.textContent = 'HALF TIME';
+                } else if (half === 2) {
+                    dmPeriodEndLabel.textContent = 'FULL TIME';
+                } else {
+                    dmPeriodEndLabel.textContent = 'END OF OT ' + (half - 2);
+                }
+                dmPeriodEnd.classList.remove('hidden');
+            } else {
+                dmPeriodEnd.classList.add('hidden');
+            }
+        }
+
     }
     // === END DISPLAY MODE LIVE DATA BINDING ===
 
