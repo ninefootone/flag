@@ -289,13 +289,10 @@ window.updateUI = () => {
         window.twoMinuteWarningIssuedLocally = true;
     }
 
-    if (!window.gameState.gameClockRunning || window.gameState.gameTimeLeft !== 120) {
+    if (!window.gameState.gameClockRunning) {
         gameClockDisplay.parentElement.classList.remove('warning');
         const dmDiv = document.getElementById('display-mode');
         if (dmDiv) dmDiv.classList.remove('dm-clock-warning');
-        if (window.gameState.gameTimeLeft !== 120) {
-            window.twoMinuteWarningIssuedLocally = false;
-        }
     }
 
     // Update the Defence Log (Add this block)
