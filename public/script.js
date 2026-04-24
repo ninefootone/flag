@@ -1,4 +1,4 @@
-const appVersion = '0.4.71';
+const appVersion = '0.4.72';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -887,22 +887,16 @@ if (timeoutsPerHalfInput) {
     const gameIdFromUrl = window.gameIdFromUrl = pathParts.length > 2 && pathParts[1] === 'game' ? pathParts[2].split('?')[0] : null;
 
     if (gameIdFromUrl) {
-        window.updateUI();
+        // Hide everything while we connect — prevents flash of setup screen
         gameLobby.classList.add('hidden');
-        settingsForm.classList.remove('hidden');
+        settingsForm.classList.add('hidden');
+        gameInterface.classList.add('hidden');
 
-        // ONLY continue if we successfully parsed a game ID
-        if (gameIdFromUrl) {
-            // 1. Instantly hide lobby and show settings (Visual change)
-            gameLobby.classList.add('hidden');
-            settingsForm.classList.remove('hidden');
-
-            // 2. Apply the CRITICAL 150ms Safari delay
-            setTimeout(() => {
-                // 3. Connect the WebSocket and update UI AFTER the pause
-                connectWebSocket(gameIdFromUrl);
-            }, 150);
-        }
+        // 2. Apply the CRITICAL 150ms Safari delay
+        setTimeout(() => {
+            // 3. Connect the WebSocket and update UI AFTER the pause
+            connectWebSocket(gameIdFromUrl);
+        }, 150);
 
     } else {
         gameLobby.classList.remove('hidden');
