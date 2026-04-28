@@ -1,4 +1,4 @@
-const appVersion = '0.4.79';
+const appVersion = '0.4.80';
 console.log(`Referee App - Version: ${appVersion}`);
 
 /**
@@ -1855,4 +1855,3 @@ if (scrollingElement && stickyTarget) {
     // === END DISPLAY MODE SETTINGS ===
 
 });
-
