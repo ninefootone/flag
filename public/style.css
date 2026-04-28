@@ -1500,7 +1500,8 @@ button.defence-stats-btn {
     display: flex;
     justify-content: center;
     align-items: start;
-    z-index: 100;
+    z-index: 10000;
+    overflow-y: auto;
 }
 
 .popup-content, .defence-popup-content {
