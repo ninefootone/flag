@@ -52,14 +52,20 @@ function broadcastState(gameId) {
 function startGameClock(gameState, gameId) {
     if (!gameClockFunctions[gameId]) {
         gameState.gameClockRunning = true;
+        gameState._gameClockStartedAt = Date.now();
+        gameState._gameClockStartingTime = gameState.gameTimeLeft;
         gameClockFunctions[gameId] = setInterval(() => {
-            if (gameState.gameTimeLeft > 0) {
-                gameState.gameTimeLeft--;
+            const elapsed = Math.floor((Date.now() - gameState._gameClockStartedAt) / 1000);
+            const newTime = gameState._gameClockStartingTime - elapsed;
+            if (newTime > 0) {
+                gameState.gameTimeLeft = newTime;
                 broadcastState(gameId);
             } else {
+                gameState.gameTimeLeft = 0;
+                broadcastState(gameId);
                 stopGameClock(gameState, gameId);
             }
-        }, 1000);
+        }, 500);
     }
 }
 
@@ -73,14 +79,20 @@ function stopGameClock(gameState, gameId) {
 function startPlayClock(gameState, gameId) {
     if (!playClockFunctions[gameId]) {
         gameState.playClockRunning = true;
+        gameState._playClockStartedAt = Date.now();
+        gameState._playClockStartingTime = gameState.playTimeLeft;
         playClockFunctions[gameId] = setInterval(() => {
-            if (gameState.playTimeLeft > 0) {
-                gameState.playTimeLeft--;
+            const elapsed = Math.floor((Date.now() - gameState._playClockStartedAt) / 1000);
+            const newTime = gameState._playClockStartingTime - elapsed;
+            if (newTime > 0) {
+                gameState.playTimeLeft = newTime;
                 broadcastState(gameId);
             } else {
+                gameState.playTimeLeft = 0;
+                broadcastState(gameId);
                 stopPlayClock(gameState, gameId);
             }
-        }, 1000);
+        }, 500);
     }
 }
 
@@ -142,6 +154,15 @@ wss.on('connection', (ws, request, gameId) => {
                 Object.assign(currentGameState, parsedMessage.payload);
                 if (parsedMessage.payload.gameStarted) {
                     currentGameState.gameStarted = true;
+                }
+                // If clock is running and time was manually adjusted, re-anchor the timestamp
+                if (parsedMessage.payload.gameTimeLeft !== undefined && currentGameState.gameClockRunning) {
+                    currentGameState._gameClockStartedAt = Date.now();
+                    currentGameState._gameClockStartingTime = parsedMessage.payload.gameTimeLeft;
+                }
+                if (parsedMessage.payload.playTimeLeft !== undefined && currentGameState.playClockRunning) {
+                    currentGameState._playClockStartedAt = Date.now();
+                    currentGameState._playClockStartingTime = parsedMessage.payload.playTimeLeft;
                 }
                 gameStates[gameId] = currentGameState;
                 broadcastState(gameId);

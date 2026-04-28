@@ -1505,7 +1505,7 @@ button.defence-stats-btn {
 
 .popup-content, .defence-popup-content {
     background-color: var(--background-color);
-    padding: 40px 20px 120px 20px;
+    padding: 40px 20px calc(140px + env(safe-area-inset-bottom)) 20px;
     width: 100%;
     max-width: 740px;
     margin: 0 auto;
