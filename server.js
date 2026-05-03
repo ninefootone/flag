@@ -125,7 +125,7 @@ server.on('upgrade', (request, socket, head) => {
 
 wss.on('connection', (ws, request, gameId) => {
     ws.gameId = gameId; // Store gameId on the client for easy lookup
-    if (!gameStates[gameId]) {
+    if (!gameStates[gameId] || gameStates[gameId].gameEnded) {
         console.log(`Creating new game state for ID: ${gameId}`);
         gameStates[gameId] = JSON.parse(JSON.stringify(initialGameState));
     }
