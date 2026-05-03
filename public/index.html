@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Whistle</title>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css?v=0.4.80">
-    <link rel="stylesheet" href="/style-gridiron-dark2.css?v=0.4.80">
-    <link rel="stylesheet" href="/display.css?v=0.4.80">
-    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.80" />
+    <link rel="stylesheet" href="/style.css?v=0.4.81">
+    <link rel="stylesheet" href="/style-gridiron-dark2.css?v=0.4.81">
+    <link rel="stylesheet" href="/display.css?v=0.4.81">
+    <link rel="manifest" href="/assets/manifest.webmanifest?v=0.4.81" />
     <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
@@ -172,6 +172,9 @@
         </div>
         
         <div id="game-interface" class="hidden">
+            <div id="ws-reconnect-banner" class="hidden" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53e3e;color:#fff;text-align:center;padding:8px 12px;font-size:14px;font-weight:600;">
+                ⚠️ Reconnecting… your last action will be sent automatically.
+            </div>
             <header>
                 <h1 class="game-info-hidden">
                     <span id="game-date-hidden"></span><span id="game-location-hidden"></span>
@@ -819,11 +822,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<script src="/teams.js?v=0.4.80"></script>
-<script src="/websocket.js?v=0.4.80"></script>
-<script src="/game-logic.js?v=0.4.80"></script>
-<script src="/ui.js?v=0.4.80"></script>
-<script src="/script.js?v=0.4.80"></script>
+<script src="/teams.js?v=0.4.81"></script>
+<script src="/websocket.js?v=0.4.81"></script>
+<script src="/game-logic.js?v=0.4.81"></script>
+<script src="/ui.js?v=0.4.81"></script>
+<script src="/script.js?v=0.4.81"></script>
 <script src="/penalties.js"></script>
 
 <script>
