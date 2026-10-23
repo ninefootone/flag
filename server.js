@@ -258,5 +258,5 @@ app.post('/submit-feedback', async (req, res) => {
 });
 
 server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port} on Node ${process.version}`);
 });

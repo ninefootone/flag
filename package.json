@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "A real-time referee app built with Express and WebSockets",
   "main": "server.js",
+  "engines": { "node": ">=22.23.4 <23" },
   "scripts": {
     "start": "node server.js"
   },
