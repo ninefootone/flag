@@ -43,16 +43,16 @@ window.connectWebSocket = (gameId) => {
             window.pingInterval = null;
         }
 
-        // Reconnection logic using exponential backoff (up to 5 attempts)
-        if (window.reconnectAttempts < 5) {
-            const delay = Math.min(1000 * Math.pow(2, window.reconnectAttempts), 15000);
-            window.reconnectAttempts++;
-            window.isReconnecting = true;
-            setTimeout(() => {
-                window.isReconnecting = false;
-                window.connectWebSocket(gameId);
-            }, delay);
-        }
+        // Keep retrying with exponential backoff, capped at 10s between attempts.
+        // (Previously gave up after 5 attempts, ~30s, leaving the app silently offline.)
+        const delay = Math.min(1000 * Math.pow(2, window.reconnectAttempts), 10000);
+        window.reconnectAttempts++;
+        window.isReconnecting = true;
+        clearTimeout(window.reconnectTimer);
+        window.reconnectTimer = setTimeout(() => {
+            window.isReconnecting = false;
+            window.connectWebSocket(gameId);
+        }, delay);
     };
 
     window.ws.onerror = (error) => {
@@ -99,6 +99,18 @@ window.hideConnectionBanner = () => {
     const banner = document.getElementById('ws-reconnect-banner');
     if (banner) banner.classList.add('hidden');
 };
+
+// Reconnect immediately when the device gets its network back,
+// instead of waiting for the next backoff timer.
+window.addEventListener('online', () => {
+    if (window.lastGameId && !window.ws) {
+        console.log('Network back online - reconnecting now');
+        clearTimeout(window.reconnectTimer);
+        window.isReconnecting = false;
+        window.reconnectAttempts = 0;
+        window.connectWebSocket(window.lastGameId);
+    }
+});
 
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
