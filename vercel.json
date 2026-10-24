@@ -1,6 +1,8 @@
 {
   "outputDirectory": "public",
   "rewrites": [
+    { "source": "/submit-team", "destination": "https://flag-production-d4bb.up.railway.app/submit-team" },
+    { "source": "/submit-feedback", "destination": "https://flag-production-d4bb.up.railway.app/submit-feedback" },
     { "source": "/game/(.*)", "destination": "/index.html" }
   ]
 }
