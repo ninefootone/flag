@@ -70,15 +70,49 @@ window.ACTION_QUEUE_MAX_AGE_MS = 15000;
 
 window.flushActionQueue = () => {
     const now = Date.now();
+    const dropped = [];
     while (window.actionQueue.length > 0 && window.ws && window.ws.readyState === WebSocket.OPEN) {
         const queued = window.actionQueue.shift();
-        if (queued.gameId !== window.lastGameId || now - queued.queuedAt > window.ACTION_QUEUE_MAX_AGE_MS) {
+        if (queued.gameId !== window.lastGameId) continue; // different game - silently discard
+        if (now - queued.queuedAt > window.ACTION_QUEUE_MAX_AGE_MS) {
             console.warn(`Dropping stale queued action: ${queued.type}`);
+            dropped.push(queued);
             continue;
         }
         window.ws.send(JSON.stringify({ type: queued.type, payload: queued.payload }));
     }
+    if (dropped.length > 0) window.showDroppedNotice(dropped);
 };
+
+// Describe dropped actions in plain English so the official knows what to re-enter.
+window.describeDroppedActions = (dropped) => {
+    let scores = 0, clock = 0, other = 0;
+    dropped.forEach(({ type, payload = {} }) => {
+        if (payload.scores !== undefined) scores++;
+        else if (type.includes('CLOCK') || payload.gameTimeLeft !== undefined || payload.playTimeLeft !== undefined) clock++;
+        else other++;
+    });
+    const parts = [];
+    if (scores) parts.push(`${scores} score change${scores > 1 ? 's' : ''}`);
+    if (clock) parts.push(`${clock} clock action${clock > 1 ? 's' : ''}`);
+    if (other) parts.push(`${other} other change${other > 1 ? 's' : ''}`);
+    return parts.join(', ');
+};
+
+// Stays visible until dismissed - an official may not be looking at the screen when it appears.
+window.showDroppedNotice = (dropped) => {
+    const notice = document.getElementById('ws-dropped-notice');
+    const text = document.getElementById('ws-dropped-text');
+    if (!notice || !text) return;
+    text.textContent = `⚠️ Not sent while offline: ${window.describeDroppedActions(dropped)}. Please check and re-enter.`;
+    notice.classList.remove('hidden');
+};
+
+document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'ws-dropped-dismiss') {
+        document.getElementById('ws-dropped-notice').classList.add('hidden');
+    }
+});
 
 window.sendAction = (type, payload = {}) => {
     if (window.ws && window.ws.readyState === WebSocket.OPEN) {
